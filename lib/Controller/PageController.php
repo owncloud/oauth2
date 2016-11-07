@@ -49,5 +49,16 @@ class PageController extends Controller {
 		return new DataResponse(['echo' => $echo]);
 	}
 
+	/**
+	 * Shows a view for the user to authorize a client.
+	 *
+	 * Is accessible by the client via /index.php/apps/oauth2/authorize
+	 *
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 */
+	public function authorize() {
+		return new TemplateResponse('oauth2', 'authorize');
+	}
 
 }
