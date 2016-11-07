@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<info>
+    <id>oauth2</id>
+    <name>OAuth 2.0</name>
+    <description>Application for using OAuth 2.0 in ownCloud</description>
+    <licence>AGPL</licence>
+    <author>Lukas Biermann, Nina Herrmann, Wladislaw  Iwanzow, Dennis Meis, Katharina Meyer, Jonathan Neugebauer</author>
+    <version>1.0</version>
+    <namespace>OAuth2</namespace>
+    <category>other</category>
+    <dependencies>
+        <owncloud min-version="8.1" max-version="9.2"/>
+    </dependencies>
+</info>
