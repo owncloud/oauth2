@@ -1,11 +1,14 @@
 <div id="app">
 	<div id="app-content">
 		<div id="app-content-wrapper">
-			<p>Do you really like to authorize this app?</p>
+			<div style="text-align: center; position: absolute; top: 50%; left: 50%; transform: translateX(-50%) translateY(-50%);">
+				<p><b>Do you really like to authorize this app?</b></p>
 
-			<form action="../oauth2/api/v1/access_code" method="post" name="form">
-				<button type="submit">Authorize</button>
-			</form>
+				<form action="" method="post" name="form">
+					<button type="submit">Authorize</button>
+				</form>
+				<a href="../../"><button>Cancel</button></a>
+			</div>
 		</div>
 	</div>
 </div>

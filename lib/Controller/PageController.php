@@ -13,8 +13,10 @@ namespace OCA\OAuth2\Controller;
 
 use OCP\IRequest;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http;
 
 class PageController extends Controller {
 
@@ -57,8 +59,31 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function authorize() {
+	public function authorize($response_type, $client_id, $redirect_uri, $state) {
+		if (is_null($response_type) || is_null($client_id)
+			|| is_null($redirect_uri)) {
+			return new RedirectResponse("../../");
+		}
+
 		return new TemplateResponse('oauth2', 'authorize');
+	}
+
+	/**
+	 * Implements the OAuth 2.0 Authorization Response.
+	 *
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 */
+	public function accessCode($response_type, $client_id, $redirect_uri, $state) {
+		switch ($response_type) {
+			case 'code':
+				if ($client_id === 'lw' && $redirect_uri === 'lw.de') {
+					return new DataResponse('123456789');
+				}
+				break;
+		}
+
+		return new DataResponse('', Http::STATUS_BAD_REQUEST);
 	}
 
 }

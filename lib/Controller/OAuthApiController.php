@@ -11,6 +11,8 @@
 
 namespace OCA\OAuth2\Controller;
 
+use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 use OCP\AppFramework\ApiController;
 
@@ -18,18 +20,6 @@ class OAuthApiController extends ApiController {
 
 	public function __construct($appName, IRequest $request) {
 		parent::__construct($appName, $request);
-	}
-
-	/**
-	 * Implements the OAuth 2.0 Authorization Response.
-	 *
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 * @PublicPage
-	 * @CORS
-	 */
-	public function accessCode() {
-		// TODO: implement method
 	}
 
 	/**
@@ -42,8 +32,12 @@ class OAuthApiController extends ApiController {
 	 * @PublicPage
 	 * @CORS
 	 */
-	public function token() {
-		// TODO: implement method
+	public function token($access_code) {
+		if ($access_code === '123456789') {
+			return new DataResponse('token');
+	}
+
+		return new DataResponse('', Http::STATUS_BAD_REQUEST);
 	}
 
 }
