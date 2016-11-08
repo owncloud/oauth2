@@ -15,6 +15,7 @@ use OCP\IRequest;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 
@@ -93,7 +94,7 @@ class PageController extends Controller {
 				break;
 		}
 
-		return new DataResponse('', Http::STATUS_BAD_REQUEST);
+		return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
 	}
 
 }

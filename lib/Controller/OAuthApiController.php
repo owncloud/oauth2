@@ -46,7 +46,7 @@ class OAuthApiController extends ApiController {
 			);
 		}
 
-		return new JSONResponse(array(), Http::STATUS_BAD_REQUEST);
+		return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
 	}
 
 }
