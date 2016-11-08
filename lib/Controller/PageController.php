@@ -74,7 +74,7 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function accessCode($response_type, $client_id, $redirect_uri, $state) {
+	public function generateAccessCode($response_type, $client_id, $redirect_uri, $state) {
 		switch ($response_type) {
 			case 'code':
 				if ($client_id === 'lw' && $redirect_uri === 'lw.de') {
