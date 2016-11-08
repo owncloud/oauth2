@@ -64,6 +64,11 @@ class PageController extends Controller {
 			|| is_null($redirect_uri)) {
 			return new RedirectResponse("../../");
 		}
+		if (strcmp($response_type, 'code') !== 0
+			|| strcmp($client_id, 'lw') !== 0
+			|| $redirect_uri !== urldecode('https://www.google.de')) {
+			return new RedirectResponse("../../");
+		}
 
 		return new TemplateResponse('oauth2', 'authorize');
 	}
@@ -77,8 +82,13 @@ class PageController extends Controller {
 	public function generateAccessCode($response_type, $client_id, $redirect_uri, $state) {
 		switch ($response_type) {
 			case 'code':
-				if ($client_id === 'lw' && $redirect_uri === 'lw.de') {
-					return new DataResponse('123456789');
+				if (strcmp($client_id, 'lw') === 0 && strcmp(urldecode($redirect_uri), 'https://www.google.de') === 0) {
+					$result = urldecode($redirect_uri);
+					$result = $result. '?code=' . '123456789';
+					if (!is_null($state)) {
+						$result = $result. '&state=' . $state;
+					}
+					return new RedirectResponse($result);
 				}
 				break;
 		}
