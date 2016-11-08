@@ -70,7 +70,7 @@ class PageController extends Controller {
 			return new RedirectResponse("../../");
 		}
 
-		return new TemplateResponse('oauth2', 'authorize');
+		return new TemplateResponse('oauth2', 'authorize', ['client_id' => $client_id]);
 	}
 
 	/**
