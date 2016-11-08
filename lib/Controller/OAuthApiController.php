@@ -32,7 +32,7 @@ class OAuthApiController extends ApiController {
 	 * @PublicPage
 	 * @CORS
 	 */
-	public function token($access_code) {
+	public function generateToken($access_code) {
 		if ($access_code === '123456789') {
 			return new DataResponse('token');
 	}

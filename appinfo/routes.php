@@ -23,7 +23,7 @@ return [
 		['name' => 'page#do_echo', 'url' => '/echo', 'verb' => 'POST'],
 		['name' => 'page#authorize', 'url' => '/authorize', 'verb' => 'GET'],
 		['name' => 'page#access_code', 'url' => '/authorize', 'verb' => 'POST'],
-		['name' => 'o_auth_api#token', 'url' => '/api/v1/token', 'verb' => 'POST'],
+		['name' => 'o_auth_api#generateToken', 'url' => '/api/v1/token', 'verb' => 'POST'],
 		['name' => 'o_auth_api#preflighted_cors', 'url' => '/api/v1/{path}',
 			'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']]
 	]
