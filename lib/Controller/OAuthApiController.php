@@ -12,7 +12,7 @@
 namespace OCA\OAuth2\Controller;
 
 use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 use OCP\AppFramework\ApiController;
 
@@ -27,6 +27,8 @@ class OAuthApiController extends ApiController {
 	 *
 	 * Is accessible by the client via the /index.php/apps/oauth2/token
 	 *
+	 * @return JSONResponse The Access Token or an empty JSON Object.
+	 *
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 * @PublicPage
@@ -34,10 +36,15 @@ class OAuthApiController extends ApiController {
 	 */
 	public function generateToken($access_code) {
 		if ($access_code === '123456789') {
-			return new DataResponse('token');
-	}
+			return new JSONResponse(
+				[
+					'access_token' => '2YotnFZFEjr1zCsicMWpAA',
+					'token_type' => 'Bearer'
+				]
+			);
+		}
 
-		return new DataResponse('', Http::STATUS_BAD_REQUEST);
+		return new JSONResponse(array(), Http::STATUS_BAD_REQUEST);
 	}
 
 }
