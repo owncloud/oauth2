@@ -6,7 +6,7 @@
  * later. See the COPYING file.
  *
  * @author Lukas Biermann
- * @copyright Lukas Biermann
+ * @copyright Lukas Biermann 2016
  */
 ?>
 <p>OAuth 2.0 Eingabemaske - Platzhalter</p>
