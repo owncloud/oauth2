@@ -1,10 +1,13 @@
-<p>Hello World <?php p($_['user']) ?></p>
-
-<p><button id="hello">click me</button></p>
-
-<p><textarea id="echo-content">
-	Send this as ajax
-</textarea></p>
-<p><button id="echo">Send ajax request</button></p>
-
-Ajax response: <div id="echo-result"></div>
+<?php
+/**
+ * ownCloud - oauth2
+ *
+ * This file is licensed under the Affero General Public License version 3 or
+ * later. See the COPYING file.
+ *
+ * @author Lukas Biermann
+ * @copyright Lukas Biermann 2016
+ */
+?>
+<p>OAuth 2.0 Eingabemaske - Platzhalter</p>
+// Just a test.
