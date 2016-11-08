@@ -8,5 +8,3 @@
  * @copyright Jonathan Neugebauer 2016
  */
 
-
-}
