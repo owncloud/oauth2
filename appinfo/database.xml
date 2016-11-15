@@ -1,6 +1,14 @@
+<!--
+This file creates the database schema for the OAuth 2.0 App.
+It creates the database: oauth_database together with its tables:
+oauth_clients; oauth_access_tokens; oauth_authorization_codes;
+oauth_refresh_tokens; oauth_users; oauth_scopes; oauth_jwt
+@author: Dennis Meis
+-->
+
 <?xml version="1.0" encoding="UTF-8" ?>
 <database>
-    <name>owncloud</name>
+    <name>oauth_database</name>
     <create>true</create>
     <overwrite>false</overwrite>
     <charset>utf8</charset>
@@ -10,9 +18,7 @@
             <field>
                 <name>client_id</name>
                 <type>text</type>
-                <default></default>
                 <notnull>true</notnull>
-                <unsigned></unsigned>
                 <length>80</length>
             </field>
 
@@ -49,6 +55,192 @@
         </declaration>
     </table>
 
+    <table>
+        <name>oauth_access_tokens</name>
+        <declaration>
+            <field>
+                <name>access_token</name>
+                <type>text</type>
+                <notnull>true</notnull>
+                <length>40</length>
+            </field>
 
+            <field>
+                <name>client_id</name>
+                <type>text</type>
+                <notnull>true</notnull>
+                <length>80</length>
+            </field>
 
+            <field>
+                <name>user_id</name>
+                <type>text</type>
+                <length>255</length>
+            </field>
+
+            <field>
+                <name>expires</name>
+                <type>timestamp</type>
+                <notnull>true</notnull>
+            </field>
+
+            <field>
+                <name>scope</name>
+                <type>text</type>
+                <length>2000</length>
+            </field>
+
+        </declaration>
+    </table>
+
+    <table>
+        <name>oauth_authorization_codes</name>
+        <declaration>
+            <field>
+                <name>authorization_code</name>
+                <type>text</type>
+                <notnull>true</notnull>
+                <length>40</length>
+            </field>
+
+            <field>
+                <name>client_id</name>
+                <type>text</type>
+                <notnull>true</notnull>
+                <length>80</length>
+            </field>
+
+            <field>
+                <name>user_id</name>
+                <type>text</type>
+                <length>255</length>
+            </field>
+
+            <field>
+                <name>redirect_uri</name>
+                <type>text</type>
+                <length>2000</length>
+            </field>
+
+            <field>
+                <name>expires</name>
+                <type>timestamp</type>
+                <notnull>true</notnull>
+            </field>
+
+            <field>
+                <name>scope</name>
+                <type>text</type>
+                <length>2000</length>
+            </field>
+
+        </declaration>
+    </table>
+
+    <table>
+        <name>oauth_refresh_tokens</name>
+        <declaration>
+            <field>
+                <name>refresh_tokens</name>
+                <type>text</type>
+                <notnull>true</notnull>
+                <length>40</length>
+            </field>
+
+            <field>
+                <name>client_id</name>
+                <type>text</type>
+                <notnull>true</notnull>
+                <length>80</length>
+            </field>
+
+            <field>
+                <name>user_id</name>
+                <type>text</type>
+                <length>255</length>
+            </field>
+
+            <field>
+                <name>expires</name>
+                <type>timestamp</type>
+                <notnull>true</notnull>
+            </field>
+
+            <field>
+                <name>scope</name>
+                <type>text</type>
+                <length>2000</length>
+            </field>
+        </declaration>
+    </table>
+
+    <table>
+        <name>oauth_users</name>
+        <declaration>
+            <field>
+                <name>username</name>
+                <type>text</type>
+                <notnull>true</notnull>
+                <length>255</length>
+            </field>
+
+            <field>
+                <name>password</name>
+                <type>text</type>
+                <length>2000</length>
+            </field>
+
+            <field>
+                <name>first_name</name>
+                <type>text</type>
+                <length>255</length>
+            </field>
+
+            <field>
+                <name>last_name</name>
+                <type>text</type>
+                <length>255</length>
+            </field>
+        </declaration>
+    </table>
+
+    <table>
+        <name>oauth_scopes</name>
+        <declaration>
+            <field>
+                <name>scope</name>
+                <type>text</type>
+            </field>
+
+            <field>
+                <name>is_default</name>
+                <type>boolean</type>
+            </field>
+        </declaration>
+    </table>
+
+    <table>
+        <name>oauth_jwt</name>
+        <declaration>
+            <field>
+                <name>client_id</name>
+                <type>text</type>
+                <notnull>true</notnull>
+                <length>80</length>
+            </field>
+
+            <field>
+                <name>subject</name>
+                <type>text</type>
+                <length>80</length>
+            </field>
+
+            <field>
+                <name>public_key</name>
+                <type>text</type>
+                <length>2000</length>
+            </field>
+        </declaration>
+
+    </table>
 </database>
