@@ -34,8 +34,8 @@ class OAuthApiController extends ApiController {
 	 * @PublicPage
 	 * @CORS
 	 */
-	public function generateToken($access_code) {
-		if ($access_code === '123456789'
+	public function generateToken($code) {
+		if ($code === '123456789'
 			&& $_SERVER['PHP_AUTH_USER'] === 'lw'
 			&& $_SERVER['PHP_AUTH_PW'] === 'secret') {
 			return new JSONResponse(
