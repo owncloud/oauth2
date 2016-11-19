@@ -9,6 +9,8 @@
  * @copyright Jonathan Neugebauer 2016
  */
 
+\OCP\App::registerAdmin('oauth2', 'settings/admin');
+
 use OCP\AppFramework\App;
 
 require_once __DIR__ . '/autoload.php';

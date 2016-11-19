@@ -5,8 +5,8 @@
  * This file is licensed under the Affero General Public License version 3 or
  * later. See the COPYING file.
  *
- * @author Jonathan Neugebauer
- * @copyright Jonathan Neugebauer 2016
+ * @author Jonathan Neugebauer, Lukas Biermann
+ * @copyright Jonathan Neugebauer, Lukas Biermann 2016
  */
 
 /**
@@ -25,6 +25,8 @@ return [
 		['name' => 'page#generate_access_code', 'url' => '/authorize', 'verb' => 'POST'],
 		['name' => 'o_auth_api#generate_token', 'url' => '/api/v1/token', 'verb' => 'POST'],
 		['name' => 'o_auth_api#preflighted_cors', 'url' => '/api/v1/{path}',
-			'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']]
+			'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
+		['name' => 'settings#getCredentials', 'url' => '/admin/default', 'verb' => 'GET'],
+		['name' => 'settings#setCredentials', 'url' => '/admin/default', 'verb' => 'PUT'],
 	]
 ];
