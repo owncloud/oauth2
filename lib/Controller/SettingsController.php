@@ -34,10 +34,8 @@ class SettingsController extends Controller {
 	public function transferCredentials($PHP_AUTH_USER, $PHP_AUTH_SECRET){
 		if(isset($_POST[' PHP_AUTH_USER' ]) && isset($_POST[ 'PHP_AUTH_SECRET' ])){
 			return new JSONResponse(['message' => 'Successfully committed your credentials.']);
-		} elseif ($PHP_AUTH_USER === NULL and $PHP_AUTH_SECRET =! NULL){
-			return new JSONResponse(['message' => 'Unknown User.'], Http::STATUS_BAD_REQUEST);
-		} elseif ($PHP_AUTH_USER =! NULL and $PHP_AUTH_SECRET === NULL){
-			return new JSONResponse(['message' => 'Unknown Secret.'], Http::STATUS_BAD_REQUEST);
+		} else {
+			return new JSONResponse(['message' => 'Unknown User or Secret.'], Http::STATUS_BAD_REQUEST);
 		}
 	}
 
