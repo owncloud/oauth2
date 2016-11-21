@@ -27,6 +27,7 @@ class OAuthApiController extends ApiController {
 	 *
 	 * Is accessible by the client via the /index.php/apps/oauth2/token
 	 *
+     * @param string $code The authorization code.
 	 * @return JSONResponse The Access Token or an empty JSON Object.
 	 *
 	 * @NoAdminRequired
