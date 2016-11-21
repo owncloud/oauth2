@@ -18,4 +18,7 @@ $clientMapper = new \OCA\OAuth2\Db\ClientMapper($app->getDatabaseConnection());
 
 $tmpl = new OCP\Template('oauth2', 'settings/admin');
 
+$clients = $clientMapper->findAll();
+$client = new \OCA\OAuth2\Db\Client();
+
 return $tmpl->fetchPage(['clients' => $clientMapper->findAll()]);
