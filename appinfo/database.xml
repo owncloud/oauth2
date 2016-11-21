@@ -8,21 +8,14 @@
         <name>*dbprefix*oauth2_clients</name>
         <declaration>
             <field>
-                <name>client_id</name>
+                <name>id</name>
                 <type>text</type>
                 <notnull>true</notnull>
                 <length>80</length>
             </field>
 
             <field>
-                <name>name</name>
-                <type>text</type>
-                <notnull>true</notnull>
-                <length>80</length>
-            </field>
-
-            <field>
-                <name>client_secret</name>
+                <name>secret</name>
                 <type>text</type>
                 <length>80</length>
             </field>
@@ -35,20 +28,15 @@
             </field>
 
             <field>
-                <name>grant_types</name>
+                <name>user_id</name>
                 <type>text</type>
                 <length>80</length>
             </field>
 
             <field>
-                <name>scope</name>
+                <name>name</name>
                 <type>text</type>
-                <length>100</length>
-            </field>
-
-            <field>
-                <name>user_id</name>
-                <type>text</type>
+                <notnull>true</notnull>
                 <length>80</length>
             </field>
         </declaration>

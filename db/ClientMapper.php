@@ -22,9 +22,9 @@ class ClientMapper extends Mapper {
     }
 
     /**
-     * Selects a client by its identifier.
+     * Selects a client by its ID.
      *
-     * @param string $client_id
+     * @param string $id The client's ID.
      *
      * @return Entity The client entity.
      *
@@ -32,17 +32,16 @@ class ClientMapper extends Mapper {
      * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more
      * than one result.
      */
-    public function find($client_id) {
-        $sql = 'SELECT * FROM `*PREFIX*oauth2_clients` ' .
-                'WHERE `client_id` = ?';
-        return $this->findEntity($sql, array($client_id));
+    public function find($id) {
+        $sql = 'SELECT * FROM `*PREFIX*oauth2_clients` WHERE `id` = ?';
+        return $this->findEntity($sql, array($id));
     }
 
     /**
      * Selects all clients.
      *
-     * @param int $limit
-     * @param int $offset
+     * @param int $limit The maximum number of rows.
+     * @param int $offset From which row we want to start.
      * @return array All clients.
      */
     public function findAll($limit = null, $offset = null) {

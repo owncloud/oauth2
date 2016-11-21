@@ -15,22 +15,17 @@ use \OCP\AppFramework\Db\Entity;
 
 class Client extends Entity {
 
-    protected $clientId;
-    protected $name;
-    protected $clientSecret;
+    protected $secret;
     protected $redirectUri;
-    protected $grantTypes;
-    protected $scope;
     protected $userId;
+    protected $name;
 
     public function __construct() {
-        $this->addType('client_id', 'string');
-        $this->addType('name', 'string');
-        $this->addType('client_secret', 'string');
+        $this->addType('id', 'string');
+        $this->addType('secret', 'string');
         $this->addType('redirect_uri', 'string');
-        $this->addType('grant_types', 'string');
-        $this->addType('scope', 'string');
         $this->addType('user_id', 'string');
+        $this->addType('name', 'string');
     }
 
 }

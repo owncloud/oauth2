@@ -54,18 +54,45 @@ class SettingsController extends Controller {
      *
      */
     public function addClient() {
+        if (filter_var($_POST['redirect_uri'], FILTER_VALIDATE_URL) === false) {
+            return new RedirectResponse('../../settings/admin#oauth-2.0');
+        }
+
         $client = new Client();
-        $client->setClientId($this->secureRandom->generate(40));
-        $client->setName($_POST['name']);
-        $client->setClientSecret($this->secureRandom->generate(40));
-        $client->setRedirectUri($_POST['redirect_uri']);
-        $client->setGrantTypes('access_code');
-        $client->setScope('files');
+        $client->setId($this->generateRandom());
+        $client->setSecret($this->generateRandom());
+        $client->setRedirectUri(trim($_POST['redirect_uri']));
         $client->setUserId($this->userId);
+        $client->setName(trim($_POST['name']));
 
         $this->clientMapper->insert($client);
 
         return new RedirectResponse('../../settings/admin#oauth-2.0');
+    }
+
+    /**
+     * Deletes a client.
+     *
+     * @return RedirectResponse Redirection to the settings page.
+     *
+     * @NoCSRFRequired
+     *
+     */
+    public function deleteClient($id) {
+        $client = $this->clientMapper->find($id);
+        $this->clientMapper->delete($client);
+
+        return new RedirectResponse('../../../../settings/admin#oauth-2.0');
+    }
+
+    /**
+     * Generates a random string with 64 characters.
+     *
+     * @return string The random string.
+     */
+    private function generateRandom() {
+        return $this->secureRandom->generate(64,
+            $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
     }
 
 }
