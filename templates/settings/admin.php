@@ -10,18 +10,34 @@
  */
 ?>
 <div class="section" id="oauth2">
-	<h2><?php p($l->t('OAuth 2.0')); ?></h2>
-	<p><?php p($l->t('Insert the credentials for the authentication.')); ?></p>
-	<form action="SettingsController.php" method="post">
-		<label for="AUTH_USER"><?php p($l->t( 'User' )); ?></label>
-		<input type="text" name='AUTH_USER' id="AUTH_USER" placeholder="User"
-			   value='<?php p($_['PHP_AUTH_USER']) ?>' />
-		<br />
-		<label for="AUTH_SECRET"><?php p($l->t( 'Password' )); ?></label>
-		<input type="password" name='AUTH_SECRET' id="AUTH_SECRET" placeholder="Password"
-			   value='<?php p($_['PHP_AUTH_SECRET']) ?>' />
-		<br />
-		<input type="submit" name="submitCredentials" id="submitCredentials"
-		   value="<?php p($l->t( 'Save' )); ?>"/>
-	</form>
+    <h2><?php p($l->t('OAuth 2.0')); ?></h2>
+
+    <h3><?php p($l->t('Registered clients')); ?></h3>
+    <table class="grid">
+        <thead>
+        <tr>
+            <th id="headerName" scope="col"><?php p($l->t('Name')); ?></th>
+            <th id="headerRedirectUri" scope="col"><?php p($l->t('Redirect URI')); ?></th>
+            <th id="headerClientId" scope="col"><?php p($l->t('Client ID')); ?></th>
+            <th id="headerSecret" scope="col"><?php p($l->t('Secret')); ?></th>
+            <th id="headerRemove">&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><?php var_dump($_['clients'])?></td>
+            <td>https://learnweb.de/cb</td>
+            <td>12oindni2o2no1</td>
+            <td>12io23bnfipo2poemncnwipe</td>
+            <td><a class="action delete" href="#"><img class="svg action" src="/core/img/actions/delete.svg"></a></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h3><?php p($l->t('Add client')); ?></h3>
+    <form action="../apps/oauth2/clients" method="post">
+        <input id="name" name="name" type="text" placeholder="<?php p($l->t('Name')); ?>">
+        <input id="redirect_uri" name="redirect_uri" type="url" placeholder="<?php p($l->t('Redirect URI')); ?>">
+        <input type="submit" class="button" value="<?php p($l->t('Add')); ?>">
+    </form>
 </div>

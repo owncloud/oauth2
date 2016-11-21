@@ -1,26 +1,21 @@
 <?php
 /**
- * ownCloud
+ * ownCloud - oauth2
  *
- * @author Jörn Friedrich Dreyer <jfd@butonic.de>
- * @copyright Copyright (c) 2016, ownCloud, Inc.
- * @license AGPL-3.0
+ * This file is licensed under the Affero General Public License version 3 or
+ * later. See the COPYING file.
  *
- * This code is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License, version 3,
- * as published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License, version 3,
- * along with this program.  If not, see <http://www.gnu.org/licenses/>
- *
+ * @author Lukas Biermann
+ * @copyright Lukas Biermann 2016
  */
+
+use OCA\Oauth2\AppInfo\Application;
 
 OCP\User::checkAdminUser();
 
-$tmpl = new OCP\Template( 'oauth2', 'settings/admin' );
-return $tmpl->fetchPage();
+$app = new Application('oauth2');
+$clientMapper = new \OCA\OAuth2\Db\ClientMapper($app->getDatabaseConnection());
+
+$tmpl = new OCP\Template('oauth2', 'settings/admin');
+
+return $tmpl->fetchPage(['clients' => $clientMapper->findAll()]);

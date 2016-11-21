@@ -15,6 +15,13 @@
             </field>
 
             <field>
+                <name>name</name>
+                <type>text</type>
+                <notnull>true</notnull>
+                <length>80</length>
+            </field>
+
+            <field>
                 <name>client_secret</name>
                 <type>text</type>
                 <length>80</length>
