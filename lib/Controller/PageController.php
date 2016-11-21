@@ -14,13 +14,11 @@ namespace OCA\OAuth2\Controller;
 use OCP\IRequest;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Http\RedirectResponse;
-use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 
 class PageController extends Controller {
-
 
 	private $userId;
 
@@ -30,18 +28,14 @@ class PageController extends Controller {
 	}
 
 	/**
-	 * CAUTION: the @Stuff turns off security checks; for this page no admin is
-	 *          required and no CSRF check. If you don't know what CSRF is, read
-	 *          it up in the docs or you might create a security hole. This is
-	 *          basically the only required method to add this exemption, don't
-	 *          add it to any other method if you don't exactly know what it does
-	 *
+	 * Shows the main view.
+     *
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
 	public function index() {
 		$params = ['user' => $this->userId];
-		return new TemplateResponse('oauth2', 'main', $params);  // templates/main.php
+		return new TemplateResponse('oauth2', 'main', $params);
 	}
 
 	/**
@@ -49,18 +43,26 @@ class PageController extends Controller {
 	 *
 	 * Is accessible by the client via /index.php/apps/oauth2/authorize
 	 *
+     * @param string $response_type The expected response type.
+     * @param string $client_id The client identifier.
+     * @param string $redirect_uri The redirect URI.
+     * @param string $state The state.
+     *
+     * @return TemplateResponse|RedirectResponse The authorize view or a
+     * redirection to the ownCloud main page.
+     *
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
 	public function authorize($response_type, $client_id, $redirect_uri, $state) {
 		if (is_null($response_type) || is_null($client_id)
 			|| is_null($redirect_uri)) {
-			return new RedirectResponse("../../");
+			return new RedirectResponse('../../');
 		}
 		if (strcmp($response_type, 'code') !== 0
 			|| strcmp($client_id, 'lw') !== 0
 			|| $redirect_uri !== urldecode('https://www.google.de')) {
-			return new RedirectResponse("../../");
+			return new RedirectResponse('../../');
 		}
 
 		return new TemplateResponse('oauth2', 'authorize', ['client_id' => $client_id]);
@@ -68,6 +70,14 @@ class PageController extends Controller {
 
 	/**
 	 * Implements the OAuth 2.0 Authorization Response.
+     *
+     * @param string $response_type
+     * @param string $client_id
+     * @param string $redirect_uri
+     * @param string $state
+     *
+     * @return RedirectResponse|JSONResponse Redirection to the given
+     * redirect_uri or a JSON with an error message.
 	 *
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
