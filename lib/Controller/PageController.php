@@ -45,14 +45,6 @@ class PageController extends Controller {
 	}
 
 	/**
-	 * Simply method that posts back the payload of the request
-	 * @NoAdminRequired
-	 */
-	public function doEcho($echo) {
-		return new DataResponse(['echo' => $echo]);
-	}
-
-	/**
 	 * Shows a view for the user to authorize a client.
 	 *
 	 * Is accessible by the client via /index.php/apps/oauth2/authorize

@@ -20,7 +20,6 @@
 return [
 	'routes' => [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
-		['name' => 'page#do_echo', 'url' => '/echo', 'verb' => 'POST'],
 		['name' => 'page#authorize', 'url' => '/authorize', 'verb' => 'GET'],
 		['name' => 'page#generate_access_code', 'url' => '/authorize', 'verb' => 'POST'],
 		['name' => 'o_auth_api#generate_token', 'url' => '/api/v1/token', 'verb' => 'POST'],
