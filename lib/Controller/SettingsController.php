@@ -10,19 +10,37 @@
  */
 
 namespace OCA\OAuth2\Controller;
+
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\IRequest;
+use OCP\Security\ISecureRandom;
 
 class SettingsController extends Controller {
 
+    /** @var ClientMapper */
     private $clientMapper;
+
+    /** @var string */
     private $userId;
 
-    public function __construct($AppName, IRequest $request, ClientMapper $mapper, $UserId) {
+    /** @var ISecureRandom */
+    private $secureRandom;
+
+    /**
+     * SettingsController constructor.
+     *
+     * @param string $AppName
+     * @param IRequest $request
+     * @param ISecureRandom $secureRandom
+     * @param ClientMapper $mapper
+     * @param string $UserId
+     */
+    public function __construct($AppName, IRequest $request, ISecureRandom $secureRandom, ClientMapper $mapper, $UserId) {
         parent::__construct($AppName, $request);
+        $this->secureRandom = $secureRandom;
         $this->clientMapper = $mapper;
         $this->userId = $UserId;
     }
@@ -37,9 +55,9 @@ class SettingsController extends Controller {
      */
     public function addClient() {
         $client = new Client();
-        $client->setClientId('abc');
+        $client->setClientId($this->secureRandom->generate(40));
         $client->setName($_POST['name']);
-        $client->setClientSecret('topSecret');
+        $client->setClientSecret($this->secureRandom->generate(40));
         $client->setRedirectUri($_POST['redirect_uri']);
         $client->setGrantTypes('access_code');
         $client->setScope('files');
