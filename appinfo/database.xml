@@ -37,7 +37,6 @@
             </field>
         </declaration>
     </table>
-
     <table>
         <name>*dbprefix*oauth2_authorization_codes</name>
         <declaration>
