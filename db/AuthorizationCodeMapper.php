@@ -15,34 +15,34 @@ use OCP\AppFramework\Db\Entity;
 use \OCP\IDb;
 use \OCP\AppFramework\Db\Mapper;
 
-class ClientMapper extends Mapper {
+class AuthorizationCodeMapper extends Mapper {
 
     public function __construct(IDb $db) {
-        parent::__construct($db, 'oauth2_clients');
+        parent::__construct($db, 'oauth2_authorization_codes');
     }
 
     /**
-     * Selects a client by its ID.
+     * Selects an authorization code by its ID.
      *
-     * @param string $id The client's ID.
+     * @param string $id The authorization code's ID.
      *
-     * @return Entity The client entity.
+     * @return Entity The authorization code entity.
      *
      * @throws \OCP\AppFramework\Db\DoesNotExistException if not found.
      * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more
      * than one result.
      */
     public function find($id) {
-        $sql = 'SELECT * FROM `' . $this->tableName . '` WHERE `id` = ?';
+        $sql = 'SELECT * FROM `'. $this->tableName . '` WHERE `id` = ?';
         return $this->findEntity($sql, array($id));
     }
 
     /**
-     * Selects all clients.
+     * Selects all authorization codes.
      *
      * @param int $limit The maximum number of rows.
      * @param int $offset From which row we want to start.
-     * @return array All clients.
+     * @return array All authorization codes.
      */
     public function findAll($limit = null, $offset = null) {
         $sql = 'SELECT * FROM `' . $this->tableName . '`';
