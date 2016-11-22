@@ -13,7 +13,7 @@ use OCA\Oauth2\AppInfo\Application;
 
 OCP\User::checkAdminUser();
 
-$app = new Application('oauth2');
+$app = new Application();
 $clientMapper = new \OCA\OAuth2\Db\ClientMapper($app->getDatabaseConnection());
 
 $tmpl = new OCP\Template('oauth2', 'settings-admin');
