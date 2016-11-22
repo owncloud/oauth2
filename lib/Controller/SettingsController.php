@@ -13,6 +13,7 @@ namespace OCA\OAuth2\Controller;
 
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
+use OCA\OAuth2\Utilities;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\IRequest;
@@ -26,9 +27,6 @@ class SettingsController extends Controller {
     /** @var string */
     private $userId;
 
-    /** @var ISecureRandom */
-    private $secureRandom;
-
     /**
      * SettingsController constructor.
      *
@@ -38,9 +36,8 @@ class SettingsController extends Controller {
      * @param ClientMapper $mapper
      * @param string $UserId
      */
-    public function __construct($AppName, IRequest $request, ISecureRandom $secureRandom, ClientMapper $mapper, $UserId) {
+    public function __construct($AppName, IRequest $request, ClientMapper $mapper, $UserId) {
         parent::__construct($AppName, $request);
-        $this->secureRandom = $secureRandom;
         $this->clientMapper = $mapper;
         $this->userId = $UserId;
     }
@@ -59,8 +56,8 @@ class SettingsController extends Controller {
         }
 
         $client = new Client();
-        $client->setId($this->generateRandom());
-        $client->setSecret($this->generateRandom());
+        $client->setId(Utilities::generateRandom());
+        $client->setSecret(Utilities::generateRandom());
         $client->setRedirectUri(trim($_POST['redirect_uri']));
         $client->setUserId($this->userId);
         $client->setName(trim($_POST['name']));
@@ -83,16 +80,6 @@ class SettingsController extends Controller {
         $this->clientMapper->delete($client);
 
         return new RedirectResponse('../../../../settings/admin#oauth-2.0');
-    }
-
-    /**
-     * Generates a random string with 64 characters.
-     *
-     * @return string The random string.
-     */
-    private function generateRandom() {
-        return $this->secureRandom->generate(64,
-            $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
     }
 
 }
