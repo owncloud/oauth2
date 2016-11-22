@@ -9,6 +9,6 @@
  * @copyright Jonathan Neugebauer 2016
  */
 
-$tmpl = new OCP\Template('oauth2', 'settings/personal');
+$tmpl = new OCP\Template('oauth2', 'settings-personal');
 
 return $tmpl->fetchPage();

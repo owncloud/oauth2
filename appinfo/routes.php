@@ -19,7 +19,6 @@
  */
 return [
     'routes' => [
-        ['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
         # Routes for the authorize view
         ['name' => 'page#authorize', 'url' => '/authorize', 'verb' => 'GET'],
         ['name' => 'page#generate_access_code', 'url' => '/authorize', 'verb' => 'POST'],

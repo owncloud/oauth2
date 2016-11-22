@@ -28,17 +28,6 @@ class PageController extends Controller {
 	}
 
 	/**
-	 * Shows the main view.
-     *
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 */
-	public function index() {
-		$params = ['user' => $this->userId];
-		return new TemplateResponse('oauth2', 'main', $params);
-	}
-
-	/**
 	 * Shows a view for the user to authorize a client.
 	 *
 	 * Is accessible by the client via /index.php/apps/oauth2/authorize
