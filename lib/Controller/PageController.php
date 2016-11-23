@@ -122,7 +122,7 @@ class PageController extends Controller {
                 }
 
                 $result = urldecode($redirect_uri);
-                $result = $result. '?code=' . Utilities::generateRandom();
+                $result = $result. '?code=' . '123456789';
                 if (!is_null($state)) {
                     $result = $result. '&state=' . $state;
                 }
