@@ -10,34 +10,76 @@
  */
 
 namespace OCA\OAuth2\Controller;
+
+use OCA\OAuth2\Db\Client;
+use OCA\OAuth2\Db\ClientMapper;
+use OCA\OAuth2\Utilities;
 use OCP\AppFramework\Controller;
-use OCP\IConfig;
+use OCP\AppFramework\Http\RedirectResponse;
 use OCP\IRequest;
+use OCP\Security\ISecureRandom;
 
 class SettingsController extends Controller {
 
-	/**
-	 * @var IConfig
-	 */
-	private $config;
-	public function __construct($AppName, IRequest $request, IConfig $config) {
-		parent::__construct($AppName, $request);
-		$this->config = $config;
-	}
+    /** @var ClientMapper */
+    private $clientMapper;
 
+    /** @var string */
+    private $userId;
 
-	/**
-	 * Place to transfer the data out of the admin.php to the database.
-	 * The real database implementation is not done yet.
-	 *
-	 */
-	public function transferCredentials($PHP_AUTH_USER, $PHP_AUTH_SECRET){
-		if(isset($_POST[' PHP_AUTH_USER' ]) && isset($_POST[ 'PHP_AUTH_SECRET' ])){
-			return new JSONResponse(['message' => 'Successfully committed your credentials.']);
-		} else {
-			return new JSONResponse(['message' => 'Unknown User or Secret.'], Http::STATUS_BAD_REQUEST);
-		}
-	}
+    /**
+     * SettingsController constructor.
+     *
+     * @param string $AppName
+     * @param IRequest $request
+     * @param ISecureRandom $secureRandom
+     * @param ClientMapper $mapper
+     * @param string $UserId
+     */
+    public function __construct($AppName, IRequest $request, ClientMapper $mapper, $UserId) {
+        parent::__construct($AppName, $request);
+        $this->clientMapper = $mapper;
+        $this->userId = $UserId;
+    }
 
+    /**
+     * Adds a client.
+     *
+     * @return RedirectResponse Redirection to the settings page.
+     *
+     * @NoCSRFRequired
+     *
+     */
+    public function addClient() {
+        if (filter_var($_POST['redirect_uri'], FILTER_VALIDATE_URL) === false) {
+            return new RedirectResponse('../../settings/admin#oauth-2.0');
+        }
+
+        $client = new Client();
+        $client->setId(Utilities::generateRandom());
+        $client->setSecret(Utilities::generateRandom());
+        $client->setRedirectUri(trim($_POST['redirect_uri']));
+        $client->setUserId($this->userId);
+        $client->setName(trim($_POST['name']));
+
+        $this->clientMapper->insert($client);
+
+        return new RedirectResponse('../../settings/admin#oauth-2.0');
+    }
+
+    /**
+     * Deletes a client.
+     *
+     * @return RedirectResponse Redirection to the settings page.
+     *
+     * @NoCSRFRequired
+     *
+     */
+    public function deleteClient($id) {
+        $client = $this->clientMapper->find($id);
+        $this->clientMapper->delete($client);
+
+        return new RedirectResponse('../../../../settings/admin#oauth-2.0');
+    }
 
 }

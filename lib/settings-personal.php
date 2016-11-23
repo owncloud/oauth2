@@ -9,7 +9,6 @@
  * @copyright Jonathan Neugebauer 2016
  */
 
-namespace OCA\OAuth2\AppInfo;
+$tmpl = new OCP\Template('oauth2', 'settings-personal');
 
-$app = new Application();
-$app->registerSettings();
+return $tmpl->fetchPage();
