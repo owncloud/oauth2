@@ -9,16 +9,17 @@
  * @copyright Lukas Biermann 2016
  */
 
-use OCA\Oauth2\AppInfo\Application;
+use OCA\OAuth2\Db\ClientMapper;
+use OCP\AppFramework\App;
 
 OCP\User::checkAdminUser();
 
-$app = new Application();
-$clientMapper = new \OCA\OAuth2\Db\ClientMapper($app->getDatabaseConnection());
+$app = new App('oauth2');
+$container = $app->getContainer();
+$clientMapper = new ClientMapper($container->query('ServerContainer')->getDb());
 
 $tmpl = new OCP\Template('oauth2', 'settings-admin');
 
 $clients = $clientMapper->findAll();
-$client = new \OCA\OAuth2\Db\Client();
 
 return $tmpl->fetchPage(['clients' => $clientMapper->findAll()]);

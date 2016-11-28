@@ -17,6 +17,11 @@ use \OCP\AppFramework\Db\Mapper;
 
 class ClientMapper extends Mapper {
 
+    /**
+     * ClientMapper constructor.
+     *
+     * @param IDb $db Database Connection.
+     */
     public function __construct(IDb $db) {
         parent::__construct($db, 'oauth2_clients');
     }
@@ -34,7 +39,7 @@ class ClientMapper extends Mapper {
      */
     public function find($id) {
         $sql = 'SELECT * FROM `' . $this->tableName . '` WHERE `id` = ?';
-        return $this->findEntity($sql, array($id));
+        return $this->findEntity($sql, array($id), null, null);
     }
 
     /**
@@ -46,7 +51,7 @@ class ClientMapper extends Mapper {
      */
     public function findAll($limit = null, $offset = null) {
         $sql = 'SELECT * FROM `' . $this->tableName . '`';
-        return $this->findEntities($sql, $limit, $offset);
+        return $this->findEntities($sql, [], $limit, $offset);
     }
 
 }
