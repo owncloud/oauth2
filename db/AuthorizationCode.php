@@ -13,19 +13,19 @@ namespace OCA\OAuth2\Db;
 
 use \OCP\AppFramework\Db\Entity;
 
-class Client extends Entity {
+class AuthorizationCode extends Entity {
 
-    protected $secret;
-    protected $redirectUri;
+    protected $clientId;
     protected $userId;
-    protected $name;
+    protected $redirectUri;
+    protected $expires;
 
     public function __construct() {
         $this->addType('id', 'string');
-        $this->addType('secret', 'string');
-        $this->addType('redirect_uri', 'string');
+        $this->addType('client_id', 'string');
         $this->addType('user_id', 'string');
-        $this->addType('name', 'string');
+        $this->addType('redirect_uri', 'string');
+        //$this->addType('expires', 'string');
     }
 
 }

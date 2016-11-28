@@ -24,20 +24,29 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td><?php var_dump($_['clients'])?></td>
-            <td>https://learnweb.de/cb</td>
-            <td>12oindni2o2no1</td>
-            <td>12io23bnfipo2poemncnwipe</td>
-            <td><a class="action delete" href="#"><img class="svg action" src="/core/img/actions/delete.svg"></a></td>
-        </tr>
+            <?php foreach ($_['clients'] as $client) { ?>
+                <tr>
+                    <td><?php p($client->getName())?></td>
+                    <td><?php p($client->getRedirectUri())?></td>
+                    <td><?php p($client->getId())?></td>
+                    <td><?php p($client->getSecret())?></td>
+                    <td>
+                        <form action="../apps/oauth2/clients/<?php p($client->getId())?>/delete" method="post"
+                              style='display:inline;'>
+                            <input type="submit" class="button icon-delete" value="">
+                        </form>
+                    </td>
+                </tr>
+            <?php } ?>
         </tbody>
     </table>
 
     <h3><?php p($l->t('Add client')); ?></h3>
     <form action="../apps/oauth2/clients" method="post">
-        <input id="name" name="name" type="text" placeholder="<?php p($l->t('Name')); ?>">
-        <input id="redirect_uri" name="redirect_uri" type="url" placeholder="<?php p($l->t('Redirect URI')); ?>">
+        <input id="name" name="name" type="text" placeholder="<?php p($l->t
+        ('Name')); ?>">
+        <input id="redirect_uri" name="redirect_uri" type="url"
+               placeholder="<?php p($l->t('Redirect URI')); ?>">
         <input type="submit" class="button" value="<?php p($l->t('Add')); ?>">
     </form>
 </div>

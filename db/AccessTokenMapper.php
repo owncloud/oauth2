@@ -15,43 +15,38 @@ use OCP\AppFramework\Db\Entity;
 use \OCP\IDb;
 use \OCP\AppFramework\Db\Mapper;
 
-class ClientMapper extends Mapper {
+class AccessTokenMapper extends Mapper {
 
-    /**
-     * ClientMapper constructor.
-     *
-     * @param IDb $db Database Connection.
-     */
     public function __construct(IDb $db) {
-        parent::__construct($db, 'oauth2_clients');
+        parent::__construct($db, 'oauth2_access_tokens');
     }
 
     /**
-     * Selects a client by its ID.
+     * Selects an access token by its ID.
      *
-     * @param string $id The client's ID.
+     * @param string $id The access token's ID.
      *
-     * @return Entity The client entity.
+     * @return Entity The access token entity.
      *
      * @throws \OCP\AppFramework\Db\DoesNotExistException if not found.
      * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more
      * than one result.
      */
     public function find($id) {
-        $sql = 'SELECT * FROM `' . $this->tableName . '` WHERE `id` = ?';
-        return $this->findEntity($sql, array($id), null, null);
+        $sql = 'SELECT * FROM `'. $this->tableName . '` WHERE `id` = ?';
+        return $this->findEntity($sql, array($id));
     }
 
     /**
-     * Selects all clients.
+     * Selects all access tokens.
      *
      * @param int $limit The maximum number of rows.
      * @param int $offset From which row we want to start.
-     * @return array All clients.
+     * @return array All access tokens.
      */
     public function findAll($limit = null, $offset = null) {
         $sql = 'SELECT * FROM `' . $this->tableName . '`';
-        return $this->findEntities($sql, [], $limit, $offset);
+        return $this->findEntities($sql, $limit, $offset);
     }
 
 }

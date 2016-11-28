@@ -11,6 +11,8 @@
 
 namespace OCA\OAuth2\Controller;
 
+use OCA\OAuth2\Db\ClientMapper;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
@@ -18,8 +20,18 @@ use OCP\AppFramework\ApiController;
 
 class OAuthApiController extends ApiController {
 
-	public function __construct($appName, IRequest $request) {
+    /** @var ClientMapper */
+    private $clientMapper;
+
+    /**
+     * OAuthApiController constructor.
+     * @param string $appName
+     * @param IRequest $request
+     * @param ClientMapper $mapper
+     */
+	public function __construct($appName, IRequest $request, ClientMapper $mapper) {
 		parent::__construct($appName, $request);
+        $this->clientMapper = $mapper;
 	}
 
 	/**
@@ -36,18 +48,31 @@ class OAuthApiController extends ApiController {
 	 * @CORS
 	 */
 	public function generateToken($code) {
-		if ($code === '123456789'
-			&& $_SERVER['PHP_AUTH_USER'] === 'lw'
-			&& $_SERVER['PHP_AUTH_PW'] === 'secret') {
-			return new JSONResponse(
-				[
-					'access_token' => '2YotnFZFEjr1zCsicMWpAA',
-					'token_type' => 'Bearer'
-				]
-			);
-		}
+        if (is_null($code) || is_null($_SERVER['PHP_AUTH_USER'])
+            || is_null($_SERVER['PHP_AUTH_PW'])) {
+            return new JSONResponse(['message' => 'Missing credentials.'], Http::STATUS_BAD_REQUEST);
+        }
 
-		return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+        try {
+            $client = $this->clientMapper->find($_SERVER['PHP_AUTH_USER']);
+        } catch (DoesNotExistException $exception) {
+            return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+        }
+
+        if (strcmp($client->getSecret(), $_SERVER['PHP_AUTH_PW']) !== 0) {
+            return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+        }
+
+        if ($code !== '123456789') {
+            return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+        }
+
+        return new JSONResponse(
+            [
+                'access_token' => '2YotnFZFEjr1zCsicMWpAA',
+                'token_type' => 'Bearer'
+            ]
+        );
 	}
 
 }

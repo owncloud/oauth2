@@ -8,184 +8,119 @@
         <name>*dbprefix*oauth2_clients</name>
         <declaration>
             <field>
-                <name>client_id</name>
+                <name>id</name>
                 <type>text</type>
                 <notnull>true</notnull>
-                <length>80</length>
+                <length>64</length>
             </field>
-
+            <field>
+                <name>secret</name>
+                <type>text</type>
+                <length>64</length>
+            </field>
+            <field>
+                <name>redirect_uri</name>
+                <type>text</type>
+                <notnull>true</notnull>
+                <length>2000</length>
+            </field>
+            <field>
+                <name>user_id</name>
+                <type>text</type>
+                <length>64</length>
+            </field>
             <field>
                 <name>name</name>
                 <type>text</type>
                 <notnull>true</notnull>
                 <length>80</length>
             </field>
-
-            <field>
-                <name>client_secret</name>
-                <type>text</type>
-                <length>80</length>
-            </field>
-
-            <field>
-                <name>redirect_uri</name>
-                <type>text</type>
-                <notnull>true</notnull>
-                <length>2000</length>
-            </field>
-
-            <field>
-                <name>grant_types</name>
-                <type>text</type>
-                <length>80</length>
-            </field>
-
-            <field>
-                <name>scope</name>
-                <type>text</type>
-                <length>100</length>
-            </field>
-
-            <field>
-                <name>user_id</name>
-                <type>text</type>
-                <length>80</length>
-            </field>
         </declaration>
     </table>
-
-    <table>
-        <name>*dbprefix*oauth2_access_tokens</name>
-        <declaration>
-            <field>
-                <name>access_token</name>
-                <type>text</type>
-                <notnull>true</notnull>
-                <length>40</length>
-            </field>
-
-            <field>
-                <name>client_id</name>
-                <type>text</type>
-                <notnull>true</notnull>
-                <length>80</length>
-            </field>
-
-            <field>
-                <name>user_id</name>
-                <type>text</type>
-                <length>255</length>
-            </field>
-
-            <field>
-                <name>expires</name>
-                <type>timestamp</type>
-                <notnull>true</notnull>
-            </field>
-
-            <field>
-                <name>scope</name>
-                <type>text</type>
-                <length>255</length>
-            </field>
-
-        </declaration>
-    </table>
-
     <table>
         <name>*dbprefix*oauth2_authorization_codes</name>
         <declaration>
             <field>
-                <name>authorization_code</name>
+                <name>id</name>
                 <type>text</type>
                 <notnull>true</notnull>
-                <length>40</length>
+                <length>64</length>
             </field>
-
             <field>
                 <name>client_id</name>
                 <type>text</type>
                 <notnull>true</notnull>
-                <length>80</length>
+                <length>64</length>
             </field>
-
             <field>
                 <name>user_id</name>
                 <type>text</type>
-                <length>255</length>
+                <length>64</length>
             </field>
-
             <field>
                 <name>redirect_uri</name>
                 <type>text</type>
                 <length>2000</length>
             </field>
-
             <field>
                 <name>expires</name>
                 <type>timestamp</type>
                 <notnull>true</notnull>
             </field>
-
-            <field>
-                <name>scope</name>
-                <type>text</type>
-                <length>2000</length>
-            </field>
-
         </declaration>
     </table>
-
     <table>
-        <name>*dbprefix*oauth2_refresh_tokens</name>
+        <name>*dbprefix*oauth2_access_tokens</name>
         <declaration>
             <field>
-                <name>refresh_tokens</name>
+                <name>id</name>
                 <type>text</type>
                 <notnull>true</notnull>
-                <length>40</length>
+                <length>64</length>
             </field>
-
             <field>
                 <name>client_id</name>
                 <type>text</type>
                 <notnull>true</notnull>
-                <length>80</length>
+                <length>64</length>
             </field>
-
             <field>
                 <name>user_id</name>
                 <type>text</type>
-                <length>255</length>
+                <length>64</length>
             </field>
-
             <field>
                 <name>expires</name>
                 <type>timestamp</type>
                 <notnull>true</notnull>
             </field>
-
-            <field>
-                <name>scope</name>
-                <type>text</type>
-                <length>2000</length>
-            </field>
         </declaration>
     </table>
-
     <table>
-        <name>*dbprefix*oauth2_scopes</name>
+        <name>*dbprefix*oauth2_refresh_tokens</name>
         <declaration>
             <field>
-                <name>scope</name>
+                <name>id</name>
                 <type>text</type>
+                <notnull>true</notnull>
+                <length>64</length>
             </field>
-
             <field>
-                <name>is_default</name>
-                <type>boolean</type>
+                <name>client_id</name>
+                <type>text</type>
+                <notnull>true</notnull>
+                <length>64</length>
             </field>
-
+            <field>
+                <name>user_id</name>
+                <type>text</type>
+                <length>64</length>
+            </field>
+            <field>
+                <name>expires</name>
+                <type>timestamp</type>
+                <notnull>true</notnull>
+            </field>
         </declaration>
     </table>
 </database>
