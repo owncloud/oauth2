@@ -17,15 +17,13 @@ class AuthorizationCode extends Entity {
 
     protected $clientId;
     protected $userId;
-    protected $redirectUri;
     protected $expires;
 
     public function __construct() {
         $this->addType('id', 'string');
         $this->addType('client_id', 'string');
         $this->addType('user_id', 'string');
-        $this->addType('redirect_uri', 'string');
-        //$this->addType('expires', 'string');
+		// TODO: set type for $expires
     }
 
 }

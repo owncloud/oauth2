@@ -17,14 +17,12 @@ class Client extends Entity {
 
     protected $secret;
     protected $redirectUri;
-    protected $userId;
     protected $name;
 
     public function __construct() {
         $this->addType('id', 'string');
         $this->addType('secret', 'string');
         $this->addType('redirect_uri', 'string');
-        $this->addType('user_id', 'string');
         $this->addType('name', 'string');
     }
 
