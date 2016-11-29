@@ -11,6 +11,8 @@
 
 namespace OCA\OAuth2\Controller;
 
+use OCA\OAuth2\Db\AuthorizationCode;
+use OCA\OAuth2\Db\AuthorizationCodeMapper;
 use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Utilities;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -20,11 +22,15 @@ use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
+use Sabre\VObject\Property\ICalendar\DateTime;
 
 class PageController extends Controller {
 
     /** @var ClientMapper */
     private $clientMapper;
+
+	/** @var AuthorizationCodeMapper */
+	private $authorizationCodeMapper;
 
     /** @var string */
     private $userId;
@@ -33,12 +39,14 @@ class PageController extends Controller {
      * PageController constructor.
      * @param string $AppName
      * @param IRequest $request
-     * @param ClientMapper $mapper
+     * @param ClientMapper $clientMapper
+	 * @param AuthorizationCodeMapper $authorizationCodeMapper
      * @param string $UserId
      */
-	public function __construct($AppName, IRequest $request, ClientMapper $mapper, $UserId){
+	public function __construct($AppName, IRequest $request, ClientMapper $clientMapper, AuthorizationCodeMapper $authorizationCodeMapper, $UserId){
 		parent::__construct($AppName, $request);
-        $this->clientMapper = $mapper;
+        $this->clientMapper = $clientMapper;
+		$this->authorizationCodeMapper = $authorizationCodeMapper;
         $this->userId = $UserId;
 	}
 
@@ -97,7 +105,7 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function generateAccessCode($response_type, $client_id, $redirect_uri, $state) {
+	public function generateAuthorizationCode($response_type, $client_id, $redirect_uri, $state) {
         if (is_null($response_type) || is_null($client_id)
             || is_null($redirect_uri)) {
             return new RedirectResponse('../../');
@@ -121,8 +129,15 @@ class PageController extends Controller {
                     return new RedirectResponse('../../');
                 }
 
+				$code = Utilities::generateRandom();
+				$authorizationCode = new AuthorizationCode();
+				$authorizationCode->setId($code);
+				$authorizationCode->setClientId($client->getId());
+				$authorizationCode->setUserId($this->userId);
+				$this->authorizationCodeMapper->insert($authorizationCode);
+
                 $result = urldecode($redirect_uri);
-                $result = $result. '?code=' . '123456789';
+                $result = $result. '?code=' . $code;
                 if (!is_null($state)) {
                     $result = $result. '&state=' . $state;
                 }

@@ -11,6 +11,7 @@
 
 namespace OCA\OAuth2\Db;
 
+use DateTime;
 use \OCP\AppFramework\Db\Entity;
 
 class AccessToken extends Entity {
@@ -23,7 +24,7 @@ class AccessToken extends Entity {
         $this->addType('id', 'string');
         $this->addType('client_id', 'string');
         $this->addType('user_id', 'string');
-        //$this->addType('expires', 'string');
+        // TODO: set type for $expires
     }
 
 }

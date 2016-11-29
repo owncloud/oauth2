@@ -1,2 +1,2 @@
-owncloud-oauth2 (1.0)
+owncloud-oauth2 (0.1.0)
 * Initial version

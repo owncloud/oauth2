@@ -32,7 +32,6 @@ class SettingsController extends Controller {
      *
      * @param string $AppName
      * @param IRequest $request
-     * @param ISecureRandom $secureRandom
      * @param ClientMapper $mapper
      * @param string $UserId
      */
@@ -59,7 +58,6 @@ class SettingsController extends Controller {
         $client->setId(Utilities::generateRandom());
         $client->setSecret(Utilities::generateRandom());
         $client->setRedirectUri(trim($_POST['redirect_uri']));
-        $client->setUserId($this->userId);
         $client->setName(trim($_POST['name']));
 
         $this->clientMapper->insert($client);
