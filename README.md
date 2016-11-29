@@ -1,52 +1,44 @@
 # OAuth 2.0
-Place this app in **owncloud/apps/**
 
-## Building the app
+This App implements the [OAuth 2.0 Authorization Code Flow](https://tools.ietf.org/html/rfc6749#section-4.1).
 
-The app can be built by using the provided Makefile by running:
+## Installing the app
+Place the content of this repository in **owncloud/apps/oauth2**.
 
-    make
+## Using the app
 
-This requires the following things to be present:
-* make
-* which
-* tar: for building the archive
-* curl: used if phpunit and composer are not installed to fetch them from the web
-* npm: for building and testing everything JS, only required if a package.json is placed inside the **js/** folder
+### Endpoints
+* Authorization URL: `/index.php/apps/oauth2/authorize`
+* Access Token URL: `/index.php/apps/oauth2/api/v1/token`
 
-The make command will install or update Composer dependencies if a composer.json is present and also **npm run build** if a package.json is present in the **js/** folder. The npm **build** script should use local paths for build systems and package managers, so people that simply want to build the app won't need to install npm libraries globally, e.g.:
+### Protocol Flow
+1. [Client registration](https://tools.ietf.org/html/rfc6749#section-2): First the clients have to be registered in the admin settings: `/index.php/settings/admin#oauth2`. You need to specify a name for the client (the name is unrelated to the OAuth 2.0 protocol and is just used to recognize it later) and the redirect URI. A client identifier and client secret is being generated when adding a new client. They both consist of 64 characters.
 
-**package.json**:
+2. [Authorization Request](https://tools.ietf.org/html/rfc6749#section-4.1.1): For every registered client an Authorization Request can be made. The client redirects the resource owner to the [Authorization URL](#endpoints) and requests authorization. The following URL parameters have to be specified: 
+    1. `response_type`: needs to be `code` because at this time only the Authorization Code Flow is implemented.
+    2. `client_id`: the client identifier obtained when registering the client.
+    3. `redirect_uri`: the redirect URI specified when registering the client.
+
+3. [Authorization Response](https://tools.ietf.org/html/rfc6749#section-4.1.2): After the resource owner's authorization the apps redirects to the `redirect_uri` specified in the Authorization Request and adds the Authorization Code as URL parameter `code`.
+
+4. [Access Token Request](https://tools.ietf.org/html/rfc6749#section-4.1.3): With the Authorization Code the client can request an Access Token using the [Access Token URL](#endpoints). [Client Authentication](https://tools.ietf.org/html/rfc6749#section-2.3) is done using Basic Auth with the client identifier as username and the client secret as password.
+
+5. [Access Token Response](https://tools.ietf.org/html/rfc6749#section-4.1.4): The app responses to a valid Access Token Request with an JSON response like this:
+
 ```json
-"scripts": {
-    "test": "node node_modules/gulp-cli/bin/gulp.js karma",
-    "prebuild": "npm install && node_modules/bower/bin/bower install && node_modules/bower/bin/bower update",
-    "build": "node node_modules/gulp-cli/bin/gulp.js"
+{
+    "access_token" : "1vtnuo1NkIsbndAjVnhl7y0wJha59JyaAiFIVQDvcBY2uvKmj5EPBEhss0pauzdQ",
+    "token_type" : "Bearer",
+    "user_id" : "admin"
 }
 ```
 
+There are tables for saving Clients, Authorization Codes, Access Tokens and Refresh Tokens in the database.
 
-## Publish to App Store
+## Issues to be solved
+- [ ] Under some configurations there was an error that the [`ClientMapper`](/db/ClientMapper.php) could not be found (Ubuntu + PHP 7 + nginx + PostgreSQL, Ubuntu + PHP 7 + Apache + MySQL). But installing in a fresh [Docker container](https://hub.docker.com/_/owncloud/) was successful. The reasons for this error still have to be investigated.
 
-First get an account for the [App Store](http://apps.owncloud.com/) then run:
-
-    make && make appstore
-
-The archive is located in build/artifacts/appstore and can then be uploaded to the App Store.
-
-## Running tests
-You can use the provided Makefile to run all tests by using:
-
-    make test
-
-This will run the PHP unit and integration tests and if a package.json is present in the **js/** folder will execute **npm run test**
-
-Of course you can also install [PHPUnit](http://phpunit.de/getting-started.html) and use the configurations directly:
-
-    phpunit -c phpunit.xml
-
-or:
-
-    phpunit -c phpunit.integration.xml
-
-for integration tests
+## To Do
+- [ ] Add section in personal settings for managing authorized applications.
+- [ ] Add option for [Refresh Tokens](https://tools.ietf.org/html/rfc6749#section-1.5).
+- [ ] Add option for an expiration time for Authorization Codes, Access Tokens and Refresh Tokens.
