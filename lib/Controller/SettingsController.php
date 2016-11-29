@@ -32,7 +32,6 @@ class SettingsController extends Controller {
      *
      * @param string $AppName
      * @param IRequest $request
-     * @param ISecureRandom $secureRandom
      * @param ClientMapper $mapper
      * @param string $UserId
      */
