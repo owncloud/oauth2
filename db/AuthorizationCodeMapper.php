@@ -37,6 +37,12 @@ class AuthorizationCodeMapper extends Mapper {
         return $this->findEntity($sql, array($id), null, null);
     }
 
+	public function findMany(array $ids) {
+		// TODO: implement filtering with many IDS
+		$sql = 'SELECT * FROM `'. $this->tableName . '` WHERE `id` IN ?';
+		return $this->findEntities($sql, array($ids), null, null);
+	}
+
     /**
      * Selects all authorization codes.
      *

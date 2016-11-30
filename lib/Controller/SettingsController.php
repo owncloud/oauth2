@@ -67,6 +67,8 @@ class SettingsController extends Controller {
 
     /**
      * Deletes a client.
+	 *
+	 * @param string $id The client identifier.
      *
      * @return RedirectResponse Redirection to the settings page.
      *
@@ -79,5 +81,23 @@ class SettingsController extends Controller {
 
         return new RedirectResponse('../../../../settings/admin#oauth-2.0');
     }
+
+	/**
+	 * Revokes the authorization for a client.
+	 *
+	 * @param string $clientId The client identifier.
+	 * @param string $userId The ID of the user logged in.
+	 *
+	 * @return RedirectResponse Redirection to the settings page.
+	 *
+	 * @NoCSRFRequired
+	 *
+	 */
+	public function revokeAuthorization($clientId, $userId) {
+		$client = $this->clientMapper->find($clientId);
+		$this->clientMapper->delete($client);
+
+		return new RedirectResponse('../../../../settings/personal#oauth-2.0');
+	}
 
 }
