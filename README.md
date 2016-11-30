@@ -39,6 +39,7 @@ There are tables for saving Clients, Authorization Codes, Access Tokens and Refr
 - [ ] Under some configurations there was an error that the [`ClientMapper`](/db/ClientMapper.php) could not be found (Ubuntu + PHP 7 + nginx + PostgreSQL, Ubuntu + PHP 7 + Apache + MySQL). But installing in a fresh [Docker container](https://hub.docker.com/_/owncloud/) was successful. The reasons for this error still have to be investigated.
 
 ## To Do
+- [ ] Add PHPUnit tests.
 - [ ] Add section in personal settings for managing authorized applications.
 - [ ] Add option for [Refresh Tokens](https://tools.ietf.org/html/rfc6749#section-1.5).
 - [ ] Add option for an expiration time for Authorization Codes, Access Tokens and Refresh Tokens.
