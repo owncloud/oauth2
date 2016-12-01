@@ -18,14 +18,15 @@
  * it's instantiated in there
  */
 return [
-	'routes' => [
-		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
-		['name' => 'page#authorize', 'url' => '/authorize', 'verb' => 'GET'],
-		['name' => 'page#generate_access_code', 'url' => '/authorize', 'verb' => 'POST'],
-		['name' => 'o_auth_api#generate_token', 'url' => '/api/v1/token', 'verb' => 'POST'],
-		['name' => 'o_auth_api#preflighted_cors', 'url' => '/api/v1/{path}',
-			'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
-		['name' => 'settings#getCredentials', 'url' => '/admin/default', 'verb' => 'GET'],
-		['name' => 'settings#setCredentials', 'url' => '/admin/default', 'verb' => 'PUT'],
-	]
+    'routes' => [
+        # Routes for the authorize view
+        ['name' => 'page#authorize', 'url' => '/authorize', 'verb' => 'GET'],
+        ['name' => 'page#generate_authorization_code', 'url' => '/authorize', 'verb' => 'POST'],
+        # API endpoint for requesting a token
+        ['name' => 'o_auth_api#generate_token', 'url' => '/api/v1/token', 'verb' => 'POST'],
+        ['name' => 'o_auth_api#preflighted_cors', 'url' => '/api/v1/{path}', 'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
+        # Route for saving settings
+        ['name' => 'settings#addClient', 'url' => '/clients', 'verb' => 'POST'],
+        ['name' => 'settings#deleteClient', 'url' => '/clients/{id}/delete', 'verb' => 'POST']
+    ]
 ];

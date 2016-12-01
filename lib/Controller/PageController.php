@@ -11,31 +11,43 @@
 
 namespace OCA\OAuth2\Controller;
 
+use OCA\OAuth2\Db\AuthorizationCode;
+use OCA\OAuth2\Db\AuthorizationCodeMapper;
+use OCA\OAuth2\Db\ClientMapper;
+use OCA\OAuth2\Utilities;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IRequest;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
+use Sabre\VObject\Property\ICalendar\DateTime;
 
 class PageController extends Controller {
 
-	private $userId;
+    /** @var ClientMapper */
+    private $clientMapper;
 
-	public function __construct($AppName, IRequest $request, $UserId){
+	/** @var AuthorizationCodeMapper */
+	private $authorizationCodeMapper;
+
+    /** @var string */
+    private $userId;
+
+    /**
+     * PageController constructor.
+     * @param string $AppName
+     * @param IRequest $request
+     * @param ClientMapper $clientMapper
+	 * @param AuthorizationCodeMapper $authorizationCodeMapper
+     * @param string $UserId
+     */
+	public function __construct($AppName, IRequest $request, ClientMapper $clientMapper, AuthorizationCodeMapper $authorizationCodeMapper, $UserId){
 		parent::__construct($AppName, $request);
-		$this->userId = $UserId;
-	}
-
-	/**
-	 * Shows the main view.
-     *
-	 * @NoAdminRequired
-	 * @NoCSRFRequired
-	 */
-	public function index() {
-		$params = ['user' => $this->userId];
-		return new TemplateResponse('oauth2', 'main', $params);
+        $this->clientMapper = $clientMapper;
+		$this->authorizationCodeMapper = $authorizationCodeMapper;
+        $this->userId = $UserId;
 	}
 
 	/**
@@ -59,13 +71,24 @@ class PageController extends Controller {
 			|| is_null($redirect_uri)) {
 			return new RedirectResponse('../../');
 		}
-		if (strcmp($response_type, 'code') !== 0
-			|| strcmp($client_id, 'lw') !== 0
-			|| $redirect_uri !== urldecode('https://www.google.de')) {
+
+		try {
+            $client = $this->clientMapper->find($client_id);
+        } catch (DoesNotExistException $exception) {
+            return new RedirectResponse('../../');
+        }
+
+        if (is_null($client)) {
+            return new RedirectResponse('../../');
+        }
+        if (strcmp($client->getRedirectUri(), urldecode($redirect_uri)) !== 0) {
+            return new RedirectResponse('../../');
+        }
+		if (strcmp($response_type, 'code') !== 0) {
 			return new RedirectResponse('../../');
 		}
 
-		return new TemplateResponse('oauth2', 'authorize', ['client_id' => $client_id]);
+		return new TemplateResponse('oauth2', 'authorize', ['client_name' => $client->getName()]);
 	}
 
 	/**
@@ -82,17 +105,43 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function generateAccessCode($response_type, $client_id, $redirect_uri, $state) {
+	public function generateAuthorizationCode($response_type, $client_id, $redirect_uri, $state) {
+        if (is_null($response_type) || is_null($client_id)
+            || is_null($redirect_uri)) {
+            return new RedirectResponse('../../');
+        }
+
 		switch ($response_type) {
 			case 'code':
-				if (strcmp($client_id, 'lw') === 0 && strcmp(urldecode($redirect_uri), 'https://www.google.de') === 0) {
-					$result = urldecode($redirect_uri);
-					$result = $result. '?code=' . '123456789';
-					if (!is_null($state)) {
-						$result = $result. '&state=' . $state;
-					}
-					return new RedirectResponse($result);
-				}
+                try {
+                    $client = $this->clientMapper->find($client_id);
+                } catch (DoesNotExistException $exception) {
+                    return new RedirectResponse('../../');
+                }
+
+                if (is_null($client)) {
+                    return new RedirectResponse('../../');
+                }
+                if (strcmp($client->getRedirectUri(), urldecode($redirect_uri)) !== 0) {
+                    return new RedirectResponse('../../');
+                }
+                if (strcmp($response_type, 'code') !== 0) {
+                    return new RedirectResponse('../../');
+                }
+
+				$code = Utilities::generateRandom();
+				$authorizationCode = new AuthorizationCode();
+				$authorizationCode->setId($code);
+				$authorizationCode->setClientId($client->getId());
+				$authorizationCode->setUserId($this->userId);
+				$this->authorizationCodeMapper->insert($authorizationCode);
+
+                $result = urldecode($redirect_uri);
+                $result = $result. '?code=' . $code;
+                if (!is_null($state)) {
+                    $result = $result. '&state=' . $state;
+                }
+                return new RedirectResponse($result);
 				break;
 		}
 

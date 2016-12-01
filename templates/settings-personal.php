@@ -8,10 +8,9 @@
  * @author Jonathan Neugebauer
  * @copyright Jonathan Neugebauer 2016
  */
+?>
+<div class="section" id="oauth2">
+    <h2><?php p($l->t('OAuth 2.0')); ?></h2>
 
-use OCP\AppFramework\App;
-
-/**
- * Additional autoloader registration, e.g. registering composer autoloaders
- */
-// require_once __DIR__ . '/../vendor/autoload.php';
+    <h3><?php p($l->t('Authorized Applications')); ?></h3>
+</div>
