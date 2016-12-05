@@ -40,6 +40,9 @@ class PageControllerTest extends PHPUnit_Framework_TestCase {
 	/** @var PageController $controller */
 	private $controller;
 
+	/** @var ClientMapper $clientMapper */
+	private $clientMapper;
+
 	/** @var string $userId */
 	private $userId = 'john';
 
@@ -49,27 +52,31 @@ class PageControllerTest extends PHPUnit_Framework_TestCase {
 		$app = new Application();
 		$container = $app->getContainer();
 
-		/** @var ClientMapper $clientMapper */
-		$clientMapper = $container->query('ClientMapper');
+		$this->clientMapper = $container->query('ClientMapper');
 
+		/** @var Client $client */
 		$client = new Client();
-		$client->setId('testId7890');
+		$client->setId('clientId1234567890');
 		$client->setSecret('topSecret123');
 		$client->setRedirectUri('https://www.example.org');
 		$client->setName('Example');
-		$clientMapper->insert($client);
+		$this->clientMapper->insert($client);
 
 		/** @var AuthorizationCodeMapper $authorizationCodeMapper */
 		$authorizationCodeMapper = $container->query('AuthorizationCodeMapper');
 
-		$this->controller = new PageController('oauth2', $request, $clientMapper, $authorizationCodeMapper, $this->userId);
+		$this->controller = new PageController('oauth2', $request, $this->clientMapper, $authorizationCodeMapper, $this->userId);
+	}
+
+	public function tearDown() {
+		$this->clientMapper->delete($this->clientMapper->find('clientId1234567890'));
 	}
 
 	public function testAuthorize() {
 		$result = $this->controller->authorize('code', 'client_id', 'redirect_uri', 'state');
 		$this->assertTrue($result instanceof RedirectResponse);
 
-		$result = $this->controller->authorize('code', 'testId7890', urldecode('https://www.example.org'), 'state');
+		$result = $this->controller->authorize('code', 'clientId1234567890', urldecode('https://www.example.org'), 'state');
 		$this->assertTrue($result instanceof TemplateResponse);
 	}
 
