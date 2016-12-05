@@ -38,7 +38,7 @@
 			<tr>
 				<td><?php p($client->getName()); ?></td>
 				<td>
-					<form action="../apps/oauth2/clients/<?php p($client->getId()); ?>/revoke?<?php p($_['user_id']); ?>" method="post"
+					<form action="../apps/oauth2/clients/<?php p($client->getId()); ?>/revoke?user_id=<?php p($_['user_id']); ?>" method="post"
 						  style='display:inline;'>
 						<input type="submit" class="button icon-delete" value="">
 					</form>

@@ -110,16 +110,16 @@ class SettingsController extends Controller {
 	 * Revokes the authorization for a client.
 	 *
 	 * @param string $id The client identifier.
-	 * @param string $userId The ID of the user logged in.
+	 * @param string $user_id The ID of the user logged in.
 	 *
 	 * @return RedirectResponse Redirection to the settings page.
 	 *
 	 * @NoCSRFRequired
 	 *
 	 */
-	public function revokeAuthorization($id, $userId) {
-		$this->accessTokenMapper->deleteByClientUser($id, $userId);
-		$this->authorizationCodeMapper->deleteByClientUser($id, $userId);
+	public function revokeAuthorization($id, $user_id) {
+		$this->accessTokenMapper->deleteByClientUser($id, $user_id);
+		$this->authorizationCodeMapper->deleteByClientUser($id, $user_id);
 
 		return new RedirectResponse('../../../../settings/personal#oauth-2.0');
 	}
