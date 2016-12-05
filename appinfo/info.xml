@@ -4,7 +4,7 @@
     <name>OAuth 2.0</name>
     <description>Application for using OAuth 2.0 in ownCloud</description>
     <licence>AGPL</licence>
-    <author>Lukas Biermann, Nina Herrmann, Wladislaw  Iwanzow, Dennis Meis, Katharina Meyer, Jonathan Neugebauer</author>
+    <author>Lukas Biermann, Nina Herrmann, Wladislaw  Iwanzow, Dennis Meis, Jonathan Neugebauer</author>
     <version>0.1.0</version>
     <namespace>OAuth2</namespace>
     <category>other</category>

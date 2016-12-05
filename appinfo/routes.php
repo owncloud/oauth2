@@ -1,22 +1,27 @@
 <?php
 /**
- * ownCloud - oauth2
+ * @author Lukas Biermann
+ * @author Nina Herrmann
+ * @author Wladislaw Iwanzow
+ * @author Dennis Meis
+ * @author Jonathan Neugebauer
  *
- * This file is licensed under the Affero General Public License version 3 or
- * later. See the COPYING file.
+ * @copyright Copyright (c) 2016, Project Seminar "PSSL16" at the University of Muenster.
+ * @license AGPL-3.0
  *
- * @author Jonathan Neugebauer, Lukas Biermann
- * @copyright Jonathan Neugebauer, Lukas Biermann 2016
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-/**
- * Create your routes in here. The name is the lowercase name of the controller
- * without the controller part, the stuff after the hash is the method.
- * e.g. page#index -> OCA\OAuth2\Controller\PageController->index()
- *
- * The controller class has to be registered in the application.php file since
- * it's instantiated in there
- */
 return [
     'routes' => [
         # Routes for the authorize view
@@ -25,8 +30,9 @@ return [
         # API endpoint for requesting a token
         ['name' => 'o_auth_api#generate_token', 'url' => '/api/v1/token', 'verb' => 'POST'],
         ['name' => 'o_auth_api#preflighted_cors', 'url' => '/api/v1/{path}', 'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
-        # Route for saving settings
+        # Routes for admin settings
         ['name' => 'settings#addClient', 'url' => '/clients', 'verb' => 'POST'],
         ['name' => 'settings#deleteClient', 'url' => '/clients/{id}/delete', 'verb' => 'POST']
+		# Routes for personal settings
     ]
 ];
