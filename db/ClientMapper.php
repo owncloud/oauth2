@@ -17,41 +17,58 @@ use \OCP\AppFramework\Db\Mapper;
 
 class ClientMapper extends Mapper {
 
-    /**
-     * ClientMapper constructor.
-     *
-     * @param IDb $db Database Connection.
-     */
-    public function __construct(IDb $db) {
-        parent::__construct($db, 'oauth2_clients');
-    }
+	/**
+	 * ClientMapper constructor.
+	 *
+	 * @param IDb $db Database Connection.
+	 */
+	public function __construct(IDb $db) {
+		parent::__construct($db, 'oauth2_clients');
+	}
 
-    /**
-     * Selects a client by its ID.
-     *
-     * @param string $id The client's ID.
-     *
-     * @return Entity The client entity.
-     *
-     * @throws \OCP\AppFramework\Db\DoesNotExistException if not found.
-     * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more
-     * than one result.
-     */
-    public function find($id) {
-        $sql = 'SELECT * FROM `' . $this->tableName . '` WHERE `id` = ?';
-        return $this->findEntity($sql, array($id), null, null);
-    }
+	/**
+	 * Selects a client by its ID.
+	 *
+	 * @param string $id The client's ID.
+	 *
+	 * @return Entity The client entity.
+	 *
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found.
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more
+	 * than one result.
+	 */
+	public function find($id) {
+		$sql = 'SELECT * FROM `' . $this->tableName . '` WHERE `id` = ?';
+		return $this->findEntity($sql, array($id), null, null);
+	}
 
-    /**
-     * Selects all clients.
-     *
-     * @param int $limit The maximum number of rows.
-     * @param int $offset From which row we want to start.
-     * @return array All clients.
-     */
-    public function findAll($limit = null, $offset = null) {
-        $sql = 'SELECT * FROM `' . $this->tableName . '`';
-        return $this->findEntities($sql, [], $limit, $offset);
-    }
+	/**
+	 * Selects all clients.
+	 *
+	 * @param int $limit The maximum number of rows.
+	 * @param int $offset From which row we want to start.
+	 * @return array All clients.
+	 */
+	public function findAll($limit = null, $offset = null) {
+		$sql = 'SELECT * FROM `' . $this->tableName . '`';
+		return $this->findEntities($sql, [], $limit, $offset);
+	}
+
+	/**
+	 * Selects clients by the given user ID.
+	 *
+	 * @param string $userId The user ID.
+	 *
+	 * @return array The client entities.
+	 */
+	public function findByUserId($userId) {
+		$sql = 'SELECT * FROM `' . $this->tableName . '` '
+			. 'WHERE `id` IN ( '
+				. 'SELECT `client_id` FROM `oc_oauth2_authorization_codes` WHERE `user_id` = ? '
+				. 'UNION DISTINCT '
+				. 'SELECT `client_id` FROM `oc_oauth2_access_tokens` WHERE `user_id` = ? '
+			.')';
+		return $this->findEntities($sql, array($userId, $userId), null, null);
+	}
 
 }

@@ -10,7 +10,6 @@
  */
 
 use OCA\OAuth2\Db\ClientMapper;
-use OCA\OAuth2\Db\AccessTokenMapper;
 use OCP\AppFramework\App;
 
 $tmpl = new OCP\Template('oauth2', 'settings-personal');
@@ -18,8 +17,7 @@ $tmpl = new OCP\Template('oauth2', 'settings-personal');
 $app = new App('oauth2');
 $container = $app->getContainer();
 $clientMapper = new ClientMapper($container->query('ServerContainer')->getDb());
-$accessTokenMapper = new AccessTokenMapper($container->query('ServerContainer')->getDb());
 
-// TODO filter clients for authorized clients for the current user
+$userId = \OC::$server->getUserSession()->getUser()->getUID();
 
-return $tmpl->fetchPage(['clients' => $clientMapper->findAll()]);
+return $tmpl->fetchPage(['clients' => $clientMapper->findByUserId($userId)]);
