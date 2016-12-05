@@ -1,25 +1,12 @@
 <?php
 /**
+ * ownCloud - oauth2
+ *
+ * This file is licensed under the Affero General Public License version 3 or
+ * later. See the COPYING file.
+ *
  * @author Lukas Biermann
- * @author Nina Herrmann
- * @author Wladislaw Iwanzow
- * @author Dennis Meis
- * @author Jonathan Neugebauer
- *
- * @copyright Copyright (c) 2016, Project Seminar "PSSL16" at the University of Muenster.
- * @license AGPL-3.0
- *
- * This code is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License, version 3,
- * as published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License, version 3,
- * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ * @copyright Lukas Biermann 2016
  */
 ?>
 <div class="section" id="oauth2">
@@ -39,12 +26,12 @@
         <tbody>
             <?php foreach ($_['clients'] as $client) { ?>
                 <tr>
-                    <td><?php p($client->getName())?></td>
-                    <td><?php p($client->getRedirectUri())?></td>
-                    <td><?php p($client->getId())?></td>
-                    <td><?php p($client->getSecret())?></td>
+                    <td><?php p($client->getName()); ?></td>
+                    <td><?php p($client->getRedirectUri()); ?></td>
+                    <td><?php p($client->getId()); ?></td>
+                    <td><?php p($client->getSecret()); ?></td>
                     <td>
-                        <form action="../apps/oauth2/clients/<?php p($client->getId())?>/delete" method="post"
+                        <form action="../apps/oauth2/clients/<?php p($client->getId()); ?>/delete" method="post"
                               style='display:inline;'>
                             <input type="submit" class="button icon-delete" value="">
                         </form>
@@ -56,10 +43,8 @@
 
     <h3><?php p($l->t('Add client')); ?></h3>
     <form action="../apps/oauth2/clients" method="post">
-        <input id="name" name="name" type="text" placeholder="<?php p($l->t
-        ('Name')); ?>">
-        <input id="redirect_uri" name="redirect_uri" type="url"
-               placeholder="<?php p($l->t('Redirect URI')); ?>">
+        <input id="name" name="name" type="text" placeholder="<?php p($l->t('Name')); ?>">
+        <input id="redirect_uri" name="redirect_uri" type="url" placeholder="<?php p($l->t('Redirect URI')); ?>">
         <input type="submit" class="button" value="<?php p($l->t('Add')); ?>">
     </form>
 </div>

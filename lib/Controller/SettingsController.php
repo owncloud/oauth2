@@ -24,6 +24,8 @@
 
 namespace OCA\OAuth2\Controller;
 
+use OCA\OAuth2\Db\AccessTokenMapper;
+use OCA\OAuth2\Db\AuthorizationCodeMapper;
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Utilities;
@@ -36,6 +38,12 @@ class SettingsController extends Controller {
     /** @var ClientMapper */
     private $clientMapper;
 
+	/** @var AuthorizationCodeMapper */
+	private $authorizationCodeMapper;
+
+	/** @var AccessTokenMapper */
+	private $accessTokenMapper;
+
     /** @var string */
     private $userId;
 
@@ -44,12 +52,16 @@ class SettingsController extends Controller {
      *
      * @param string $AppName
      * @param IRequest $request
-     * @param ClientMapper $mapper
+     * @param ClientMapper $clientMapper
+	 * @param AuthorizationCodeMapper $authorizationCodeMapper
+	 * @param AccessTokenMapper $accessTokenMapper
      * @param string $UserId
      */
-    public function __construct($AppName, IRequest $request, ClientMapper $mapper, $UserId) {
+    public function __construct($AppName, IRequest $request, ClientMapper $clientMapper, AuthorizationCodeMapper $authorizationCodeMapper, AccessTokenMapper $accessTokenMapper, $UserId) {
         parent::__construct($AppName, $request);
-        $this->clientMapper = $mapper;
+        $this->clientMapper = $clientMapper;
+		$this->authorizationCodeMapper = $authorizationCodeMapper;
+		$this->accessTokenMapper = $accessTokenMapper;
         $this->userId = $UserId;
     }
 
@@ -97,7 +109,7 @@ class SettingsController extends Controller {
 	/**
 	 * Revokes the authorization for a client.
 	 *
-	 * @param string $clientId The client identifier.
+	 * @param string $id The client identifier.
 	 * @param string $userId The ID of the user logged in.
 	 *
 	 * @return RedirectResponse Redirection to the settings page.
@@ -105,9 +117,9 @@ class SettingsController extends Controller {
 	 * @NoCSRFRequired
 	 *
 	 */
-	public function revokeAuthorization($clientId, $userId) {
-		$client = $this->clientMapper->find($clientId);
-		$this->clientMapper->delete($client);
+	public function revokeAuthorization($id, $userId) {
+		$this->accessTokenMapper->deleteByClientUser($id, $userId);
+		$this->authorizationCodeMapper->deleteByClientUser($id, $userId);
 
 		return new RedirectResponse('../../../../settings/personal#oauth-2.0');
 	}

@@ -74,7 +74,7 @@ class ClientMapper extends Mapper {
 	 *
 	 * @return array The client entities.
 	 */
-	public function findByUserId($userId) {
+	public function findByUser($userId) {
 		$sql = 'SELECT * FROM `' . $this->tableName . '` '
 			. 'WHERE `id` IN ( '
 				. 'SELECT `client_id` FROM `oc_oauth2_authorization_codes` WHERE `user_id` = ? '

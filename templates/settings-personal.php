@@ -36,9 +36,9 @@
 		<tbody>
 		<?php foreach ($_['clients'] as $client) { ?>
 			<tr>
-				<td><?php p($client->getName()) ?></td>
+				<td><?php p($client->getName()); ?></td>
 				<td>
-					<form action="#" method="post"
+					<form action="../apps/oauth2/clients/<?php p($client->getId()); ?>/revoke?<?php p($_['user_id']); ?>" method="post"
 						  style='display:inline;'>
 						<input type="submit" class="button icon-delete" value="">
 					</form>

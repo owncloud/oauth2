@@ -69,4 +69,17 @@ class AuthorizationCodeMapper extends Mapper {
         return $this->findEntities($sql, [], $limit, $offset);
     }
 
+	/**
+	 * Deletes all authorization codes for given client and user ID.
+	 *
+	 * @param string $clientId The client ID.
+	 * @param string $userId The user ID.
+	 */
+	public function deleteByClientUser($clientId, $userId) {
+		$sql = 'DELETE FROM `' . $this->tableName . '` '
+			. 'WHERE client_id = ? AND user_id = ?';
+		$stmt = $this->execute($sql, array($clientId, $userId), null, null);
+		$stmt->closeCursor();
+	}
+
 }

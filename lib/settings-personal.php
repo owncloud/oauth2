@@ -33,4 +33,4 @@ $clientMapper = new ClientMapper($container->query('ServerContainer')->getDb());
 
 $userId = \OC::$server->getUserSession()->getUser()->getUID();
 
-return $tmpl->fetchPage(['clients' => $clientMapper->findByUserId($userId)]);
+return $tmpl->fetchPage(['clients' => $clientMapper->findByUser($userId), 'user_id' => $userId]);

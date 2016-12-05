@@ -32,7 +32,8 @@ return [
         ['name' => 'o_auth_api#preflighted_cors', 'url' => '/api/v1/{path}', 'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
         # Routes for admin settings
         ['name' => 'settings#addClient', 'url' => '/clients', 'verb' => 'POST'],
-        ['name' => 'settings#deleteClient', 'url' => '/clients/{id}/delete', 'verb' => 'POST']
+        ['name' => 'settings#deleteClient', 'url' => '/clients/{id}/delete', 'verb' => 'POST'],
 		# Routes for personal settings
+		['name' => 'settings#revokeAuthorization', 'url' => '/clients/{id}/revoke', 'verb' => 'POST']
     ]
 ];
