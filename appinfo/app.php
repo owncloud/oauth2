@@ -22,7 +22,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-namespace OCA\OAuth2\AppInfo;
+use OCA\OAuth2\AppInfo\Application;
 
 $app = new Application();
 $app->registerSettings();
