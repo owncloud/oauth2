@@ -4,4 +4,21 @@
             <directory>./tests/unit</directory>
         </testsuite>
     </testsuites>
+
+	<filter>
+		<whitelist>
+			<directory suffix=".php">../../../oauth2</directory>
+			<exclude>
+				<directory suffix=".php">../../../oauth2/3rdparty
+				</directory>
+				<directory suffix=".php">../../../oauth2/l10n</directory>
+				<directory suffix=".php">../../../oauth2/tests
+				</directory>
+			</exclude>
+		</whitelist>
+	</filter>
+
+	<logging>
+		<log type="coverage-clover" target="./clover.xml"/>
+	</logging>
 </phpunit>
