@@ -24,16 +24,16 @@
 
 namespace OCA\OAuth2\Controller;
 
-use OCA\OAuth2\Db\AccessToken;
-use OCA\OAuth2\Db\AccessTokenMapper;
-use OCA\OAuth2\Db\AuthorizationCodeMapper;
-use OCA\OAuth2\Db\ClientMapper;
-use OCA\OAuth2\Utilities;
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\JSONResponse;
-use OCP\IRequest;
-use OCP\AppFramework\ApiController;
+use \OCA\OAuth2\Db\AccessToken;
+use \OCA\OAuth2\Db\AccessTokenMapper;
+use \OCA\OAuth2\Db\AuthorizationCodeMapper;
+use \OCA\OAuth2\Db\ClientMapper;
+use \OCA\OAuth2\Utilities;
+use \OCP\AppFramework\Db\DoesNotExistException;
+use \OCP\AppFramework\Http;
+use \OCP\AppFramework\Http\JSONResponse;
+use \OCP\IRequest;
+use \OCP\AppFramework\ApiController;
 
 class OAuthApiController extends ApiController {
 

@@ -24,7 +24,7 @@
 
 namespace OCA\OAuth2\Db;
 
-use OCP\AppFramework\Db\Entity;
+use \OCP\AppFramework\Db\Entity;
 use \OCP\IDb;
 use \OCP\AppFramework\Db\Mapper;
 
