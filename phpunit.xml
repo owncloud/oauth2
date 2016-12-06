@@ -7,12 +7,11 @@
 
 	<filter>
 		<whitelist>
-			<directory suffix=".php">../../../oauth2</directory>
+			<directory suffix=".php">.</directory>
 			<exclude>
-				<directory suffix=".php">../../../oauth2/3rdparty
-				</directory>
-				<directory suffix=".php">../../../oauth2/l10n</directory>
-				<directory suffix=".php">../../../oauth2/tests
+				<directory suffix=".php">./3rdparty</directory>
+				<directory suffix=".php">./l10n</directory>
+				<directory suffix=".php">./tests
 				</directory>
 			</exclude>
 		</whitelist>

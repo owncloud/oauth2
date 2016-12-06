@@ -170,5 +170,5 @@ ifeq (, $(shell which phpunit 2> /dev/null))
 	php $(build_tools_directory)/phpunit.phar -c phpunit.integration.xml
 else
 	phpunit -c phpunit.xml --coverage-clover build/php-unit.clover
-	phpunit -c phpunit.integration.xml --coverage-clover build/php-unit.clover
+	phpunit -c phpunit.integration.xml
 endif
