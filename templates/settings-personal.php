@@ -26,6 +26,10 @@
 	<h2><?php p($l->t('OAuth 2.0')); ?></h2>
 
 	<h3><?php p($l->t('Authorized Applications')); ?></h3>
+	<?php if (empty($_['clients'])) {
+		p($l->t('No applications registered.'));
+	}
+	else { ?>
 	<table class="grid">
 		<thead>
 		<tr>
@@ -47,4 +51,5 @@
 		<?php } ?>
 		</tbody>
 	</table>
+	<?php } ?>
 </div>
