@@ -22,7 +22,5 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-use OCA\OAuth2\AppInfo\Application;
-
-$app = new Application();
-$app->registerSettings();
+\OCP\App::registerAdmin('oauth2', 'lib/settings-admin');
+\OCP\App::registerPersonal('oauth2', 'lib/settings-personal');

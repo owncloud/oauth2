@@ -67,12 +67,4 @@ class Application extends App {
 		});
     }
 
-    /**
-     * Registers the settings for the app.
-     */
-    public function registerSettings() {
-        \OCP\App::registerAdmin('oauth2', 'lib/settings-admin');
-        \OCP\App::registerPersonal('oauth2', 'lib/settings-personal');
-    }
-
 }
