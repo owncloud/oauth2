@@ -9,6 +9,7 @@ env:
         - CORE_BRANCH=stable9
         - CORE_BRANCH=stable9.1
         - master
+    matrix:
         - DB=pgsql
         - DB=sqlite
         - DB=mysql
