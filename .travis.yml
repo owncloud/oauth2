@@ -9,15 +9,11 @@ env:
     - CORE_BRANCH=stable9.1 DB=pgsql
     - CORE_BRANCH=stable9.1 DB=sqlite
     - CORE_BRANCH=stable9.1 DB=mysql
-    - CORE_BRANCH=master DB=pgsql
-    - CORE_BRANCH=master DB=sqlite
-    - CORE_BRANCH=master DB=mysql
 
 matrix:
     allow_failures:
         - php: 7.1
         - php: nightly
-    fast_finish: true
 
 before_install:
     # enable a display for running JavaScript tests
