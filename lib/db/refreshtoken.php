@@ -28,12 +28,14 @@ use \OCP\AppFramework\Db\Entity;
 
 class RefreshToken extends Entity {
 
+    protected $token;
     protected $clientId;
     protected $userId;
     protected $expires;
 
     public function __construct() {
-        $this->addType('id', 'string');
+        $this->addType('id', 'integer');
+        $this->addType('token', 'string');
         $this->addType('client_id', 'string');
         $this->addType('user_id', 'string');
 		// TODO: set type for $expires

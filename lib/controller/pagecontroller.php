@@ -90,7 +90,7 @@ class PageController extends Controller {
 		}
 
 		try {
-            $client = $this->clientMapper->find($client_id);
+            $client = $this->clientMapper->findByIdentifier($client_id);
         } catch (DoesNotExistException $exception) {
             return new RedirectResponse('../../');
         }
@@ -131,7 +131,7 @@ class PageController extends Controller {
 		switch ($response_type) {
 			case 'code':
                 try {
-                    $client = $this->clientMapper->find($client_id);
+                    $client = $this->clientMapper->findByIdentifier($client_id);
                 } catch (DoesNotExistException $exception) {
                     return new RedirectResponse('../../');
                 }
@@ -148,7 +148,7 @@ class PageController extends Controller {
 
 				$code = Utilities::generateRandom();
 				$authorizationCode = new AuthorizationCode();
-				$authorizationCode->setId($code);
+				$authorizationCode->setIdentifier($code);
 				$authorizationCode->setClientId($client->getId());
 				$authorizationCode->setUserId($this->userId);
 				$this->authorizationCodeMapper->insert($authorizationCode);

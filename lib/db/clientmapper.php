@@ -55,6 +55,22 @@ class ClientMapper extends Mapper {
 		return $this->findEntity($sql, array($id), null, null);
 	}
 
+    /**
+     * Selects a client by its identifier.
+     *
+     * @param string $identifier The client's identifier.
+     *
+     * @return Entity The client entity.
+     *
+     * @throws \OCP\AppFramework\Db\DoesNotExistException if not found.
+     * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more
+     * than one result.
+     */
+    public function findByIdentifier($identifier) {
+        $sql = 'SELECT * FROM `' . $this->tableName . '` WHERE `identifier` = ?';
+        return $this->findEntity($sql, array($identifier), null, null);
+    }
+
 	/**
 	 * Selects all clients.
 	 *

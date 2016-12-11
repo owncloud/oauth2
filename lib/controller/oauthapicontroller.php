@@ -81,7 +81,7 @@ class OAuthApiController extends ApiController {
         }
 
         try {
-            $client = $this->clientMapper->find($_SERVER['PHP_AUTH_USER']);
+            $client = $this->clientMapper->findByIdentifier($_SERVER['PHP_AUTH_USER']);
         } catch (DoesNotExistException $exception) {
             return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
         }
@@ -91,7 +91,7 @@ class OAuthApiController extends ApiController {
         }
 
 		try {
-			$authorizationCode = $this->authorizationCodeMapper->find($code);
+			$authorizationCode = $this->authorizationCodeMapper->findByCode($code);
 		} catch (DoesNotExistException $exception) {
 			return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
 		}
@@ -103,7 +103,7 @@ class OAuthApiController extends ApiController {
 		$token = Utilities::generateRandom();
 		$userId = $authorizationCode->getUserId();
 		$accessToken = new AccessToken();
-		$accessToken->setId($token);
+		$accessToken->setToken($token);
 		$accessToken->setClientId($authorizationCode->getClientId());
 		$accessToken->setUserId($userId);
 		$this->accessTokenMapper->insert($accessToken);

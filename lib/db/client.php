@@ -28,12 +28,14 @@ use \OCP\AppFramework\Db\Entity;
 
 class Client extends Entity {
 
+    protected $identifier;
     protected $secret;
     protected $redirectUri;
     protected $name;
 
     public function __construct() {
-        $this->addType('id', 'string');
+        $this->addType('id', 'integer');
+        $this->addType('identifier', 'string');
         $this->addType('secret', 'string');
         $this->addType('redirect_uri', 'string');
         $this->addType('name', 'string');

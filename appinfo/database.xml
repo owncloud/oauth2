@@ -8,7 +8,15 @@
         <name>*dbprefix*oauth2_clients</name>
         <declaration>
             <field>
-                <name>id</name>
+            	<name>id</name>
+            	<type>integer</type>
+            	<notnull>true</notnull>
+            	<autoincrement>true</autoincrement>
+            	<unsigned>true</unsigned>
+            	<primary>true</primary>
+            </field>
+            <field>
+                <name>identifier</name>
                 <type>text</type>
                 <length>64</length>
                 <notnull>true</notnull>
@@ -38,15 +46,23 @@
         <declaration>
             <field>
                 <name>id</name>
+                <type>integer</type>
+                <notnull>true</notnull>
+                <autoincrement>true</autoincrement>
+                <unsigned>true</unsigned>
+                <primary>true</primary>
+            </field>
+            <field>
+                <name>code</name>
                 <type>text</type>
                 <length>64</length>
                 <notnull>true</notnull>
             </field>
             <field>
                 <name>client_id</name>
-                <type>text</type>
-                <length>64</length>
+                <type>integer</type>
                 <notnull>true</notnull>
+                <unsigned>true</unsigned>
             </field>
             <field>
                 <name>user_id</name>
@@ -65,15 +81,23 @@
         <declaration>
             <field>
                 <name>id</name>
+                <type>integer</type>
+                <notnull>true</notnull>
+                <autoincrement>true</autoincrement>
+                <unsigned>true</unsigned>
+                <primary>true</primary>
+            </field>
+            <field>
+                <name>token</name>
                 <type>text</type>
                 <length>64</length>
                 <notnull>true</notnull>
             </field>
             <field>
                 <name>client_id</name>
-                <type>text</type>
-                <length>64</length>
+                <type>integer</type>
                 <notnull>true</notnull>
+                <unsigned>true</unsigned>
             </field>
             <field>
                 <name>user_id</name>
@@ -92,15 +116,23 @@
         <declaration>
             <field>
                 <name>id</name>
+                <type>integer</type>
+                <notnull>true</notnull>
+                <autoincrement>true</autoincrement>
+                <unsigned>true</unsigned>
+                <primary>true</primary>
+            </field>
+            <field>
+                <name>token</name>
                 <type>text</type>
                 <length>64</length>
                 <notnull>true</notnull>
             </field>
             <field>
                 <name>client_id</name>
-                <type>text</type>
-                <length>64</length>
+                <type>integer</type>
                 <notnull>true</notnull>
+                <unsigned>true</unsigned>
             </field>
             <field>
                 <name>user_id</name>

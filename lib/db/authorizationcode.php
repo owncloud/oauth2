@@ -28,12 +28,14 @@ use \OCP\AppFramework\Db\Entity;
 
 class AuthorizationCode extends Entity {
 
+    protected $code;
     protected $clientId;
     protected $userId;
     protected $expires;
 
     public function __construct() {
-        $this->addType('id', 'string');
+        $this->addType('id', 'integer');
+        $this->addType('code', 'string');
         $this->addType('client_id', 'string');
         $this->addType('user_id', 'string');
 		// TODO: set type for $expires

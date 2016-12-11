@@ -18,7 +18,7 @@
         <tr>
             <th id="headerName" scope="col"><?php p($l->t('Name')); ?></th>
             <th id="headerRedirectUri" scope="col"><?php p($l->t('Redirect URI')); ?></th>
-            <th id="headerClientId" scope="col"><?php p($l->t('Client ID')); ?></th>
+            <th id="headerClientIdentifier" scope="col"><?php p($l->t('Client Identifier')); ?></th>
             <th id="headerSecret" scope="col"><?php p($l->t('Secret')); ?></th>
             <th id="headerRemove">&nbsp;</th>
         </tr>
@@ -28,7 +28,7 @@
                 <tr>
                     <td><?php p($client->getName()); ?></td>
                     <td><?php p($client->getRedirectUri()); ?></td>
-                    <td><?php p($client->getId()); ?></td>
+                    <td><?php p($client->getIdentifier()); ?></td>
                     <td><?php p($client->getSecret()); ?></td>
                     <td>
                         <form action="../apps/oauth2/clients/<?php p($client->getId()); ?>/delete" method="post"

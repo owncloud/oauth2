@@ -50,6 +50,22 @@ class AuthorizationCodeMapper extends Mapper {
         return $this->findEntity($sql, array($id), null, null);
     }
 
+    /**
+     * Selects an authorization code by its code.
+     *
+     * @param string $code The authorization code.
+     *
+     * @return Entity The authorization code entity.
+     *
+     * @throws \OCP\AppFramework\Db\DoesNotExistException if not found.
+     * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more
+     * than one result.
+     */
+    public function findByCode($code) {
+        $sql = 'SELECT * FROM `'. $this->tableName . '` WHERE `code` = ?';
+        return $this->findEntity($sql, array($code), null, null);
+    }
+
 	public function findMany(array $ids) {
 		// TODO: implement filtering with many IDS
 		$sql = 'SELECT * FROM `'. $this->tableName . '` WHERE `id` IN ?';

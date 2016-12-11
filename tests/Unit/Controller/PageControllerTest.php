@@ -56,7 +56,7 @@ class PageControllerTest extends PHPUnit_Framework_TestCase {
 
 		/** @var Client $client */
 		$client = new Client();
-		$client->setId('clientId1234567890');
+		$client->setIdentifier('clientId1234567890');
 		$client->setSecret('topSecret123');
 		$client->setRedirectUri('https://www.example.org');
 		$client->setName('Example');
@@ -69,7 +69,7 @@ class PageControllerTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function tearDown() {
-		$this->clientMapper->delete($this->clientMapper->find('clientId1234567890'));
+		$this->clientMapper->delete($this->clientMapper->findByIdentifier('clientId1234567890'));
 	}
 
 	public function testAuthorize() {

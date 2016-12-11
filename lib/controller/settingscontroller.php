@@ -79,7 +79,7 @@ class SettingsController extends Controller {
         }
 
         $client = new Client();
-        $client->setId(Utilities::generateRandom());
+        $client->setIdentifier(Utilities::generateRandom());
         $client->setSecret(Utilities::generateRandom());
         $client->setRedirectUri(trim($_POST['redirect_uri']));
         $client->setName(trim($_POST['name']));
@@ -102,6 +102,8 @@ class SettingsController extends Controller {
     public function deleteClient($id) {
         $client = $this->clientMapper->find($id);
         $this->clientMapper->delete($client);
+
+        // TODO: Delete all Authorization Codes, Access Tokens and Refresh Tokens
 
         return new RedirectResponse('../../../../settings/admin#oauth-2.0');
     }
