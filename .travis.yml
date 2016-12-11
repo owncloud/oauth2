@@ -21,12 +21,6 @@ matrix:
           env: DB=pgsql CORE_BRANCH=master
     fast_finish: true
 
-
-allow_failures:
-    matrix:
-      - php: 7.1
-      - php: nightly
-
 before_install:
     # enable a display for running JavaScript tests
     - export DISPLAY=:99.0
