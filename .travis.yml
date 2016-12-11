@@ -4,15 +4,19 @@ language: php
 php:
     - 5.6
     - 7.0
-    #- 7.1
-    #- nightly
 env:
-    global:
-        - CORE_BRANCH=stable9
     matrix:
+        - CORE_BRANCH=stable9
+        - CORE_BRANCH=stable9.1
+        - master
         - DB=pgsql
         - DB=sqlite
         - DB=mysql
+
+allow_failures:
+    matrix:
+      - php: 7.1
+      - php: nightly
 
 before_install:
     # enable a display for running JavaScript tests
