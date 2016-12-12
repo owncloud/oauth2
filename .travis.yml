@@ -9,6 +9,9 @@ env:
     - CORE_BRANCH=stable9.1 DB=pgsql
     - CORE_BRANCH=stable9.1 DB=sqlite
     - CORE_BRANCH=stable9.1 DB=mysql
+    - CORE_BRANCH=stable9.0 DB=pgsql
+    - CORE_BRANCH=stable9.0 DB=sqlite
+    - CORE_BRANCH=stable9.0 DB=mysql
 
 matrix:
     allow_failures:
