@@ -14,7 +14,7 @@
 
     <h3><?php p($l->t('Registered clients')); ?></h3>
     <?php if (empty($_['clients'])) {
-        p($l->t('No applications registered.'));
+        p($l->t('No clients registered.'));
     }
     else { ?>
     <table class="grid">
