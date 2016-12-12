@@ -67,6 +67,10 @@ class AuthorizationCodeMapper extends Mapper {
      * than one result.
      */
     public function findByCode($code) {
+		if (is_null($code)) {
+			throw new InvalidArgumentException('code must not be null');
+		}
+
         $sql = 'SELECT * FROM `'. $this->tableName . '` WHERE `code` = ?';
         return $this->findEntity($sql, array($code), null, null);
     }

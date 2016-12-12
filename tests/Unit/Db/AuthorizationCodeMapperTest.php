@@ -99,6 +99,23 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 		$this->authorizationCodeMapper->find(null);
 	}
 
+	public function testFindByCode() {
+		/** @var AuthorizationCode $authorizationCode */
+		$authorizationCode = $this->authorizationCodeMapper->findByCode($this->code);
+
+		$this->assertEquals($this->id, $authorizationCode->getId());
+		$this->assertEquals($this->code, $authorizationCode->getCode());
+		$this->assertEquals($this->clientId, $authorizationCode->getClientId());
+		$this->assertEquals($this->userId, $authorizationCode->getUserId());
+		$this->assertNull($authorizationCode->getExpires());
+
+		$this->expectException(DoesNotExistException::class);
+		$this->authorizationCodeMapper->findByCode('qwertz');
+
+		$this->expectException(InvalidArgumentException::class);
+		$this->authorizationCodeMapper->findByCode(null);
+	}
+
 	public function testFindAll() {
 		$authorizationCodes = $this->authorizationCodeMapper->findAll();
 
