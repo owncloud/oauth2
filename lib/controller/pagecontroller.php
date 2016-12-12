@@ -76,6 +76,7 @@ class PageController extends Controller {
      * @param string $client_id The client identifier.
      * @param string $redirect_uri The redirect URI.
      * @param string $state The state.
+	 * @param string $scope The scope.
      *
      * @return TemplateResponse|RedirectResponse The authorize view or a
      * redirection to the ownCloud main page.
@@ -83,7 +84,7 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function authorize($response_type, $client_id, $redirect_uri, $state) {
+	public function authorize($response_type, $client_id, $redirect_uri, $state, $scope) {
 		if (is_null($response_type) || is_null($client_id)
 			|| is_null($redirect_uri)) {
 			return new RedirectResponse('../../');
@@ -98,7 +99,7 @@ class PageController extends Controller {
         if (is_null($client)) {
             return new RedirectResponse('../../');
         }
-        if (strcmp($client->getRedirectUri(), urldecode($redirect_uri)) !== 0) {
+        if (strcmp($client->getRedirectUri(), strtok(urldecode($redirect_uri), '?')) !== 0) {
             return new RedirectResponse('../../');
         }
 		if (strcmp($response_type, 'code') !== 0) {
@@ -111,10 +112,11 @@ class PageController extends Controller {
 	/**
 	 * Implements the OAuth 2.0 Authorization Response.
      *
-     * @param string $response_type
-     * @param string $client_id
-     * @param string $redirect_uri
-     * @param string $state
+     * @param string $response_type The expected response type.
+	 * @param string $client_id The client identifier.
+	 * @param string $redirect_uri The redirect URI.
+	 * @param string $state The state.
+	 * @param string $scope The scope.
      *
      * @return RedirectResponse|JSONResponse Redirection to the given
      * redirect_uri or a JSON with an error message.
@@ -122,7 +124,7 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function generateAuthorizationCode($response_type, $client_id, $redirect_uri, $state) {
+	public function generateAuthorizationCode($response_type, $client_id, $redirect_uri, $state, $scope) {
         if (is_null($response_type) || is_null($client_id)
             || is_null($redirect_uri)) {
             return new RedirectResponse('../../');
@@ -139,7 +141,7 @@ class PageController extends Controller {
                 if (is_null($client)) {
                     return new RedirectResponse('../../');
                 }
-                if (strcmp($client->getRedirectUri(), urldecode($redirect_uri)) !== 0) {
+                if (strcmp($client->getRedirectUri(), strtok(urldecode($redirect_uri), '?')) !== 0) {
                     return new RedirectResponse('../../');
                 }
                 if (strcmp($response_type, 'code') !== 0) {
