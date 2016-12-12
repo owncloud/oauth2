@@ -58,5 +58,8 @@ script:
 after_failure:
     - cat ../../data/owncloud.log
 
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
 addons:
     firefox: "latest"
