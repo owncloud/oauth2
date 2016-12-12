@@ -99,7 +99,7 @@ class PageController extends Controller {
         if (is_null($client)) {
             return new RedirectResponse('../../');
         }
-        if (strcmp($client->getRedirectUri(), strtok(urldecode($redirect_uri), '?')) !== 0) {
+        if (strcmp($client->getRedirectUri(), urldecode($redirect_uri)) !== 0) {
             return new RedirectResponse('../../');
         }
 		if (strcmp($response_type, 'code') !== 0) {
@@ -141,7 +141,7 @@ class PageController extends Controller {
                 if (is_null($client)) {
                     return new RedirectResponse('../../');
                 }
-                if (strcmp($client->getRedirectUri(), strtok(urldecode($redirect_uri), '?')) !== 0) {
+                if (strcmp($client->getRedirectUri(), urldecode($redirect_uri)) !== 0) {
                     return new RedirectResponse('../../');
                 }
                 if (strcmp($response_type, 'code') !== 0) {
