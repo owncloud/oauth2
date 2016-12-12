@@ -152,7 +152,7 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 		$this->clientMapper->findByIdentifier('qwertz');
 
 		$this->expectException(InvalidArgumentException::class);
-		$this->clientMapper->find(null);
+		$this->clientMapper->findByIdentifier(null);
 	}
 
 	public function testFindAll() {
