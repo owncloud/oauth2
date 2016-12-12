@@ -24,6 +24,7 @@
 
 namespace OCA\OAuth2\Db;
 
+use InvalidArgumentException;
 use \OCP\AppFramework\Db\Entity;
 use \OCP\IDb;
 use \OCP\AppFramework\Db\Mapper;
@@ -51,6 +52,10 @@ class ClientMapper extends Mapper {
 	 * than one result.
 	 */
 	public function find($id) {
+		if (is_null($id)) {
+			throw new InvalidArgumentException('id must not be null');
+		}
+
 		$sql = 'SELECT * FROM `' . $this->tableName . '` WHERE `id` = ?';
 		return $this->findEntity($sql, array($id), null, null);
 	}
@@ -67,6 +72,10 @@ class ClientMapper extends Mapper {
      * than one result.
      */
     public function findByIdentifier($identifier) {
+		if (is_null($identifier)) {
+			throw new InvalidArgumentException('identifier must not be null');
+		}
+
         $sql = 'SELECT * FROM `' . $this->tableName . '` WHERE `identifier` = ?';
         return $this->findEntity($sql, array($identifier), null, null);
     }
@@ -91,6 +100,10 @@ class ClientMapper extends Mapper {
 	 * @return array The client entities.
 	 */
 	public function findByUser($userId) {
+		if (is_null($userId)) {
+			throw new InvalidArgumentException('userId must not be null');
+		}
+
 		$sql = 'SELECT * FROM `' . $this->tableName . '` '
 			. 'WHERE `id` IN ( '
 				. 'SELECT `client_id` FROM `oc_oauth2_authorization_codes` WHERE `user_id` = ? '
