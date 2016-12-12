@@ -84,7 +84,7 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function authorize($response_type, $client_id, $redirect_uri, $state, $scope) {
+	public function authorize($response_type, $client_id, $redirect_uri, $state = null, $scope = null) {
 		if (is_null($response_type) || is_null($client_id)
 			|| is_null($redirect_uri)) {
 			return new RedirectResponse('../../');
@@ -124,7 +124,7 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function generateAuthorizationCode($response_type, $client_id, $redirect_uri, $state, $scope) {
+	public function generateAuthorizationCode($response_type, $client_id, $redirect_uri, $state = null, $scope = null) {
         if (is_null($response_type) || is_null($client_id)
             || is_null($redirect_uri)) {
             return new RedirectResponse('../../');
