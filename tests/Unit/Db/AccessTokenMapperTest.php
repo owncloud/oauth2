@@ -83,6 +83,7 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testFind() {
+		/** @var AccessToken $accessToken */
 		$accessToken = $this->accessTokenMapper->find($this->id);
 
 		$this->assertEquals($this->id, $accessToken->getId());

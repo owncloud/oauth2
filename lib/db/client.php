@@ -26,6 +26,18 @@ namespace OCA\OAuth2\Db;
 
 use \OCP\AppFramework\Db\Entity;
 
+/**
+ * Class Client
+ *
+ * @method string getIdentifier()
+ * @method void setIdentifier(string $identifier)
+ * @method string getSecret()
+ * @method void setSecret(string $secret)
+ * @method string getRedirectUri()
+ * @method void setRedirectUri(string $redirectUri)
+ * @method string getName()
+ * @method void setName(string $name)
+ */
 class Client extends Entity {
 
     protected $identifier;

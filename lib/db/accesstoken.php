@@ -26,6 +26,16 @@ namespace OCA\OAuth2\Db;
 
 use \OCP\AppFramework\Db\Entity;
 
+/**
+ * Class AccessToken
+ *
+ * @method integer getToken()
+ * @method void setToken(string $token)
+ * @method string getClientId()
+ * @method void setClientId(string $clientId)
+ * @method string getUserId()
+ * @method void setUserId(string $userId)
+ */
 class AccessToken extends Entity {
 
     protected $token;

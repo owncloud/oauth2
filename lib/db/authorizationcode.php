@@ -35,8 +35,6 @@ use \OCP\AppFramework\Db\Entity;
  * @method void setClientId(string $clientId)
  * @method string getUserId()
  * @method void setUserId(string $userId)
- *
- * @package OCA\OAuth2\Db
  */
 class AuthorizationCode extends Entity {
 

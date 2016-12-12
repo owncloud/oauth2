@@ -122,6 +122,7 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testFind() {
+		/** @var Client $client */
 		$client = $this->clientMapper->find($this->id);
 
 		$this->assertEquals($this->id, $client->getId());
@@ -138,6 +139,7 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testFindByIdentifier() {
+		/** @var Client $client */
 		$client = $this->clientMapper->findByIdentifier($this->identifier);
 
 		$this->assertEquals($this->id, $client->getId());
@@ -164,6 +166,7 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 
 		$this->assertEquals(1, count($clients));
 
+		/** @var Client $client */
 		$client = $clients[0];
 		$this->assertEquals($this->id, $client->getId());
 		$this->assertEquals($this->identifier, $client->getIdentifier());
