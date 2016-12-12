@@ -13,6 +13,10 @@
     <h2><?php p($l->t('OAuth 2.0')); ?></h2>
 
     <h3><?php p($l->t('Registered clients')); ?></h3>
+    <?php if (empty($_['clients'])) {
+        p($l->t('No clients registered.'));
+    }
+    else { ?>
     <table class="grid">
         <thead>
         <tr>
@@ -40,6 +44,7 @@
             <?php } ?>
         </tbody>
     </table>
+    <?php } ?>
 
     <h3><?php p($l->t('Add client')); ?></h3>
     <form action="../apps/oauth2/clients" method="post">
