@@ -24,6 +24,7 @@
 
 namespace OCA\OAuth2\Db;
 
+use InvalidArgumentException;
 use \OCP\AppFramework\Db\Entity;
 use \OCP\IDb;
 use \OCP\AppFramework\Db\Mapper;
@@ -46,6 +47,10 @@ class AuthorizationCodeMapper extends Mapper {
      * than one result.
      */
     public function find($id) {
+		if (is_null($id)) {
+			throw new InvalidArgumentException('id must not be null');
+		}
+
         $sql = 'SELECT * FROM `'. $this->tableName . '` WHERE `id` = ?';
         return $this->findEntity($sql, array($id), null, null);
     }
@@ -92,6 +97,10 @@ class AuthorizationCodeMapper extends Mapper {
 	 * @param string $userId The user ID.
 	 */
 	public function deleteByClientUser($clientId, $userId) {
+		if (is_null($clientId) || is_null($userId)) {
+			throw new InvalidArgumentException('client_id and user_id must not be null');
+		}
+
 		$sql = 'DELETE FROM `' . $this->tableName . '` '
 			. 'WHERE client_id = ? AND user_id = ?';
 		$stmt = $this->execute($sql, array($clientId, $userId), null, null);

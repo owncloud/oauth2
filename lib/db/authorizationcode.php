@@ -26,6 +26,18 @@ namespace OCA\OAuth2\Db;
 
 use \OCP\AppFramework\Db\Entity;
 
+/**
+ * Class AuthorizationCode
+ *
+ * @method integer getCode()
+ * @method void setCode(string $code)
+ * @method string getClientId()
+ * @method void setClientId(string $clientId)
+ * @method string getUserId()
+ * @method void setUserId(string $userId)
+ *
+ * @package OCA\OAuth2\Db
+ */
 class AuthorizationCode extends Entity {
 
     protected $code;
