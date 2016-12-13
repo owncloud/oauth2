@@ -47,6 +47,10 @@ class RefreshTokenMapper extends Mapper {
      * than one result.
      */
     public function find($id) {
+		if (is_null($id)) {
+			throw new InvalidArgumentException('id must not be null');
+		}
+
         $sql = 'SELECT * FROM `'. $this->tableName . '` WHERE `id` = ?';
         return $this->findEntity($sql, array($id), null, null);
     }
