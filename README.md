@@ -39,7 +39,7 @@ Place the content of this repository in **owncloud/apps/oauth2**.
 There are tables for saving Clients, Authorization Codes, Access Tokens and Refresh Tokens in the database.
 
 ## Issues to be solved
-- [ ] Under some configurations there was an error that the [`ClientMapper`](/db/ClientMapper.php) could not be found (Ubuntu + PHP 7 + nginx + PostgreSQL, Ubuntu + PHP 7 + Apache + MySQL). But installing in a fresh [Docker container](https://hub.docker.com/_/owncloud/) was successful. The reasons for this error still have to be investigated.
+- [x] ~~Under some configurations there was an error that the [`ClientMapper`](/db/ClientMapper.php) could not be found (Ubuntu + PHP 7 + nginx + PostgreSQL, Ubuntu + PHP 7 + Apache + MySQL). But installing in a fresh [Docker container](https://hub.docker.com/_/owncloud/) was successful. The reasons for this error still have to be investigated.~~
 
 ## To Do
 - [ ] Add PHPUnit tests.
