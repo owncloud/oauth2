@@ -64,4 +64,21 @@ class RefreshTokenMapper extends Mapper {
         return $this->findEntities($sql, [], $limit, $offset);
     }
 
+	/**
+	 * Deletes all refresh tokens for given client and user ID.
+	 *
+	 * @param string $clientId The client ID.
+	 * @param string $userId The user ID.
+	 */
+	public function deleteByClientUser($clientId, $userId) {
+		if (is_null($clientId) || is_null($userId)) {
+			throw new InvalidArgumentException('client_id and user_id must not be null');
+		}
+
+		$sql = 'DELETE FROM `' . $this->tableName . '` '
+			. 'WHERE client_id = ? AND user_id = ?';
+		$stmt = $this->execute($sql, array($clientId, $userId), null, null);
+		$stmt->closeCursor();
+	}
+
 }
