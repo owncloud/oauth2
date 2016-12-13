@@ -1,7 +1,23 @@
 <phpunit bootstrap="tests/bootstrap.php" colors="true">
     <testsuites>
         <testsuite name="unit">
-            <directory>./tests/unit</directory>
+            <directory>./tests/Unit</directory>
         </testsuite>
     </testsuites>
+
+	<filter>
+		<whitelist>
+			<directory suffix=".php">.</directory>
+			<exclude>
+				<directory suffix=".php">./3rdparty</directory>
+				<directory suffix=".php">./l10n</directory>
+				<directory suffix=".php">./tests
+				</directory>
+			</exclude>
+		</whitelist>
+	</filter>
+
+	<logging>
+		<log type="coverage-clover" target="./clover.xml"/>
+	</logging>
 </phpunit>

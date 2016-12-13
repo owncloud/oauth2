@@ -22,19 +22,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-use OCA\OAuth2\AppInfo\Application;
-use OCA\OAuth2\Db\ClientMapper;
+namespace OCA\OAuth2\Db;
 
-OCP\User::checkAdminUser();
+use OCP\AppFramework\Db\Entity;
 
-$app = new Application();
-$container = $app->getContainer();
+/**
+ * Class AccessToken
+ *
+ * @method string getToken()
+ * @method void setToken(string $token)
+ * @method int getClientId()
+ * @method void setClientId(int $clientId)
+ * @method string getUserId()
+ * @method void setUserId(string $userId)
+ */
+class AccessToken extends Entity {
 
-/** @var ClientMapper $clientMapper */
-$clientMapper = $container->query('OCA\OAuth2\Db\ClientMapper');
+    protected $token;
+    protected $clientId;
+    protected $userId;
+    protected $expires;
 
-$tmpl = new OCP\Template('oauth2', 'settings-admin');
+    public function __construct() {
+        $this->addType('id', 'int');
+        $this->addType('token', 'string');
+        $this->addType('client_id', 'int');
+        $this->addType('user_id', 'string');
+        // TODO: set type for $expires
+    }
 
-$clients = $clientMapper->findAll();
-
-return $tmpl->fetchPage(['clients' => $clientMapper->findAll()]);
+}

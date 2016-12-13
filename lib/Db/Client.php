@@ -22,19 +22,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-use OCA\OAuth2\AppInfo\Application;
-use OCA\OAuth2\Db\ClientMapper;
+namespace OCA\OAuth2\Db;
 
-OCP\User::checkAdminUser();
+use OCP\AppFramework\Db\Entity;
 
-$app = new Application();
-$container = $app->getContainer();
+/**
+ * Class Client
+ *
+ * @method string getIdentifier()
+ * @method void setIdentifier(string $identifier)
+ * @method string getSecret()
+ * @method void setSecret(string $secret)
+ * @method string getRedirectUri()
+ * @method void setRedirectUri(string $redirectUri)
+ * @method string getName()
+ * @method void setName(string $name)
+ */
+class Client extends Entity {
 
-/** @var ClientMapper $clientMapper */
-$clientMapper = $container->query('OCA\OAuth2\Db\ClientMapper');
+    protected $identifier;
+    protected $secret;
+    protected $redirectUri;
+    protected $name;
 
-$tmpl = new OCP\Template('oauth2', 'settings-admin');
+    public function __construct() {
+        $this->addType('id', 'int');
+        $this->addType('identifier', 'string');
+        $this->addType('secret', 'string');
+        $this->addType('redirect_uri', 'string');
+        $this->addType('name', 'string');
+    }
 
-$clients = $clientMapper->findAll();
-
-return $tmpl->fetchPage(['clients' => $clientMapper->findAll()]);
+}

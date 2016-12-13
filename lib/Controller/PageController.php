@@ -1,12 +1,25 @@
 <?php
 /**
- * ownCloud - oauth2
- *
- * This file is licensed under the Affero General Public License version 3 or
- * later. See the COPYING file.
- *
+ * @author Lukas Biermann
+ * @author Nina Herrmann
+ * @author Wladislaw Iwanzow
+ * @author Dennis Meis
  * @author Jonathan Neugebauer
- * @copyright Jonathan Neugebauer 2016
+ *
+ * @copyright Copyright (c) 2016, Project Seminar "PSSL16" at the University of Muenster.
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
 namespace OCA\OAuth2\Controller;
@@ -22,7 +35,6 @@ use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
-use Sabre\VObject\Property\ICalendar\DateTime;
 
 class PageController extends Controller {
 
@@ -45,6 +57,7 @@ class PageController extends Controller {
      */
 	public function __construct($AppName, IRequest $request, ClientMapper $clientMapper, AuthorizationCodeMapper $authorizationCodeMapper, $UserId){
 		parent::__construct($AppName, $request);
+
         $this->clientMapper = $clientMapper;
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
         $this->userId = $UserId;
@@ -59,6 +72,7 @@ class PageController extends Controller {
      * @param string $client_id The client identifier.
      * @param string $redirect_uri The redirect URI.
      * @param string $state The state.
+	 * @param string $scope The scope.
      *
      * @return TemplateResponse|RedirectResponse The authorize view or a
      * redirection to the ownCloud main page.
@@ -66,14 +80,14 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function authorize($response_type, $client_id, $redirect_uri, $state) {
+	public function authorize($response_type, $client_id, $redirect_uri, $state = null, $scope = null) {
 		if (is_null($response_type) || is_null($client_id)
 			|| is_null($redirect_uri)) {
 			return new RedirectResponse('../../');
 		}
 
 		try {
-            $client = $this->clientMapper->find($client_id);
+            $client = $this->clientMapper->findByIdentifier($client_id);
         } catch (DoesNotExistException $exception) {
             return new RedirectResponse('../../');
         }
@@ -94,10 +108,11 @@ class PageController extends Controller {
 	/**
 	 * Implements the OAuth 2.0 Authorization Response.
      *
-     * @param string $response_type
-     * @param string $client_id
-     * @param string $redirect_uri
-     * @param string $state
+     * @param string $response_type The expected response type.
+	 * @param string $client_id The client identifier.
+	 * @param string $redirect_uri The redirect URI.
+	 * @param string $state The state.
+	 * @param string $scope The scope.
      *
      * @return RedirectResponse|JSONResponse Redirection to the given
      * redirect_uri or a JSON with an error message.
@@ -105,7 +120,7 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function generateAuthorizationCode($response_type, $client_id, $redirect_uri, $state) {
+	public function generateAuthorizationCode($response_type, $client_id, $redirect_uri, $state = null, $scope = null) {
         if (is_null($response_type) || is_null($client_id)
             || is_null($redirect_uri)) {
             return new RedirectResponse('../../');
@@ -114,7 +129,7 @@ class PageController extends Controller {
 		switch ($response_type) {
 			case 'code':
                 try {
-                    $client = $this->clientMapper->find($client_id);
+                    $client = $this->clientMapper->findByIdentifier($client_id);
                 } catch (DoesNotExistException $exception) {
                     return new RedirectResponse('../../');
                 }
@@ -131,7 +146,7 @@ class PageController extends Controller {
 
 				$code = Utilities::generateRandom();
 				$authorizationCode = new AuthorizationCode();
-				$authorizationCode->setId($code);
+				$authorizationCode->setIdentifier($code);
 				$authorizationCode->setClientId($client->getId());
 				$authorizationCode->setUserId($this->userId);
 				$this->authorizationCodeMapper->insert($authorizationCode);

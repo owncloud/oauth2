@@ -22,19 +22,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-use OCA\OAuth2\AppInfo\Application;
-use OCA\OAuth2\Db\ClientMapper;
+namespace OCA\OAuth2\Tests\Unit;
 
-OCP\User::checkAdminUser();
+use OCA\OAuth2\Utilities;
+use PHPUnit_Framework_TestCase;
 
-$app = new Application();
-$container = $app->getContainer();
+class PageControllerTest extends PHPUnit_Framework_TestCase {
 
-/** @var ClientMapper $clientMapper */
-$clientMapper = $container->query('OCA\OAuth2\Db\ClientMapper');
+	public function testGenerateRandom() {
+		$random = Utilities::generateRandom();
 
-$tmpl = new OCP\Template('oauth2', 'settings-admin');
+		$this->assertEquals(64, strlen($random));
+		$this->assertFalse(strpos($random, '+'));
+		$this->assertFalse(strpos($random, '/'));
+	}
 
-$clients = $clientMapper->findAll();
-
-return $tmpl->fetchPage(['clients' => $clientMapper->findAll()]);
+}
