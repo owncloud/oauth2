@@ -35,7 +35,7 @@ before_install:
     # install core
     - cd ../
     - git clone https://github.com/owncloud/core.git --recursive --depth 1 -b $CORE_BRANCH owncloud
-    - if [[ "CORE_BRANCH" == 'master' ]]; then cd owncloud; make; cd ../; fi
+    - if [[ "$CORE_BRANCH" == 'master' ]]; then cd owncloud; make; cd ../; fi
     - mv owncloud-app_oauth2 oauth2
     - mv oauth2 owncloud/apps/
 
