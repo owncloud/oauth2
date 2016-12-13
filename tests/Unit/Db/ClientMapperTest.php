@@ -24,7 +24,6 @@
 
 namespace OCA\OAuth2\Tests\Unit\Db;
 
-use InvalidArgumentException;
 use OCA\OAuth2\AppInfo\Application;
 use OCA\OAuth2\Db\AccessToken;
 use OCA\OAuth2\Db\AccessTokenMapper;
@@ -32,7 +31,6 @@ use OCA\OAuth2\Db\AuthorizationCode;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
-use OCP\AppFramework\Db\DoesNotExistException;
 use PHPUnit_Framework_TestCase;
 
 class ClientMapperTest extends PHPUnit_Framework_TestCase {
