@@ -24,26 +24,24 @@
 
 namespace OCA\OAuth2\Tests\Integration\Controller;
 
-use OCP\AppFramework\App;
+use OCA\OAuth2\AppInfo\Application;
+use OCP\App\IAppManager;
+use OCP\AppFramework\IAppContainer;
 use Test\TestCase;
 
-
-/**
- * This test shows how to make a small Integration Test. Query your class
- * directly from the container, only pass in mocks if needed and run your tests
- * against the database
- */
 class AppTest extends TestCase {
 
+	/** @var IAppContainer $container */
     private $container;
 
     public function setUp() {
         parent::setUp();
-        $app = new App('oauth2');
+        $app = new Application();
         $this->container = $app->getContainer();
     }
 
     public function testAppInstalled() {
+		/** @var IAppManager $appManager */
         $appManager = $this->container->query('OCP\App\IAppManager');
         $this->assertTrue($appManager->isInstalled('oauth2'));
     }

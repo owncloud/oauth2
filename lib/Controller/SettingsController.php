@@ -24,14 +24,15 @@
 
 namespace OCA\OAuth2\Controller;
 
-use \OCA\OAuth2\Db\AccessTokenMapper;
-use \OCA\OAuth2\Db\AuthorizationCodeMapper;
-use \OCA\OAuth2\Db\Client;
-use \OCA\OAuth2\Db\ClientMapper;
-use \OCA\OAuth2\Utilities;
-use \OCP\AppFramework\Controller;
-use \OCP\AppFramework\Http\RedirectResponse;
-use \OCP\IRequest;
+use OCA\OAuth2\Db\AccessTokenMapper;
+use OCA\OAuth2\Db\AuthorizationCodeMapper;
+use OCA\OAuth2\Db\Client;
+use OCA\OAuth2\Db\ClientMapper;
+use OCA\OAuth2\Db\RefreshTokenMapper;
+use OCA\OAuth2\Utilities;
+use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\RedirectResponse;
+use OCP\IRequest;
 
 class SettingsController extends Controller {
 
@@ -44,6 +45,9 @@ class SettingsController extends Controller {
 	/** @var AccessTokenMapper */
 	private $accessTokenMapper;
 
+	/** @var RefreshTokenMapper */
+	private $refreshTokenMapper;
+
     /** @var string */
     private $userId;
 
@@ -55,13 +59,15 @@ class SettingsController extends Controller {
      * @param ClientMapper $clientMapper
 	 * @param AuthorizationCodeMapper $authorizationCodeMapper
 	 * @param AccessTokenMapper $accessTokenMapper
+	 * @param RefreshTokenMapper $refreshTokenMapper
      * @param string $UserId
      */
-    public function __construct($AppName, IRequest $request, ClientMapper $clientMapper, AuthorizationCodeMapper $authorizationCodeMapper, AccessTokenMapper $accessTokenMapper, $UserId) {
+    public function __construct($AppName, IRequest $request, ClientMapper $clientMapper, AuthorizationCodeMapper $authorizationCodeMapper, AccessTokenMapper $accessTokenMapper, RefreshTokenMapper $refreshTokenMapper, $UserId) {
         parent::__construct($AppName, $request);
         $this->clientMapper = $clientMapper;
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
 		$this->accessTokenMapper = $accessTokenMapper;
+		$this->refreshTokenMapper = $refreshTokenMapper;
         $this->userId = $UserId;
     }
 
@@ -79,7 +85,7 @@ class SettingsController extends Controller {
         }
 
         $client = new Client();
-        $client->setId(Utilities::generateRandom());
+        $client->setIdentifier(Utilities::generateRandom());
         $client->setSecret(Utilities::generateRandom());
         $client->setRedirectUri(trim($_POST['redirect_uri']));
         $client->setName(trim($_POST['name']));
@@ -103,6 +109,8 @@ class SettingsController extends Controller {
         $client = $this->clientMapper->find($id);
         $this->clientMapper->delete($client);
 
+        // TODO: Delete all Authorization Codes, Access Tokens and Refresh Tokens
+
         return new RedirectResponse('../../../../settings/admin#oauth-2.0');
     }
 
@@ -118,8 +126,9 @@ class SettingsController extends Controller {
 	 *
 	 */
 	public function revokeAuthorization($id, $user_id) {
-		$this->accessTokenMapper->deleteByClientUser($id, $user_id);
 		$this->authorizationCodeMapper->deleteByClientUser($id, $user_id);
+		$this->accessTokenMapper->deleteByClientUser($id, $user_id);
+		$this->refreshTokenMapper->deleteByClientUser($id, $user_id);
 
 		return new RedirectResponse('../../../../settings/personal#oauth-2.0');
 	}

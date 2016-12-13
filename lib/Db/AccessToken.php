@@ -24,19 +24,31 @@
 
 namespace OCA\OAuth2\Db;
 
-use \OCP\AppFramework\Db\Entity;
+use OCP\AppFramework\Db\Entity;
 
-class AuthorizationCode extends Entity {
+/**
+ * Class AccessToken
+ *
+ * @method string getToken()
+ * @method void setToken(string $token)
+ * @method int getClientId()
+ * @method void setClientId(int $clientId)
+ * @method string getUserId()
+ * @method void setUserId(string $userId)
+ */
+class AccessToken extends Entity {
 
+    protected $token;
     protected $clientId;
     protected $userId;
     protected $expires;
 
     public function __construct() {
-        $this->addType('id', 'string');
-        $this->addType('client_id', 'string');
+        $this->addType('id', 'int');
+        $this->addType('token', 'string');
+        $this->addType('client_id', 'int');
         $this->addType('user_id', 'string');
-		// TODO: set type for $expires
+        // TODO: set type for $expires
     }
 
 }

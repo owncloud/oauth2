@@ -22,21 +22,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-namespace OCA\OAuth2\Db;
+namespace OCA\OAuth2\AppInfo;
 
-use \OCP\AppFramework\Db\Entity;
+use OCP\AppFramework\App;
 
-class RefreshToken extends Entity {
+class Application extends App {
 
-    protected $clientId;
-    protected $userId;
-    protected $expires;
-
-    public function __construct() {
-        $this->addType('id', 'string');
-        $this->addType('client_id', 'string');
-        $this->addType('user_id', 'string');
-		// TODO: set type for $expires
+    /**
+     * Application constructor.
+     *
+     * @param array $urlParams an array with variables extracted from the routes
+     */
+    public function __construct(array $urlParams=array()){
+        parent::__construct('oauth2', $urlParams);
     }
+
+	/**
+	 * Registers settings pages.
+	 */
+    public function registerSettings() {
+		\OCP\App::registerAdmin('oauth2', 'lib/settings-admin');
+		\OCP\App::registerPersonal('oauth2', 'lib/settings-personal');
+	}
 
 }

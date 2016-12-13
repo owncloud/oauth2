@@ -24,9 +24,10 @@
 
 namespace OCA\OAuth2\Db;
 
-use \OCP\AppFramework\Db\Entity;
-use \OCP\IDb;
-use \OCP\AppFramework\Db\Mapper;
+use InvalidArgumentException;
+use OCP\AppFramework\Db\Entity;
+use OCP\IDb;
+use OCP\AppFramework\Db\Mapper;
 
 class AccessTokenMapper extends Mapper {
 
@@ -37,7 +38,7 @@ class AccessTokenMapper extends Mapper {
 	/**
 	 * Selects an access token by its ID.
 	 *
-	 * @param string $id The access token's ID.
+	 * @param int $id The access token's ID.
 	 *
 	 * @return Entity The access token entity.
 	 *
@@ -46,6 +47,10 @@ class AccessTokenMapper extends Mapper {
 	 * than one result.
 	 */
 	public function find($id) {
+		if (!is_int($id)) {
+			throw new InvalidArgumentException('Argument id must be an int');
+		}
+
 		$sql = 'SELECT * FROM `' . $this->tableName . '` WHERE `id` = ?';
 		return $this->findEntity($sql, array($id), null, null);
 	}
@@ -66,10 +71,14 @@ class AccessTokenMapper extends Mapper {
 	/**
 	 * Deletes all access tokens for given client and user ID.
 	 *
-	 * @param string $clientId The client ID.
+	 * @param int $clientId The client ID.
 	 * @param string $userId The user ID.
 	 */
 	public function deleteByClientUser($clientId, $userId) {
+		if (!is_int($clientId) || !is_string($userId)) {
+			throw new InvalidArgumentException('Argument client_id must be an int and user_id must be a string');
+		}
+
 		$sql = 'DELETE FROM `' . $this->tableName . '` '
 			. 'WHERE client_id = ? AND user_id = ?';
 		$stmt = $this->execute($sql, array($clientId, $userId), null, null);

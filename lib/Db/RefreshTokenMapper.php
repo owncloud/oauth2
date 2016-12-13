@@ -24,9 +24,10 @@
 
 namespace OCA\OAuth2\Db;
 
-use \OCP\AppFramework\Db\Entity;
-use \OCP\IDb;
-use \OCP\AppFramework\Db\Mapper;
+use InvalidArgumentException;
+use OCP\AppFramework\Db\Entity;
+use OCP\IDb;
+use OCP\AppFramework\Db\Mapper;
 
 class RefreshTokenMapper extends Mapper {
 
@@ -37,7 +38,7 @@ class RefreshTokenMapper extends Mapper {
     /**
      * Selects an refresh code by its ID.
      *
-     * @param string $id The refresh code's ID.
+     * @param int $id The refresh code's ID.
      *
      * @return Entity The refresh code entity.
      *
@@ -46,6 +47,10 @@ class RefreshTokenMapper extends Mapper {
      * than one result.
      */
     public function find($id) {
+		if (!is_int($id)) {
+			throw new InvalidArgumentException('Argument id must be an int');
+		}
+
         $sql = 'SELECT * FROM `'. $this->tableName . '` WHERE `id` = ?';
         return $this->findEntity($sql, array($id), null, null);
     }
@@ -62,5 +67,22 @@ class RefreshTokenMapper extends Mapper {
         $sql = 'SELECT * FROM `' . $this->tableName . '`';
         return $this->findEntities($sql, [], $limit, $offset);
     }
+
+	/**
+	 * Deletes all refresh tokens for given client and user ID.
+	 *
+	 * @param int $clientId The client ID.
+	 * @param string $userId The user ID.
+	 */
+	public function deleteByClientUser($clientId, $userId) {
+		if (!is_int($clientId) || !is_string($userId)) {
+			throw new InvalidArgumentException('Argument client_id must be an int and user_id must be a string');
+		}
+
+		$sql = 'DELETE FROM `' . $this->tableName . '` '
+			. 'WHERE client_id = ? AND user_id = ?';
+		$stmt = $this->execute($sql, array($clientId, $userId), null, null);
+		$stmt->closeCursor();
+	}
 
 }

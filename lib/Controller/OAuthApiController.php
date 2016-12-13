@@ -24,16 +24,16 @@
 
 namespace OCA\OAuth2\Controller;
 
-use \OCA\OAuth2\Db\AccessToken;
-use \OCA\OAuth2\Db\AccessTokenMapper;
-use \OCA\OAuth2\Db\AuthorizationCodeMapper;
-use \OCA\OAuth2\Db\ClientMapper;
-use \OCA\OAuth2\Utilities;
-use \OCP\AppFramework\Db\DoesNotExistException;
-use \OCP\AppFramework\Http;
-use \OCP\AppFramework\Http\JSONResponse;
-use \OCP\IRequest;
-use \OCP\AppFramework\ApiController;
+use OCA\OAuth2\Db\AccessToken;
+use OCA\OAuth2\Db\AccessTokenMapper;
+use OCA\OAuth2\Db\AuthorizationCodeMapper;
+use OCA\OAuth2\Db\ClientMapper;
+use OCA\OAuth2\Utilities;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\JSONResponse;
+use OCP\IRequest;
+use OCP\AppFramework\ApiController;
 
 class OAuthApiController extends ApiController {
 
@@ -81,7 +81,7 @@ class OAuthApiController extends ApiController {
         }
 
         try {
-            $client = $this->clientMapper->find($_SERVER['PHP_AUTH_USER']);
+            $client = $this->clientMapper->findByIdentifier($_SERVER['PHP_AUTH_USER']);
         } catch (DoesNotExistException $exception) {
             return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
         }
@@ -91,7 +91,7 @@ class OAuthApiController extends ApiController {
         }
 
 		try {
-			$authorizationCode = $this->authorizationCodeMapper->find($code);
+			$authorizationCode = $this->authorizationCodeMapper->findByCode($code);
 		} catch (DoesNotExistException $exception) {
 			return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
 		}
@@ -103,7 +103,7 @@ class OAuthApiController extends ApiController {
 		$token = Utilities::generateRandom();
 		$userId = $authorizationCode->getUserId();
 		$accessToken = new AccessToken();
-		$accessToken->setId($token);
+		$accessToken->setToken($token);
 		$accessToken->setClientId($authorizationCode->getClientId());
 		$accessToken->setUserId($userId);
 		$this->accessTokenMapper->insert($accessToken);

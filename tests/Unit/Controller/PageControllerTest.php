@@ -31,9 +31,7 @@ use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
 use OCP\AppFramework\Http\RedirectResponse;
 use PHPUnit_Framework_TestCase;
-
 use OCP\AppFramework\Http\TemplateResponse;
-
 
 class PageControllerTest extends PHPUnit_Framework_TestCase {
 
@@ -52,24 +50,24 @@ class PageControllerTest extends PHPUnit_Framework_TestCase {
 		$app = new Application();
 		$container = $app->getContainer();
 
-		$this->clientMapper = $container->query('ClientMapper');
+		$this->clientMapper = $container->query('OCA\OAuth2\Db\ClientMapper');
 
 		/** @var Client $client */
 		$client = new Client();
-		$client->setId('clientId1234567890');
+		$client->setIdentifier('clientId1234567890');
 		$client->setSecret('topSecret123');
 		$client->setRedirectUri('https://www.example.org');
 		$client->setName('Example');
 		$this->clientMapper->insert($client);
 
 		/** @var AuthorizationCodeMapper $authorizationCodeMapper */
-		$authorizationCodeMapper = $container->query('AuthorizationCodeMapper');
+		$authorizationCodeMapper = $container->query('OCA\OAuth2\Db\AuthorizationCodeMapper');
 
 		$this->controller = new PageController('oauth2', $request, $this->clientMapper, $authorizationCodeMapper, $this->userId);
 	}
 
 	public function tearDown() {
-		$this->clientMapper->delete($this->clientMapper->find('clientId1234567890'));
+		$this->clientMapper->delete($this->clientMapper->findByIdentifier('clientId1234567890'));
 	}
 
 	public function testAuthorize() {

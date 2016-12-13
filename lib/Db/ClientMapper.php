@@ -24,9 +24,10 @@
 
 namespace OCA\OAuth2\Db;
 
-use \OCP\AppFramework\Db\Entity;
-use \OCP\IDb;
-use \OCP\AppFramework\Db\Mapper;
+use InvalidArgumentException;
+use OCP\AppFramework\Db\Entity;
+use OCP\IDb;
+use OCP\AppFramework\Db\Mapper;
 
 class ClientMapper extends Mapper {
 
@@ -42,7 +43,7 @@ class ClientMapper extends Mapper {
 	/**
 	 * Selects a client by its ID.
 	 *
-	 * @param string $id The client's ID.
+	 * @param int $id The client's ID.
 	 *
 	 * @return Entity The client entity.
 	 *
@@ -51,9 +52,33 @@ class ClientMapper extends Mapper {
 	 * than one result.
 	 */
 	public function find($id) {
+		if (!is_int($id)) {
+			throw new InvalidArgumentException('id must not be null');
+		}
+
 		$sql = 'SELECT * FROM `' . $this->tableName . '` WHERE `id` = ?';
 		return $this->findEntity($sql, array($id), null, null);
 	}
+
+    /**
+     * Selects a client by its identifier.
+     *
+     * @param string $identifier The client's identifier.
+     *
+     * @return Entity The client entity.
+     *
+     * @throws \OCP\AppFramework\Db\DoesNotExistException if not found.
+     * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more
+     * than one result.
+     */
+    public function findByIdentifier($identifier) {
+		if (!is_string($identifier)) {
+			throw new InvalidArgumentException('identifier must not be null');
+		}
+
+        $sql = 'SELECT * FROM `' . $this->tableName . '` WHERE `identifier` = ?';
+        return $this->findEntity($sql, array($identifier), null, null);
+    }
 
 	/**
 	 * Selects all clients.
@@ -75,10 +100,14 @@ class ClientMapper extends Mapper {
 	 * @return array The client entities.
 	 */
 	public function findByUser($userId) {
+		if (!is_string($userId)) {
+			throw new InvalidArgumentException('userId must not be null');
+		}
+
 		$sql = 'SELECT * FROM `' . $this->tableName . '` '
 			. 'WHERE `id` IN ( '
 				. 'SELECT `client_id` FROM `oc_oauth2_authorization_codes` WHERE `user_id` = ? '
-				. 'UNION DISTINCT '
+				. 'UNION '
 				. 'SELECT `client_id` FROM `oc_oauth2_access_tokens` WHERE `user_id` = ? '
 			.')';
 		return $this->findEntities($sql, array($userId, $userId), null, null);
