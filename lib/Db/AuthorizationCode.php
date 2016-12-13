@@ -29,10 +29,10 @@ use OCP\AppFramework\Db\Entity;
 /**
  * Class AuthorizationCode
  *
- * @method integer getCode()
- * @method void setCode(string $code)
- * @method string getClientId()
- * @method void setClientId(string $clientId)
+ * @method int getCode()
+ * @method void setCode(int $code)
+ * @method int getClientId()
+ * @method void setClientId(int $clientId)
  * @method string getUserId()
  * @method void setUserId(string $userId)
  */
@@ -44,9 +44,9 @@ class AuthorizationCode extends Entity {
     protected $expires;
 
     public function __construct() {
-        $this->addType('id', 'integer');
-        $this->addType('code', 'string');
-        $this->addType('client_id', 'string');
+        $this->addType('id', 'int');
+        $this->addType('code', 'int');
+        $this->addType('client_id', 'int');
         $this->addType('user_id', 'string');
 		// TODO: set type for $expires
     }

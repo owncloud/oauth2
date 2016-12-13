@@ -38,7 +38,7 @@ class AccessTokenMapper extends Mapper {
 	/**
 	 * Selects an access token by its ID.
 	 *
-	 * @param string $id The access token's ID.
+	 * @param int $id The access token's ID.
 	 *
 	 * @return Entity The access token entity.
 	 *
