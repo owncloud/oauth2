@@ -146,7 +146,7 @@ class PageController extends Controller {
 
 				$code = Utilities::generateRandom();
 				$authorizationCode = new AuthorizationCode();
-				$authorizationCode->setIdentifier($code);
+				$authorizationCode->setCode($code);
 				$authorizationCode->setClientId($client->getId());
 				$authorizationCode->setUserId($this->userId);
 				$this->authorizationCodeMapper->insert($authorizationCode);
