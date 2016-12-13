@@ -47,8 +47,8 @@ class AccessTokenMapper extends Mapper {
 	 * than one result.
 	 */
 	public function find($id) {
-		if (is_null($id)) {
-			throw new InvalidArgumentException('id must not be null');
+		if (!is_int($id)) {
+			throw new InvalidArgumentException('Argument id must be an int');
 		}
 
 		$sql = 'SELECT * FROM `' . $this->tableName . '` WHERE `id` = ?';
@@ -71,12 +71,12 @@ class AccessTokenMapper extends Mapper {
 	/**
 	 * Deletes all access tokens for given client and user ID.
 	 *
-	 * @param string $clientId The client ID.
+	 * @param int $clientId The client ID.
 	 * @param string $userId The user ID.
 	 */
 	public function deleteByClientUser($clientId, $userId) {
-		if (is_null($clientId) || is_null($userId)) {
-			throw new InvalidArgumentException('client_id and user_id must not be null');
+		if (!is_int($clientId) || !is_string($userId)) {
+			throw new InvalidArgumentException('Argument client_id must be an int and user_id must be a string');
 		}
 
 		$sql = 'DELETE FROM `' . $this->tableName . '` '

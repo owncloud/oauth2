@@ -24,11 +24,9 @@
 
 namespace OCA\OAuth2\Tests\Unit\Db;
 
-use InvalidArgumentException;
 use OCA\OAuth2\AppInfo\Application;
 use OCA\OAuth2\Db\RefreshToken;
 use OCA\OAuth2\Db\RefreshTokenMapper;
-use OCP\AppFramework\Db\DoesNotExistException;
 use PHPUnit_Framework_TestCase;
 
 class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
@@ -91,12 +89,27 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($this->clientId, $refreshToken->getClientId());
 		$this->assertEquals($this->userId, $refreshToken->getUserId());
 		$this->assertNull($refreshToken->getExpires());
+	}
 
-		$this->expectException(DoesNotExistException::class);
+	/**
+	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
+	 */
+	public function testFindDoesNotExistException() {
 		$this->refreshTokenMapper->find(-1);
+	}
 
-		$this->expectException(InvalidArgumentException::class);
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testFindInvalidArgumentException1() {
 		$this->refreshTokenMapper->find(null);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testFindInvalidArgumentException2() {
+		$this->refreshTokenMapper->find('qwertz');
 	}
 
 	public function testFindAll() {
@@ -108,16 +121,44 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 	public function testDeleteByClientUser() {
 		$this->refreshTokenMapper->deleteByClientUser($this->clientId, $this->userId);
 
-		$this->expectException(DoesNotExistException::class);
-		$this->refreshTokenMapper->find($this->id);
-
 		$refreshTokens = $this->refreshTokenMapper->findAll();
 		$this->assertEquals(1, count($refreshTokens));
+	}
 
-		$this->expectException(InvalidArgumentException::class);
+	/**
+	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
+	 */
+	public function testDeleteByClientUserDoesNotExistException() {
+		$this->refreshTokenMapper->deleteByClientUser($this->clientId, $this->userId);
+		$this->refreshTokenMapper->find($this->id);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByClientUserInvalidArgumentException1() {
 		$this->refreshTokenMapper->deleteByClientUser(null, null);
-		$this->refreshTokenMapper->deleteByClientUser($this->clientId, null);
-		$this->refreshTokenMapper->deleteByClientUser(null, $this->userId);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByClientUserInvalidArgumentException2() {
+		$this->refreshTokenMapper->deleteByClientUser('qwertz', 12);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByClientUserInvalidArgumentException3() {
+		$this->refreshTokenMapper->deleteByClientUser($this->clientId, 12);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByClientUserInvalidArgumentException4() {
+		$this->refreshTokenMapper->deleteByClientUser('qwertz', $this->userId);
 	}
 
 }

@@ -38,7 +38,7 @@ class AuthorizationCodeMapper extends Mapper {
     /**
      * Selects an authorization code by its ID.
      *
-     * @param string $id The authorization code's ID.
+     * @param int $id The authorization code's ID.
      *
      * @return Entity The authorization code entity.
      *
@@ -47,8 +47,8 @@ class AuthorizationCodeMapper extends Mapper {
      * than one result.
      */
     public function find($id) {
-		if (is_null($id)) {
-			throw new InvalidArgumentException('id must not be null');
+		if (!is_int($id)) {
+			throw new InvalidArgumentException('Argument id must be an int');
 		}
 
         $sql = 'SELECT * FROM `'. $this->tableName . '` WHERE `id` = ?';
@@ -67,8 +67,8 @@ class AuthorizationCodeMapper extends Mapper {
      * than one result.
      */
     public function findByCode($code) {
-		if (is_null($code)) {
-			throw new InvalidArgumentException('code must not be null');
+		if (!is_string($code)) {
+			throw new InvalidArgumentException('Argument code must be a string');
 		}
 
         $sql = 'SELECT * FROM `'. $this->tableName . '` WHERE `code` = ?';
@@ -91,12 +91,12 @@ class AuthorizationCodeMapper extends Mapper {
 	/**
 	 * Deletes all authorization codes for given client and user ID.
 	 *
-	 * @param string $clientId The client ID.
+	 * @param int $clientId The client ID.
 	 * @param string $userId The user ID.
 	 */
 	public function deleteByClientUser($clientId, $userId) {
-		if (is_null($clientId) || is_null($userId)) {
-			throw new InvalidArgumentException('client_id and user_id must not be null');
+		if (!is_int($clientId) || !is_string($userId)) {
+			throw new InvalidArgumentException('Argument client_id must be an int and user_id must be a string');
 		}
 
 		$sql = 'DELETE FROM `' . $this->tableName . '` '

@@ -130,12 +130,27 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($this->secret, $client->getSecret());
 		$this->assertEquals($this->redirectUri, $client->getRedirectUri());
 		$this->assertEquals($this->name, $client->getName());
+	}
 
-		$this->expectException(DoesNotExistException::class);
+	/**
+	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
+	 */
+	public function testFindDoesNotExistException() {
 		$this->clientMapper->find(-1);
+	}
 
-		$this->expectException(InvalidArgumentException::class);
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testFindInvalidArgumentException1() {
 		$this->clientMapper->find(null);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testFindInvalidArgumentException2() {
+		$this->clientMapper->find('qwertz');
 	}
 
 	public function testFindByIdentifier() {
@@ -147,12 +162,27 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($this->secret, $client->getSecret());
 		$this->assertEquals($this->redirectUri, $client->getRedirectUri());
 		$this->assertEquals($this->name, $client->getName());
+	}
 
-		$this->expectException(DoesNotExistException::class);
+	/**
+	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
+	 */
+	public function testFindByIdentifierDoesNotExistException() {
 		$this->clientMapper->findByIdentifier('qwertz');
+	}
 
-		$this->expectException(InvalidArgumentException::class);
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testFindByIdentifierInvalidArgumentException1() {
 		$this->clientMapper->findByIdentifier(null);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testFindByIdentifierInvalidArgumentException2() {
+		$this->clientMapper->findByIdentifier(12);
 	}
 
 	public function testFindAll() {
@@ -176,9 +206,20 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 
 		$clients = $this->clientMapper->findByUser('qwertz');
 		$this->assertEmpty($clients);
+	}
 
-		$this->expectException(InvalidArgumentException::class);
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testFindByUserInvalidArgumentException1() {
 		$this->clientMapper->findByUser(null);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testFindByUserInvalidArgumentException2() {
+		$this->clientMapper->findByUser(12);
 	}
 
 }

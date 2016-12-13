@@ -24,11 +24,9 @@
 
 namespace OCA\OAuth2\Tests\Unit\Db;
 
-use InvalidArgumentException;
 use OCA\OAuth2\AppInfo\Application;
 use OCA\OAuth2\Db\AuthorizationCode;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
-use OCP\AppFramework\Db\DoesNotExistException;
 use PHPUnit_Framework_TestCase;
 
 class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
@@ -91,12 +89,27 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($this->clientId, $authorizationCode->getClientId());
 		$this->assertEquals($this->userId, $authorizationCode->getUserId());
 		$this->assertNull($authorizationCode->getExpires());
+	}
 
-		$this->expectException(DoesNotExistException::class);
+	/**
+	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
+	 */
+	public function testFindDoesNotExistException() {
 		$this->authorizationCodeMapper->find(-1);
+	}
 
-		$this->expectException(InvalidArgumentException::class);
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testFindInvalidArgumentException1() {
 		$this->authorizationCodeMapper->find(null);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testFindInvalidArgumentException2() {
+		$this->authorizationCodeMapper->find('qwertz');
 	}
 
 	public function testFindByCode() {
@@ -108,12 +121,27 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($this->clientId, $authorizationCode->getClientId());
 		$this->assertEquals($this->userId, $authorizationCode->getUserId());
 		$this->assertNull($authorizationCode->getExpires());
+	}
 
-		$this->expectException(DoesNotExistException::class);
+	/**
+	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
+	 */
+	public function testFindByCodeDoesNotExistException() {
 		$this->authorizationCodeMapper->findByCode('qwertz');
+	}
 
-		$this->expectException(InvalidArgumentException::class);
-		$this->authorizationCodeMapper->findByCode(null);
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testFindByCodeInvalidArgumentException1() {
+		$this->authorizationCodeMapper->find(null);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testFindByCodeInvalidArgumentException2() {
+		$this->authorizationCodeMapper->find('qwertz');
 	}
 
 	public function testFindAll() {
@@ -125,16 +153,44 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 	public function testDeleteByClientUser() {
 		$this->authorizationCodeMapper->deleteByClientUser($this->clientId, $this->userId);
 
-		$this->expectException(DoesNotExistException::class);
-		$this->authorizationCodeMapper->find($this->id);
-
 		$authorizationCodes = $this->authorizationCodeMapper->findAll();
 		$this->assertEquals(1, count($authorizationCodes));
+	}
 
-		$this->expectException(InvalidArgumentException::class);
+	/**
+	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
+	 */
+	public function testDeleteByClientUserDoesNotExistException() {
+		$this->authorizationCodeMapper->deleteByClientUser($this->clientId, $this->userId);
+		$this->authorizationCodeMapper->find($this->id);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByClientUserInvalidArgumentException1() {
 		$this->authorizationCodeMapper->deleteByClientUser(null, null);
-		$this->authorizationCodeMapper->deleteByClientUser($this->clientId, null);
-		$this->authorizationCodeMapper->deleteByClientUser(null, $this->userId);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByClientUserInvalidArgumentException2() {
+		$this->authorizationCodeMapper->deleteByClientUser('qwertz', 12);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByClientUserInvalidArgumentException3() {
+		$this->authorizationCodeMapper->deleteByClientUser($this->clientId, 12);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByClientUserInvalidArgumentException4() {
+		$this->authorizationCodeMapper->deleteByClientUser('qwertz', $this->userId);
 	}
 
 }

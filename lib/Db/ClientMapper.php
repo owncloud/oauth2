@@ -43,7 +43,7 @@ class ClientMapper extends Mapper {
 	/**
 	 * Selects a client by its ID.
 	 *
-	 * @param string $id The client's ID.
+	 * @param int $id The client's ID.
 	 *
 	 * @return Entity The client entity.
 	 *
@@ -52,7 +52,7 @@ class ClientMapper extends Mapper {
 	 * than one result.
 	 */
 	public function find($id) {
-		if (is_null($id)) {
+		if (!is_int($id)) {
 			throw new InvalidArgumentException('id must not be null');
 		}
 
@@ -72,7 +72,7 @@ class ClientMapper extends Mapper {
      * than one result.
      */
     public function findByIdentifier($identifier) {
-		if (is_null($identifier)) {
+		if (!is_string($identifier)) {
 			throw new InvalidArgumentException('identifier must not be null');
 		}
 
@@ -100,7 +100,7 @@ class ClientMapper extends Mapper {
 	 * @return array The client entities.
 	 */
 	public function findByUser($userId) {
-		if (is_null($userId)) {
+		if (!is_string($userId)) {
 			throw new InvalidArgumentException('userId must not be null');
 		}
 
