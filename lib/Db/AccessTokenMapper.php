@@ -25,27 +25,22 @@
 namespace OCA\OAuth2\Db;
 
 use InvalidArgumentException;
-use \OCP\AppFramework\Db\Entity;
-use \OCP\IDb;
-use \OCP\AppFramework\Db\Mapper;
+use OCP\AppFramework\Db\Entity;
+use OCP\IDb;
+use OCP\AppFramework\Db\Mapper;
 
-class ClientMapper extends Mapper {
+class AccessTokenMapper extends Mapper {
 
-	/**
-	 * ClientMapper constructor.
-	 *
-	 * @param IDb $db Database Connection.
-	 */
 	public function __construct(IDb $db) {
-		parent::__construct($db, 'oauth2_clients');
+		parent::__construct($db, 'oauth2_access_tokens');
 	}
 
 	/**
-	 * Selects a client by its ID.
+	 * Selects an access token by its ID.
 	 *
-	 * @param string $id The client's ID.
+	 * @param string $id The access token's ID.
 	 *
-	 * @return Entity The client entity.
+	 * @return Entity The access token entity.
 	 *
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found.
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more
@@ -60,32 +55,13 @@ class ClientMapper extends Mapper {
 		return $this->findEntity($sql, array($id), null, null);
 	}
 
-    /**
-     * Selects a client by its identifier.
-     *
-     * @param string $identifier The client's identifier.
-     *
-     * @return Entity The client entity.
-     *
-     * @throws \OCP\AppFramework\Db\DoesNotExistException if not found.
-     * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more
-     * than one result.
-     */
-    public function findByIdentifier($identifier) {
-		if (is_null($identifier)) {
-			throw new InvalidArgumentException('identifier must not be null');
-		}
-
-        $sql = 'SELECT * FROM `' . $this->tableName . '` WHERE `identifier` = ?';
-        return $this->findEntity($sql, array($identifier), null, null);
-    }
-
 	/**
-	 * Selects all clients.
+	 * Selects all access tokens.
 	 *
 	 * @param int $limit The maximum number of rows.
 	 * @param int $offset From which row we want to start.
-	 * @return array All clients.
+	 *
+	 * @return array All access tokens.
 	 */
 	public function findAll($limit = null, $offset = null) {
 		$sql = 'SELECT * FROM `' . $this->tableName . '`';
@@ -93,24 +69,20 @@ class ClientMapper extends Mapper {
 	}
 
 	/**
-	 * Selects clients by the given user ID.
+	 * Deletes all access tokens for given client and user ID.
 	 *
+	 * @param string $clientId The client ID.
 	 * @param string $userId The user ID.
-	 *
-	 * @return array The client entities.
 	 */
-	public function findByUser($userId) {
-		if (is_null($userId)) {
-			throw new InvalidArgumentException('userId must not be null');
+	public function deleteByClientUser($clientId, $userId) {
+		if (is_null($clientId) || is_null($userId)) {
+			throw new InvalidArgumentException('client_id and user_id must not be null');
 		}
 
-		$sql = 'SELECT * FROM `' . $this->tableName . '` '
-			. 'WHERE `id` IN ( '
-				. 'SELECT `client_id` FROM `oc_oauth2_authorization_codes` WHERE `user_id` = ? '
-				. 'UNION '
-				. 'SELECT `client_id` FROM `oc_oauth2_access_tokens` WHERE `user_id` = ? '
-			.')';
-		return $this->findEntities($sql, array($userId, $userId), null, null);
+		$sql = 'DELETE FROM `' . $this->tableName . '` '
+			. 'WHERE client_id = ? AND user_id = ?';
+		$stmt = $this->execute($sql, array($clientId, $userId), null, null);
+		$stmt->closeCursor();
 	}
 
 }

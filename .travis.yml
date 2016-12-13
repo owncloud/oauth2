@@ -11,9 +11,6 @@ env:
     - CORE_BRANCH=stable9.1 DB=pgsql
     - CORE_BRANCH=stable9.1 DB=sqlite
     - CORE_BRANCH=stable9.1 DB=mysql
-    - CORE_BRANCH=stable9 DB=pgsql
-    - CORE_BRANCH=stable9 DB=sqlite
-    - CORE_BRANCH=stable9 DB=mysql
     - CORE_BRANCH=master DB=pgsql
     - CORE_BRANCH=master DB=sqlite
     - CORE_BRANCH=master DB=mysql
@@ -25,6 +22,7 @@ matrix:
         - env: DB=pgsql CORE_BRANCH=master
         - env: DB=mysql CORE_BRANCH=master
         - env: DB=sqlite CORE_BRANCH=master
+    fast_finish: true
 
 before_install:
     # enable a display for running JavaScript tests
@@ -37,6 +35,7 @@ before_install:
     # install core
     - cd ../
     - git clone https://github.com/owncloud/core.git --recursive --depth 1 -b $CORE_BRANCH owncloud
+    - if [[ "CORE_BRANCH" == 'master' ]]; then cd owncloud; make; cd ../; fi
     - mv owncloud-app_oauth2 oauth2
     - mv oauth2 owncloud/apps/
 

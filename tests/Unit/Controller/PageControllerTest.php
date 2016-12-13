@@ -31,9 +31,7 @@ use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
 use OCP\AppFramework\Http\RedirectResponse;
 use PHPUnit_Framework_TestCase;
-
 use OCP\AppFramework\Http\TemplateResponse;
-
 
 class PageControllerTest extends PHPUnit_Framework_TestCase {
 

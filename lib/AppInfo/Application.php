@@ -24,11 +24,11 @@
 
 namespace OCA\OAuth2\AppInfo;
 
-use \OCA\OAuth2\Db\AccessTokenMapper;
-use \OCA\OAuth2\Db\AuthorizationCodeMapper;
-use \OCA\OAuth2\Db\ClientMapper;
-use \OCA\OAuth2\Db\RefreshTokenMapper;
-use \OCP\AppFramework\App;
+use OCA\OAuth2\Db\AccessTokenMapper;
+use OCA\OAuth2\Db\AuthorizationCodeMapper;
+use OCA\OAuth2\Db\ClientMapper;
+use OCA\OAuth2\Db\RefreshTokenMapper;
+use OCP\AppFramework\App;
 
 class Application extends App {
 

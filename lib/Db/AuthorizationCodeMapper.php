@@ -25,9 +25,9 @@
 namespace OCA\OAuth2\Db;
 
 use InvalidArgumentException;
-use \OCP\AppFramework\Db\Entity;
-use \OCP\IDb;
-use \OCP\AppFramework\Db\Mapper;
+use OCP\AppFramework\Db\Entity;
+use OCP\IDb;
+use OCP\AppFramework\Db\Mapper;
 
 class AuthorizationCodeMapper extends Mapper {
 

@@ -24,18 +24,18 @@
 
 namespace OCA\OAuth2\Controller;
 
-use \OCA\OAuth2\Db\AuthorizationCode;
-use \OCA\OAuth2\Db\AuthorizationCodeMapper;
-use \OCA\OAuth2\Db\ClientMapper;
-use \OCA\OAuth2\Utilities;
-use \OCP\AppFramework\App;
-use \OCP\AppFramework\Db\DoesNotExistException;
-use \OCP\IRequest;
-use \OCP\AppFramework\Http\TemplateResponse;
-use \OCP\AppFramework\Http\RedirectResponse;
-use \OCP\AppFramework\Http\JSONResponse;
-use \OCP\AppFramework\Controller;
-use \OCP\AppFramework\Http;
+use OCA\OAuth2\Db\AuthorizationCode;
+use OCA\OAuth2\Db\AuthorizationCodeMapper;
+use OCA\OAuth2\Db\ClientMapper;
+use OCA\OAuth2\Utilities;
+use OCP\AppFramework\App;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\IRequest;
+use OCP\AppFramework\Http\TemplateResponse;
+use OCP\AppFramework\Http\RedirectResponse;
+use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http;
 
 class PageController extends Controller {
 

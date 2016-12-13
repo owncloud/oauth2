@@ -24,14 +24,14 @@
 
 namespace OCA\OAuth2\Controller;
 
-use \OCA\OAuth2\Db\AccessTokenMapper;
-use \OCA\OAuth2\Db\AuthorizationCodeMapper;
-use \OCA\OAuth2\Db\Client;
-use \OCA\OAuth2\Db\ClientMapper;
-use \OCA\OAuth2\Utilities;
-use \OCP\AppFramework\Controller;
-use \OCP\AppFramework\Http\RedirectResponse;
-use \OCP\IRequest;
+use OCA\OAuth2\Db\AccessTokenMapper;
+use OCA\OAuth2\Db\AuthorizationCodeMapper;
+use OCA\OAuth2\Db\Client;
+use OCA\OAuth2\Db\ClientMapper;
+use OCA\OAuth2\Utilities;
+use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\RedirectResponse;
+use OCP\IRequest;
 
 class SettingsController extends Controller {
 

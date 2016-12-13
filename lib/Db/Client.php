@@ -24,31 +24,33 @@
 
 namespace OCA\OAuth2\Db;
 
-use \OCP\AppFramework\Db\Entity;
+use OCP\AppFramework\Db\Entity;
 
 /**
- * Class AccessToken
+ * Class Client
  *
- * @method integer getToken()
- * @method void setToken(string $token)
- * @method string getClientId()
- * @method void setClientId(string $clientId)
- * @method string getUserId()
- * @method void setUserId(string $userId)
+ * @method string getIdentifier()
+ * @method void setIdentifier(string $identifier)
+ * @method string getSecret()
+ * @method void setSecret(string $secret)
+ * @method string getRedirectUri()
+ * @method void setRedirectUri(string $redirectUri)
+ * @method string getName()
+ * @method void setName(string $name)
  */
-class AccessToken extends Entity {
+class Client extends Entity {
 
-    protected $token;
-    protected $clientId;
-    protected $userId;
-    protected $expires;
+    protected $identifier;
+    protected $secret;
+    protected $redirectUri;
+    protected $name;
 
     public function __construct() {
         $this->addType('id', 'integer');
-        $this->addType('token', 'string');
-        $this->addType('client_id', 'string');
-        $this->addType('user_id', 'string');
-        // TODO: set type for $expires
+        $this->addType('identifier', 'string');
+        $this->addType('secret', 'string');
+        $this->addType('redirect_uri', 'string');
+        $this->addType('name', 'string');
     }
 
 }
