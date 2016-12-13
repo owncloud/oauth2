@@ -22,14 +22,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
+use OCA\OAuth2\AppInfo\Application;
 use OCA\OAuth2\Db\ClientMapper;
-use OCP\AppFramework\App;
 
 OCP\User::checkAdminUser();
 
-$app = new App('oauth2');
+$app = new Application();
 $container = $app->getContainer();
-$clientMapper = new ClientMapper($container->query('ServerContainer')->getDb());
+
+/** @var ClientMapper $clientMapper */
+$clientMapper = $container->query('OCA\OAuth2\Db\ClientMapper');
 
 $tmpl = new OCP\Template('oauth2', 'settings-admin');
 

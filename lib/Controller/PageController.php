@@ -28,7 +28,6 @@ use OCA\OAuth2\Db\AuthorizationCode;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
 use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Utilities;
-use OCP\AppFramework\App;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IRequest;
 use OCP\AppFramework\Http\TemplateResponse;
@@ -58,9 +57,6 @@ class PageController extends Controller {
      */
 	public function __construct($AppName, IRequest $request, ClientMapper $clientMapper, AuthorizationCodeMapper $authorizationCodeMapper, $UserId){
 		parent::__construct($AppName, $request);
-
-        $app = new App('oauth2');
-        $container = $app->getContainer();
 
         $this->clientMapper = $clientMapper;
 		$this->authorizationCodeMapper = $authorizationCodeMapper;

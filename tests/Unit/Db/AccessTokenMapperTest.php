@@ -58,7 +58,7 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$app = new Application();
 		$container = $app->getContainer();
 
-		$this->accessTokenMapper = $container->query('AccessTokenMapper');
+		$this->accessTokenMapper = $container->query('OCA\OAuth2\Db\AccessTokenMapper');
 
 		$accessToken = new AccessToken();
 		$accessToken->setToken($this->token);

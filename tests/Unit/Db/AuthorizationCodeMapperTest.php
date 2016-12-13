@@ -58,7 +58,7 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 		$app = new Application();
 		$container = $app->getContainer();
 
-		$this->authorizationCodeMapper = $container->query('AuthorizationCodeMapper');
+		$this->authorizationCodeMapper = $container->query('OCA\OAuth2\Db\AuthorizationCodeMapper');
 
 		$authorizationCode = new AuthorizationCode();
 		$authorizationCode->setCode($this->code);

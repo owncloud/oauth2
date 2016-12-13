@@ -24,10 +24,6 @@
 
 namespace OCA\OAuth2\AppInfo;
 
-use OCA\OAuth2\Db\AccessTokenMapper;
-use OCA\OAuth2\Db\AuthorizationCodeMapper;
-use OCA\OAuth2\Db\ClientMapper;
-use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCP\AppFramework\App;
 
 class Application extends App {
@@ -39,32 +35,14 @@ class Application extends App {
      */
     public function __construct(array $urlParams=array()){
         parent::__construct('oauth2', $urlParams);
-
-		$container = $this->getContainer();
-
-		$container->registerService('ClientMapper', function($c) {
-			return new ClientMapper(
-				$c->query('ServerContainer')->getDb()
-			);
-		});
-
-		$container->registerService('AuthorizationCodeMapper', function($c) {
-			return new AuthorizationCodeMapper(
-				$c->query('ServerContainer')->getDb()
-			);
-		});
-
-		$container->registerService('AccessTokenMapper', function($c) {
-			return new AccessTokenMapper(
-				$c->query('ServerContainer')->getDb()
-			);
-		});
-
-		$container->registerService('RefreshTokenMapper', function($c) {
-			return new RefreshTokenMapper(
-				$c->query('ServerContainer')->getDb()
-			);
-		});
     }
+
+	/**
+	 * Registers settings pages.
+	 */
+    public function registerSettings() {
+		\OCP\App::registerAdmin('oauth2', 'lib/settings-admin');
+		\OCP\App::registerPersonal('oauth2', 'lib/settings-personal');
+	}
 
 }

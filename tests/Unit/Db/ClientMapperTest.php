@@ -80,7 +80,7 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 		$app = new Application();
 		$container = $app->getContainer();
 
-		$this->clientMapper = $container->query('ClientMapper');
+		$this->clientMapper = $container->query('OCA\OAuth2\Db\ClientMapper');
 
 		$client = new Client();
 		$client->setIdentifier($this->identifier);
@@ -98,8 +98,8 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 		$client->setName('Google');
 		$this->client2 = $this->clientMapper->insert($client);
 
-		$this->authorizationCodeMapper = $container->query('AuthorizationCodeMapper');
-		$this->accessTokenMapper = $container->query('AccessTokenMapper');
+		$this->authorizationCodeMapper = $container->query('OCA\OAuth2\Db\AuthorizationCodeMapper');
+		$this->accessTokenMapper = $container->query('OCA\OAuth2\Db\AccessTokenMapper');
 
 		$authorizationCode = new AuthorizationCode();
 		$authorizationCode->setCode('akYNVaCz7us4VZUf2f24QZqXCyrky3M39yUZuGF6pecVzMImIzvsFZa6FMAJVJ1v');

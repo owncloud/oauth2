@@ -50,7 +50,7 @@ class PageControllerTest extends PHPUnit_Framework_TestCase {
 		$app = new Application();
 		$container = $app->getContainer();
 
-		$this->clientMapper = $container->query('ClientMapper');
+		$this->clientMapper = $container->query('OCA\OAuth2\Db\ClientMapper');
 
 		/** @var Client $client */
 		$client = new Client();
@@ -61,7 +61,7 @@ class PageControllerTest extends PHPUnit_Framework_TestCase {
 		$this->clientMapper->insert($client);
 
 		/** @var AuthorizationCodeMapper $authorizationCodeMapper */
-		$authorizationCodeMapper = $container->query('AuthorizationCodeMapper');
+		$authorizationCodeMapper = $container->query('OCA\OAuth2\Db\AuthorizationCodeMapper');
 
 		$this->controller = new PageController('oauth2', $request, $this->clientMapper, $authorizationCodeMapper, $this->userId);
 	}
