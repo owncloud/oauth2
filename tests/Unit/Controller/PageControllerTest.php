@@ -24,6 +24,7 @@
 
 namespace OCA\OAuth2\Tests\Unit\Controller;
 
+use OC_Util;
 use OCA\OAuth2\AppInfo\Application;
 use OCA\OAuth2\Controller\PageController;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
@@ -41,8 +42,26 @@ class PageControllerTest extends PHPUnit_Framework_TestCase {
 	/** @var ClientMapper $clientMapper */
 	private $clientMapper;
 
+	/** @var AuthorizationCodeMapper $authorizationCodeMapper */
+	private $authorizationCodeMapper;
+
 	/** @var string $userId */
 	private $userId = 'john';
+
+	/** @var string $identifier */
+	private $identifier = 'NXCy3M3a6FM9pecVyUZuGF62AJVJaCfmkYz7us4yr4QZqVzMIkVZUf1v2IzvsFZa';
+
+	/** @var string $secret */
+	private $secret = '9yUZuGF6pecVaCfmIzvsFZakYNXCyr4QZqVzMIky3M3a6FMz7us4VZUf2AJVJ1v2';
+
+	/** @var string $redirectUri */
+	private $redirectUri = 'https://owncloud.org';
+
+	/** @var string $name */
+	private $name = 'ownCloud';
+
+	/** @var Client $client */
+	private $client;
 
 	public function setUp() {
 		$request = $this->getMockBuilder('OCP\IRequest')->getMock();
@@ -54,28 +73,118 @@ class PageControllerTest extends PHPUnit_Framework_TestCase {
 
 		/** @var Client $client */
 		$client = new Client();
-		$client->setIdentifier('clientId1234567890');
-		$client->setSecret('topSecret123');
-		$client->setRedirectUri('https://www.example.org');
-		$client->setName('Example');
-		$this->clientMapper->insert($client);
+		$client->setIdentifier($this->identifier);
+		$client->setSecret($this->secret);
+		$client->setRedirectUri($this->redirectUri);
+		$client->setName($this->name);
+		$this->client = $this->clientMapper->insert($client);
 
-		/** @var AuthorizationCodeMapper $authorizationCodeMapper */
-		$authorizationCodeMapper = $container->query('OCA\OAuth2\Db\AuthorizationCodeMapper');
+		$this->authorizationCodeMapper = $container->query('OCA\OAuth2\Db\AuthorizationCodeMapper');
 
-		$this->controller = new PageController('oauth2', $request, $this->clientMapper, $authorizationCodeMapper, $this->userId);
+		$this->controller = new PageController('oauth2', $request, $this->clientMapper, $this->authorizationCodeMapper, $this->userId);
 	}
 
 	public function tearDown() {
-		$this->clientMapper->delete($this->clientMapper->findByIdentifier('clientId1234567890'));
+		$this->clientMapper->delete($this->client);
 	}
 
 	public function testAuthorize() {
-		$result = $this->controller->authorize('code', 'client_id', 'redirect_uri', 'state');
+		// Wrong types
+		$result = $this->controller->authorize(1, 'qwertz', 'abcd', 'state', 'scope');
 		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
-		$result = $this->controller->authorize('code', 'clientId1234567890', urldecode('https://www.example.org'), 'state');
+		$result = $this->controller->authorize('code', 2, 'abcd', 'state', 'scope');
+		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+
+		$result = $this->controller->authorize('code', 'qwertz', 3, 'state', 'scope');
+		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+
+		$result = $this->controller->authorize('code', $this->identifier, urldecode($this->redirectUri), 4, 'scope');
+		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+
+		$result = $this->controller->authorize('code', $this->identifier, urldecode($this->redirectUri), 'state', 5);
+		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+
+		// Wrong parameters
+		$result = $this->controller->authorize('code', 'qwertz', 'abcd', 'state', 'scope');
+		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+
+		$result = $this->controller->authorize('qwertz', $this->identifier, urldecode($this->redirectUri));
+		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+
+		$result = $this->controller->authorize('code', $this->identifier, urldecode('https://www.example.org'));
+		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+
+		$result = $this->controller->authorize('code', $this->identifier, urldecode($this->redirectUri));
 		$this->assertTrue($result instanceof TemplateResponse);
+		$this->assertEquals('authorize', $result->getTemplateName());
+		$this->assertEquals(['client_name' => $this->name], $result->getParams());
+	}
+
+	public function testGenerateAuthorizationCode() {
+		// Wrong types
+		$result = $this->controller->generateAuthorizationCode(1, 'qwertz', 'abcd', 'state', 'scope');
+		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+
+		$result = $this->controller->generateAuthorizationCode('code', 2, 'abcd', 'state', 'scope');
+		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+
+		$result = $this->controller->generateAuthorizationCode('code', 'qwertz', 3, 'state', 'scope');
+		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+
+		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, urldecode($this->redirectUri), 4, 'scope');
+		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+
+		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, urldecode($this->redirectUri), 'state', 5);
+		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+
+		// Wrong parameters
+		$result = $this->controller->generateAuthorizationCode('code', 'qwertz', 'abcd', 'state', 'scope');
+		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+
+		$result = $this->controller->generateAuthorizationCode('qwertz', $this->identifier, urldecode($this->redirectUri));
+		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+
+		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, urldecode('https://www.example.org'));
+		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+
+		$this->assertEquals(0, count($this->authorizationCodeMapper->findAll()));
+		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, urldecode($this->redirectUri));
+		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertEquals(1, count($this->authorizationCodeMapper->findAll()));
+		list($url, $query) = explode('?', $result->getRedirectURL());
+		$this->assertEquals($url, $this->redirectUri);
+		parse_str($query, $parameters);
+		$this->assertTrue(array_key_exists('code', $parameters));
+		$this->authorizationCodeMapper->delete($this->authorizationCodeMapper->findByCode($parameters['code']));
+
+		$this->assertEquals(0, count($this->authorizationCodeMapper->findAll()));
+		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, urldecode($this->redirectUri), 'testingState');
+		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertEquals(1, count($this->authorizationCodeMapper->findAll()));
+		list($url, $query) = explode('?', $result->getRedirectURL());
+		$this->assertEquals($url, $this->redirectUri);
+		parse_str($query, $parameters);
+		$this->assertTrue(array_key_exists('state', $parameters));
+		$this->assertEquals('testingState', $parameters['state']);
+		$this->assertTrue(array_key_exists('code', $parameters));
+		$this->authorizationCodeMapper->delete($this->authorizationCodeMapper->findByCode($parameters['code']));
 	}
 
 }
