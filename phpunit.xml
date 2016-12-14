@@ -9,9 +9,10 @@
 		<whitelist>
 			<directory suffix=".php">.</directory>
 			<exclude>
-				<directory suffix=".php">./templates</directory>
 				<directory suffix=".php">./3rdparty</directory>
+				<directory suffix=".php">./appinfo</directory>
 				<directory suffix=".php">./l10n</directory>
+				<directory suffix=".php">./templates</directory>
 				<directory suffix=".php">./tests</directory>
 			</exclude>
 		</whitelist>
