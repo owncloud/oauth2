@@ -151,7 +151,7 @@ class PageController extends Controller {
                 $result = urldecode($redirect_uri);
                 $result = $result. '?code=' . $code;
                 if (!is_null($state)) {
-                    $result = $result. '&state=' . $state;
+                    $result = $result. '&state=' . urlencode($state);
                 }
                 return new RedirectResponse($result);
 				break;
