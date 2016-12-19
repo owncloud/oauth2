@@ -56,6 +56,26 @@ class AccessTokenMapper extends Mapper {
 	}
 
 	/**
+	 * Selects an access token by its token.
+	 *
+	 * @param string $token The access token.
+	 *
+	 * @return Entity The access token entity.
+	 *
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found.
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more
+	 * than one result.
+	 */
+	public function findByToken($token) {
+		if (!is_string($token)) {
+			throw new InvalidArgumentException('Argument token must be a string');
+		}
+
+		$sql = 'SELECT * FROM `'. $this->tableName . '` WHERE `token` = ?';
+		return $this->findEntity($sql, array($token), null, null);
+	}
+
+	/**
 	 * Selects all access tokens.
 	 *
 	 * @param int $limit The maximum number of rows.

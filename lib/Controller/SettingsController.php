@@ -98,7 +98,7 @@ class SettingsController extends Controller {
     /**
      * Deletes a client.
 	 *
-	 * @param string $id The client identifier.
+	 * @param int $id The client identifier.
      *
      * @return RedirectResponse Redirection to the settings page.
      *
@@ -117,7 +117,7 @@ class SettingsController extends Controller {
 	/**
 	 * Revokes the authorization for a client.
 	 *
-	 * @param string $id The client identifier.
+	 * @param int $id The client identifier.
 	 * @param string $user_id The ID of the user logged in.
 	 *
 	 * @return RedirectResponse Redirection to the settings page.

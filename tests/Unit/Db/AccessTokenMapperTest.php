@@ -112,6 +112,38 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$this->accessTokenMapper->find('qwertz');
 	}
 
+	public function testFindByToken() {
+		/** @var AccessToken $accessToken */
+		$accessToken = $this->accessTokenMapper->findByToken($this->token);
+
+		$this->assertEquals($this->id, $accessToken->getId());
+		$this->assertEquals($this->token, $accessToken->getToken());
+		$this->assertEquals($this->clientId, $accessToken->getClientId());
+		$this->assertEquals($this->userId, $accessToken->getUserId());
+		$this->assertNull($accessToken->getExpires());
+	}
+
+	/**
+	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
+	 */
+	public function testFindByTokenDoesNotExistException() {
+		$this->accessTokenMapper->findByToken('qwertz');
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testFindByTokenInvalidArgumentException1() {
+		$this->accessTokenMapper->findByToken(null);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testFindByTokenInvalidArgumentException2() {
+		$this->accessTokenMapper->findByToken(1);
+	}
+
 	public function testFindAll() {
 		$accessTokens = $this->accessTokenMapper->findAll();
 
