@@ -1,4 +1,4 @@
-# OAuth 2.0
+# 🔐 OAuth 2.0
 [![Build Status](https://travis-ci.org/pssl16/owncloud-app_oauth2.svg?branch=master)](https://travis-ci.org/pssl16/owncloud-app_oauth2)
 [![codecov](https://codecov.io/gh/pssl16/owncloud-app_oauth2/branch/master/graph/badge.svg)](https://codecov.io/gh/pssl16/owncloud-app_oauth2)
 
