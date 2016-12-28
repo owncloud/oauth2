@@ -68,8 +68,6 @@ class PageController extends Controller {
 	/**
 	 * Shows a view for the user to authorize a client.
 	 *
-	 * Is accessible by the client via /index.php/apps/oauth2/authorize
-	 *
      * @param string $response_type The expected response type.
      * @param string $client_id The client identifier.
      * @param string $redirect_uri The redirect URI.
