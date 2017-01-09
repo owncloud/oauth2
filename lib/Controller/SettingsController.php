@@ -80,7 +80,8 @@ class SettingsController extends Controller {
      *
      */
     public function addClient() {
-        if (filter_var($_POST['redirect_uri'], FILTER_VALIDATE_URL) === false) {
+		if (!isset($_POST['redirect_uri']) || !isset($_POST['name']) ||
+			filter_var($_POST['redirect_uri'], FILTER_VALIDATE_URL) === false) {
             return new RedirectResponse('../../settings/admin#oauth-2.0');
         }
 
