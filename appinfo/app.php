@@ -26,3 +26,4 @@ use OCA\OAuth2\AppInfo\Application;
 
 $app = new Application();
 $app->registerSettings();
+$app->getContainer()->query('UserHooks')->register();

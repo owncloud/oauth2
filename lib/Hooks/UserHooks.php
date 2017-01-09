@@ -22,40 +22,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-namespace OCA\OAuth2\AppInfo;
+namespace OCA\OAuth2\Hooks;
 
-use OCP\AppFramework\App;
-use OCA\OAuth2\Hooks\UserHooks;
+class UserHooks {
 
-class Application extends App {
+	private $userManager;
 
-    /**
-     * Application constructor.
-     *
-     * @param array $urlParams an array with variables extracted from the routes
-     */
-    public function __construct(array $urlParams=array()){
-        parent::__construct('oauth2', $urlParams);
-
-    $container = $this->getContainer();
-
-		/**
-		 * Controllers
-		 */
-
-		$container->registerService('UserHooks', function($c) {
-			return new UserHooks(
-				$c->query('ServerContainer')->getUserManager()
-			);
-		});
-    }
-
-	/**
-	 * Registers settings pages.
-	 */
-    public function registerSettings() {
-		\OCP\App::registerAdmin('oauth2', 'lib/settings-admin');
-		\OCP\App::registerPersonal('oauth2', 'lib/settings-personal');
+	public function __construct($userManager){
+		$this->userManager = $userManager;
 	}
 
+	public function register() {
+		$callback = function($user) {
+			//code that executes before the $user is deleted -> delete the token
+		};
+		$this->userManager->listen('\OC\User', 'preDelete', $callback);
+	}
 }
