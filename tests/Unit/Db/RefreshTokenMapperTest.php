@@ -162,36 +162,34 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$this->refreshTokenMapper->deleteByClientUser('qwertz', $this->userId);
 	}
 
-    public function testDeleteByClient(){
-        $this->refreshTokenMapper->deleteByClient($this->clientId);
+	public function testDeleteByClient() {
+		$this->refreshTokenMapper->deleteByClient($this->clientId);
+		$this->assertEquals(0, count($this->refreshTokenMapper->findAll()));
+	}
 
-        $refreshTokens = $this->refreshTokenMapper->findAll();
-        $this->assertEquals(0, count($refreshTokens));
-    }
+	/**
+	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
+	 */
+	public function testDeleteByClientDoesNotExistException() {
+		$this->refreshTokenMapper->deleteByClient($this->clientId);
+		$this->refreshTokenMapper->find($this->id);
+	}
 
-    /**
-     * @expectedException \OCP\AppFramework\Db\DoesNotExistException
-     */
-    public function testDeleteByClientDoesNotExistException() {
-        $this->refreshTokenMapper->deleteByClient($this->clientId);
-        $this->refreshTokenMapper->find($this->id);
-    }
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByClientInvalidArgumentException1() {
+		$this->refreshTokenMapper->deleteByClient(null);
+	}
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testDeleteByClientInvalidArgumentException1() {
-        $this->refreshTokenMapper->deleteByClient(null);
-    }
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByClientInvalidArgumentException2() {
+		$this->refreshTokenMapper->deleteByClient('qwertz');
+	}
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testDeleteByClientInvalidArgumentException2() {
-        $this->refreshTokenMapper->deleteByClient('qwertz');
-    }
-
-  public function testDeleteAll() {
+	public function testDeleteAll() {
 		$this->assertEquals(2, count($this->refreshTokenMapper->findAll()));
 		$this->refreshTokenMapper->deleteAll();
 		$this->assertEquals(0, count($this->refreshTokenMapper->findAll()));

@@ -194,36 +194,34 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$this->accessTokenMapper->deleteByClientUser('qwertz', $this->userId);
 	}
 
-	public function testDeleteByClient(){
-        $this->accessTokenMapper->deleteByClient($this->clientId);
+	public function testDeleteByClient() {
+		$this->accessTokenMapper->deleteByClient($this->clientId);
+		$this->assertEquals(0, count($this->accessTokenMapper->findAll()));
+	}
 
-        $accessTokens = $this->accessTokenMapper->findAll();
-        $this->assertEquals(0, count($accessTokens));
-    }
+	/**
+	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
+	 */
+	public function testDeleteByClientDoesNotExistException() {
+		$this->accessTokenMapper->deleteByClient($this->clientId);
+		$this->accessTokenMapper->find($this->id);
+	}
 
-    /**
-     * @expectedException \OCP\AppFramework\Db\DoesNotExistException
-     */
-    public function testDeleteByClientDoesNotExistException() {
-        $this->accessTokenMapper->deleteByClient($this->clientId);
-        $this->accessTokenMapper->find($this->id);
-    }
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByClientInvalidArgumentException1() {
+		$this->accessTokenMapper->deleteByClient(null);
+	}
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testDeleteByClientInvalidArgumentException1() {
-        $this->accessTokenMapper->deleteByClient(null);
-    }
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByClientInvalidArgumentException2() {
+		$this->accessTokenMapper->deleteByClient('qwertz');
+	}
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testDeleteByClientInvalidArgumentException2() {
-        $this->accessTokenMapper->deleteByClient('qwertz');
-    }
-
-  public function testDeleteAll() {
+	public function testDeleteAll() {
 		$this->assertEquals(2, count($this->accessTokenMapper->findAll()));
 		$this->accessTokenMapper->deleteAll();
 		$this->assertEquals(0, count($this->accessTokenMapper->findAll()));

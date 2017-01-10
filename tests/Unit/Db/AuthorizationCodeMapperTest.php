@@ -194,35 +194,33 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 		$this->authorizationCodeMapper->deleteByClientUser('qwertz', $this->userId);
 	}
 
-    public function testDeleteByClient(){
-        $this->authorizationCodeMapper->deleteByClient($this->clientId);
+	public function testDeleteByClient() {
+		$this->authorizationCodeMapper->deleteByClient($this->clientId);
+		$this->assertEquals(0, count($this->authorizationCodeMapper->findAll()));
+	}
 
-        $authorizationCodes = $this->authorizationCodeMapper->findAll();
-        $this->assertEquals(0, count($authorizationCodes));
-    }
+	/**
+	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
+	 */
+	public function testDeleteByClientDoesNotExistException() {
+		$this->authorizationCodeMapper->deleteByClient($this->clientId);
+		$this->authorizationCodeMapper->find($this->id);
+	}
 
-    /**
-     * @expectedException \OCP\AppFramework\Db\DoesNotExistException
-     */
-    public function testDeleteByClientDoesNotExistException() {
-        $this->authorizationCodeMapper->deleteByClient($this->clientId);
-        $this->authorizationCodeMapper->find($this->id);
-    }
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByClientInvalidArgumentException1() {
+		$this->authorizationCodeMapper->deleteByClient(null);
+	}
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testDeleteByClientInvalidArgumentException1() {
-        $this->authorizationCodeMapper->deleteByClient(null);
-    }
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByClientInvalidArgumentException2() {
+		$this->authorizationCodeMapper->deleteByClient('qwertz');
+	}
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testDeleteByClientInvalidArgumentException2() {
-        $this->authorizationCodeMapper->deleteByClient('qwertz');
-    }
-  
 	public function testDeleteAll() {
 		$this->assertEquals(2, count($this->authorizationCodeMapper->findAll()));
 		$this->authorizationCodeMapper->deleteAll();
