@@ -49,15 +49,15 @@ class PageController extends Controller {
     /** @var string */
     private $userId;
 
-    /**
-     * PageController constructor.
-     * @param string $AppName
-     * @param IRequest $request
-     * @param ClientMapper $clientMapper
-	 * @param AuthorizationCodeMapper $authorizationCodeMapper
-     * @param string $UserId
-     */
-	public function __construct($AppName, IRequest $request, ClientMapper $clientMapper, AuthorizationCodeMapper $authorizationCodeMapper, $UserId){
+	/**
+	 * PageController constructor.
+	 * @param string $AppName The name of the app.
+	 * @param IRequest $request The request.
+	 * @param ClientMapper $clientMapper The client mapper.
+	 * @param AuthorizationCodeMapper $authorizationCodeMapper The authorization code mapper.
+	 * @param string $UserId The user ID.
+	 */
+	public function __construct($AppName, IRequest $request, ClientMapper $clientMapper, AuthorizationCodeMapper $authorizationCodeMapper, $UserId) {
 		parent::__construct($AppName, $request);
 
         $this->clientMapper = $clientMapper;
@@ -67,8 +67,6 @@ class PageController extends Controller {
 
 	/**
 	 * Shows a view for the user to authorize a client.
-	 *
-	 * Is accessible by the client via /index.php/apps/oauth2/authorize
 	 *
      * @param string $response_type The expected response type.
      * @param string $client_id The client identifier.
