@@ -25,6 +25,7 @@
 namespace OCA\OAuth2\Db;
 
 use InvalidArgumentException;
+use OCA\OAuth2\Controller\SettingsController;
 use OCP\AppFramework\Db\Entity;
 use OCP\IDb;
 use OCP\AppFramework\Db\Mapper;
@@ -114,4 +115,23 @@ class AccessTokenMapper extends Mapper {
 		$stmt->closeCursor();
 	}
 
+    /**
+     * Deletes all access tokens for a given client_id.
+     * Used for client deletion by the administrator in the
+     * admin settings.
+     *
+     * @param int $clientId The client ID
+     * @see SettingsController::deleteClient()
+     */
+	public function deleteByClient($clientId)
+    {
+        if (!is_int($clientId)) {
+            throw new InvalidArgumentException('Argument client_id must be an int');
+        }
+
+        $sql = 'DELETE FROM `' . $this->tableName . '`'
+            . 'WHERE client_id = ?';
+        $stmt = $this->execute($sql, array($clientId), null, null);
+        $stmt->closeCursor();
+    }
 }

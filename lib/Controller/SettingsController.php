@@ -114,7 +114,9 @@ class SettingsController extends Controller {
         $client = $this->clientMapper->find($id);
         $this->clientMapper->delete($client);
 
-        // TODO: Delete all Authorization Codes, Access Tokens and Refresh Tokens
+        $this->authorizationCodeMapper->deleteByClient($id);
+        $this->accessTokenMapper->deleteByClient($id);
+        $this->refreshTokenMapper->deleteByClient($id);
 
         return new RedirectResponse('../../../../settings/admin#oauth-2.0');
     }
