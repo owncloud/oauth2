@@ -52,7 +52,7 @@ class RefreshTokenMapper extends Mapper {
 		}
 
         $sql = 'SELECT * FROM `'. $this->tableName . '` WHERE `id` = ?';
-        return $this->findEntity($sql, array($id), null, null);
+        return $this->findEntity($sql, [$id], null, null);
     }
 
     /**
@@ -79,9 +79,8 @@ class RefreshTokenMapper extends Mapper {
 			throw new InvalidArgumentException('Argument client_id must be an int and user_id must be a string');
 		}
 
-		$sql = 'DELETE FROM `' . $this->tableName . '` '
-			. 'WHERE client_id = ? AND user_id = ?';
-		$stmt = $this->execute($sql, array($clientId, $userId), null, null);
+		$sql = 'DELETE FROM `' . $this->tableName . '` ' . 'WHERE `client_id` = ? AND `user_id` = ?';
+		$stmt = $this->execute($sql, [$clientId, $userId], null, null);
 		$stmt->closeCursor();
 	}
 
@@ -93,15 +92,13 @@ class RefreshTokenMapper extends Mapper {
      * @param int $clientId The client ID
      * @see SettingsController::deleteClient()
      */
-    public function deleteByClient($clientId)
-    {
+    public function deleteByClient($clientId) {
         if (!is_int($clientId)) {
             throw new InvalidArgumentException('Argument client_id must be an int');
         }
 
-        $sql = 'DELETE FROM `' . $this->tableName . '`'
-            . 'WHERE client_id = ?';
-        $stmt = $this->execute($sql, array($clientId), null, null);
+        $sql = 'DELETE FROM `' . $this->tableName . '` ' . 'WHERE `client_id` = ?';
+        $stmt = $this->execute($sql, [$clientId], null, null);
         $stmt->closeCursor();
     }
 
