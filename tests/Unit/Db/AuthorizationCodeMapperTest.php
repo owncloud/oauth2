@@ -134,14 +134,14 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 	 * @expectedException \InvalidArgumentException
 	 */
 	public function testFindByCodeInvalidArgumentException1() {
-		$this->authorizationCodeMapper->find(null);
+		$this->authorizationCodeMapper->findByCode(null);
 	}
 
 	/**
 	 * @expectedException \InvalidArgumentException
 	 */
 	public function testFindByCodeInvalidArgumentException2() {
-		$this->authorizationCodeMapper->find('qwertz');
+		$this->authorizationCodeMapper->findByCode(1);
 	}
 
 	public function testFindAll() {

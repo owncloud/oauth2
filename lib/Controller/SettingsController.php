@@ -80,7 +80,8 @@ class SettingsController extends Controller {
      *
      */
     public function addClient() {
-        if (filter_var($_POST['redirect_uri'], FILTER_VALIDATE_URL) === false) {
+		if (!isset($_POST['redirect_uri']) || !isset($_POST['name']) ||
+			filter_var($_POST['redirect_uri'], FILTER_VALIDATE_URL) === false) {
             return new RedirectResponse('../../settings/admin#oauth-2.0');
         }
 
@@ -98,7 +99,7 @@ class SettingsController extends Controller {
     /**
      * Deletes a client.
 	 *
-	 * @param string $id The client identifier.
+	 * @param int $id The client identifier.
      *
      * @return RedirectResponse Redirection to the settings page.
      *
@@ -117,7 +118,7 @@ class SettingsController extends Controller {
 	/**
 	 * Revokes the authorization for a client.
 	 *
-	 * @param string $id The client identifier.
+	 * @param int $id The client identifier.
 	 * @param string $user_id The ID of the user logged in.
 	 *
 	 * @return RedirectResponse Redirection to the settings page.
