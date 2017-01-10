@@ -57,6 +57,7 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 		$container = $app->getContainer();
 
 		$this->authorizationCodeMapper = $container->query('OCA\OAuth2\Db\AuthorizationCodeMapper');
+		$this->authorizationCodeMapper->deleteAll();
 
 		$authorizationCode = new AuthorizationCode();
 		$authorizationCode->setCode($this->code);
@@ -221,4 +222,11 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
     public function testDeleteByClientInvalidArgumentException2() {
         $this->authorizationCodeMapper->deleteByClient('qwertz');
     }
+  
+	public function testDeleteAll() {
+		$this->assertEquals(2, count($this->authorizationCodeMapper->findAll()));
+		$this->authorizationCodeMapper->deleteAll();
+		$this->assertEquals(0, count($this->authorizationCodeMapper->findAll()));
+	}
+
 }

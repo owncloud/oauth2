@@ -79,6 +79,7 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 		$container = $app->getContainer();
 
 		$this->clientMapper = $container->query('OCA\OAuth2\Db\ClientMapper');
+		$this->clientMapper->deleteAll();
 
 		$client = new Client();
 		$client->setIdentifier($this->identifier);
@@ -97,7 +98,9 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 		$this->client2 = $this->clientMapper->insert($client);
 
 		$this->authorizationCodeMapper = $container->query('OCA\OAuth2\Db\AuthorizationCodeMapper');
+		$this->authorizationCodeMapper->deleteAll();
 		$this->accessTokenMapper = $container->query('OCA\OAuth2\Db\AccessTokenMapper');
+		$this->accessTokenMapper->deleteAll();
 
 		$authorizationCode = new AuthorizationCode();
 		$authorizationCode->setCode('akYNVaCz7us4VZUf2f24QZqXCyrky3M39yUZuGF6pecVzMImIzvsFZa6FMAJVJ1v');
@@ -218,6 +221,12 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testFindByUserInvalidArgumentException2() {
 		$this->clientMapper->findByUser(12);
+	}
+
+	public function testDeleteAll() {
+		$this->assertEquals(2, count($this->clientMapper->findAll()));
+		$this->clientMapper->deleteAll();
+		$this->assertEquals(0, count($this->clientMapper->findAll()));
 	}
 
 }
