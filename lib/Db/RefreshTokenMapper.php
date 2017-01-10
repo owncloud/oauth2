@@ -85,4 +85,13 @@ class RefreshTokenMapper extends Mapper {
 		$stmt->closeCursor();
 	}
 
+	/**
+	 * Deletes all entities from the table
+	 */
+	public function deleteAll(){
+		$sql = 'DELETE FROM `' . $this->tableName . '`';
+		$stmt = $this->execute($sql, []);
+		$stmt->closeCursor();
+	}
+
 }

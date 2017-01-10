@@ -52,7 +52,7 @@ class AccessTokenMapper extends Mapper {
 		}
 
 		$sql = 'SELECT * FROM `' . $this->tableName . '` WHERE `id` = ?';
-		return $this->findEntity($sql, array($id), null, null);
+		return $this->findEntity($sql, [$id], null, null);
 	}
 
 	/**
@@ -72,7 +72,7 @@ class AccessTokenMapper extends Mapper {
 		}
 
 		$sql = 'SELECT * FROM `'. $this->tableName . '` WHERE `token` = ?';
-		return $this->findEntity($sql, array($token), null, null);
+		return $this->findEntity($sql, [$token], null, null);
 	}
 
 	/**
@@ -101,7 +101,16 @@ class AccessTokenMapper extends Mapper {
 
 		$sql = 'DELETE FROM `' . $this->tableName . '` '
 			. 'WHERE client_id = ? AND user_id = ?';
-		$stmt = $this->execute($sql, array($clientId, $userId), null, null);
+		$stmt = $this->execute($sql, [$clientId, $userId], null, null);
+		$stmt->closeCursor();
+	}
+
+	/**
+	 * Deletes all entities from the table
+	 */
+	public function deleteAll(){
+		$sql = 'DELETE FROM `' . $this->tableName . '`';
+		$stmt = $this->execute($sql, []);
 		$stmt->closeCursor();
 	}
 
