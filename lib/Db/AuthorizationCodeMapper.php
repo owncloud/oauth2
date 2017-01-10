@@ -105,4 +105,24 @@ class AuthorizationCodeMapper extends Mapper {
 		$stmt->closeCursor();
 	}
 
+    /**
+     * Deletes all authorization codes for a given client ID.
+     * Used for client deletion by the administrator in the
+     * admin settings.
+     *
+     * @param int $clientId The client ID
+     * @see SettingsController::deleteClient()
+     */
+    public function deleteByClient($clientId)
+    {
+        if (!is_int($clientId)) {
+            throw new InvalidArgumentException('Argument client_id must be an int');
+        }
+
+        $sql = 'DELETE FROM `' . $this->tableName . '`'
+            . 'WHERE client_id = ?';
+        $stmt = $this->execute($sql, array($clientId), null, null);
+        $stmt->closeCursor();
+    }
+
 }
