@@ -57,7 +57,7 @@ class ClientMapper extends Mapper {
 		}
 
 		$sql = 'SELECT * FROM `' . $this->tableName . '` WHERE `id` = ?';
-		return $this->findEntity($sql, array($id), null, null);
+		return $this->findEntity($sql, [$id], null, null);
 	}
 
     /**
@@ -77,7 +77,7 @@ class ClientMapper extends Mapper {
 		}
 
         $sql = 'SELECT * FROM `' . $this->tableName . '` WHERE `identifier` = ?';
-        return $this->findEntity($sql, array($identifier), null, null);
+        return $this->findEntity($sql, [$identifier], null, null);
     }
 
 	/**
@@ -110,7 +110,16 @@ class ClientMapper extends Mapper {
 				. 'UNION '
 				. 'SELECT `client_id` FROM `oc_oauth2_access_tokens` WHERE `user_id` = ? '
 			.')';
-		return $this->findEntities($sql, array($userId, $userId), null, null);
+		return $this->findEntities($sql, [$userId, $userId], null, null);
+	}
+
+	/**
+	 * Deletes all entities from the table
+	 */
+	public function deleteAll() {
+		$sql = 'DELETE FROM `' . $this->tableName . '`';
+		$stmt = $this->execute($sql, []);
+		$stmt->closeCursor();
 	}
 
 }

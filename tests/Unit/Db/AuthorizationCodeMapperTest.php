@@ -57,6 +57,7 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 		$container = $app->getContainer();
 
 		$this->authorizationCodeMapper = $container->query('OCA\OAuth2\Db\AuthorizationCodeMapper');
+		$this->authorizationCodeMapper->deleteAll();
 
 		$authorizationCode = new AuthorizationCode();
 		$authorizationCode->setCode($this->code);
@@ -134,14 +135,14 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 	 * @expectedException \InvalidArgumentException
 	 */
 	public function testFindByCodeInvalidArgumentException1() {
-		$this->authorizationCodeMapper->find(null);
+		$this->authorizationCodeMapper->findByCode(null);
 	}
 
 	/**
 	 * @expectedException \InvalidArgumentException
 	 */
 	public function testFindByCodeInvalidArgumentException2() {
-		$this->authorizationCodeMapper->find('qwertz');
+		$this->authorizationCodeMapper->findByCode(1);
 	}
 
 	public function testFindAll() {
@@ -191,6 +192,39 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testDeleteByClientUserInvalidArgumentException4() {
 		$this->authorizationCodeMapper->deleteByClientUser('qwertz', $this->userId);
+	}
+
+	public function testDeleteByClient() {
+		$this->authorizationCodeMapper->deleteByClient($this->clientId);
+		$this->assertEquals(0, count($this->authorizationCodeMapper->findAll()));
+	}
+
+	/**
+	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
+	 */
+	public function testDeleteByClientDoesNotExistException() {
+		$this->authorizationCodeMapper->deleteByClient($this->clientId);
+		$this->authorizationCodeMapper->find($this->id);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByClientInvalidArgumentException1() {
+		$this->authorizationCodeMapper->deleteByClient(null);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByClientInvalidArgumentException2() {
+		$this->authorizationCodeMapper->deleteByClient('qwertz');
+	}
+
+	public function testDeleteAll() {
+		$this->assertEquals(2, count($this->authorizationCodeMapper->findAll()));
+		$this->authorizationCodeMapper->deleteAll();
+		$this->assertEquals(0, count($this->authorizationCodeMapper->findAll()));
 	}
 
 }

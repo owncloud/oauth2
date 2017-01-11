@@ -22,27 +22,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-namespace OCA\OAuth2\AppInfo;
+namespace OCA\OAuth2\Tests\Unit\Controller;
 
-use OCP\AppFramework\App;
+use OCA\OAuth2\AppInfo\Application;
+use PHPUnit_Framework_TestCase;
 
-class Application extends App {
+class ApplicationTest extends PHPUnit_Framework_TestCase {
 
-    /**
-     * Application constructor.
-     *
-     * @param array $urlParams an array with variables extracted from the routes
-     */
-    public function __construct(array $urlParams=array()){
-        parent::__construct('oauth2', $urlParams);
-    }
+	/** @var Application $application */
+	private $application;
 
-	/**
-	 * Registers settings pages.
-	 */
-    public function registerSettings() {
-		\OCP\App::registerAdmin('oauth2', 'settings-admin');
-		\OCP\App::registerPersonal('oauth2', 'settings-personal');
+	public function setUp() {
+		$this->application = new Application();
+	}
+
+	public function testRegisterSettings() {
+		$this->application->registerSettings();
 	}
 
 }

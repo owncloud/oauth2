@@ -26,7 +26,9 @@ namespace OCA\OAuth2\Controller;
 
 use OCA\OAuth2\Db\AccessToken;
 use OCA\OAuth2\Db\AccessTokenMapper;
+use OCA\OAuth2\Db\AuthorizationCode;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
+use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Utilities;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -64,8 +66,6 @@ class OAuthApiController extends ApiController {
 	/**
 	 * Implements the OAuth 2.0 Access Token Response.
 	 *
-	 * Is accessible by the client via the /index.php/apps/oauth2/api/v1/token
-	 *
      * @param string $code The authorization code.
 	 * @return JSONResponse The Access Token or an empty JSON Object.
 	 *
@@ -81,6 +81,7 @@ class OAuthApiController extends ApiController {
         }
 
         try {
+			/** @var Client $client */
             $client = $this->clientMapper->findByIdentifier($_SERVER['PHP_AUTH_USER']);
         } catch (DoesNotExistException $exception) {
             return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
@@ -91,6 +92,7 @@ class OAuthApiController extends ApiController {
         }
 
 		try {
+			/** @var AuthorizationCode $authorizationCode */
 			$authorizationCode = $this->authorizationCodeMapper->findByCode($code);
 		} catch (DoesNotExistException $exception) {
 			return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);

@@ -57,6 +57,7 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$container = $app->getContainer();
 
 		$this->accessTokenMapper = $container->query('OCA\OAuth2\Db\AccessTokenMapper');
+		$this->accessTokenMapper->deleteAll();
 
 		$accessToken = new AccessToken();
 		$accessToken->setToken($this->token);
@@ -112,6 +113,38 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$this->accessTokenMapper->find('qwertz');
 	}
 
+	public function testFindByToken() {
+		/** @var AccessToken $accessToken */
+		$accessToken = $this->accessTokenMapper->findByToken($this->token);
+
+		$this->assertEquals($this->id, $accessToken->getId());
+		$this->assertEquals($this->token, $accessToken->getToken());
+		$this->assertEquals($this->clientId, $accessToken->getClientId());
+		$this->assertEquals($this->userId, $accessToken->getUserId());
+		$this->assertNull($accessToken->getExpires());
+	}
+
+	/**
+	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
+	 */
+	public function testFindByTokenDoesNotExistException() {
+		$this->accessTokenMapper->findByToken('qwertz');
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testFindByTokenInvalidArgumentException1() {
+		$this->accessTokenMapper->findByToken(null);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testFindByTokenInvalidArgumentException2() {
+		$this->accessTokenMapper->findByToken(1);
+	}
+
 	public function testFindAll() {
 		$accessTokens = $this->accessTokenMapper->findAll();
 
@@ -159,6 +192,39 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testDeleteByClientUserInvalidArgumentException4() {
 		$this->accessTokenMapper->deleteByClientUser('qwertz', $this->userId);
+	}
+
+	public function testDeleteByClient() {
+		$this->accessTokenMapper->deleteByClient($this->clientId);
+		$this->assertEquals(0, count($this->accessTokenMapper->findAll()));
+	}
+
+	/**
+	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
+	 */
+	public function testDeleteByClientDoesNotExistException() {
+		$this->accessTokenMapper->deleteByClient($this->clientId);
+		$this->accessTokenMapper->find($this->id);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByClientInvalidArgumentException1() {
+		$this->accessTokenMapper->deleteByClient(null);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByClientInvalidArgumentException2() {
+		$this->accessTokenMapper->deleteByClient('qwertz');
+	}
+
+	public function testDeleteAll() {
+		$this->assertEquals(2, count($this->accessTokenMapper->findAll()));
+		$this->accessTokenMapper->deleteAll();
+		$this->assertEquals(0, count($this->accessTokenMapper->findAll()));
 	}
 
 }
