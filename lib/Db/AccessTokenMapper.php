@@ -106,7 +106,6 @@ class AccessTokenMapper extends Mapper {
 	}
 
 	/**
-<<<<<<< HEAD
 	 * Deletes all access token for given userID.
 	 *
 	 * @param string $userId The user ID.
@@ -120,7 +119,7 @@ class AccessTokenMapper extends Mapper {
 		$stmt->closeCursor();
 	}
 
-=======
+	/**
 	 * Deletes all entities from the table
 	 */
 	public function deleteAll(){
@@ -146,5 +145,4 @@ class AccessTokenMapper extends Mapper {
         $stmt = $this->execute($sql, [$clientId], null, null);
         $stmt->closeCursor();
     }
->>>>>>> master
 }
