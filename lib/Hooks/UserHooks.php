@@ -24,18 +24,42 @@
 
 namespace OCA\OAuth2\Hooks;
 
+use OCA\OAuth2\Db\AccessTokenMapper;
+use OCP\IUserManager;
+use OC\User\User;
+
 class UserHooks {
 
+	/** @var IUserManager */
 	private $userManager;
 
-	public function __construct($userManager){
+	/** @var  AccessTokenMapper */
+	private $accessTokenMapper;
+
+	/**
+	 * UserHooks constructor.
+	 *
+	 * @param IUserManager $userManager
+	 * @param AccessTokenMapper $accessTokenMapper
+	 */
+	public function __construct(IUserManager $userManager,
+								AccessTokenMapper $accessTokenMapper){
 		$this->userManager = $userManager;
+		$this->accessTokenMapper = $accessTokenMapper;
+
 	}
 
 	public function register() {
+		/**
+		 * @param User $user
+		 */
 		$callback = function($user) {
-			//code that executes before the $user is deleted -> delete the token
+			// your code that executes before $user is deleted
+			if (null !== ($user->getUID())){
+			$this->accessTokenMapper->deleteByToken($user->getUID());}
 		};
 		$this->userManager->listen('\OC\User', 'preDelete', $callback);
 	}
+
+
 }

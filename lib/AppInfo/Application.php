@@ -26,6 +26,8 @@ namespace OCA\OAuth2\AppInfo;
 
 use OCP\AppFramework\App;
 use OCA\OAuth2\Hooks\UserHooks;
+use OCA\OAuth2\Db\AccessTokenMapper;
+
 
 class Application extends App {
 
@@ -40,19 +42,32 @@ class Application extends App {
     $container = $this->getContainer();
 
 		/**
-		 * Controllers
+		 * Hooks
 		 */
 
 		$container->registerService('UserHooks', function($c) {
 			return new UserHooks(
-				$c->query('ServerContainer')->getUserManager()
+				$c->query('ServerContainer')->getUserManager(),
+				$c->query('AccessTokenMapper')
 			);
 		});
+
+		/**
+		 * Mapper (needed for the hooks)
+		 */
+
+		$container->registerService('AccessTokenMapper', function($c){
+			return new AccessTokenMapper(
+				$c->query('ServerContainer')->getDb()
+			);
+		});
+
     }
 
 	/**
 	 * Registers settings pages.
 	 */
+
     public function registerSettings() {
 		\OCP\App::registerAdmin('oauth2', 'settings-admin');
 		\OCP\App::registerPersonal('oauth2', 'settings-personal');

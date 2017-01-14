@@ -105,4 +105,18 @@ class AccessTokenMapper extends Mapper {
 		$stmt->closeCursor();
 	}
 
+	/**
+	 * Deletes all access token for given userID.
+	 *
+	 * @param string $userId The user ID.
+	 */
+	public function deleteByToken($userId){
+		if (!is_string($userId)) {
+			throw new InvalidArgumentException('Argument user_id must be a string');
+		}
+		$sql = 'DELETE FROM `oc_oauth2_access_tokens` WHERE user_id = ?';
+		$stmt = $this->execute($sql, array($userId), null);
+		$stmt->closeCursor();
+	}
+
 }
