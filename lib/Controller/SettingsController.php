@@ -107,10 +107,16 @@ class SettingsController extends Controller {
      *
      */
     public function deleteClient($id) {
+		if (!is_int($id)) {
+			return new RedirectResponse('../../../../settings/admin#oauth-2.0');
+		}
+
         $client = $this->clientMapper->find($id);
         $this->clientMapper->delete($client);
 
-        // TODO: Delete all Authorization Codes, Access Tokens and Refresh Tokens
+        $this->authorizationCodeMapper->deleteByClient($id);
+        $this->accessTokenMapper->deleteByClient($id);
+        $this->refreshTokenMapper->deleteByClient($id);
 
         return new RedirectResponse('../../../../settings/admin#oauth-2.0');
     }
@@ -127,6 +133,10 @@ class SettingsController extends Controller {
 	 *
 	 */
 	public function revokeAuthorization($id, $user_id) {
+		if (!is_int($id) || !is_string($user_id)) {
+			return new RedirectResponse('../../../../settings/personal#oauth-2.0');
+		}
+
 		$this->authorizationCodeMapper->deleteByClientUser($id, $user_id);
 		$this->accessTokenMapper->deleteByClientUser($id, $user_id);
 		$this->refreshTokenMapper->deleteByClientUser($id, $user_id);
