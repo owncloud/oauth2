@@ -156,14 +156,14 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 	public function testFindAll() {
 		$accessTokens = $this->accessTokenMapper->findAll();
 
-		$this->assertEquals(2, count($accessTokens));
+		$this->assertEquals(3, count($accessTokens));
 	}
 
 	public function testDeleteByClientUser() {
 		$this->accessTokenMapper->deleteByClientUser($this->clientId, $this->userId);
 
 		$accessTokens = $this->accessTokenMapper->findAll();
-		$this->assertEquals(1, count($accessTokens));
+		$this->assertEquals(2, count($accessTokens));
 	}
 
 	/**
@@ -231,7 +231,7 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 
 	public function testDeleteByUser() {
 		$this->accessTokenMapper->deleteByUser($this->userId);
-		$this->assertEquals(0, count($this->accessTokenMapper->findAll()));
+		$this->assertEquals(2, count($this->accessTokenMapper->findAll()));
 	}
 
 	/**
@@ -257,7 +257,7 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testDeleteAll() {
-		$this->assertEquals(2, count($this->accessTokenMapper->findAll()));
+		$this->assertEquals(3, count($this->accessTokenMapper->findAll()));
 		$this->accessTokenMapper->deleteAll();
 		$this->assertEquals(0, count($this->accessTokenMapper->findAll()));
 	}
