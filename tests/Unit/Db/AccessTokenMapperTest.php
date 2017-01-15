@@ -86,6 +86,7 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 	public function tearDown() {
 		$this->accessTokenMapper->delete($this->accessToken1);
 		$this->accessTokenMapper->delete($this->accessToken2);
+		$this->accessTokenMapper->delete($this->accessToken3);
 	}
 
 	public function testFind() {
