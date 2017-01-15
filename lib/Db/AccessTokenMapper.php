@@ -115,7 +115,7 @@ class AccessTokenMapper extends Mapper {
 			throw new InvalidArgumentException('Argument user_id must be a string');
 		}
 		$sql = 'DELETE FROM `oc_oauth2_access_tokens` WHERE user_id = ?';
-		$stmt = $this->execute($sql, array($userId), null);
+		$stmt = $this->execute($sql, [$userId], null);
 		$stmt->closeCursor();
 	}
 

@@ -74,6 +74,13 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$accessToken->setUserId('max');
 		$accessToken->setExpires(null);
 		$this->accessToken2 = $this->accessTokenMapper->insert($accessToken);
+
+		$accessToken = new AccessToken();
+		$accessToken->setToken('s4yr3M3VJaCNXCy4QZI7uyUZkVZUf1a6FM9pefmkcVv2IzvsFZaYzuGF62AqVzMJ');
+		$accessToken->setClientId(1);
+		$accessToken->setUserId('max');
+		$accessToken->setExpires(null);
+		$this->accessToken3 = $this->accessTokenMapper->insert($accessToken);
 	}
 
 	public function tearDown() {
