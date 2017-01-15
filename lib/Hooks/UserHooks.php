@@ -56,7 +56,7 @@ class UserHooks {
 		$callback = function($user) {
 			// your code that executes before $user is deleted
 			if (null !== ($user->getUID())){
-			$this->accessTokenMapper->deleteByToken($user->getUID());}
+			$this->accessTokenMapper->deleteByUser($user->getUID());}
 		};
 		$this->userManager->listen('\OC\User', 'preDelete', $callback);
 	}

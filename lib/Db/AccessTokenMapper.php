@@ -106,11 +106,11 @@ class AccessTokenMapper extends Mapper {
 	}
 
 	/**
-	 * Deletes all access token for given userID.
+	 * Deletes all access token for the given userID.
 	 *
 	 * @param string $userId The user ID.
 	 */
-	public function deleteByToken($userId){
+	public function deleteByUser($userId){
 		if (!is_string($userId)) {
 			throw new InvalidArgumentException('Argument user_id must be a string');
 		}

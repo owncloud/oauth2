@@ -218,7 +218,34 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 	 * @expectedException \InvalidArgumentException
 	 */
 	public function testDeleteByClientInvalidArgumentException2() {
-		$this->accessTokenMapper->deleteByClient('qwertz');
+		$this->accessTokenMapper->deleteBy('qwertz');
+	}
+
+	public function testDeleteByUser() {
+		$this->accessTokenMapper->deleteByUser($this->userId);
+		$this->assertEquals(0, count($this->accessTokenMapper->findAll()));
+	}
+
+	/**
+	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
+	 */
+	public function testDeleteByUserDoesNotExistException() {
+		$this->accessTokenMapper->deleteByUser($this->userId);
+		$this->accessTokenMapper->find($this->id);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByUserInvalidArgumentException1() {
+		$this->accessTokenMapper->deleteByUser(null);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByUserInvalidArgumentException2() {
+		$this->accessTokenMapper->deleteByUser(true);
 	}
 
 	public function testDeleteAll() {
