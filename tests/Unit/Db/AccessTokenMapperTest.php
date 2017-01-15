@@ -226,7 +226,7 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 	 * @expectedException \InvalidArgumentException
 	 */
 	public function testDeleteByClientInvalidArgumentException2() {
-		$this->accessTokenMapper->deleteBy('qwertz');
+		$this->accessTokenMapper->deleteByClient('qwertz');
 	}
 
 	public function testDeleteByUser() {
