@@ -25,6 +25,7 @@
 namespace OCA\OAuth2\Tests\Unit\Controller;
 
 use OCA\OAuth2\AppInfo\Application;
+use OCA\OAuth2\Hooks\UserHooks;
 use PHPUnit_Framework_TestCase;
 
 class ApplicationTest extends PHPUnit_Framework_TestCase {
@@ -38,7 +39,12 @@ class ApplicationTest extends PHPUnit_Framework_TestCase {
 
 	public function testRegisterService() {
 		$app = new Application();
-		$container = $app->getContainer();
+		$c = $app->getContainer();
+		$c->registerService(UserHooks::class, function($c) {
+			$service = $this->getMockBuilder('OCA\OAuth2\Hooks\UserHooks')->disableOriginalConstructor()->getMock();
+			$service->method('$callback')->willReturn([]);
+			return $service;
+		});
 	}
 
 	public function testRegisterSettings() {
