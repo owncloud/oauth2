@@ -43,7 +43,7 @@ class UserHooks {
 	 * @param AccessTokenMapper $accessTokenMapper
 	 */
 	public function __construct(IUserManager $userManager,
-								AccessTokenMapper $accessTokenMapper){
+								AccessTokenMapper $accessTokenMapper) {
 		$this->userManager = $userManager;
 		$this->accessTokenMapper = $accessTokenMapper;
 
@@ -53,10 +53,11 @@ class UserHooks {
 		/**
 		 * @param User $user
 		 */
-		$callback = function($user) {
+		$callback = function ($user) {
 			// your code that executes before $user is deleted
-			if (null !== ($user->getUID())){
-			$this->accessTokenMapper->deleteByUser($user->getUID());}
+			if (null !== ($user->getUID())) {
+				$this->accessTokenMapper->deleteByUser($user->getUID());
+			}
 		};
 		$this->userManager->listen('\OC\User', 'preDelete', $callback);
 	}

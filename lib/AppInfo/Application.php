@@ -24,51 +24,37 @@
 
 namespace OCA\OAuth2\AppInfo;
 
-use OCP\AppFramework\App;
 use OCA\OAuth2\Hooks\UserHooks;
-use OCA\OAuth2\Db\AccessTokenMapper;
-
+use OCP\AppFramework\App;
 
 class Application extends App {
 
-    /**
-     * Application constructor.
-     *
-     * @param array $urlParams an array with variables extracted from the routes
-     */
-    public function __construct(array $urlParams=array()){
-        parent::__construct('oauth2', $urlParams);
+	/**
+	 * Application constructor.
+	 *
+	 * @param array $urlParams an array with variables extracted from the routes
+	 */
+	public function __construct(array $urlParams = array()) {
+		parent::__construct('oauth2', $urlParams);
 
-    $container = $this->getContainer();
+		$container = $this->getContainer();
 
 		/**
 		 * Hooks
 		 */
-
-		$container->registerService('UserHooks', function($c) {
+		$container->registerService('UserHooks', function ($c) {
 			return new UserHooks(
 				$c->query('ServerContainer')->getUserManager(),
-				$c->query('AccessTokenMapper')
+				$c->query('OCA\OAuth2\Db\AccessTokenMapper')
 			);
 		});
-
-		/**
-		 * Mapper (needed for the hooks)
-		 */
-
-		$container->registerService('AccessTokenMapper', function($c){
-			return new AccessTokenMapper(
-				$c->query('ServerContainer')->getDb()
-			);
-		});
-
-    }
+	}
 
 	/**
 	 * Registers settings pages.
 	 */
 
-    public function registerSettings() {
+	public function registerSettings() {
 		\OCP\App::registerAdmin('oauth2', 'settings-admin');
 		\OCP\App::registerPersonal('oauth2', 'settings-personal');
 	}
