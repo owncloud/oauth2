@@ -36,6 +36,11 @@ class ApplicationTest extends PHPUnit_Framework_TestCase {
 		$this->application = new Application();
 	}
 
+	public function testRegisterService() {
+		$app = new Application();
+		$container = $app->getContainer();
+	}
+
 	public function testRegisterSettings() {
 		$this->application->registerSettings();
 	}

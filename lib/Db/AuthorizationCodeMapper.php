@@ -131,4 +131,18 @@ class AuthorizationCodeMapper extends Mapper {
         $stmt->closeCursor();
     }
 
+	/**
+	 * Deletes all authorization codes for the given userID.
+	 *
+	 * @param string $userId The user ID.
+	 */
+	public function deleteByUser($userId){
+		if (!is_string($userId)) {
+			throw new InvalidArgumentException('Argument user_id must be a string');
+		}
+		$sql = 'DELETE FROM `oc_oauth2_authorization_codes` WHERE user_id = ?';
+		$stmt = $this->execute($sql, [$userId], null);
+		$stmt->closeCursor();
+	}
+
 }

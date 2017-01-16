@@ -221,6 +221,33 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 		$this->authorizationCodeMapper->deleteByClient('qwertz');
 	}
 
+	public function testDeleteByUser() {
+		$this->authorizationCodeMapper->deleteByUser($this->userId);
+		$this->assertEquals(1, count($this->authorizationCodeMapper->findAll()));
+	}
+
+	/**
+	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
+	 */
+	public function testDeleteByUserDoesNotExistException() {
+		$this->authorizationCodeMapper->deleteByUser($this->userId);
+		$this->authorizationCodeMapper->find($this->id);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByUserInvalidArgumentException1() {
+		$this->authorizationCodeMapper->deleteByUser(null);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByUserInvalidArgumentException2() {
+		$this->authorizationCodeMapper->deleteByUser(true);
+	}
+
 	public function testDeleteAll() {
 		$this->assertEquals(2, count($this->authorizationCodeMapper->findAll()));
 		$this->authorizationCodeMapper->deleteAll();

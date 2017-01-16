@@ -189,6 +189,33 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$this->refreshTokenMapper->deleteByClient('qwertz');
 	}
 
+	public function testDeleteByUser() {
+		$this->refreshTokenMapper->deleteByUser($this->userId);
+		$this->assertEquals(1, count($this->refreshTokenMapper->findAll()));
+	}
+
+	/**
+	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
+	 */
+	public function testDeleteByUserDoesNotExistException() {
+		$this->refreshTokenMapper->deleteByUser($this->userId);
+		$this->refreshTokenMapper->find($this->id);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByUserInvalidArgumentException1() {
+		$this->refreshTokenMapper->deleteByUser(null);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByUserInvalidArgumentException2() {
+		$this->refreshTokenMapper->deleteByUser(true);
+	}
+
 	public function testDeleteAll() {
 		$this->assertEquals(2, count($this->refreshTokenMapper->findAll()));
 		$this->refreshTokenMapper->deleteAll();

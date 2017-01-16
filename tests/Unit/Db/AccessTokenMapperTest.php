@@ -52,6 +52,9 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 	/** @var AccessToken $accessToken2 */
 	private $accessToken2;
 
+	/** @var AccessToken $accessToken3 */
+	private $accessToken3;
+
 	public function setUp() {
 		$app = new Application();
 		$container = $app->getContainer();
