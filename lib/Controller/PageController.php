@@ -25,10 +25,12 @@
 namespace OCA\OAuth2\Controller;
 
 use OC_Util;
+use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\AuthorizationCode;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
+use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCA\OAuth2\Utilities;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IRequest;
@@ -46,6 +48,12 @@ class PageController extends Controller {
 	/** @var AuthorizationCodeMapper */
 	private $authorizationCodeMapper;
 
+	/** @var AccessTokenMapper */
+	private $accessTokenMapper;
+
+	/** @var RefreshTokenMapper */
+	private $refreshTokenMapper;
+
     /** @var string */
     private $userId;
 
@@ -55,13 +63,17 @@ class PageController extends Controller {
 	 * @param IRequest $request The request.
 	 * @param ClientMapper $clientMapper The client mapper.
 	 * @param AuthorizationCodeMapper $authorizationCodeMapper The authorization code mapper.
+	 * @param AccessTokenMapper $accessTokenMapper The access token mapper.
+	 * @param RefreshTokenMapper $refreshTokenMapper The refresh token mapper.
 	 * @param string $UserId The user ID.
 	 */
-	public function __construct($AppName, IRequest $request, ClientMapper $clientMapper, AuthorizationCodeMapper $authorizationCodeMapper, $UserId) {
+	public function __construct($AppName, IRequest $request, ClientMapper $clientMapper, AuthorizationCodeMapper $authorizationCodeMapper, AccessTokenMapper $accessTokenMapper, RefreshTokenMapper $refreshTokenMapper, $UserId) {
 		parent::__construct($AppName, $request);
 
         $this->clientMapper = $clientMapper;
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
+		$this->accessTokenMapper = $accessTokenMapper;
+		$this->refreshTokenMapper = $refreshTokenMapper;
         $this->userId = $UserId;
 	}
 
@@ -138,6 +150,10 @@ class PageController extends Controller {
                 if (strcmp($client->getRedirectUri(), urldecode($redirect_uri)) !== 0) {
                     return new RedirectResponse(OC_Util::getDefaultPageUrl());
                 }
+
+                $this->authorizationCodeMapper->deleteByClientUser($client->getId(), $this->userId);
+                $this->accessTokenMapper->deleteByClientUser($client->getId(), $this->userId);
+				$this->refreshTokenMapper->deleteByClientUser($client->getId(), $this->userId);
 
 				$code = Utilities::generateRandom();
 				$authorizationCode = new AuthorizationCode();

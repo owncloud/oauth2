@@ -27,9 +27,11 @@ namespace OCA\OAuth2\Tests\Unit\Controller;
 use OC_Util;
 use OCA\OAuth2\AppInfo\Application;
 use OCA\OAuth2\Controller\PageController;
+use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
+use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCP\AppFramework\Http\RedirectResponse;
 use PHPUnit_Framework_TestCase;
 use OCP\AppFramework\Http\TemplateResponse;
@@ -80,8 +82,12 @@ class PageControllerTest extends PHPUnit_Framework_TestCase {
 		$this->client = $this->clientMapper->insert($client);
 
 		$this->authorizationCodeMapper = $container->query('OCA\OAuth2\Db\AuthorizationCodeMapper');
+		/** @var AccessTokenMapper $accessTokenMapper */
+		$accessTokenMapper = $container->query('OCA\OAuth2\Db\AccessTokenMapper');
+		/** @var RefreshTokenMapper $refreshTokenMapper */
+		$refreshTokenMapper = $container->query('OCA\OAuth2\Db\RefreshTokenMapper');
 
-		$this->controller = new PageController('oauth2', $request, $this->clientMapper, $this->authorizationCodeMapper, $this->userId);
+		$this->controller = new PageController('oauth2', $request, $this->clientMapper, $this->authorizationCodeMapper, $accessTokenMapper, $refreshTokenMapper, $this->userId);
 	}
 
 	public function tearDown() {
