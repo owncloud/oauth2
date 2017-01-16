@@ -206,7 +206,7 @@ class PageControllerTest extends TestCase {
 			['https://owncloud.org:80/test?q=1', 'https://sso.owncloud.org:80/test?q=1', false]));
 
 		$this->assertFalse($this->invokePrivate($this->controller, 'validateRedirectUri',
-			['https://owncloud.org:80/test?q=1', 'https://owncloud.de:90/test?q=1', false]));
+			['https://owncloud.org:80/test?q=1', 'https://owncloud.org:90/test?q=1', false]));
 
 		$this->assertFalse($this->invokePrivate($this->controller, 'validateRedirectUri',
 			['https://owncloud.org:80/tests?q=1', 'https://owncloud.org:80/test?q=1', false]));
