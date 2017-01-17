@@ -75,7 +75,7 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 		$authorizationCode->setCode('s4yr3M3VJaCNXCy4QZI7uyUZkVZUf1a6FM9pefmkcVv2IzvsFZaYzuGF62AqVzMJ');
 		$authorizationCode->setClientId(1);
 		$authorizationCode->setUserId('max');
-		$authorizationCode->setExpires($this->expires);
+		$authorizationCode->resetExpires();
 		$this->authorizationCode2 = $this->authorizationCodeMapper->insert($authorizationCode);
 	}
 

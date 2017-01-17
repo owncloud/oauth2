@@ -78,6 +78,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$this->clientMapper = $container->query('OCA\OAuth2\Db\ClientMapper');
 		$this->authorizationCodeMapper = $container->query('OCA\OAuth2\Db\AuthorizationCodeMapper');
 		$this->accessTokenMapper = $container->query('OCA\OAuth2\Db\AccessTokenMapper');
+		$refreshTokenMapper = $container->query('OCA\OAuth2\Db\RefreshTokenMapper');
 
 		/** @var Client $client */
 		$client = new Client();
@@ -102,7 +103,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$authorizationCode->resetExpires();
 		$this->authorizationCode = $this->authorizationCodeMapper->insert($authorizationCode);
 
-		$this->controller = new OAuthApiController('oauth2', $request, $this->clientMapper, $this->authorizationCodeMapper, $this->accessTokenMapper);
+		$this->controller = new OAuthApiController('oauth2', $request, $this->clientMapper, $this->authorizationCodeMapper, $this->accessTokenMapper, $refreshTokenMapper);
 	}
 
 	public function tearDown() {
@@ -187,6 +188,10 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(64, strlen($json->access_token));
 		$this->assertNotEmpty($json->token_type);
 		$this->assertEquals('Bearer', $json->token_type);
+		$this->assertNotEmpty($json->expires_in);
+		$this->assertEquals('3600', $json->expires_in);
+		$this->assertNotEmpty($json->refresh_token);
+		$this->assertEquals(64, strlen($json->refresh_token));
 		$this->assertNotEmpty($json->user_id);
 		$this->assertEquals($this->userId, $json->user_id);
 		$this->assertEquals(200, $result->getStatus());

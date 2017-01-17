@@ -30,6 +30,8 @@ use OCA\OAuth2\Db\AuthorizationCode;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
+use OCA\OAuth2\Db\RefreshToken;
+use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCA\OAuth2\Utilities;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http;
@@ -48,6 +50,9 @@ class OAuthApiController extends ApiController {
 	/** @var AccessTokenMapper */
 	private $accessTokenMapper;
 
+	/** @var RefreshTokenMapper */
+	private $refreshTokenMapper;
+
     /**
      * OAuthApiController constructor.
      * @param string $appName
@@ -55,12 +60,14 @@ class OAuthApiController extends ApiController {
      * @param ClientMapper $clientMapper
 	 * @param AuthorizationCodeMapper $authorizationCodeMapper
 	 * @param AccessTokenMapper $accessTokenMapper
+	 * @param RefreshTokenMapper $refreshTokenMapper
      */
-	public function __construct($appName, IRequest $request, ClientMapper $clientMapper, AuthorizationCodeMapper $authorizationCodeMapper, AccessTokenMapper $accessTokenMapper) {
+	public function __construct($appName, IRequest $request, ClientMapper $clientMapper, AuthorizationCodeMapper $authorizationCodeMapper, AccessTokenMapper $accessTokenMapper, RefreshTokenMapper $refreshTokenMapper) {
 		parent::__construct($appName, $request);
         $this->clientMapper = $clientMapper;
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
 		$this->accessTokenMapper = $accessTokenMapper;
+		$this->refreshTokenMapper = $refreshTokenMapper;
 	}
 
 	/**
@@ -112,14 +119,24 @@ class OAuthApiController extends ApiController {
 		$accessToken->setToken($token);
 		$accessToken->setClientId($authorizationCode->getClientId());
 		$accessToken->setUserId($userId);
+		$accessToken->resetExpires();
 		$this->accessTokenMapper->insert($accessToken);
+
+		$token = Utilities::generateRandom();
+		$refreshToken = new RefreshToken();
+		$refreshToken->setToken($token);
+		$refreshToken->setClientId($authorizationCode->getClientId());
+		$refreshToken->setUserId($userId);
+		$this->refreshTokenMapper->insert($refreshToken);
 
         $this->authorizationCodeMapper->delete($authorizationCode);
 
         return new JSONResponse(
             [
-                'access_token' => $token,
+                'access_token' => $accessToken->getToken(),
                 'token_type' => 'Bearer',
+				'expires_in' => '3600',
+				'refresh_token' => $refreshToken->getToken(),
 				'user_id' => $userId
             ]
         );

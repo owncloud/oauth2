@@ -75,7 +75,7 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$accessToken->setToken('s4yr3M3VJaCNXCy4QZI7uyUZkVZUf1a6FM9pefmkcVv2IzvsFZaYzuGF62AqVzMJ');
 		$accessToken->setClientId(1);
 		$accessToken->setUserId('max');
-		$accessToken->setExpires(null);
+		$accessToken->resetExpires();
 		$this->accessToken2 = $this->accessTokenMapper->insert($accessToken);
 	}
 
@@ -93,9 +93,6 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($this->clientId, $accessToken->getClientId());
 		$this->assertEquals($this->userId, $accessToken->getUserId());
 		$this->assertEquals($this->expires, $accessToken->getExpires());
-
-		$accessToken = $this->accessTokenMapper->find($this->accessToken2->getId());
-		$this->assertNull($accessToken->getExpires());
 	}
 
 	/**
