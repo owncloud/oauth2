@@ -53,4 +53,11 @@ class AccessToken extends Entity {
 		$this->addType('expires', 'int');
     }
 
+	/**
+	 * Resets the expiry time to 1 hour from now.
+	 */
+    public function resetExpires() {
+    	$this->expires = time() + 3600;
+	}
+
 }
