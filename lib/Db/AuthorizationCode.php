@@ -57,7 +57,16 @@ class AuthorizationCode extends Entity {
 	 * Resets the expiry time to 10 minutes from now.
 	 */
 	public function resetExpires() {
-		$this->expires = time() + 600;
+		$this->setExpires(time() + 600);
+	}
+
+	/**
+	 * Determines if an authorization code has expired.
+	 *
+	 * @return boolean true if the authorization code has expired, false otherwise.
+	 */
+	public function hasExpired() {
+		return time() >= $this->getExpires();
 	}
 
 }

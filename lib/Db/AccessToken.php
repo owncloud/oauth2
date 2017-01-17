@@ -57,7 +57,16 @@ class AccessToken extends Entity {
 	 * Resets the expiry time to 1 hour from now.
 	 */
     public function resetExpires() {
-    	$this->expires = time() + 3600;
+    	$this->setExpires(time() + 3600);
+	}
+
+	/**
+	 * Determines if an access token has expired.
+	 *
+	 * @return boolean true if the access token has expired, false otherwise.
+	 */
+	public function hasExpired() {
+		return time() >= $this->getExpires();
 	}
 
 }
