@@ -78,7 +78,8 @@
             </field>
             <field>
                 <name>expires</name>
-                <type>timestamp</type>
+                <type>integer</type>
+                <unsigned>true</unsigned>
             </field>
         </declaration>
     </table>
@@ -113,7 +114,8 @@
             </field>
             <field>
                 <name>expires</name>
-                <type>timestamp</type>
+                <type>integer</type>
+                <unsigned>true</unsigned>
             </field>
         </declaration>
     </table>
@@ -148,7 +150,8 @@
             </field>
             <field>
                 <name>expires</name>
-                <type>timestamp</type>
+                <type>integer</type>
+                <unsigned>true</unsigned>
             </field>
         </declaration>
     </table>

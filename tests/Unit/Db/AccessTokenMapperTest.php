@@ -43,6 +43,9 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 	/** @var int $clientId */
 	private $clientId = 1;
 
+	/** @var int $expires */
+	private $expires = 12;
+
 	/** @var AccessToken $accessToken1 */
 	private $accessToken1;
 
@@ -63,7 +66,7 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$accessToken->setToken($this->token);
 		$accessToken->setClientId($this->clientId);
 		$accessToken->setUserId($this->userId);
-		$accessToken->setExpires(null);
+		$accessToken->setExpires($this->expires);
 
 		$this->accessToken1 = $this->accessTokenMapper->insert($accessToken);
 		$this->id = $this->accessToken1->getId();
@@ -89,6 +92,9 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($this->token, $accessToken->getToken());
 		$this->assertEquals($this->clientId, $accessToken->getClientId());
 		$this->assertEquals($this->userId, $accessToken->getUserId());
+		$this->assertEquals($this->expires, $accessToken->getExpires());
+
+		$accessToken = $this->accessTokenMapper->find($this->accessToken2->getId());
 		$this->assertNull($accessToken->getExpires());
 	}
 
@@ -121,7 +127,7 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($this->token, $accessToken->getToken());
 		$this->assertEquals($this->clientId, $accessToken->getClientId());
 		$this->assertEquals($this->userId, $accessToken->getUserId());
-		$this->assertNull($accessToken->getExpires());
+		$this->assertEquals($this->expires, $accessToken->getExpires());
 	}
 
 	/**

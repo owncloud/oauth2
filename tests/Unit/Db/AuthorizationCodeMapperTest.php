@@ -43,6 +43,9 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 	/** @var int $clientId */
 	private $clientId = 1;
 
+	/** @var int $expires */
+	private $expires = 12;
+
 	/** @var AuthorizationCode $authorizationCode1 */
 	private $authorizationCode1;
 
@@ -63,7 +66,7 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 		$authorizationCode->setCode($this->code);
 		$authorizationCode->setClientId($this->clientId);
 		$authorizationCode->setUserId($this->userId);
-		$authorizationCode->setExpires(null);
+		$authorizationCode->setExpires($this->expires);
 
 		$this->authorizationCode1 = $this->authorizationCodeMapper->insert($authorizationCode);
 		$this->id = $this->authorizationCode1->getId();
@@ -89,6 +92,9 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($this->code, $authorizationCode->getCode());
 		$this->assertEquals($this->clientId, $authorizationCode->getClientId());
 		$this->assertEquals($this->userId, $authorizationCode->getUserId());
+		$this->assertEquals($this->expires, $authorizationCode->getExpires());
+
+		$authorizationCode = $this->authorizationCodeMapper->find($this->authorizationCode2->getId());
 		$this->assertNull($authorizationCode->getExpires());
 	}
 
@@ -121,7 +127,7 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($this->code, $authorizationCode->getCode());
 		$this->assertEquals($this->clientId, $authorizationCode->getClientId());
 		$this->assertEquals($this->userId, $authorizationCode->getUserId());
-		$this->assertNull($authorizationCode->getExpires());
+		$this->assertEquals($this->expires, $authorizationCode->getExpires());
 	}
 
 	/**
