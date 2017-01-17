@@ -148,11 +148,6 @@
                 <length>64</length>
                 <notnull>true</notnull>
             </field>
-            <field>
-                <name>expires</name>
-                <type>integer</type>
-                <unsigned>true</unsigned>
-            </field>
         </declaration>
     </table>
 </database>

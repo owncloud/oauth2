@@ -66,7 +66,6 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$refreshToken->setToken($this->token);
 		$refreshToken->setClientId($this->clientId);
 		$refreshToken->setUserId($this->userId);
-		$refreshToken->setExpires($this->expires);
 
 		$this->refreshToken1 = $this->refreshTokenMapper->insert($refreshToken);
 		$this->id = $this->refreshToken1->getId();
@@ -75,7 +74,6 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$refreshToken->setToken('XCy4QZI7s4yr3MmkcVv2IzvkVZUf1asFZaYzuGF6uyUZ6FM9pef2AqVzMJ3VJaCN');
 		$refreshToken->setClientId(1);
 		$refreshToken->setUserId('max');
-		$refreshToken->setExpires(null);
 		$this->refreshToken2 = $this->refreshTokenMapper->insert($refreshToken);
 	}
 
@@ -92,10 +90,6 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($this->token, $refreshToken->getToken());
 		$this->assertEquals($this->clientId, $refreshToken->getClientId());
 		$this->assertEquals($this->userId, $refreshToken->getUserId());
-		$this->assertEquals($this->expires, $refreshToken->getExpires());
-
-		$refreshToken = $this->refreshTokenMapper->find($this->refreshToken2->getId());
-		$this->assertNull($refreshToken->getExpires());
 	}
 
 	/**

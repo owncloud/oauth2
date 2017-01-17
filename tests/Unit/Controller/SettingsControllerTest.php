@@ -108,7 +108,6 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 		$refreshToken->setToken('3M3amqVGF62kYz7us4yr4QZyUZuMIAZUf1v2IzvsFJVJaCfz6FM9pecVkVZaNXCy');
 		$refreshToken->setClientId($this->client->getId());
 		$refreshToken->setUserId($this->userId);
-		$refreshToken->setExpires(null);
 		$this->refreshTokenMapper->insert($refreshToken);
 
 		$this->controller = new SettingsController('oauth2', $request, $this->clientMapper, $this->authorizationCodeMapper, $this->accessTokenMapper, $this->refreshTokenMapper, $this->userId);

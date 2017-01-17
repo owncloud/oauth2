@@ -35,22 +35,18 @@ use OCP\AppFramework\Db\Entity;
  * @method void setClientId(int $clientId)
  * @method string getUserId()
  * @method void setUserId(string $userId)
- * @method int getExpires()
- * @method void setExpires(int $value)
  */
 class RefreshToken extends Entity {
 
     protected $token;
     protected $clientId;
     protected $userId;
-    protected $expires;
 
     public function __construct() {
         $this->addType('id', 'int');
         $this->addType('token', 'string');
         $this->addType('client_id', 'int');
         $this->addType('user_id', 'string');
-		$this->addType('expires', 'int');
     }
 
 }
