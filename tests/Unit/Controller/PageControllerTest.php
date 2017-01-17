@@ -183,7 +183,7 @@ class PageControllerTest extends TestCase {
 		$expected = time() + 600;
 		/** @var AuthorizationCode $authorizationCode */
 		$authorizationCode = $this->authorizationCodeMapper->findByCode($parameters['code']);
-		$this->assertEquals($expected, $authorizationCode->getExpires());
+		$this->assertEquals($expected, $authorizationCode->getExpires(), '', 1);
 		$this->assertEquals($this->userId, $authorizationCode->getUserId());
 		$this->assertEquals($this->client->getId(), $authorizationCode->getClientId());
 		$this->authorizationCodeMapper->delete($this->authorizationCodeMapper->findByCode($parameters['code']));
@@ -201,7 +201,7 @@ class PageControllerTest extends TestCase {
 		$expected = time() + 600;
 		/** @var AuthorizationCode $authorizationCode */
 		$authorizationCode = $this->authorizationCodeMapper->findByCode($parameters['code']);
-		$this->assertEquals($expected, $authorizationCode->getExpires());
+		$this->assertEquals($expected, $authorizationCode->getExpires(), '', 1);
 		$this->assertEquals($this->userId, $authorizationCode->getUserId());
 		$this->assertEquals($this->client->getId(), $authorizationCode->getClientId());
 		$this->authorizationCodeMapper->delete($this->authorizationCodeMapper->findByCode($parameters['code']));
