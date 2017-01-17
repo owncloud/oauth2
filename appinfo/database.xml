@@ -80,6 +80,7 @@
                 <name>expires</name>
                 <type>integer</type>
                 <unsigned>true</unsigned>
+                <notnull>true</notnull>
             </field>
         </declaration>
     </table>
