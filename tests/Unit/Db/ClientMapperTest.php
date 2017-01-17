@@ -110,6 +110,7 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 		$authorizationCode->setCode('akYNVaCz7us4VZUf2f24QZqXCyrky3M39yUZuGF6pecVzMImIzvsFZa6FMAJVJ1v');
 		$authorizationCode->setClientId($this->id);
 		$authorizationCode->setUserId($this->userId);
+		$authorizationCode->resetExpires();
 		$this->authorizationCode = $this->authorizationCodeMapper->insert($authorizationCode);
 
 		$accessToken = new AccessToken();
