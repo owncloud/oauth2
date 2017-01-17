@@ -99,7 +99,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$authorizationCode->setCode('kYz7us4yr4QZyUZuMIkVZUf1v2IzvsFZaNXCy3M3amqVGF62AJVJaCfz6FM9pecV');
 		$authorizationCode->setClientId($this->client1->getId());
 		$authorizationCode->setUserId($this->userId);
-		$authorizationCode->setExpires(null);
+		$authorizationCode->resetExpires();
 		$this->authorizationCode = $this->authorizationCodeMapper->insert($authorizationCode);
 
 		$this->controller = new OAuthApiController('oauth2', $request, $this->clientMapper, $this->authorizationCodeMapper, $this->accessTokenMapper);
@@ -169,6 +169,17 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals('Unknown credentials.', $json->message);
 		$this->assertEquals(400, $result->getStatus());
 
+		$this->authorizationCode->setExpires(time() - 1);
+		$this->authorizationCodeMapper->update($this->authorizationCode);
+		$result = $this->controller->generateToken($this->authorizationCode->getCode());
+		$this->assertTrue($result instanceof JSONResponse);
+		$json = json_decode($result->render());
+		$this->assertNotEmpty($json->message);
+		$this->assertEquals('Unknown credentials.', $json->message);
+		$this->assertEquals(400, $result->getStatus());
+
+		$this->authorizationCode->resetExpires();
+		$this->authorizationCodeMapper->update($this->authorizationCode);
 		$result = $this->controller->generateToken($this->authorizationCode->getCode());
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());

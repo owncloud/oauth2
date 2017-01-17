@@ -102,6 +102,10 @@ class OAuthApiController extends ApiController {
             return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
         }
 
+        if ($authorizationCode->hasExpired()) {
+			return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+		}
+
 		$token = Utilities::generateRandom();
 		$userId = $authorizationCode->getUserId();
 		$accessToken = new AccessToken();

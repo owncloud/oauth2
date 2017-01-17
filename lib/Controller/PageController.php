@@ -164,6 +164,7 @@ class PageController extends Controller {
 				$authorizationCode->setCode($code);
 				$authorizationCode->setClientId($client->getId());
 				$authorizationCode->setUserId($this->userId);
+				$authorizationCode->resetExpires();
 				$this->authorizationCodeMapper->insert($authorizationCode);
 
 				$result = urldecode($redirect_uri);

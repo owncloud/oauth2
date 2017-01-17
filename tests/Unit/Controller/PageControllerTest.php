@@ -28,6 +28,7 @@ use OC_Util;
 use OCA\OAuth2\AppInfo\Application;
 use OCA\OAuth2\Controller\PageController;
 use OCA\OAuth2\Db\AccessTokenMapper;
+use OCA\OAuth2\Db\AuthorizationCode;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
@@ -179,6 +180,12 @@ class PageControllerTest extends TestCase {
 		$this->assertEquals($url, $this->redirectUri);
 		parse_str($query, $parameters);
 		$this->assertTrue(array_key_exists('code', $parameters));
+		$expected = time() + 600;
+		/** @var AuthorizationCode $authorizationCode */
+		$authorizationCode = $this->authorizationCodeMapper->findByCode($parameters['code']);
+		$this->assertEquals($expected, $authorizationCode->getExpires());
+		$this->assertEquals($this->userId, $authorizationCode->getUserId());
+		$this->assertEquals($this->client->getId(), $authorizationCode->getClientId());
 		$this->authorizationCodeMapper->delete($this->authorizationCodeMapper->findByCode($parameters['code']));
 
 		$this->assertEquals(0, count($this->authorizationCodeMapper->findAll()));
@@ -191,6 +198,12 @@ class PageControllerTest extends TestCase {
 		$this->assertTrue(array_key_exists('state', $parameters));
 		$this->assertEquals('testingState', $parameters['state']);
 		$this->assertTrue(array_key_exists('code', $parameters));
+		$expected = time() + 600;
+		/** @var AuthorizationCode $authorizationCode */
+		$authorizationCode = $this->authorizationCodeMapper->findByCode($parameters['code']);
+		$this->assertEquals($expected, $authorizationCode->getExpires());
+		$this->assertEquals($this->userId, $authorizationCode->getUserId());
+		$this->assertEquals($this->client->getId(), $authorizationCode->getClientId());
 		$this->authorizationCodeMapper->delete($this->authorizationCodeMapper->findByCode($parameters['code']));
 	}
 
