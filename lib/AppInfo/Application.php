@@ -45,7 +45,9 @@ class Application extends App {
 		$container->registerService('UserHooks', function ($c) {
 			return new UserHooks(
 				$c->query('ServerContainer')->getUserManager(),
-				$c->query('OCA\OAuth2\Db\AccessTokenMapper')
+				$c->query('OCA\OAuth2\Db\AccessTokenMapper'),
+				$c->query('OCA\OAuth2\Db\AuthorizationCodeMapper'),
+				$c->query('OCA\OAuth2\Db\RefreshTokenMapper')
 			);
 		});
 	}

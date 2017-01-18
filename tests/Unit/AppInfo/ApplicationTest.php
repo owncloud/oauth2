@@ -40,7 +40,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase {
 	public function testRegisterService() {
 		$app = new Application();
 		$c = $app->getContainer();
-		$c->registerService(UserHooks::class, function($c) {
+		$c->registerService(UserHooks::class, function ($c) {
 			$service = $this->getMockBuilder('OCA\OAuth2\Hooks\UserHooks')->disableOriginalConstructor()->getMock();
 			$service->method('$callback')->willReturn([]);
 			return $service;

@@ -25,6 +25,8 @@
 namespace OCA\OAuth2\Hooks;
 
 use OCA\OAuth2\Db\AccessTokenMapper;
+use OCA\OAuth2\Db\AuthorizationCodeMapper;
+use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCP\IUserManager;
 use OC\User\User;
 
@@ -36,16 +38,28 @@ class UserHooks {
 	/** @var  AccessTokenMapper */
 	private $accessTokenMapper;
 
+	/** @var AuthorizationCodeMapper */
+	private $authorizationCodeMapper;
+
+	/** @var RefreshTokenMapper */
+	private $refreshTokenMapper;
+
 	/**
 	 * UserHooks constructor.
 	 *
 	 * @param IUserManager $userManager
 	 * @param AccessTokenMapper $accessTokenMapper
+	 * @param AuthorizationCodeMapper $authorizationCodeMapper
+	 * @param RefreshTokenMapper $refreshTokenMapper
 	 */
 	public function __construct(IUserManager $userManager,
-								AccessTokenMapper $accessTokenMapper) {
+								AccessTokenMapper $accessTokenMapper,
+								AuthorizationCodeMapper $authorizationCodeMapper,
+								RefreshTokenMapper $refreshTokenMapper) {
 		$this->userManager = $userManager;
 		$this->accessTokenMapper = $accessTokenMapper;
+		$this->authorizationCodeMapper = $authorizationCodeMapper;
+		$this->refreshTokenMapper = $refreshTokenMapper;
 
 	}
 
@@ -57,10 +71,11 @@ class UserHooks {
 			// your code that executes before $user is deleted
 			if (null !== ($user->getUID())) {
 				$this->accessTokenMapper->deleteByUser($user->getUID());
+				$this->authorizationCodeMapper->deleteByUser($user->getUID());
+				$this->refreshTokenMapper->deleteByUser($user->getUID());
 			}
 		};
 		$this->userManager->listen('\OC\User', 'preDelete', $callback);
 	}
-
 
 }

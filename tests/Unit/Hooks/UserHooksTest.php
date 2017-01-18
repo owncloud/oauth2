@@ -27,6 +27,8 @@ namespace OCA\OAuth2\Tests\Unit\Hooks;
 use OCA\OAuth2\AppInfo\Application;
 use OCA\OAuth2\Hooks\UserHooks;
 use OCA\OAuth2\Db\AccessTokenMapper;
+use OCA\OAuth2\Db\AuthorizationCodeMapper;
+use OCA\OAuth2\Db\RefreshTokenMapper;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -46,6 +48,14 @@ class UserHooksTest extends PHPUnit_Framework_TestCase {
 	 */
 	private $accessTokenMapper;
 	/**
+	 * @var AuthorizationCodeMapper
+	 */
+	private $authorizationCodeMapper;
+	/**
+	 * @var RefreshTokenMapper
+	 */
+	private $refreshTokenMapper;
+	/**
 	 * @var UserHooks
 	 */
 	private $instance;
@@ -58,6 +68,8 @@ class UserHooksTest extends PHPUnit_Framework_TestCase {
 		$container = $app->getContainer();
 
 		$this->accessTokenMapper = $container->query('OCA\OAuth2\Db\AccessTokenMapper');
+		$this->authorizationCodeMapper = $container->query('OCA\OAuth2\Db\AuthorizationCodeMapper');
+		$this->refreshTokenMapper = $container->query('OCA\OAuth2\Db\RefreshTokenMapper');
 		$this->userManagerMock = $this->getMockBuilder('OCP\IUserManager')->getMock();
 
 		/** @var UserHooks | \PHPUnit_Framework_MockObject_MockObject $instance */
@@ -65,12 +77,13 @@ class UserHooksTest extends PHPUnit_Framework_TestCase {
 			->setConstructorArgs(
 				[
 					$this->userManagerMock,
-					$this->accessTokenMapper
+					$this->accessTokenMapper,
+					$this->authorizationCodeMapper,
+					$this->refreshTokenMapper
 				]
 			)
 			->setMethods(['register'])
 			->getMock();
-
 
 
 	}
