@@ -182,9 +182,9 @@ class PageController extends Controller {
 	/**
 	 * Validates a redirect URI.
 	 *
-	 * @param $expected String The expected redirect URI.
-	 * @param $actual String The actual redirect URI.
-	 * @param $allowSubdomains boolean Whether to allow subdomains.
+	 * @param string $expected The expected redirect URI.
+	 * @param string $actual The actual redirect URI.
+	 * @param boolean $allowSubdomains Whether to allow subdomains.
 	 *
 	 * @return True if the redirect URI is valid, false otherwise.
 	 */
