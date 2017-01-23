@@ -32,6 +32,8 @@ Place the content of this repository in **owncloud/apps/oauth2**.
 {
     "access_token" : "1vtnuo1NkIsbndAjVnhl7y0wJha59JyaAiFIVQDvcBY2uvKmj5EPBEhss0pauzdQ",
     "token_type" : "Bearer",
+    "expires_in" : 3600,
+    "refresh_token" : "7y0wJuvKmj5E1vjVnhlPBEhha59JyaAiFIVQDvcBY2ss0pauzdQtnuo1NkIsbndA",
     "user_id" : "admin"
 }
 ```
