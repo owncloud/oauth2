@@ -85,7 +85,6 @@ class PageController extends Controller {
 	 * @param string $client_id The client identifier.
 	 * @param string $redirect_uri The redirect URI.
 	 * @param string $state The state.
-	 * @param string $scope The scope.
 	 *
 	 * @return TemplateResponse|RedirectResponse The authorize view or a
 	 * redirection to the ownCloud main page.
@@ -93,11 +92,9 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function authorize($response_type, $client_id, $redirect_uri, $state = null, $scope = null) {
+	public function authorize($response_type, $client_id, $redirect_uri, $state = null) {
 		if (!is_string($response_type) || !is_string($client_id)
-			|| !is_string($redirect_uri) || (isset($state) && !is_string($state))
-			|| (isset($scope) && !is_string($scope))
-		) {
+			|| !is_string($redirect_uri) || (isset($state) && !is_string($state))) {
 			return new RedirectResponse(OC_Util::getDefaultPageUrl());
 		}
 
@@ -126,7 +123,6 @@ class PageController extends Controller {
 	 * @param string $client_id The client identifier.
 	 * @param string $redirect_uri The redirect URI.
 	 * @param string $state The state.
-	 * @param string $scope The scope.
 	 *
 	 * @return RedirectResponse|JSONResponse Redirection to the given
 	 * redirect_uri or a JSON with an error message.
@@ -134,11 +130,9 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function generateAuthorizationCode($response_type, $client_id, $redirect_uri, $state = null, $scope = null) {
+	public function generateAuthorizationCode($response_type, $client_id, $redirect_uri, $state = null) {
 		if (!is_string($response_type) || !is_string($client_id)
-			|| !is_string($redirect_uri) || (isset($state) && !is_string($state))
-			|| (isset($scope) && !is_string($scope))
-		) {
+			|| !is_string($redirect_uri) || (isset($state) && !is_string($state))) {
 			return new RedirectResponse(OC_Util::getDefaultPageUrl());
 		}
 

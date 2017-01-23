@@ -98,28 +98,24 @@ class PageControllerTest extends TestCase {
 
 	public function testAuthorize() {
 		// Wrong types
-		$result = $this->controller->authorize(1, 'qwertz', 'abcd', 'state', 'scope');
+		$result = $this->controller->authorize(1, 'qwertz', 'abcd', 'state');
 		$this->assertTrue($result instanceof RedirectResponse);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
-		$result = $this->controller->authorize('code', 2, 'abcd', 'state', 'scope');
+		$result = $this->controller->authorize('code', 2, 'abcd', 'state');
 		$this->assertTrue($result instanceof RedirectResponse);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
-		$result = $this->controller->authorize('code', 'qwertz', 3, 'state', 'scope');
+		$result = $this->controller->authorize('code', 'qwertz', 3, 'state');
 		$this->assertTrue($result instanceof RedirectResponse);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
-		$result = $this->controller->authorize('code', $this->identifier, urldecode($this->redirectUri), 4, 'scope');
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
-
-		$result = $this->controller->authorize('code', $this->identifier, urldecode($this->redirectUri), 'state', 5);
+		$result = $this->controller->authorize('code', $this->identifier, urldecode($this->redirectUri), 4);
 		$this->assertTrue($result instanceof RedirectResponse);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
 		// Wrong parameters
-		$result = $this->controller->authorize('code', 'qwertz', 'abcd', 'state', 'scope');
+		$result = $this->controller->authorize('code', 'qwertz', 'abcd', 'state');
 		$this->assertTrue($result instanceof RedirectResponse);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
@@ -139,23 +135,19 @@ class PageControllerTest extends TestCase {
 
 	public function testGenerateAuthorizationCode() {
 		// Wrong types
-		$result = $this->controller->generateAuthorizationCode(1, 'qwertz', 'abcd', 'state', 'scope');
+		$result = $this->controller->generateAuthorizationCode(1, 'qwertz', 'abcd', 'state');
 		$this->assertTrue($result instanceof RedirectResponse);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
-		$result = $this->controller->generateAuthorizationCode('code', 2, 'abcd', 'state', 'scope');
+		$result = $this->controller->generateAuthorizationCode('code', 2, 'abcd', 'state');
 		$this->assertTrue($result instanceof RedirectResponse);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
-		$result = $this->controller->generateAuthorizationCode('code', 'qwertz', 3, 'state', 'scope');
+		$result = $this->controller->generateAuthorizationCode('code', 'qwertz', 3, 'state');
 		$this->assertTrue($result instanceof RedirectResponse);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
-		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, urldecode($this->redirectUri), 4, 'scope');
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
-
-		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, urldecode($this->redirectUri), 'state', 5);
+		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, urldecode($this->redirectUri), 4);
 		$this->assertTrue($result instanceof RedirectResponse);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
