@@ -127,6 +127,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$accessToken->setToken('sFz6FM9pecGF62kYz7us43M3amqVZaNQZyUZuMIkAJVJaCfVyr4Uf1v2IzvVZXCy');
 		$accessToken->setClientId($this->client1->getId());
 		$accessToken->setUserId($this->userId);
+		$accessToken->resetExpires();
 		$this->accessToken = $this->accessTokenMapper->insert($accessToken);
 
 		/** @var RefreshToken $refreshToken */
