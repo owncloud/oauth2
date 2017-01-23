@@ -30,6 +30,8 @@ use OCA\OAuth2\Db\AuthorizationCode;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
+use OCA\OAuth2\Db\RefreshToken;
+use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCA\OAuth2\Utilities;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http;
@@ -39,8 +41,8 @@ use OCP\AppFramework\ApiController;
 
 class OAuthApiController extends ApiController {
 
-    /** @var ClientMapper */
-    private $clientMapper;
+	/** @var ClientMapper */
+	private $clientMapper;
 
 	/** @var AuthorizationCodeMapper */
 	private $authorizationCodeMapper;
@@ -48,25 +50,34 @@ class OAuthApiController extends ApiController {
 	/** @var AccessTokenMapper */
 	private $accessTokenMapper;
 
-    /**
-     * OAuthApiController constructor.
-     * @param string $appName
-     * @param IRequest $request
-     * @param ClientMapper $clientMapper
+	/** @var RefreshTokenMapper */
+	private $refreshTokenMapper;
+
+	/**
+	 * OAuthApiController constructor.
+	 *
+	 * @param string $appName
+	 * @param IRequest $request
+	 * @param ClientMapper $clientMapper
 	 * @param AuthorizationCodeMapper $authorizationCodeMapper
 	 * @param AccessTokenMapper $accessTokenMapper
-     */
-	public function __construct($appName, IRequest $request, ClientMapper $clientMapper, AuthorizationCodeMapper $authorizationCodeMapper, AccessTokenMapper $accessTokenMapper) {
+	 * @param RefreshTokenMapper $refreshTokenMapper
+	 */
+	public function __construct($appName, IRequest $request, ClientMapper $clientMapper, AuthorizationCodeMapper $authorizationCodeMapper, AccessTokenMapper $accessTokenMapper, RefreshTokenMapper $refreshTokenMapper) {
 		parent::__construct($appName, $request);
-        $this->clientMapper = $clientMapper;
+		$this->clientMapper = $clientMapper;
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
 		$this->accessTokenMapper = $accessTokenMapper;
+		$this->refreshTokenMapper = $refreshTokenMapper;
 	}
 
 	/**
 	 * Implements the OAuth 2.0 Access Token Response.
 	 *
-     * @param string $code The authorization code.
+	 * @param string $grant_type The authorization grant type.
+	 * @param string $code The authorization code.
+	 * @param string $redirect_uri The redirect URI.
+	 * @param string $refresh_token The refresh token.
 	 * @return JSONResponse The Access Token or an empty JSON Object.
 	 *
 	 * @NoAdminRequired
@@ -74,51 +85,99 @@ class OAuthApiController extends ApiController {
 	 * @PublicPage
 	 * @CORS
 	 */
-	public function generateToken($code) {
-        if (is_null($code) || is_null($_SERVER['PHP_AUTH_USER'])
-            || is_null($_SERVER['PHP_AUTH_PW'])) {
-            return new JSONResponse(['message' => 'Missing credentials.'], Http::STATUS_BAD_REQUEST);
-        }
-
-        try {
-			/** @var Client $client */
-            $client = $this->clientMapper->findByIdentifier($_SERVER['PHP_AUTH_USER']);
-        } catch (DoesNotExistException $exception) {
-            return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
-        }
-
-        if (strcmp($client->getSecret(), $_SERVER['PHP_AUTH_PW']) !== 0) {
-            return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
-        }
+	public function generateToken($grant_type, $code = null, $redirect_uri = null, $refresh_token = null) {
+		if (!is_string($grant_type) || is_null($_SERVER['PHP_AUTH_USER']) || is_null($_SERVER['PHP_AUTH_PW'])) {
+			return new JSONResponse(['message' => 'Missing credentials.'], Http::STATUS_BAD_REQUEST);
+		}
 
 		try {
-			/** @var AuthorizationCode $authorizationCode */
-			$authorizationCode = $this->authorizationCodeMapper->findByCode($code);
+			/** @var Client $client */
+			$client = $this->clientMapper->findByIdentifier($_SERVER['PHP_AUTH_USER']);
 		} catch (DoesNotExistException $exception) {
 			return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
 		}
 
-        if (strcmp($authorizationCode->getClientId(), $client->getId()) !== 0) {
-            return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
-        }
+		if (strcmp($client->getSecret(), $_SERVER['PHP_AUTH_PW']) !== 0) {
+			return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+		}
+
+		switch ($grant_type) {
+			case 'authorization_code':
+				if (!is_string($code) || !is_string($redirect_uri)) {
+					return new JSONResponse(['message' => 'Missing credentials.'], Http::STATUS_BAD_REQUEST);
+				}
+
+				try {
+					/** @var AuthorizationCode $authorizationCode */
+					$authorizationCode = $this->authorizationCodeMapper->findByCode($code);
+				} catch (DoesNotExistException $exception) {
+					return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+				}
+
+				if (strcmp($authorizationCode->getClientId(), $client->getId()) !== 0) {
+					return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+				}
+
+				if ($authorizationCode->hasExpired()) {
+					return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+				}
+
+				if (!Utilities::validateRedirectUri($client->getRedirectUri(), urldecode($redirect_uri), $client->getAllowSubdomains())) {
+					return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+				}
+
+				$userId = $authorizationCode->getUserId();
+				break;
+			case 'refresh_token':
+				if (!is_string($refresh_token)) {
+					return new JSONResponse(['message' => 'Missing credentials.'], Http::STATUS_BAD_REQUEST);
+				}
+
+				try {
+					/** @var RefreshToken $refreshToken */
+					$refreshToken = $this->refreshTokenMapper->findByToken($refresh_token);
+				} catch (DoesNotExistException $exception) {
+					return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+				}
+
+				if (strcmp($refreshToken->getClientId(), $client->getId()) !== 0) {
+					return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+				}
+
+				$userId = $refreshToken->getUserId();
+				break;
+			default:
+				return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+		}
+
+		$this->authorizationCodeMapper->deleteByClient($client->getId());
+		$this->accessTokenMapper->deleteByClient($client->getId());
+		$this->refreshTokenMapper->deleteByClient($client->getId());
 
 		$token = Utilities::generateRandom();
-		$userId = $authorizationCode->getUserId();
 		$accessToken = new AccessToken();
 		$accessToken->setToken($token);
-		$accessToken->setClientId($authorizationCode->getClientId());
+		$accessToken->setClientId($client->getId());
 		$accessToken->setUserId($userId);
+		$accessToken->resetExpires();
 		$this->accessTokenMapper->insert($accessToken);
 
-        $this->authorizationCodeMapper->delete($authorizationCode);
+		$token = Utilities::generateRandom();
+		$refreshToken = new RefreshToken();
+		$refreshToken->setToken($token);
+		$refreshToken->setClientId($client->getId());
+		$refreshToken->setUserId($userId);
+		$this->refreshTokenMapper->insert($refreshToken);
 
-        return new JSONResponse(
-            [
-                'access_token' => $token,
-                'token_type' => 'Bearer',
+		return new JSONResponse(
+			[
+				'access_token' => $accessToken->getToken(),
+				'token_type' => 'Bearer',
+				'expires_in' => 3600,
+				'refresh_token' => $refreshToken->getToken(),
 				'user_id' => $userId
-            ]
-        );
+			]
+		);
 	}
 
 }

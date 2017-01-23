@@ -35,6 +35,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setClientId(int $clientId)
  * @method string getUserId()
  * @method void setUserId(string $userId)
+ * @method int getExpires()
+ * @method void setExpires(int $value)
  */
 class AccessToken extends Entity {
 
@@ -48,7 +50,23 @@ class AccessToken extends Entity {
         $this->addType('token', 'string');
         $this->addType('client_id', 'int');
         $this->addType('user_id', 'string');
-        // TODO: set type for $expires
+		$this->addType('expires', 'int');
     }
+
+	/**
+	 * Resets the expiry time to 1 hour from now.
+	 */
+    public function resetExpires() {
+    	$this->setExpires(time() + 3600);
+	}
+
+	/**
+	 * Determines if an access token has expired.
+	 *
+	 * @return boolean true if the access token has expired, false otherwise.
+	 */
+	public function hasExpired() {
+		return time() >= $this->getExpires();
+	}
 
 }

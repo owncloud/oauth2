@@ -28,6 +28,7 @@ use OC_Util;
 use OCA\OAuth2\AppInfo\Application;
 use OCA\OAuth2\Controller\PageController;
 use OCA\OAuth2\Db\AccessTokenMapper;
+use OCA\OAuth2\Db\AuthorizationCode;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
@@ -72,6 +73,7 @@ class PageControllerTest extends TestCase {
 		$container = $app->getContainer();
 
 		$this->clientMapper = $container->query('OCA\OAuth2\Db\ClientMapper');
+		$this->clientMapper->deleteAll();
 
 		/** @var Client $client */
 		$client = new Client();
@@ -97,28 +99,24 @@ class PageControllerTest extends TestCase {
 
 	public function testAuthorize() {
 		// Wrong types
-		$result = $this->controller->authorize(1, 'qwertz', 'abcd', 'state', 'scope');
+		$result = $this->controller->authorize(1, 'qwertz', 'abcd', 'state');
 		$this->assertTrue($result instanceof RedirectResponse);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
-		$result = $this->controller->authorize('code', 2, 'abcd', 'state', 'scope');
+		$result = $this->controller->authorize('code', 2, 'abcd', 'state');
 		$this->assertTrue($result instanceof RedirectResponse);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
-		$result = $this->controller->authorize('code', 'qwertz', 3, 'state', 'scope');
+		$result = $this->controller->authorize('code', 'qwertz', 3, 'state');
 		$this->assertTrue($result instanceof RedirectResponse);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
-		$result = $this->controller->authorize('code', $this->identifier, urldecode($this->redirectUri), 4, 'scope');
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
-
-		$result = $this->controller->authorize('code', $this->identifier, urldecode($this->redirectUri), 'state', 5);
+		$result = $this->controller->authorize('code', $this->identifier, urldecode($this->redirectUri), 4);
 		$this->assertTrue($result instanceof RedirectResponse);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
 		// Wrong parameters
-		$result = $this->controller->authorize('code', 'qwertz', 'abcd', 'state', 'scope');
+		$result = $this->controller->authorize('code', 'qwertz', 'abcd', 'state');
 		$this->assertTrue($result instanceof RedirectResponse);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
@@ -138,23 +136,19 @@ class PageControllerTest extends TestCase {
 
 	public function testGenerateAuthorizationCode() {
 		// Wrong types
-		$result = $this->controller->generateAuthorizationCode(1, 'qwertz', 'abcd', 'state', 'scope');
+		$result = $this->controller->generateAuthorizationCode(1, 'qwertz', 'abcd', 'state');
 		$this->assertTrue($result instanceof RedirectResponse);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
-		$result = $this->controller->generateAuthorizationCode('code', 2, 'abcd', 'state', 'scope');
+		$result = $this->controller->generateAuthorizationCode('code', 2, 'abcd', 'state');
 		$this->assertTrue($result instanceof RedirectResponse);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
-		$result = $this->controller->generateAuthorizationCode('code', 'qwertz', 3, 'state', 'scope');
+		$result = $this->controller->generateAuthorizationCode('code', 'qwertz', 3, 'state');
 		$this->assertTrue($result instanceof RedirectResponse);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
-		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, urldecode($this->redirectUri), 4, 'scope');
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
-
-		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, urldecode($this->redirectUri), 'state', 5);
+		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, urldecode($this->redirectUri), 4);
 		$this->assertTrue($result instanceof RedirectResponse);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
@@ -179,6 +173,12 @@ class PageControllerTest extends TestCase {
 		$this->assertEquals($url, $this->redirectUri);
 		parse_str($query, $parameters);
 		$this->assertTrue(array_key_exists('code', $parameters));
+		$expected = time() + 600;
+		/** @var AuthorizationCode $authorizationCode */
+		$authorizationCode = $this->authorizationCodeMapper->findByCode($parameters['code']);
+		$this->assertEquals($expected, $authorizationCode->getExpires(), '', 1);
+		$this->assertEquals($this->userId, $authorizationCode->getUserId());
+		$this->assertEquals($this->client->getId(), $authorizationCode->getClientId());
 		$this->authorizationCodeMapper->delete($this->authorizationCodeMapper->findByCode($parameters['code']));
 
 		$this->assertEquals(0, count($this->authorizationCodeMapper->findAll()));
@@ -191,28 +191,13 @@ class PageControllerTest extends TestCase {
 		$this->assertTrue(array_key_exists('state', $parameters));
 		$this->assertEquals('testingState', $parameters['state']);
 		$this->assertTrue(array_key_exists('code', $parameters));
+		$expected = time() + 600;
+		/** @var AuthorizationCode $authorizationCode */
+		$authorizationCode = $this->authorizationCodeMapper->findByCode($parameters['code']);
+		$this->assertEquals($expected, $authorizationCode->getExpires(), '', 1);
+		$this->assertEquals($this->userId, $authorizationCode->getUserId());
+		$this->assertEquals($this->client->getId(), $authorizationCode->getClientId());
 		$this->authorizationCodeMapper->delete($this->authorizationCodeMapper->findByCode($parameters['code']));
-	}
-
-	public function testValidateRedirectUri() {
-		$this->assertFalse($this->invokePrivate($this->controller, 'validateRedirectUri',
-			['http://owncloud.org:80/test?q=1', 'https://owncloud.org:80/test?q=1', false]));
-
-		$this->assertTrue($this->invokePrivate($this->controller, 'validateRedirectUri',
-			['https://owncloud.org:80/test?q=1', 'https://sso.owncloud.org:80/test?q=1', true]));
-		$this->assertFalse($this->invokePrivate($this->controller, 'validateRedirectUri',
-			['https://owncloud.org:80/test?q=1', 'https://sso.owncloud.de:80/test?q=1', true]));
-		$this->assertFalse($this->invokePrivate($this->controller, 'validateRedirectUri',
-			['https://owncloud.org:80/test?q=1', 'https://sso.owncloud.org:80/test?q=1', false]));
-
-		$this->assertFalse($this->invokePrivate($this->controller, 'validateRedirectUri',
-			['https://owncloud.org:80/test?q=1', 'https://owncloud.org:90/test?q=1', false]));
-
-		$this->assertFalse($this->invokePrivate($this->controller, 'validateRedirectUri',
-			['https://owncloud.org:80/tests?q=1', 'https://owncloud.org:80/test?q=1', false]));
-
-		$this->assertFalse($this->invokePrivate($this->controller, 'validateRedirectUri',
-			['https://owncloud.org:80/test?q=1', 'https://owncloud.org:80/test?q=0', false]));
 	}
 
 }

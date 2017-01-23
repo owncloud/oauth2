@@ -55,6 +55,26 @@ class RefreshTokenMapper extends Mapper {
         return $this->findEntity($sql, [$id], null, null);
     }
 
+	/**
+	 * Selects an refresh token by its token.
+	 *
+	 * @param string $token The refresh token.
+	 *
+	 * @return Entity The refresh token entity.
+	 *
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found.
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more
+	 * than one result.
+	 */
+	public function findByToken($token) {
+		if (!is_string($token)) {
+			throw new InvalidArgumentException('Argument token must be a string');
+		}
+
+		$sql = 'SELECT * FROM `'. $this->tableName . '` WHERE `token` = ?';
+		return $this->findEntity($sql, [$token], null, null);
+	}
+
     /**
      * Selects all refresh codes.
      *

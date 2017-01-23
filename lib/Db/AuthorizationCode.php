@@ -35,6 +35,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setClientId(int $clientId)
  * @method string getUserId()
  * @method void setUserId(string $userId)
+ * @method int getExpires()
+ * @method void setExpires(int $value)
  */
 class AuthorizationCode extends Entity {
 
@@ -48,7 +50,23 @@ class AuthorizationCode extends Entity {
         $this->addType('code', 'string');
         $this->addType('client_id', 'int');
         $this->addType('user_id', 'string');
-		// TODO: set type for $expires
+		$this->addType('expires', 'int');
     }
+
+	/**
+	 * Resets the expiry time to 10 minutes from now.
+	 */
+	public function resetExpires() {
+		$this->setExpires(time() + 600);
+	}
+
+	/**
+	 * Determines if an authorization code has expired.
+	 *
+	 * @return boolean true if the authorization code has expired, false otherwise.
+	 */
+	public function hasExpired() {
+		return time() >= $this->getExpires();
+	}
 
 }

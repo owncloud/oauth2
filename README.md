@@ -22,27 +22,21 @@ Place the content of this repository in **owncloud/apps/oauth2**.
     3. `redirect_uri` (required): the redirect URI specified when registering the client.
     4. `state` (optional): can be set by the client "to maintain state between the request and callback" ([RFC 6749](https://tools.ietf.org/html/rfc6749#section-4.1.1)).
 
-3. [Authorization Response](https://tools.ietf.org/html/rfc6749#section-4.1.2): After the resource owner's authorization the apps redirects to the `redirect_uri` specified in the Authorization Request and adds the Authorization Code as URL parameter `code`.
+3. [Authorization Response](https://tools.ietf.org/html/rfc6749#section-4.1.2): After the resource owner's authorization the apps redirects to the `redirect_uri` specified in the Authorization Request and adds the Authorization Code as URL parameter `code`. An Authorization Code is valid for 10 minutes.
 
 4. [Access Token Request](https://tools.ietf.org/html/rfc6749#section-4.1.3): With the Authorization Code the client can request an Access Token using the [Access Token URL](#endpoints). [Client Authentication](https://tools.ietf.org/html/rfc6749#section-2.3) is done using Basic Auth with the client identifier as username and the client secret as password.
 
-5. [Access Token Response](https://tools.ietf.org/html/rfc6749#section-4.1.4): The app responses to a valid Access Token Request with an JSON response like this:
+5. [Access Token Response](https://tools.ietf.org/html/rfc6749#section-4.1.4): The app responses to a valid Access Token Request with an JSON response like the following. An Access Token is valid for 1 hour.
 
 ```json
 {
     "access_token" : "1vtnuo1NkIsbndAjVnhl7y0wJha59JyaAiFIVQDvcBY2uvKmj5EPBEhss0pauzdQ",
     "token_type" : "Bearer",
+    "expires_in" : 3600,
+    "refresh_token" : "7y0wJuvKmj5E1vjVnhlPBEhha59JyaAiFIVQDvcBY2ss0pauzdQtnuo1NkIsbndA",
     "user_id" : "admin"
 }
 ```
 
-There are tables for saving Clients, Authorization Codes, Access Tokens and Refresh Tokens in the database.
-
-## Issues to be solved
-- [x] ~~Under some configurations there was an error that the [`ClientMapper`](/db/ClientMapper.php) could not be found (Ubuntu + PHP 7 + nginx + PostgreSQL, Ubuntu + PHP 7 + Apache + MySQL). But installing in a fresh [Docker container](https://hub.docker.com/_/owncloud/) was successful. The reasons for this error still have to be investigated.~~
-
-## To Do
-- [x] ~~Add PHPUnit tests.~~
-- [x] ~~Add section in personal settings for managing authorized applications.~~
-- [ ] Add option for [Refresh Tokens](https://tools.ietf.org/html/rfc6749#section-1.5).
-- [ ] Add option for an expiration time for Authorization Codes, Access Tokens and Refresh Tokens.
+## Possible improvements
+- [ ] Add option for using different [scopes](https://tools.ietf.org/html/rfc6749#section-3.3).

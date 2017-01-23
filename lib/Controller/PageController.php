@@ -85,7 +85,6 @@ class PageController extends Controller {
 	 * @param string $client_id The client identifier.
 	 * @param string $redirect_uri The redirect URI.
 	 * @param string $state The state.
-	 * @param string $scope The scope.
 	 *
 	 * @return TemplateResponse|RedirectResponse The authorize view or a
 	 * redirection to the ownCloud main page.
@@ -93,11 +92,9 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function authorize($response_type, $client_id, $redirect_uri, $state = null, $scope = null) {
+	public function authorize($response_type, $client_id, $redirect_uri, $state = null) {
 		if (!is_string($response_type) || !is_string($client_id)
-			|| !is_string($redirect_uri) || (isset($state) && !is_string($state))
-			|| (isset($scope) && !is_string($scope))
-		) {
+			|| !is_string($redirect_uri) || (isset($state) && !is_string($state))) {
 			return new RedirectResponse(OC_Util::getDefaultPageUrl());
 		}
 
@@ -108,7 +105,7 @@ class PageController extends Controller {
 			return new RedirectResponse(OC_Util::getDefaultPageUrl());
 		}
 
-		if (!$this->validateRedirectUri($client->getRedirectUri(), urldecode($redirect_uri), $client->getAllowSubdomains())) {
+		if (!Utilities::validateRedirectUri($client->getRedirectUri(), urldecode($redirect_uri), $client->getAllowSubdomains())) {
 			return new RedirectResponse(OC_Util::getDefaultPageUrl());
 		}
 
@@ -126,7 +123,6 @@ class PageController extends Controller {
 	 * @param string $client_id The client identifier.
 	 * @param string $redirect_uri The redirect URI.
 	 * @param string $state The state.
-	 * @param string $scope The scope.
 	 *
 	 * @return RedirectResponse|JSONResponse Redirection to the given
 	 * redirect_uri or a JSON with an error message.
@@ -134,11 +130,9 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function generateAuthorizationCode($response_type, $client_id, $redirect_uri, $state = null, $scope = null) {
+	public function generateAuthorizationCode($response_type, $client_id, $redirect_uri, $state = null) {
 		if (!is_string($response_type) || !is_string($client_id)
-			|| !is_string($redirect_uri) || (isset($state) && !is_string($state))
-			|| (isset($scope) && !is_string($scope))
-		) {
+			|| !is_string($redirect_uri) || (isset($state) && !is_string($state))) {
 			return new RedirectResponse(OC_Util::getDefaultPageUrl());
 		}
 
@@ -151,7 +145,7 @@ class PageController extends Controller {
 					return new RedirectResponse(OC_Util::getDefaultPageUrl());
 				}
 
-				if (!$this->validateRedirectUri($client->getRedirectUri(), urldecode($redirect_uri), $client->getAllowSubdomains())) {
+				if (!Utilities::validateRedirectUri($client->getRedirectUri(), urldecode($redirect_uri), $client->getAllowSubdomains())) {
 					return new RedirectResponse(OC_Util::getDefaultPageUrl());
 				}
 
@@ -164,6 +158,7 @@ class PageController extends Controller {
 				$authorizationCode->setCode($code);
 				$authorizationCode->setClientId($client->getId());
 				$authorizationCode->setUserId($this->userId);
+				$authorizationCode->resetExpires();
 				$this->authorizationCodeMapper->insert($authorizationCode);
 
 				$result = urldecode($redirect_uri);
@@ -176,50 +171,6 @@ class PageController extends Controller {
 			default:
 				return new RedirectResponse(OC_Util::getDefaultPageUrl());
 		}
-	}
-
-	/**
-	 * Validates a redirect URI.
-	 *
-	 * @param $expected String The expected redirect URI.
-	 * @param $actual String The actual redirect URI.
-	 * @param $allowSubdomains boolean Whether to allow subdomains.
-	 *
-	 * @return True if the redirect URI is valid, false otherwise.
-	 */
-	private function validateRedirectUri($expected, $actual, $allowSubdomains) {
-		if (strcmp(parse_url($expected, PHP_URL_SCHEME), parse_url($actual, PHP_URL_SCHEME)) !== 0) {
-			return false;
-		}
-
-		$expectedHost = parse_url($expected, PHP_URL_HOST);
-		$actualHost = parse_url($actual, PHP_URL_HOST);
-
-		if ($allowSubdomains) {
-			if (strcmp($expectedHost, $actualHost) !== 0
-				&& strcmp($expectedHost, str_replace(explode('.', $actualHost)[0] . '.', '', $actualHost)) !== 0
-			) {
-				return false;
-			}
-		} else {
-			if (strcmp($expectedHost, $actualHost) !== 0) {
-				return false;
-			}
-		}
-
-		if (strcmp(parse_url($expected, PHP_URL_PORT), parse_url($actual, PHP_URL_PORT)) !== 0) {
-			return false;
-		}
-
-		if (strcmp(parse_url($expected, PHP_URL_PATH), parse_url($actual, PHP_URL_PATH)) !== 0) {
-			return false;
-		}
-
-		if (strcmp(parse_url($expected, PHP_URL_QUERY), parse_url($actual, PHP_URL_QUERY)) !== 0) {
-			return false;
-		}
-
-		return true;
 	}
 
 }

@@ -94,21 +94,20 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 		$authorizationCode->setCode('kYz7us4yr4QZyUZuMIkVZUf1v2IzvsFZaNXCy3M3amqVGF62AJVJaCfz6FM9pecV');
 		$authorizationCode->setClientId($this->client->getId());
 		$authorizationCode->setUserId($this->userId);
-		$authorizationCode->setExpires(null);
+		$authorizationCode->resetExpires();
 		$this->authorizationCodeMapper->insert($authorizationCode);
 
 		$accessToken = new AccessToken();
 		$accessToken->setToken('3M3amqVGF62kYz7us4yr4QZyUZuMIAZUf1v2IzvsFJVJaCfz6FM9pecVkVZaNXCy');
 		$accessToken->setClientId($this->client->getId());
 		$accessToken->setUserId($this->userId);
-		$accessToken->setExpires(null);
+		$accessToken->resetExpires();
 		$this->accessTokenMapper->insert($accessToken);
 
 		$refreshToken = new RefreshToken();
 		$refreshToken->setToken('3M3amqVGF62kYz7us4yr4QZyUZuMIAZUf1v2IzvsFJVJaCfz6FM9pecVkVZaNXCy');
 		$refreshToken->setClientId($this->client->getId());
 		$refreshToken->setUserId($this->userId);
-		$refreshToken->setExpires(null);
 		$this->refreshTokenMapper->insert($refreshToken);
 
 		$this->controller = new SettingsController('oauth2', $request, $this->clientMapper, $this->authorizationCodeMapper, $this->accessTokenMapper, $this->refreshTokenMapper, $this->userId);

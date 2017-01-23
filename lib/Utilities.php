@@ -36,4 +36,48 @@ class Utilities {
             'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
     }
 
+	/**
+	 * Validates a redirect URI.
+	 *
+	 * @param string $expected The expected redirect URI.
+	 * @param string $actual The actual redirect URI.
+	 * @param boolean $allowSubdomains Whether to allow subdomains.
+	 *
+	 * @return True if the redirect URI is valid, false otherwise.
+	 */
+	public static function validateRedirectUri($expected, $actual, $allowSubdomains) {
+		if (strcmp(parse_url($expected, PHP_URL_SCHEME), parse_url($actual, PHP_URL_SCHEME)) !== 0) {
+			return false;
+		}
+
+		$expectedHost = parse_url($expected, PHP_URL_HOST);
+		$actualHost = parse_url($actual, PHP_URL_HOST);
+
+		if ($allowSubdomains) {
+			if (strcmp($expectedHost, $actualHost) !== 0
+				&& strcmp($expectedHost, str_replace(explode('.', $actualHost)[0] . '.', '', $actualHost)) !== 0
+			) {
+				return false;
+			}
+		} else {
+			if (strcmp($expectedHost, $actualHost) !== 0) {
+				return false;
+			}
+		}
+
+		if (strcmp(parse_url($expected, PHP_URL_PORT), parse_url($actual, PHP_URL_PORT)) !== 0) {
+			return false;
+		}
+
+		if (strcmp(parse_url($expected, PHP_URL_PATH), parse_url($actual, PHP_URL_PATH)) !== 0) {
+			return false;
+		}
+
+		if (strcmp(parse_url($expected, PHP_URL_QUERY), parse_url($actual, PHP_URL_QUERY)) !== 0) {
+			return false;
+		}
+
+		return true;
+	}
+
 }
