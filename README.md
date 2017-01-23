@@ -44,5 +44,6 @@ There are tables for saving Clients, Authorization Codes, Access Tokens and Refr
 ## To Do
 - [x] ~~Add PHPUnit tests.~~
 - [x] ~~Add section in personal settings for managing authorized applications.~~
-- [ ] Add option for [Refresh Tokens](https://tools.ietf.org/html/rfc6749#section-1.5).
-- [ ] Add option for an expiration time for Authorization Codes, Access Tokens and Refresh Tokens.
+- [x] ~~Add option for [Refresh Tokens](https://tools.ietf.org/html/rfc6749#section-1.5).~~
+- [x] ~~Add option for an expiration time for Authorization Codes and Access Tokens.~~
+- [x] Add option for using different [scopes](https://tools.ietf.org/html/rfc6749#section-3.3).
