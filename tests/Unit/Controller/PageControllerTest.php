@@ -199,25 +199,4 @@ class PageControllerTest extends TestCase {
 		$this->authorizationCodeMapper->delete($this->authorizationCodeMapper->findByCode($parameters['code']));
 	}
 
-	public function testValidateRedirectUri() {
-		$this->assertFalse($this->invokePrivate($this->controller, 'validateRedirectUri',
-			['http://owncloud.org:80/test?q=1', 'https://owncloud.org:80/test?q=1', false]));
-
-		$this->assertTrue($this->invokePrivate($this->controller, 'validateRedirectUri',
-			['https://owncloud.org:80/test?q=1', 'https://sso.owncloud.org:80/test?q=1', true]));
-		$this->assertFalse($this->invokePrivate($this->controller, 'validateRedirectUri',
-			['https://owncloud.org:80/test?q=1', 'https://sso.owncloud.de:80/test?q=1', true]));
-		$this->assertFalse($this->invokePrivate($this->controller, 'validateRedirectUri',
-			['https://owncloud.org:80/test?q=1', 'https://sso.owncloud.org:80/test?q=1', false]));
-
-		$this->assertFalse($this->invokePrivate($this->controller, 'validateRedirectUri',
-			['https://owncloud.org:80/test?q=1', 'https://owncloud.org:90/test?q=1', false]));
-
-		$this->assertFalse($this->invokePrivate($this->controller, 'validateRedirectUri',
-			['https://owncloud.org:80/tests?q=1', 'https://owncloud.org:80/test?q=1', false]));
-
-		$this->assertFalse($this->invokePrivate($this->controller, 'validateRedirectUri',
-			['https://owncloud.org:80/test?q=1', 'https://owncloud.org:80/test?q=0', false]));
-	}
-
 }

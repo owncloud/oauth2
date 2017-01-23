@@ -60,6 +60,9 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 	/** @var string $clientSecret */
 	private $clientSecret = '9yUZuGF6pecVaCfmIzvsFZakYNXCyr4QZqVzMIky3M3a6FMz7us4VZUf2AJVJ1v2';
 
+	/** @var string $redirectUri */
+	private $redirectUri = 'https://owncloud.org';
+
 	/** @var Client $client1 */
 	private $client1;
 
@@ -84,7 +87,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$client = new Client();
 		$client->setIdentifier($this->clientIdentifier1);
 		$client->setSecret($this->clientSecret);
-		$client->setRedirectUri('https://owncloud.org');
+		$client->setRedirectUri($this->redirectUri);
 		$client->setName('ownCloud');
 		$this->client1 = $this->clientMapper->insert($client);
 
@@ -116,7 +119,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$_SERVER['PHP_AUTH_USER'] = null;
 		$_SERVER['PHP_AUTH_PW'] = null;
 
-		$result = $this->controller->generateToken($this->authorizationCode->getCode());
+		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
 		$this->assertNotEmpty($json->message);
@@ -126,7 +129,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$_SERVER['PHP_AUTH_USER'] = 'test';
 		$_SERVER['PHP_AUTH_PW'] = $this->clientSecret;
 
-		$result = $this->controller->generateToken($this->authorizationCode->getCode());
+		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
 		$this->assertNotEmpty($json->message);
@@ -136,7 +139,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
 		$_SERVER['PHP_AUTH_PW'] = 'test';
 
-		$result = $this->controller->generateToken($this->authorizationCode->getCode());
+		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
 		$this->assertNotEmpty($json->message);
@@ -145,7 +148,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$_SERVER['PHP_AUTH_PW'] = $this->clientSecret;
 
-		$result = $this->controller->generateToken(null);
+		$result = $this->controller->generateToken('authorization_code', null);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
 		$this->assertNotEmpty($json->message);
@@ -154,7 +157,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier2;
 
-		$result = $this->controller->generateToken($this->authorizationCode->getCode());
+		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
 		$this->assertNotEmpty($json->message);
@@ -163,7 +166,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
 
-		$result = $this->controller->generateToken('test');
+		$result = $this->controller->generateToken('authorization_code', 'test', $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
 		$this->assertNotEmpty($json->message);
@@ -172,7 +175,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$this->authorizationCode->setExpires(time() - 1);
 		$this->authorizationCodeMapper->update($this->authorizationCode);
-		$result = $this->controller->generateToken($this->authorizationCode->getCode());
+		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
 		$this->assertNotEmpty($json->message);
@@ -181,7 +184,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$this->authorizationCode->resetExpires();
 		$this->authorizationCodeMapper->update($this->authorizationCode);
-		$result = $this->controller->generateToken($this->authorizationCode->getCode());
+		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
 		$this->assertNotEmpty($json->access_token);
@@ -189,7 +192,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$this->assertNotEmpty($json->token_type);
 		$this->assertEquals('Bearer', $json->token_type);
 		$this->assertNotEmpty($json->expires_in);
-		$this->assertEquals('3600', $json->expires_in);
+		$this->assertEquals(3600, $json->expires_in);
 		$this->assertNotEmpty($json->refresh_token);
 		$this->assertEquals(64, strlen($json->refresh_token));
 		$this->assertNotEmpty($json->user_id);

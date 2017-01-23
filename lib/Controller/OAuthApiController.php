@@ -81,61 +81,81 @@ class OAuthApiController extends ApiController {
 	 * @PublicPage
 	 * @CORS
 	 */
-	public function generateToken($code) {
-        if (is_null($code) || is_null($_SERVER['PHP_AUTH_USER'])
-            || is_null($_SERVER['PHP_AUTH_PW'])) {
+	public function generateToken($grant_type, $code = null, $redirect_uri = null, $refresh_token = null) {
+        if (!is_string($grant_type) || is_null($_SERVER['PHP_AUTH_USER']) || is_null($_SERVER['PHP_AUTH_PW'])) {
             return new JSONResponse(['message' => 'Missing credentials.'], Http::STATUS_BAD_REQUEST);
         }
 
-        try {
-			/** @var Client $client */
-            $client = $this->clientMapper->findByIdentifier($_SERVER['PHP_AUTH_USER']);
-        } catch (DoesNotExistException $exception) {
-            return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
-        }
-
-        if (strcmp($client->getSecret(), $_SERVER['PHP_AUTH_PW']) !== 0) {
-            return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
-        }
-
 		try {
-			/** @var AuthorizationCode $authorizationCode */
-			$authorizationCode = $this->authorizationCodeMapper->findByCode($code);
+			/** @var Client $client */
+			$client = $this->clientMapper->findByIdentifier($_SERVER['PHP_AUTH_USER']);
 		} catch (DoesNotExistException $exception) {
 			return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
 		}
 
-        if (strcmp($authorizationCode->getClientId(), $client->getId()) !== 0) {
-            return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
-        }
-
-        if ($authorizationCode->hasExpired()) {
+		if (strcmp($client->getSecret(), $_SERVER['PHP_AUTH_PW']) !== 0) {
 			return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
 		}
 
-		$token = Utilities::generateRandom();
-		$userId = $authorizationCode->getUserId();
-		$accessToken = new AccessToken();
-		$accessToken->setToken($token);
-		$accessToken->setClientId($authorizationCode->getClientId());
-		$accessToken->setUserId($userId);
-		$accessToken->resetExpires();
-		$this->accessTokenMapper->insert($accessToken);
+        switch ($grant_type) {
+			case 'authorization_code':
+				if (!is_string($code) || !is_string($redirect_uri)) {
+					return new JSONResponse(['message' => 'Missing credentials.'], Http::STATUS_BAD_REQUEST);
+				}
 
-		$token = Utilities::generateRandom();
-		$refreshToken = new RefreshToken();
-		$refreshToken->setToken($token);
-		$refreshToken->setClientId($authorizationCode->getClientId());
-		$refreshToken->setUserId($userId);
-		$this->refreshTokenMapper->insert($refreshToken);
+				try {
+					/** @var AuthorizationCode $authorizationCode */
+					$authorizationCode = $this->authorizationCodeMapper->findByCode($code);
+				} catch (DoesNotExistException $exception) {
+					return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+				}
 
-        $this->authorizationCodeMapper->delete($authorizationCode);
+				if (strcmp($authorizationCode->getClientId(), $client->getId()) !== 0) {
+					return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+				}
+
+				if ($authorizationCode->hasExpired()) {
+					return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+				}
+
+				if (!Utilities::validateRedirectUri($client->getRedirectUri(), urldecode($redirect_uri), $client->getAllowSubdomains())) {
+					return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+				}
+
+				$token = Utilities::generateRandom();
+				$userId = $authorizationCode->getUserId();
+				$accessToken = new AccessToken();
+				$accessToken->setToken($token);
+				$accessToken->setClientId($authorizationCode->getClientId());
+				$accessToken->setUserId($userId);
+				$accessToken->resetExpires();
+				$this->accessTokenMapper->insert($accessToken);
+
+				$token = Utilities::generateRandom();
+				$refreshToken = new RefreshToken();
+				$refreshToken->setToken($token);
+				$refreshToken->setClientId($authorizationCode->getClientId());
+				$refreshToken->setUserId($userId);
+				$this->refreshTokenMapper->insert($refreshToken);
+
+				$this->authorizationCodeMapper->delete($authorizationCode);
+
+				break;
+			case 'refresh_token':
+				if (!is_string($refresh_token)) {
+					return new JSONResponse(['message' => 'Missing credentials.'], Http::STATUS_BAD_REQUEST);
+				}
+
+				break;
+			default:
+				return new JSONResponse(['message' => 'Missing credentials.'], Http::STATUS_BAD_REQUEST);
+		}
 
         return new JSONResponse(
             [
                 'access_token' => $accessToken->getToken(),
                 'token_type' => 'Bearer',
-				'expires_in' => '3600',
+				'expires_in' => 3600,
 				'refresh_token' => $refreshToken->getToken(),
 				'user_id' => $userId
             ]
