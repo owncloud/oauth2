@@ -80,8 +80,8 @@ class SettingsController extends Controller {
      *
      */
     public function addClient() {
-		if (!isset($_POST['redirect_uri']) || !isset($_POST['name']) ||
-			filter_var($_POST['redirect_uri'], FILTER_VALIDATE_URL) === false) {
+		if (!isset($_POST['redirect_uri']) || !isset($_POST['name'])
+			|| filter_var($_POST['redirect_uri'], FILTER_VALIDATE_URL) === false) {
             return new RedirectResponse('../../settings/admin#oauth-2.0');
         }
 
@@ -90,6 +90,12 @@ class SettingsController extends Controller {
         $client->setSecret(Utilities::generateRandom());
         $client->setRedirectUri(trim($_POST['redirect_uri']));
         $client->setName(trim($_POST['name']));
+
+        if (isset($_POST['allow_subdomains'])) {
+        	$client->setAllowSubdomains(true);
+		} else {
+        	$client->setAllowSubdomains(false);
+		}
 
         $this->clientMapper->insert($client);
 

@@ -87,6 +87,7 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 		$client->setSecret('9yUZuGF6pecVaCfmIzvsFZakYNXCyr4QZqVzMIky3M3a6FMz7us4VZUf2AJVJ1v2');
 		$client->setRedirectUri($this->redirectUri);
 		$client->setName($this->name);
+		$client->setAllowSubdomains(false);
 		$this->client = $this->clientMapper->insert($client);
 
 		$authorizationCode = new AuthorizationCode();
@@ -121,41 +122,57 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testAddClient() {
+		$this->clientMapper->deleteAll();
+
 		$result = $this->controller->addClient();
 		$this->assertTrue($result instanceof RedirectResponse);
 		$this->assertEquals('../../settings/admin#oauth-2.0', $result->getRedirectURL());
-		$this->assertEquals(1, count($this->clientMapper->findAll()));
+		$this->assertEquals(0, count($this->clientMapper->findAll()));
 
 		$_POST['redirect_uri'] = 'test';
 		$result = $this->controller->addClient();
 		$this->assertTrue($result instanceof RedirectResponse);
 		$this->assertEquals('../../settings/admin#oauth-2.0', $result->getRedirectURL());
-		$this->assertEquals(1, count($this->clientMapper->findAll()));
+		$this->assertEquals(0, count($this->clientMapper->findAll()));
 
 		$_POST['redirect_uri'] = null;
 		$_POST['name'] = 'test';
 		$result = $this->controller->addClient();
 		$this->assertTrue($result instanceof RedirectResponse);
 		$this->assertEquals('../../settings/admin#oauth-2.0', $result->getRedirectURL());
-		$this->assertEquals(1, count($this->clientMapper->findAll()));
+		$this->assertEquals(0, count($this->clientMapper->findAll()));
 
 		$_POST['redirect_uri'] = 'test';
 		$_POST['name'] = 'test';
 		$result = $this->controller->addClient();
 		$this->assertTrue($result instanceof RedirectResponse);
 		$this->assertEquals('../../settings/admin#oauth-2.0', $result->getRedirectURL());
-		$this->assertEquals(1, count($this->clientMapper->findAll()));
+		$this->assertEquals(0, count($this->clientMapper->findAll()));
 
 		$_POST['redirect_uri'] = $this->redirectUri;
 		$_POST['name'] = $this->name;
 		$result = $this->controller->addClient();
 		$this->assertTrue($result instanceof RedirectResponse);
 		$this->assertEquals('../../settings/admin#oauth-2.0', $result->getRedirectURL());
-		$this->assertEquals(2, count($this->clientMapper->findAll()));
+		$this->assertEquals(1, count($this->clientMapper->findAll()));
 		/** @var Client $client */
 		$client = $this->clientMapper->findAll()[0];
 		$this->assertEquals($this->redirectUri, $client->getRedirectUri());
 		$this->assertEquals($this->name, $client->getName());
+		$this->assertEquals(0, $client->getAllowSubdomains());
+
+		$this->clientMapper->delete($client);
+
+		$_POST['allow_subdomains'] = '1';
+		$result = $this->controller->addClient();
+		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertEquals('../../settings/admin#oauth-2.0', $result->getRedirectURL());
+		$this->assertEquals(1, count($this->clientMapper->findAll()));
+		/** @var Client $client */
+		$client = $this->clientMapper->findAll()[0];
+		$this->assertEquals($this->redirectUri, $client->getRedirectUri());
+		$this->assertEquals($this->name, $client->getName());
+		$this->assertEquals(1, $client->getAllowSubdomains());
 	}
 
 	public function testDeleteClient() {

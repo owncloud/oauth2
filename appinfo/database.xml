@@ -39,6 +39,12 @@
                 <notnull>true</notnull>
                 <length>80</length>
             </field>
+            <field>
+                <name>allow_subdomains</name>
+                <type>boolean</type>
+                <default>false</default>
+                <notnull>true</notnull>
+            </field>
         </declaration>
     </table>
     <table>
