@@ -73,6 +73,7 @@ class PageControllerTest extends TestCase {
 		$container = $app->getContainer();
 
 		$this->clientMapper = $container->query('OCA\OAuth2\Db\ClientMapper');
+		$this->clientMapper->deleteAll();
 
 		/** @var Client $client */
 		$client = new Client();
