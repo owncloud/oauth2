@@ -147,6 +147,18 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$this->refreshTokenMapper->delete($this->refreshToken);
 	}
 
+	public function testGenerateTokenWithUnknownGrantType() {
+		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
+		$_SERVER['PHP_AUTH_PW'] = $this->clientSecret;
+
+		$result = $this->controller->generateToken('unknown');
+		$this->assertTrue($result instanceof JSONResponse);
+		$json = json_decode($result->render());
+		$this->assertNotEmpty($json->message);
+		$this->assertEquals('Unknown credentials.', $json->message);
+		$this->assertEquals(400, $result->getStatus());
+	}
+
 	public function testGenerateTokenWithAuthorizationCode() {
 		$_SERVER['PHP_AUTH_USER'] = null;
 		$_SERVER['PHP_AUTH_PW'] = null;
@@ -199,6 +211,13 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
 
 		$result = $this->controller->generateToken('authorization_code', 'test', $this->redirectUri);
+		$this->assertTrue($result instanceof JSONResponse);
+		$json = json_decode($result->render());
+		$this->assertNotEmpty($json->message);
+		$this->assertEquals('Unknown credentials.', $json->message);
+		$this->assertEquals(400, $result->getStatus());
+
+		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), 'http://www.example.org');
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
 		$this->assertNotEmpty($json->message);

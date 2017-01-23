@@ -147,7 +147,7 @@ class OAuthApiController extends ApiController {
 				$userId = $refreshToken->getUserId();
 				break;
 			default:
-				return new JSONResponse(['message' => 'Missing credentials.'], Http::STATUS_BAD_REQUEST);
+				return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
 		}
 
 		$this->authorizationCodeMapper->deleteByClient($client->getId());
