@@ -113,6 +113,37 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$this->refreshTokenMapper->find('qwertz');
 	}
 
+	public function testFindByToken() {
+		/** @var RefreshToken $refreshToken */
+		$refreshToken = $this->refreshTokenMapper->findByToken($this->token);
+
+		$this->assertEquals($this->id, $refreshToken->getId());
+		$this->assertEquals($this->token, $refreshToken->getToken());
+		$this->assertEquals($this->clientId, $refreshToken->getClientId());
+		$this->assertEquals($this->userId, $refreshToken->getUserId());
+	}
+
+	/**
+	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
+	 */
+	public function testFindByTokenDoesNotExistException() {
+		$this->refreshTokenMapper->findByToken('qwertz');
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testFindByTokenInvalidArgumentException1() {
+		$this->refreshTokenMapper->findByToken(null);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testFindByTokenInvalidArgumentException2() {
+		$this->refreshTokenMapper->findByToken(1);
+	}
+
 	public function testFindAll() {
 		$refreshTokens = $this->refreshTokenMapper->findAll();
 
