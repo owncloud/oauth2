@@ -39,6 +39,12 @@
                 <notnull>true</notnull>
                 <length>80</length>
             </field>
+            <field>
+                <name>allow_subdomains</name>
+                <type>boolean</type>
+                <default>false</default>
+                <notnull>true</notnull>
+            </field>
         </declaration>
     </table>
     <table>
@@ -72,7 +78,9 @@
             </field>
             <field>
                 <name>expires</name>
-                <type>timestamp</type>
+                <type>integer</type>
+                <unsigned>true</unsigned>
+                <notnull>true</notnull>
             </field>
         </declaration>
     </table>
@@ -107,7 +115,9 @@
             </field>
             <field>
                 <name>expires</name>
-                <type>timestamp</type>
+                <type>integer</type>
+                <unsigned>true</unsigned>
+                <notnull>true</notnull>
             </field>
         </declaration>
     </table>
@@ -139,10 +149,6 @@
                 <type>text</type>
                 <length>64</length>
                 <notnull>true</notnull>
-            </field>
-            <field>
-                <name>expires</name>
-                <type>timestamp</type>
             </field>
         </declaration>
     </table>

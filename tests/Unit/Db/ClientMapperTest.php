@@ -50,6 +50,9 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 	/** @var string $name */
 	private $name = 'ownCloud';
 
+	/** @var boolean $allowSubdomains */
+	private $allowSubdomains = true;
+
 	/** @var Client $client1 */
 	private $client1;
 
@@ -86,6 +89,7 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 		$client->setSecret($this->secret);
 		$client->setRedirectUri($this->redirectUri);
 		$client->setName($this->name);
+		$client->setAllowSubdomains($this->allowSubdomains);
 
 		$this->client1 = $this->clientMapper->insert($client);
 		$this->id = $this->client1->getId();
@@ -106,12 +110,14 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 		$authorizationCode->setCode('akYNVaCz7us4VZUf2f24QZqXCyrky3M39yUZuGF6pecVzMImIzvsFZa6FMAJVJ1v');
 		$authorizationCode->setClientId($this->id);
 		$authorizationCode->setUserId($this->userId);
+		$authorizationCode->resetExpires();
 		$this->authorizationCode = $this->authorizationCodeMapper->insert($authorizationCode);
 
 		$accessToken = new AccessToken();
 		$accessToken->setToken('qXF6pecVzMf2f24QZIzvImakYNVaCz7ussFZa6FMAJVJ1vCyrky3M39yUZuG4VZU');
 		$accessToken->setClientId($this->id);
 		$accessToken->setUserId($this->userId);
+		$accessToken->resetExpires();
 		$this->accessToken = $this->accessTokenMapper->insert($accessToken);
 	}
 
@@ -131,6 +137,7 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($this->secret, $client->getSecret());
 		$this->assertEquals($this->redirectUri, $client->getRedirectUri());
 		$this->assertEquals($this->name, $client->getName());
+		$this->assertEquals($this->allowSubdomains, $client->getAllowSubdomains());
 	}
 
 	/**
@@ -163,6 +170,7 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($this->secret, $client->getSecret());
 		$this->assertEquals($this->redirectUri, $client->getRedirectUri());
 		$this->assertEquals($this->name, $client->getName());
+		$this->assertEquals($this->allowSubdomains, $client->getAllowSubdomains());
 	}
 
 	/**
@@ -204,6 +212,7 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($this->secret, $client->getSecret());
 		$this->assertEquals($this->redirectUri, $client->getRedirectUri());
 		$this->assertEquals($this->name, $client->getName());
+		$this->assertEquals($this->allowSubdomains, $client->getAllowSubdomains());
 
 		$clients = $this->clientMapper->findByUser('qwertz');
 		$this->assertEmpty($clients);

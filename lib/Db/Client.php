@@ -37,6 +37,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setRedirectUri(string $redirectUri)
  * @method string getName()
  * @method void setName(string $name)
+ * @method boolean getAllowSubdomains()
+ * @method void setAllowSubdomains(boolean $value)
  */
 class Client extends Entity {
 
@@ -44,6 +46,7 @@ class Client extends Entity {
     protected $secret;
     protected $redirectUri;
     protected $name;
+    protected $allowSubdomains;
 
     public function __construct() {
         $this->addType('id', 'int');
@@ -51,6 +54,7 @@ class Client extends Entity {
         $this->addType('secret', 'string');
         $this->addType('redirect_uri', 'string');
         $this->addType('name', 'string');
+		$this->addType('allow_subdomains', 'boolean');
     }
 
 }

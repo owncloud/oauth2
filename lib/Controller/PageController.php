@@ -24,11 +24,14 @@
 
 namespace OCA\OAuth2\Controller;
 
+use InvalidArgumentException;
 use OC_Util;
+use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\AuthorizationCode;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
+use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCA\OAuth2\Utilities;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IRequest;
@@ -36,67 +39,76 @@ use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http;
 
 class PageController extends Controller {
 
-    /** @var ClientMapper */
-    private $clientMapper;
+	/** @var ClientMapper */
+	private $clientMapper;
 
 	/** @var AuthorizationCodeMapper */
 	private $authorizationCodeMapper;
 
-    /** @var string */
-    private $userId;
+	/** @var AccessTokenMapper */
+	private $accessTokenMapper;
+
+	/** @var RefreshTokenMapper */
+	private $refreshTokenMapper;
+
+	/** @var string */
+	private $userId;
 
 	/**
 	 * PageController constructor.
+	 *
 	 * @param string $AppName The name of the app.
 	 * @param IRequest $request The request.
 	 * @param ClientMapper $clientMapper The client mapper.
 	 * @param AuthorizationCodeMapper $authorizationCodeMapper The authorization code mapper.
+	 * @param AccessTokenMapper $accessTokenMapper The access token mapper.
+	 * @param RefreshTokenMapper $refreshTokenMapper The refresh token mapper.
 	 * @param string $UserId The user ID.
 	 */
-	public function __construct($AppName, IRequest $request, ClientMapper $clientMapper, AuthorizationCodeMapper $authorizationCodeMapper, $UserId) {
+	public function __construct($AppName, IRequest $request, ClientMapper $clientMapper, AuthorizationCodeMapper $authorizationCodeMapper, AccessTokenMapper $accessTokenMapper, RefreshTokenMapper $refreshTokenMapper, $UserId) {
 		parent::__construct($AppName, $request);
 
-        $this->clientMapper = $clientMapper;
+		$this->clientMapper = $clientMapper;
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
-        $this->userId = $UserId;
+		$this->accessTokenMapper = $accessTokenMapper;
+		$this->refreshTokenMapper = $refreshTokenMapper;
+		$this->userId = $UserId;
 	}
 
 	/**
 	 * Shows a view for the user to authorize a client.
 	 *
-     * @param string $response_type The expected response type.
-     * @param string $client_id The client identifier.
-     * @param string $redirect_uri The redirect URI.
-     * @param string $state The state.
-	 * @param string $scope The scope.
-     *
-     * @return TemplateResponse|RedirectResponse The authorize view or a
-     * redirection to the ownCloud main page.
-     *
+	 * @param string $response_type The expected response type.
+	 * @param string $client_id The client identifier.
+	 * @param string $redirect_uri The redirect URI.
+	 * @param string $state The state.
+	 *
+	 * @return TemplateResponse|RedirectResponse The authorize view or a
+	 * redirection to the ownCloud main page.
+	 *
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function authorize($response_type, $client_id, $redirect_uri, $state = null, $scope = null) {
+	public function authorize($response_type, $client_id, $redirect_uri, $state = null) {
 		if (!is_string($response_type) || !is_string($client_id)
-			|| !is_string($redirect_uri) || (isset($state) && !is_string($state))
-			|| (isset($scope) && !is_string($scope))) {
+			|| !is_string($redirect_uri) || (isset($state) && !is_string($state))) {
 			return new RedirectResponse(OC_Util::getDefaultPageUrl());
 		}
 
 		try {
 			/** @var Client $client */
-            $client = $this->clientMapper->findByIdentifier($client_id);
-        } catch (DoesNotExistException $exception) {
-            return new RedirectResponse(OC_Util::getDefaultPageUrl());
-        }
+			$client = $this->clientMapper->findByIdentifier($client_id);
+		} catch (DoesNotExistException $exception) {
+			return new RedirectResponse(OC_Util::getDefaultPageUrl());
+		}
 
-        if (strcmp($client->getRedirectUri(), urldecode($redirect_uri)) !== 0) {
-            return new RedirectResponse(OC_Util::getDefaultPageUrl());
-        }
+		if (!Utilities::validateRedirectUri($client->getRedirectUri(), urldecode($redirect_uri), $client->getAllowSubdomains())) {
+			return new RedirectResponse(OC_Util::getDefaultPageUrl());
+		}
+
 		if (strcmp($response_type, 'code') !== 0) {
 			return new RedirectResponse(OC_Util::getDefaultPageUrl());
 		}
@@ -106,52 +118,55 @@ class PageController extends Controller {
 
 	/**
 	 * Implements the OAuth 2.0 Authorization Response.
-     *
-     * @param string $response_type The expected response type.
+	 *
+	 * @param string $response_type The expected response type.
 	 * @param string $client_id The client identifier.
 	 * @param string $redirect_uri The redirect URI.
 	 * @param string $state The state.
-	 * @param string $scope The scope.
-     *
-     * @return RedirectResponse|JSONResponse Redirection to the given
-     * redirect_uri or a JSON with an error message.
+	 *
+	 * @return RedirectResponse|JSONResponse Redirection to the given
+	 * redirect_uri or a JSON with an error message.
 	 *
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function generateAuthorizationCode($response_type, $client_id, $redirect_uri, $state = null, $scope = null) {
-        if (!is_string($response_type) || !is_string($client_id)
-            || !is_string($redirect_uri) || (isset($state) && !is_string($state))
-			|| (isset($scope) && !is_string($scope))) {
-            return new RedirectResponse(OC_Util::getDefaultPageUrl());
-        }
+	public function generateAuthorizationCode($response_type, $client_id, $redirect_uri, $state = null) {
+		if (!is_string($response_type) || !is_string($client_id)
+			|| !is_string($redirect_uri) || (isset($state) && !is_string($state))) {
+			return new RedirectResponse(OC_Util::getDefaultPageUrl());
+		}
 
 		switch ($response_type) {
 			case 'code':
-                try {
+				try {
 					/** @var Client $client */
-                    $client = $this->clientMapper->findByIdentifier($client_id);
-                } catch (DoesNotExistException $exception) {
-                    return new RedirectResponse(OC_Util::getDefaultPageUrl());
-                }
+					$client = $this->clientMapper->findByIdentifier($client_id);
+				} catch (DoesNotExistException $exception) {
+					return new RedirectResponse(OC_Util::getDefaultPageUrl());
+				}
 
-                if (strcmp($client->getRedirectUri(), urldecode($redirect_uri)) !== 0) {
-                    return new RedirectResponse(OC_Util::getDefaultPageUrl());
-                }
+				if (!Utilities::validateRedirectUri($client->getRedirectUri(), urldecode($redirect_uri), $client->getAllowSubdomains())) {
+					return new RedirectResponse(OC_Util::getDefaultPageUrl());
+				}
+
+				$this->authorizationCodeMapper->deleteByClientUser($client->getId(), $this->userId);
+				$this->accessTokenMapper->deleteByClientUser($client->getId(), $this->userId);
+				$this->refreshTokenMapper->deleteByClientUser($client->getId(), $this->userId);
 
 				$code = Utilities::generateRandom();
 				$authorizationCode = new AuthorizationCode();
 				$authorizationCode->setCode($code);
 				$authorizationCode->setClientId($client->getId());
 				$authorizationCode->setUserId($this->userId);
+				$authorizationCode->resetExpires();
 				$this->authorizationCodeMapper->insert($authorizationCode);
 
-                $result = urldecode($redirect_uri);
-                $result = $result. '?code=' . $code;
-                if (!is_null($state)) {
-                    $result = $result. '&state=' . urlencode($state);
-                }
-                return new RedirectResponse($result);
+				$result = urldecode($redirect_uri);
+				$result = $result . '?code=' . $code;
+				if (!is_null($state)) {
+					$result = $result . '&state=' . urlencode($state);
+				}
+				return new RedirectResponse($result);
 				break;
 			default:
 				return new RedirectResponse(OC_Util::getDefaultPageUrl());

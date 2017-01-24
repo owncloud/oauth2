@@ -145,4 +145,5 @@ class AccessTokenMapper extends Mapper {
         $stmt = $this->execute($sql, [$clientId], null, null);
         $stmt->closeCursor();
     }
+
 }
