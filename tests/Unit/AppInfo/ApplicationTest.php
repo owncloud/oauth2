@@ -25,7 +25,6 @@
 namespace OCA\OAuth2\Tests\Unit\Controller;
 
 use OCA\OAuth2\AppInfo\Application;
-use OCA\OAuth2\Hooks\UserHooks;
 use PHPUnit_Framework_TestCase;
 
 class ApplicationTest extends PHPUnit_Framework_TestCase {
@@ -35,19 +34,6 @@ class ApplicationTest extends PHPUnit_Framework_TestCase {
 
 	public function setUp() {
 		$this->application = new Application();
-	}
-
-	public function testRegisterService() {
-		$app = new Application();
-		$c = $app->getContainer();
-		$c->registerService('UserHooks', function($c){
-			return new UserHooks(
-				$c->query('ServerContainer')->getUserManager(),
-				$c->query('OCA\OAuth2\Db\AccessTokenMapper'),
-				$c->query('OCA\OAuth2\Db\AuthorizationCodeMapper'),
-				$c->query('OCA\OAuth2\Db\RefreshTokenMapper')
-			);
-		});
 	}
 
 	public function testRegisterSettings() {
