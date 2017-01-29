@@ -22,42 +22,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-namespace OCA\OAuth2\AppInfo;
+namespace OCA\OAuth2\Tests\Unit\Controller;
 
+use OCA\OAuth2\AppInfo\Application;
 use OCA\OAuth2\Hooks\UserHooks;
-use OCP\AppFramework\App;
+use PHPUnit_Framework_TestCase;
 
-class Application extends App {
+class UserHooksTest extends PHPUnit_Framework_TestCase {
 
-	/**
-	 * Application constructor.
-	 *
-	 * @param array $urlParams an array with variables extracted from the routes
-	 */
-	public function __construct(array $urlParams = array()) {
-		parent::__construct('oauth2', $urlParams);
+	/** @var UserHooks $userHooks */
+	private $userHooks;
 
-		$container = $this->getContainer();
+	public function setUp() {
+		$app = new Application();
+		$container = $app->getContainer();
 
-		/**
-		 * Hooks
-		 */
-		$container->registerService('UserHooks', function ($c) {
-			return new UserHooks(
-				$c->query('ServerContainer')->getUserManager(),
-				$c->query('OCA\OAuth2\Db\AuthorizationCodeMapper'),
-				$c->query('OCA\OAuth2\Db\AccessTokenMapper'),
-				$c->query('OCA\OAuth2\Db\RefreshTokenMapper')
-			);
-		});
+		$userManager = $container->query('ServerContainer')->getUserManager();
+		$authorizationCodeMapper = $container->query('OCA\OAuth2\Db\AuthorizationCodeMapper');
+		$accessTokenMapper = $container->query('OCA\OAuth2\Db\AccessTokenMapper');
+		$refreshTokenMapper = $container->query('OCA\OAuth2\Db\RefreshTokenMapper');
+
+		$this->userHooks = new UserHooks($userManager, $authorizationCodeMapper, $accessTokenMapper, $refreshTokenMapper);
 	}
 
-	/**
-	 * Registers settings pages.
-	 */
-	public function registerSettings() {
-		\OCP\App::registerAdmin('oauth2', 'settings-admin');
-		\OCP\App::registerPersonal('oauth2', 'settings-personal');
+	public function testRegister() {
+		$this->userHooks->register();
 	}
 
 }
