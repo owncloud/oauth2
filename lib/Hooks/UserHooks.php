@@ -35,11 +35,11 @@ class UserHooks {
 	/** @var IUserManager */
 	private $userManager;
 
-	/** @var  AccessTokenMapper */
-	private $accessTokenMapper;
-
 	/** @var AuthorizationCodeMapper */
 	private $authorizationCodeMapper;
+
+	/** @var  AccessTokenMapper */
+	private $accessTokenMapper;
 
 	/** @var RefreshTokenMapper */
 	private $refreshTokenMapper;
@@ -47,18 +47,18 @@ class UserHooks {
 	/**
 	 * UserHooks constructor.
 	 *
-	 * @param IUserManager $userManager
-	 * @param AccessTokenMapper $accessTokenMapper
-	 * @param AuthorizationCodeMapper $authorizationCodeMapper
-	 * @param RefreshTokenMapper $refreshTokenMapper
+	 * @param IUserManager $userManager The user manager
+	 * @param AuthorizationCodeMapper $authorizationCodeMapper The authorization code mapper
+	 * @param AccessTokenMapper $accessTokenMapper The access token mapper
+	 * @param RefreshTokenMapper $refreshTokenMapper The refresh token mapper
 	 */
 	public function __construct(IUserManager $userManager,
-								AccessTokenMapper $accessTokenMapper,
 								AuthorizationCodeMapper $authorizationCodeMapper,
+								AccessTokenMapper $accessTokenMapper,
 								RefreshTokenMapper $refreshTokenMapper) {
 		$this->userManager = $userManager;
-		$this->accessTokenMapper = $accessTokenMapper;
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
+		$this->accessTokenMapper = $accessTokenMapper;
 		$this->refreshTokenMapper = $refreshTokenMapper;
 	}
 
@@ -73,6 +73,7 @@ class UserHooks {
 				$this->refreshTokenMapper->deleteByUser($user->getUID());
 			}
 		};
+
 		$this->userManager->listen('\OC\User', 'preDelete', $callback);
 	}
 
