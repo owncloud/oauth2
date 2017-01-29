@@ -72,7 +72,7 @@ class AccessTokenMapper extends Mapper {
 			throw new InvalidArgumentException('Argument token must be a string');
 		}
 
-		$sql = 'SELECT * FROM `'. $this->tableName . '` WHERE `token` = ?';
+		$sql = 'SELECT * FROM `' . $this->tableName . '` WHERE `token` = ?';
 		return $this->findEntity($sql, [$token], null, null);
 	}
 
@@ -87,6 +87,39 @@ class AccessTokenMapper extends Mapper {
 	public function findAll($limit = null, $offset = null) {
 		$sql = 'SELECT * FROM `' . $this->tableName . '`';
 		return $this->findEntities($sql, [], $limit, $offset);
+	}
+
+	/**
+	 * Deletes all access tokens for a given client_id.
+	 * Used for client deletion by the administrator in the
+	 * admin settings.
+	 *
+	 * @param int $clientId The client ID
+	 * @see SettingsController::deleteClient()
+	 */
+	public function deleteByClient($clientId) {
+		if (!is_int($clientId)) {
+			throw new InvalidArgumentException('Argument client_id must be an int');
+		}
+
+		$sql = 'DELETE FROM `' . $this->tableName . '` ' . ' WHERE `client_id` = ?';
+		$stmt = $this->execute($sql, [$clientId], null, null);
+		$stmt->closeCursor();
+	}
+
+	/**
+	 * Deletes all access token for the given user ID.
+	 *
+	 * @param string $userId The user ID.
+	 */
+	public function deleteByUser($userId) {
+		if (!is_string($userId)) {
+			throw new InvalidArgumentException('Argument user_id must be a string');
+		}
+
+		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `user_id` = ?';
+		$stmt = $this->execute($sql, [$userId], null, null);
+		$stmt->closeCursor();
 	}
 
 	/**
@@ -106,44 +139,12 @@ class AccessTokenMapper extends Mapper {
 	}
 
 	/**
-	 * Deletes all access token for the given userID.
-	 *
-	 * @param string $userId The user ID.
-	 */
-	public function deleteByUser($userId){
-		if (!is_string($userId)) {
-			throw new InvalidArgumentException('Argument user_id must be a string');
-		}
-		$sql = 'DELETE FROM `oc_oauth2_access_tokens` WHERE `user_id` = ?';
-		$stmt = $this->execute($sql, [$userId], null);
-		$stmt->closeCursor();
-	}
-
-	/**
 	 * Deletes all entities from the table
 	 */
-	public function deleteAll(){
+	public function deleteAll() {
 		$sql = 'DELETE FROM `' . $this->tableName . '`';
 		$stmt = $this->execute($sql, []);
 		$stmt->closeCursor();
 	}
-
-    /**
-     * Deletes all access tokens for a given client_id.
-     * Used for client deletion by the administrator in the
-     * admin settings.
-     *
-     * @param int $clientId The client ID
-     * @see SettingsController::deleteClient()
-     */
-	public function deleteByClient($clientId) {
-        if (!is_int($clientId)) {
-            throw new InvalidArgumentException('Argument client_id must be an int');
-        }
-
-        $sql = 'DELETE FROM `' . $this->tableName . '` ' . ' WHERE `client_id` = ?';
-        $stmt = $this->execute($sql, [$clientId], null, null);
-        $stmt->closeCursor();
-    }
 
 }

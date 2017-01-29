@@ -75,15 +75,15 @@ class RefreshTokenMapper extends Mapper {
 			throw new InvalidArgumentException('Argument token must be a string');
 		}
 
-		$sql = 'SELECT * FROM `'. $this->tableName . '` WHERE `token` = ?';
+		$sql = 'SELECT * FROM `' . $this->tableName . '` WHERE `token` = ?';
 		return $this->findEntity($sql, [$token], null, null);
 	}
 
-    /**
-     * Selects all refresh codes.
-     *
-     * @param int $limit The maximum number of rows.
-     * @param int $offset From which row we want to start.
+	/**
+	 * Selects all refresh codes.
+	 *
+	 * @param int $limit The maximum number of rows.
+	 * @param int $offset From which row we want to start.
 	 *
 	 * @return array All refresh codes.
 	 */
@@ -127,7 +127,7 @@ class RefreshTokenMapper extends Mapper {
 	}
 
 	/**
-	 * Deletes all refresh tokens for the given userID.
+	 * Deletes all refresh tokens for the given user ID.
 	 *
 	 * @param string $userId The user ID.
 	 */
@@ -135,8 +135,9 @@ class RefreshTokenMapper extends Mapper {
 		if (!is_string($userId)) {
 			throw new InvalidArgumentException('Argument user_id must be a string');
 		}
-		$sql = 'DELETE FROM `oc_oauth2_refresh_tokens` WHERE `user_id` = ?';
-		$stmt = $this->execute($sql, [$userId], null);
+
+		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `user_id` = ?';
+		$stmt = $this->execute($sql, [$userId], null, null);
 		$stmt->closeCursor();
 	}
 

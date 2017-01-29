@@ -31,62 +31,95 @@ use OCP\AppFramework\Db\Mapper;
 
 class AuthorizationCodeMapper extends Mapper {
 
-    public function __construct(IDb $db) {
-        parent::__construct($db, 'oauth2_authorization_codes');
-    }
+	public function __construct(IDb $db) {
+		parent::__construct($db, 'oauth2_authorization_codes');
+	}
 
-    /**
-     * Selects an authorization code by its ID.
-     *
-     * @param int $id The authorization code's ID.
-     *
-     * @return Entity The authorization code entity.
-     *
-     * @throws \OCP\AppFramework\Db\DoesNotExistException if not found.
-     * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more
-     * than one result.
-     */
-    public function find($id) {
+	/**
+	 * Selects an authorization code by its ID.
+	 *
+	 * @param int $id The authorization code's ID.
+	 *
+	 * @return Entity The authorization code entity.
+	 *
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found.
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more
+	 * than one result.
+	 */
+	public function find($id) {
 		if (!is_int($id)) {
 			throw new InvalidArgumentException('Argument id must be an int');
 		}
 
-        $sql = 'SELECT * FROM `'. $this->tableName . '` WHERE `id` = ?';
-        return $this->findEntity($sql, [$id], null, null);
-    }
+		$sql = 'SELECT * FROM `' . $this->tableName . '` WHERE `id` = ?';
+		return $this->findEntity($sql, [$id], null, null);
+	}
 
-    /**
-     * Selects an authorization code by its code.
-     *
-     * @param string $code The authorization code.
-     *
-     * @return Entity The authorization code entity.
-     *
-     * @throws \OCP\AppFramework\Db\DoesNotExistException if not found.
-     * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more
-     * than one result.
-     */
-    public function findByCode($code) {
+	/**
+	 * Selects an authorization code by its code.
+	 *
+	 * @param string $code The authorization code.
+	 *
+	 * @return Entity The authorization code entity.
+	 *
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found.
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more
+	 * than one result.
+	 */
+	public function findByCode($code) {
 		if (!is_string($code)) {
 			throw new InvalidArgumentException('Argument code must be a string');
 		}
 
-        $sql = 'SELECT * FROM `'. $this->tableName . '` WHERE `code` = ?';
-        return $this->findEntity($sql, [$code], null, null);
-    }
+		$sql = 'SELECT * FROM `' . $this->tableName . '` WHERE `code` = ?';
+		return $this->findEntity($sql, [$code], null, null);
+	}
 
-    /**
-     * Selects all authorization codes.
-     *
-     * @param int $limit The maximum number of rows.
-     * @param int $offset From which row we want to start.
+	/**
+	 * Selects all authorization codes.
 	 *
-     * @return array All authorization codes.
-     */
-    public function findAll($limit = null, $offset = null) {
-        $sql = 'SELECT * FROM `' . $this->tableName . '`';
-        return $this->findEntities($sql, [], $limit, $offset);
-    }
+	 * @param int $limit The maximum number of rows.
+	 * @param int $offset From which row we want to start.
+	 *
+	 * @return array All authorization codes.
+	 */
+	public function findAll($limit = null, $offset = null) {
+		$sql = 'SELECT * FROM `' . $this->tableName . '`';
+		return $this->findEntities($sql, [], $limit, $offset);
+	}
+
+	/**
+	 * Deletes all authorization codes for a given client ID.
+	 * Used for client deletion by the administrator in the
+	 * admin settings.
+	 *
+	 * @param int $clientId The client ID
+	 * @see SettingsController::deleteClient()
+	 */
+	public function deleteByClient($clientId) {
+		if (!is_int($clientId)) {
+			throw new InvalidArgumentException('Argument client_id must be an int');
+		}
+
+		$sql = 'DELETE FROM `' . $this->tableName . '` ' . 'WHERE `client_id` = ?';
+		$stmt = $this->execute($sql, [$clientId], null, null);
+		$stmt->closeCursor();
+	}
+
+	/**
+	 * Deletes all authorization codes for the given user ID.
+	 *
+	 * @param string $userId The user ID.
+	 */
+	public function deleteByUser($userId) {
+		if (!is_string($userId)) {
+			throw new InvalidArgumentException('Argument user_id must be a string');
+		}
+
+		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `user_id` = ?';
+		$stmt = $this->execute($sql, [$userId], null, null);
+		$stmt->closeCursor();
+	}
 
 	/**
 	 * Deletes all authorization codes for given client and user ID.
@@ -110,38 +143,6 @@ class AuthorizationCodeMapper extends Mapper {
 	public function deleteAll() {
 		$sql = 'DELETE FROM `' . $this->tableName . '`';
 		$stmt = $this->execute($sql, []);
-		$stmt->closeCursor();
-	}
-
-    /**
-     * Deletes all authorization codes for a given client ID.
-     * Used for client deletion by the administrator in the
-     * admin settings.
-     *
-     * @param int $clientId The client ID
-     * @see SettingsController::deleteClient()
-     */
-    public function deleteByClient($clientId) {
-        if (!is_int($clientId)) {
-            throw new InvalidArgumentException('Argument client_id must be an int');
-        }
-
-        $sql = 'DELETE FROM `' . $this->tableName . '` ' . 'WHERE `client_id` = ?';
-        $stmt = $this->execute($sql, [$clientId], null, null);
-        $stmt->closeCursor();
-    }
-
-	/**
-	 * Deletes all authorization codes for the given userID.
-	 *
-	 * @param string $userId The user ID.
-	 */
-	public function deleteByUser($userId){
-		if (!is_string($userId)) {
-			throw new InvalidArgumentException('Argument user_id must be a string');
-		}
-		$sql = 'DELETE FROM `oc_oauth2_authorization_codes` WHERE user_id = ?';
-		$stmt = $this->execute($sql, [$userId], null);
 		$stmt->closeCursor();
 	}
 

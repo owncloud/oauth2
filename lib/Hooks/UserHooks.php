@@ -60,7 +60,6 @@ class UserHooks {
 		$this->accessTokenMapper = $accessTokenMapper;
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
 		$this->refreshTokenMapper = $refreshTokenMapper;
-
 	}
 
 	public function register() {
@@ -68,8 +67,7 @@ class UserHooks {
 		 * @param User $user
 		 */
 		$callback = function ($user) {
-			// your code that executes before $user is deleted
-			if (null !== ($user->getUID())) {
+			if (!is_null($user->getUID())) {
 				$this->accessTokenMapper->deleteByUser($user->getUID());
 				$this->authorizationCodeMapper->deleteByUser($user->getUID());
 				$this->refreshTokenMapper->deleteByUser($user->getUID());
