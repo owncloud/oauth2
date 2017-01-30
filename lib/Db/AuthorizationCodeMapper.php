@@ -146,4 +146,13 @@ class AuthorizationCodeMapper extends Mapper {
 		$stmt->closeCursor();
 	}
 
+	/**
+	 * Deletes all expired authorization codes.
+	 */
+	public function cleanUp() {
+		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `expires` <= ' . time();
+		$stmt = $this->execute($sql);
+		$stmt->closeCursor();
+	}
+
 }

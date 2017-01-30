@@ -147,4 +147,13 @@ class AccessTokenMapper extends Mapper {
 		$stmt->closeCursor();
 	}
 
+	/**
+	 * Deletes all expired access tokens.
+	 */
+	public function cleanUp() {
+		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `expires` <= ' . time();
+		$stmt = $this->execute($sql);
+		$stmt->closeCursor();
+	}
+
 }

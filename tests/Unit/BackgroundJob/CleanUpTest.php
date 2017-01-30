@@ -22,33 +22,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-namespace OCA\OAuth2\Tests\Unit\Hooks;
+namespace OCA\OAuth2\Tests\Unit\BackgroundJob;
 
-use OCA\OAuth2\AppInfo\Application;
-use OCA\OAuth2\Hooks\UserHooks;
+use OCA\OAuth2\BackgroundJob\CleanUp;
 use PHPUnit_Framework_TestCase;
 
-class UserHooksTest extends PHPUnit_Framework_TestCase {
+class CleanUpTest extends PHPUnit_Framework_TestCase {
 
-	/** @var UserHooks $userHooks */
-	private $userHooks;
-
-	public function setUp() {
-		parent::setUp();
-
-		$app = new Application();
-		$container = $app->getContainer();
-
-		$userManager = $container->query('ServerContainer')->getUserManager();
-		$authorizationCodeMapper = $container->query('OCA\OAuth2\Db\AuthorizationCodeMapper');
-		$accessTokenMapper = $container->query('OCA\OAuth2\Db\AccessTokenMapper');
-		$refreshTokenMapper = $container->query('OCA\OAuth2\Db\RefreshTokenMapper');
-
-		$this->userHooks = new UserHooks($userManager, $authorizationCodeMapper, $accessTokenMapper, $refreshTokenMapper);
-	}
-
-	public function testRegister() {
-		$this->userHooks->register();
+	public function testRun() {
+		CleanUp::run();
 	}
 
 }
