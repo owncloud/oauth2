@@ -29,11 +29,28 @@ use OCA\OAuth2\Controller\SettingsController;
 use OCP\AppFramework\Db\Entity;
 use OCP\IDb;
 use OCP\AppFramework\Db\Mapper;
+use OCP\ILogger;
 
 class AccessTokenMapper extends Mapper {
 
-	public function __construct(IDb $db) {
+	/** @var ILogger */
+	private $logger;
+
+	/** @var string */
+	private $appName;
+
+	/**
+	 * AccessTokenMapper constructor.
+	 *
+	 * @param IDb $db Instance of the Db abstraction layer.
+	 * @param ILogger $logger The logger.
+	 * @param null|string $appName The app's name.
+	 */
+	public function __construct(IDb $db, ILogger $logger, $appName) {
 		parent::__construct($db, 'oauth2_access_tokens');
+
+		$this->logger = $logger;
+		$this->appName = $appName;
 	}
 
 	/**
@@ -151,6 +168,7 @@ class AccessTokenMapper extends Mapper {
 	 * Deletes all expired access tokens.
 	 */
 	public function cleanUp() {
+		$this->logger->info('Cleaning up expired Access Tokens.', ['app' => $this->appName]);
 		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `expires` <= ' . time();
 		$stmt = $this->execute($sql);
 		$stmt->closeCursor();
