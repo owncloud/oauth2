@@ -67,6 +67,8 @@ class PageControllerTest extends TestCase {
 	private $client;
 
 	public function setUp() {
+		parent::setUp();
+
 		$request = $this->getMockBuilder('OCP\IRequest')->getMock();
 
 		$app = new Application();
@@ -94,6 +96,8 @@ class PageControllerTest extends TestCase {
 	}
 
 	public function tearDown() {
+		parent::tearDown();
+
 		$this->clientMapper->delete($this->client);
 	}
 

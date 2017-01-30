@@ -56,6 +56,8 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 	private $refreshToken2;
 
 	public function setUp() {
+		parent::setUp();
+
 		$app = new Application();
 		$container = $app->getContainer();
 
@@ -78,6 +80,8 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function tearDown() {
+		parent::tearDown();
+
 		$this->refreshTokenMapper->delete($this->refreshToken1);
 		$this->refreshTokenMapper->delete($this->refreshToken2);
 	}

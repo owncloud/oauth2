@@ -33,6 +33,8 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase {
 	private $accessToken;
 
 	public function setUp() {
+		parent::setUp();
+
 		$this->accessToken = new AccessToken();
 	}
 

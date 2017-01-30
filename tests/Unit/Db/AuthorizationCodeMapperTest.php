@@ -56,6 +56,8 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 	private $authorizationCode2;
 
 	public function setUp() {
+		parent::setUp();
+
 		$app = new Application();
 		$container = $app->getContainer();
 
@@ -80,6 +82,8 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function tearDown() {
+		parent::tearDown();
+
 		$this->authorizationCodeMapper->delete($this->authorizationCode1);
 		$this->authorizationCodeMapper->delete($this->authorizationCode2);
 	}

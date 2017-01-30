@@ -67,6 +67,8 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 	private $name = 'ownCloud';
 
 	public function setUp() {
+		parent::setUp();
+
 		$request = $this->getMockBuilder('OCP\IRequest')->getMock();
 
 		$app = new Application();
@@ -114,6 +116,8 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function tearDown() {
+		parent::tearDown();
+
 		$this->clientMapper->deleteAll();
 		$this->authorizationCodeMapper->deleteAll();
 		$this->accessTokenMapper->deleteAll();

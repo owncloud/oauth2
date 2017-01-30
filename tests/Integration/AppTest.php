@@ -36,6 +36,7 @@ class AppTest extends TestCase {
 
     public function setUp() {
         parent::setUp();
+
         $app = new Application();
         $this->container = $app->getContainer();
     }

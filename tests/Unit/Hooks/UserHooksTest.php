@@ -34,6 +34,8 @@ class UserHooksTest extends PHPUnit_Framework_TestCase {
 	private $userHooks;
 
 	public function setUp() {
+		parent::setUp();
+
 		$app = new Application();
 		$container = $app->getContainer();
 

@@ -78,6 +78,8 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 	private $accessToken;
 
 	public function setUp() {
+		parent::setUp();
+
 		$app = new Application();
 		$container = $app->getContainer();
 
@@ -122,6 +124,8 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function tearDown() {
+		parent::tearDown();
+
 		$this->clientMapper->delete($this->client1);
 		$this->clientMapper->delete($this->client2);
 		$this->authorizationCodeMapper->delete($this->authorizationCode);

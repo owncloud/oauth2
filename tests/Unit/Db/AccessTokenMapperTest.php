@@ -56,6 +56,8 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 	private $accessToken2;
 
 	public function setUp() {
+		parent::setUp();
+
 		$app = new Application();
 		$container = $app->getContainer();
 
@@ -80,6 +82,8 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function tearDown() {
+		parent::tearDown();
+
 		$this->accessTokenMapper->delete($this->accessToken1);
 		$this->accessTokenMapper->delete($this->accessToken2);
 	}

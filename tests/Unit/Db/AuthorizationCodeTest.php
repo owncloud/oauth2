@@ -33,6 +33,8 @@ class AuthorizationCodeTest extends PHPUnit_Framework_TestCase {
 	private $authorizationCode;
 
 	public function setUp() {
+		parent::setUp();
+
 		$this->authorizationCode = new AuthorizationCode();
 	}
 
