@@ -22,31 +22,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-namespace OCA\OAuth2\Db;
+namespace OCA\OAuth2\Tests\Unit\Db;
 
-use OCP\AppFramework\Db\Entity;
+use OCA\OAuth2\Db\AccessToken;
+use PHPUnit_Framework_TestCase;
 
-/**
- * Class RefreshToken
- *
- * @method string getToken()
- * @method void setToken(string $token)
- * @method int getClientId()
- * @method void setClientId(int $clientId)
- * @method string getUserId()
- * @method void setUserId(string $userId)
- */
-class RefreshToken extends Entity {
+class AccessTokenTest extends PHPUnit_Framework_TestCase {
 
-    protected $token;
-    protected $clientId;
-    protected $userId;
+	/** @var AccessToken $accessToken */
+	private $accessToken;
 
-    public function __construct() {
-        $this->addType('id', 'int');
-        $this->addType('token', 'string');
-        $this->addType('client_id', 'int');
-        $this->addType('user_id', 'string');
-    }
+	public function setUp() {
+		parent::setUp();
+
+		$this->accessToken = new AccessToken();
+	}
+
+	public function testResetExpires() {
+		$expected = time() + 3600;
+		$this->accessToken->resetExpires();
+		$this->assertEquals($expected, $this->accessToken->getExpires(), '', 1);
+	}
+
+	public function testHasExpired() {
+		$this->assertTrue($this->accessToken->hasExpired());
+		$this->accessToken->setExpires(10);
+		$this->assertTrue($this->accessToken->hasExpired());
+		$this->accessToken->resetExpires();
+		$this->assertFalse($this->accessToken->hasExpired());
+	}
 
 }

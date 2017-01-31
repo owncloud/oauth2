@@ -24,23 +24,38 @@
 
 namespace OCA\OAuth2\AppInfo;
 
+use OCA\OAuth2\Hooks\UserHooks;
 use OCP\AppFramework\App;
 
 class Application extends App {
 
-    /**
-     * Application constructor.
-     *
-     * @param array $urlParams an array with variables extracted from the routes
-     */
-    public function __construct(array $urlParams=array()){
-        parent::__construct('oauth2', $urlParams);
-    }
+	/**
+	 * Application constructor.
+	 *
+	 * @param array $urlParams an array with variables extracted from the routes
+	 */
+	public function __construct(array $urlParams = array()) {
+		parent::__construct('oauth2', $urlParams);
+
+		$container = $this->getContainer();
+
+		/**
+		 * Hooks
+		 */
+		$container->registerService('UserHooks', function ($c) {
+			return new UserHooks(
+				$c->query('ServerContainer')->getUserManager(),
+				$c->query('OCA\OAuth2\Db\AuthorizationCodeMapper'),
+				$c->query('OCA\OAuth2\Db\AccessTokenMapper'),
+				$c->query('OCA\OAuth2\Db\RefreshTokenMapper')
+			);
+		});
+	}
 
 	/**
 	 * Registers settings pages.
 	 */
-    public function registerSettings() {
+	public function registerSettings() {
 		\OCP\App::registerAdmin('oauth2', 'settings-admin');
 		\OCP\App::registerPersonal('oauth2', 'settings-personal');
 	}

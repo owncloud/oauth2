@@ -25,11 +25,14 @@
 namespace OCA\OAuth2\Tests\Unit\Controller;
 
 use OCA\OAuth2\Controller\OAuthApiController;
+use OCA\OAuth2\Db\AccessToken;
 use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\AuthorizationCode;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
+use OCA\OAuth2\Db\RefreshToken;
+use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCP\AppFramework\Http\JSONResponse;
 use PHPUnit_Framework_TestCase;
 use OCA\OAuth2\AppInfo\Application;
@@ -48,6 +51,9 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 	/** @var AccessTokenMapper */
 	private $accessTokenMapper;
 
+	/** @var RefreshTokenMapper */
+	private $refreshTokenMapper;
+
 	/** @var string $userId */
 	private $userId = 'john';
 
@@ -60,6 +66,9 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 	/** @var string $clientSecret */
 	private $clientSecret = '9yUZuGF6pecVaCfmIzvsFZakYNXCyr4QZqVzMIky3M3a6FMz7us4VZUf2AJVJ1v2';
 
+	/** @var string $redirectUri */
+	private $redirectUri = 'https://owncloud.org';
+
 	/** @var Client $client1 */
 	private $client1;
 
@@ -69,21 +78,34 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 	/** @var AuthorizationCode $authorizationCode */
 	private $authorizationCode;
 
+	/** @var AccessToken $accessToken */
+	private $accessToken;
+
+	/** @var RefreshToken $refreshToken */
+	private $refreshToken;
+
 	public function setUp() {
+		parent::setUp();
+
 		$request = $this->getMockBuilder('OCP\IRequest')->getMock();
 
 		$app = new Application();
 		$container = $app->getContainer();
 
 		$this->clientMapper = $container->query('OCA\OAuth2\Db\ClientMapper');
+		$this->clientMapper->deleteAll();
 		$this->authorizationCodeMapper = $container->query('OCA\OAuth2\Db\AuthorizationCodeMapper');
+		$this->authorizationCodeMapper->deleteAll();
 		$this->accessTokenMapper = $container->query('OCA\OAuth2\Db\AccessTokenMapper');
+		$this->accessTokenMapper->deleteAll();
+		$this->refreshTokenMapper = $container->query('OCA\OAuth2\Db\RefreshTokenMapper');
+		$this->refreshTokenMapper->deleteAll();
 
 		/** @var Client $client */
 		$client = new Client();
 		$client->setIdentifier($this->clientIdentifier1);
 		$client->setSecret($this->clientSecret);
-		$client->setRedirectUri('https://owncloud.org');
+		$client->setRedirectUri($this->redirectUri);
 		$client->setName('ownCloud');
 		$this->client1 = $this->clientMapper->insert($client);
 
@@ -99,23 +121,53 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$authorizationCode->setCode('kYz7us4yr4QZyUZuMIkVZUf1v2IzvsFZaNXCy3M3amqVGF62AJVJaCfz6FM9pecV');
 		$authorizationCode->setClientId($this->client1->getId());
 		$authorizationCode->setUserId($this->userId);
-		$authorizationCode->setExpires(null);
+		$authorizationCode->resetExpires();
 		$this->authorizationCode = $this->authorizationCodeMapper->insert($authorizationCode);
 
-		$this->controller = new OAuthApiController('oauth2', $request, $this->clientMapper, $this->authorizationCodeMapper, $this->accessTokenMapper);
+		/** @var AccessToken $accessToken */
+		$accessToken = new AccessToken();
+		$accessToken->setToken('sFz6FM9pecGF62kYz7us43M3amqVZaNQZyUZuMIkAJVJaCfVyr4Uf1v2IzvVZXCy');
+		$accessToken->setClientId($this->client1->getId());
+		$accessToken->setUserId($this->userId);
+		$accessToken->resetExpires();
+		$this->accessToken = $this->accessTokenMapper->insert($accessToken);
+
+		/** @var RefreshToken $refreshToken */
+		$refreshToken = new RefreshToken();
+		$refreshToken->setToken('GF62kYz7us4yr4Uf1v2IzvsFZaNQZyUZuMIkAJVJaCfz6FM9pecVZXCy3M3amqVV');
+		$refreshToken->setClientId($this->client1->getId());
+		$refreshToken->setUserId($this->userId);
+		$this->refreshToken = $this->refreshTokenMapper->insert($refreshToken);
+
+		$this->controller = new OAuthApiController('oauth2', $request, $this->clientMapper, $this->authorizationCodeMapper, $this->accessTokenMapper, $this->refreshTokenMapper);
 	}
 
 	public function tearDown() {
-		$this->authorizationCodeMapper->delete($this->authorizationCode);
+		parent::tearDown();
+
 		$this->clientMapper->delete($this->client1);
 		$this->clientMapper->delete($this->client2);
+		$this->authorizationCodeMapper->delete($this->authorizationCode);
+		$this->refreshTokenMapper->delete($this->refreshToken);
 	}
 
-	public function testGenerateToken() {
+	public function testGenerateTokenWithUnknownGrantType() {
+		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
+		$_SERVER['PHP_AUTH_PW'] = $this->clientSecret;
+
+		$result = $this->controller->generateToken('unknown');
+		$this->assertTrue($result instanceof JSONResponse);
+		$json = json_decode($result->render());
+		$this->assertNotEmpty($json->message);
+		$this->assertEquals('Unknown credentials.', $json->message);
+		$this->assertEquals(400, $result->getStatus());
+	}
+
+	public function testGenerateTokenWithAuthorizationCode() {
 		$_SERVER['PHP_AUTH_USER'] = null;
 		$_SERVER['PHP_AUTH_PW'] = null;
 
-		$result = $this->controller->generateToken($this->authorizationCode->getCode());
+		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
 		$this->assertNotEmpty($json->message);
@@ -125,7 +177,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$_SERVER['PHP_AUTH_USER'] = 'test';
 		$_SERVER['PHP_AUTH_PW'] = $this->clientSecret;
 
-		$result = $this->controller->generateToken($this->authorizationCode->getCode());
+		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
 		$this->assertNotEmpty($json->message);
@@ -135,7 +187,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
 		$_SERVER['PHP_AUTH_PW'] = 'test';
 
-		$result = $this->controller->generateToken($this->authorizationCode->getCode());
+		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
 		$this->assertNotEmpty($json->message);
@@ -144,7 +196,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$_SERVER['PHP_AUTH_PW'] = $this->clientSecret;
 
-		$result = $this->controller->generateToken(null);
+		$result = $this->controller->generateToken('authorization_code', null);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
 		$this->assertNotEmpty($json->message);
@@ -153,7 +205,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier2;
 
-		$result = $this->controller->generateToken($this->authorizationCode->getCode());
+		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
 		$this->assertNotEmpty($json->message);
@@ -162,26 +214,124 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
 
-		$result = $this->controller->generateToken('test');
+		$result = $this->controller->generateToken('authorization_code', 'test', $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
 		$this->assertNotEmpty($json->message);
 		$this->assertEquals('Unknown credentials.', $json->message);
 		$this->assertEquals(400, $result->getStatus());
 
-		$result = $this->controller->generateToken($this->authorizationCode->getCode());
+		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), 'http://www.example.org');
+		$this->assertTrue($result instanceof JSONResponse);
+		$json = json_decode($result->render());
+		$this->assertNotEmpty($json->message);
+		$this->assertEquals('Unknown credentials.', $json->message);
+		$this->assertEquals(400, $result->getStatus());
+
+		$this->authorizationCode->setExpires(time() - 1);
+		$this->authorizationCodeMapper->update($this->authorizationCode);
+		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
+		$this->assertTrue($result instanceof JSONResponse);
+		$json = json_decode($result->render());
+		$this->assertNotEmpty($json->message);
+		$this->assertEquals('Unknown credentials.', $json->message);
+		$this->assertEquals(400, $result->getStatus());
+
+		$this->authorizationCode->resetExpires();
+		$this->authorizationCodeMapper->update($this->authorizationCode);
+		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
 		$this->assertNotEmpty($json->access_token);
 		$this->assertEquals(64, strlen($json->access_token));
 		$this->assertNotEmpty($json->token_type);
 		$this->assertEquals('Bearer', $json->token_type);
+		$this->assertNotEmpty($json->expires_in);
+		$this->assertEquals(3600, $json->expires_in);
+		$this->assertNotEmpty($json->refresh_token);
+		$this->assertEquals(64, strlen($json->refresh_token));
 		$this->assertNotEmpty($json->user_id);
 		$this->assertEquals($this->userId, $json->user_id);
 		$this->assertEquals(200, $result->getStatus());
+		$this->assertEquals(0, count($this->authorizationCodeMapper->findAll()));
+		$this->assertEquals(1, count($this->accessTokenMapper->findAll()));
+		$this->assertEquals(1, count($this->refreshTokenMapper->findAll()));
+	}
 
-		$accessToken = $this->accessTokenMapper->findByToken($json->access_token);
-		$this->accessTokenMapper->delete($accessToken);
+	public function testGenerateTokenWithRefreshToken() {
+		$_SERVER['PHP_AUTH_USER'] = null;
+		$_SERVER['PHP_AUTH_PW'] = null;
+
+		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
+		$this->assertTrue($result instanceof JSONResponse);
+		$json = json_decode($result->render());
+		$this->assertNotEmpty($json->message);
+		$this->assertEquals('Missing credentials.', $json->message);
+		$this->assertEquals(400, $result->getStatus());
+
+		$_SERVER['PHP_AUTH_USER'] = 'test';
+		$_SERVER['PHP_AUTH_PW'] = $this->clientSecret;
+
+		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
+		$this->assertTrue($result instanceof JSONResponse);
+		$json = json_decode($result->render());
+		$this->assertNotEmpty($json->message);
+		$this->assertEquals('Unknown credentials.', $json->message);
+		$this->assertEquals(400, $result->getStatus());
+
+		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
+		$_SERVER['PHP_AUTH_PW'] = 'test';
+
+		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
+		$this->assertTrue($result instanceof JSONResponse);
+		$json = json_decode($result->render());
+		$this->assertNotEmpty($json->message);
+		$this->assertEquals('Unknown credentials.', $json->message);
+		$this->assertEquals(400, $result->getStatus());
+
+		$_SERVER['PHP_AUTH_PW'] = $this->clientSecret;
+
+		$result = $this->controller->generateToken('refresh_token', null, null, null);
+		$this->assertTrue($result instanceof JSONResponse);
+		$json = json_decode($result->render());
+		$this->assertNotEmpty($json->message);
+		$this->assertEquals('Missing credentials.', $json->message);
+		$this->assertEquals(400, $result->getStatus());
+
+		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier2;
+
+		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
+		$this->assertTrue($result instanceof JSONResponse);
+		$json = json_decode($result->render());
+		$this->assertNotEmpty($json->message);
+		$this->assertEquals('Unknown credentials.', $json->message);
+		$this->assertEquals(400, $result->getStatus());
+
+		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
+
+		$result = $this->controller->generateToken('refresh_token', null, null, 'test');
+		$this->assertTrue($result instanceof JSONResponse);
+		$json = json_decode($result->render());
+		$this->assertNotEmpty($json->message);
+		$this->assertEquals('Unknown credentials.', $json->message);
+		$this->assertEquals(400, $result->getStatus());
+
+		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
+		$this->assertTrue($result instanceof JSONResponse);
+		$json = json_decode($result->render());
+		$this->assertNotEmpty($json->access_token);
+		$this->assertEquals(64, strlen($json->access_token));
+		$this->assertNotEmpty($json->token_type);
+		$this->assertEquals('Bearer', $json->token_type);
+		$this->assertNotEmpty($json->expires_in);
+		$this->assertEquals(3600, $json->expires_in);
+		$this->assertNotEmpty($json->refresh_token);
+		$this->assertEquals(64, strlen($json->refresh_token));
+		$this->assertNotEmpty($json->user_id);
+		$this->assertEquals($this->userId, $json->user_id);
+		$this->assertEquals(200, $result->getStatus());
+		$this->assertEquals(1, count($this->accessTokenMapper->findAll()));
+		$this->assertEquals(1, count($this->refreshTokenMapper->findAll()));
 	}
 
 }

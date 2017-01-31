@@ -43,6 +43,9 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 	/** @var int $clientId */
 	private $clientId = 1;
 
+	/** @var int $expires */
+	private $expires = 12;
+
 	/** @var RefreshToken $refreshToken1 */
 	private $refreshToken1;
 
@@ -53,6 +56,8 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 	private $refreshToken2;
 
 	public function setUp() {
+		parent::setUp();
+
 		$app = new Application();
 		$container = $app->getContainer();
 
@@ -63,7 +68,6 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$refreshToken->setToken($this->token);
 		$refreshToken->setClientId($this->clientId);
 		$refreshToken->setUserId($this->userId);
-		$refreshToken->setExpires(null);
 
 		$this->refreshToken1 = $this->refreshTokenMapper->insert($refreshToken);
 		$this->id = $this->refreshToken1->getId();
@@ -72,11 +76,12 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$refreshToken->setToken('XCy4QZI7s4yr3MmkcVv2IzvkVZUf1asFZaYzuGF6uyUZ6FM9pef2AqVzMJ3VJaCN');
 		$refreshToken->setClientId(1);
 		$refreshToken->setUserId('max');
-		$refreshToken->setExpires(null);
 		$this->refreshToken2 = $this->refreshTokenMapper->insert($refreshToken);
 	}
 
 	public function tearDown() {
+		parent::tearDown();
+
 		$this->refreshTokenMapper->delete($this->refreshToken1);
 		$this->refreshTokenMapper->delete($this->refreshToken2);
 	}
@@ -89,7 +94,6 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($this->token, $refreshToken->getToken());
 		$this->assertEquals($this->clientId, $refreshToken->getClientId());
 		$this->assertEquals($this->userId, $refreshToken->getUserId());
-		$this->assertNull($refreshToken->getExpires());
 	}
 
 	/**
@@ -111,6 +115,37 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testFindInvalidArgumentException2() {
 		$this->refreshTokenMapper->find('qwertz');
+	}
+
+	public function testFindByToken() {
+		/** @var RefreshToken $refreshToken */
+		$refreshToken = $this->refreshTokenMapper->findByToken($this->token);
+
+		$this->assertEquals($this->id, $refreshToken->getId());
+		$this->assertEquals($this->token, $refreshToken->getToken());
+		$this->assertEquals($this->clientId, $refreshToken->getClientId());
+		$this->assertEquals($this->userId, $refreshToken->getUserId());
+	}
+
+	/**
+	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
+	 */
+	public function testFindByTokenDoesNotExistException() {
+		$this->refreshTokenMapper->findByToken('qwertz');
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testFindByTokenInvalidArgumentException1() {
+		$this->refreshTokenMapper->findByToken(null);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testFindByTokenInvalidArgumentException2() {
+		$this->refreshTokenMapper->findByToken(1);
 	}
 
 	public function testFindAll() {
@@ -187,6 +222,33 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testDeleteByClientInvalidArgumentException2() {
 		$this->refreshTokenMapper->deleteByClient('qwertz');
+	}
+
+	public function testDeleteByUser() {
+		$this->refreshTokenMapper->deleteByUser($this->userId);
+		$this->assertEquals(1, count($this->refreshTokenMapper->findAll()));
+	}
+
+	/**
+	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
+	 */
+	public function testDeleteByUserDoesNotExistException() {
+		$this->refreshTokenMapper->deleteByUser($this->userId);
+		$this->refreshTokenMapper->find($this->id);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByUserInvalidArgumentException1() {
+		$this->refreshTokenMapper->deleteByUser(null);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByUserInvalidArgumentException2() {
+		$this->refreshTokenMapper->deleteByUser(true);
 	}
 
 	public function testDeleteAll() {

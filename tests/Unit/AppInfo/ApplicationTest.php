@@ -33,6 +33,8 @@ class ApplicationTest extends PHPUnit_Framework_TestCase {
 	private $application;
 
 	public function setUp() {
+		parent::setUp();
+
 		$this->application = new Application();
 	}
 

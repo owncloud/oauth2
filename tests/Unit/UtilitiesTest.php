@@ -37,4 +37,49 @@ class PageControllerTest extends PHPUnit_Framework_TestCase {
 		$this->assertFalse(strpos($random, '/'));
 	}
 
+	public function testValidateRedirectUri() {
+		$this->assertFalse(
+			Utilities::validateRedirectUri(
+				'http://owncloud.org:80/test?q=1',
+				'https://owncloud.org:80/test?q=1',
+				false)
+		);
+		$this->assertTrue(
+			Utilities::validateRedirectUri(
+				'https://owncloud.org:80/test?q=1',
+				'https://sso.owncloud.org:80/test?q=1',
+				true)
+		);
+		$this->assertFalse(
+			Utilities::validateRedirectUri(
+				'https://owncloud.org:80/test?q=1',
+				'https://sso.owncloud.de:80/test?q=1',
+				true)
+		);
+		$this->assertFalse(
+			Utilities::validateRedirectUri(
+				'https://owncloud.org:80/test?q=1',
+				'https://sso.owncloud.org:80/test?q=1',
+				false)
+		);
+		$this->assertFalse(
+			Utilities::validateRedirectUri(
+				'https://owncloud.org:80/test?q=1',
+				'https://owncloud.org:90/test?q=1',
+				false)
+		);
+		$this->assertFalse(
+			Utilities::validateRedirectUri(
+				'https://owncloud.org:80/tests?q=1',
+				'https://owncloud.org:80/test?q=1',
+				false)
+		);
+		$this->assertFalse(
+			Utilities::validateRedirectUri(
+				'https://owncloud.org:80/test?q=1',
+				'https://owncloud.org:80/test?q=0',
+				false)
+		);
+	}
+
 }

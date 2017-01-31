@@ -43,6 +43,9 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 	/** @var int $clientId */
 	private $clientId = 1;
 
+	/** @var int $expires */
+	private $expires = 12;
+
 	/** @var AccessToken $accessToken1 */
 	private $accessToken1;
 
@@ -53,6 +56,8 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 	private $accessToken2;
 
 	public function setUp() {
+		parent::setUp();
+
 		$app = new Application();
 		$container = $app->getContainer();
 
@@ -63,7 +68,7 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$accessToken->setToken($this->token);
 		$accessToken->setClientId($this->clientId);
 		$accessToken->setUserId($this->userId);
-		$accessToken->setExpires(null);
+		$accessToken->setExpires($this->expires);
 
 		$this->accessToken1 = $this->accessTokenMapper->insert($accessToken);
 		$this->id = $this->accessToken1->getId();
@@ -72,11 +77,13 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$accessToken->setToken('s4yr3M3VJaCNXCy4QZI7uyUZkVZUf1a6FM9pefmkcVv2IzvsFZaYzuGF62AqVzMJ');
 		$accessToken->setClientId(1);
 		$accessToken->setUserId('max');
-		$accessToken->setExpires(null);
+		$accessToken->resetExpires();
 		$this->accessToken2 = $this->accessTokenMapper->insert($accessToken);
 	}
 
 	public function tearDown() {
+		parent::tearDown();
+
 		$this->accessTokenMapper->delete($this->accessToken1);
 		$this->accessTokenMapper->delete($this->accessToken2);
 	}
@@ -89,7 +96,7 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($this->token, $accessToken->getToken());
 		$this->assertEquals($this->clientId, $accessToken->getClientId());
 		$this->assertEquals($this->userId, $accessToken->getUserId());
-		$this->assertNull($accessToken->getExpires());
+		$this->assertEquals($this->expires, $accessToken->getExpires());
 	}
 
 	/**
@@ -121,7 +128,7 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($this->token, $accessToken->getToken());
 		$this->assertEquals($this->clientId, $accessToken->getClientId());
 		$this->assertEquals($this->userId, $accessToken->getUserId());
-		$this->assertNull($accessToken->getExpires());
+		$this->assertEquals($this->expires, $accessToken->getExpires());
 	}
 
 	/**
@@ -219,6 +226,33 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testDeleteByClientInvalidArgumentException2() {
 		$this->accessTokenMapper->deleteByClient('qwertz');
+	}
+
+	public function testDeleteByUser() {
+		$this->accessTokenMapper->deleteByUser($this->userId);
+		$this->assertEquals(1, count($this->accessTokenMapper->findAll()));
+	}
+
+	/**
+	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
+	 */
+	public function testDeleteByUserDoesNotExistException() {
+		$this->accessTokenMapper->deleteByUser($this->userId);
+		$this->accessTokenMapper->find($this->id);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByUserInvalidArgumentException1() {
+		$this->accessTokenMapper->deleteByUser(null);
+	}
+
+	/**
+	 * @expectedException \InvalidArgumentException
+	 */
+	public function testDeleteByUserInvalidArgumentException2() {
+		$this->accessTokenMapper->deleteByUser(true);
 	}
 
 	public function testDeleteAll() {

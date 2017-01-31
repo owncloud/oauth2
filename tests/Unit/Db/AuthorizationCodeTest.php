@@ -22,31 +22,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-namespace OCA\OAuth2\Db;
+namespace OCA\OAuth2\Tests\Unit\Db;
 
-use OCP\AppFramework\Db\Entity;
+use OCA\OAuth2\Db\AuthorizationCode;
+use PHPUnit_Framework_TestCase;
 
-/**
- * Class RefreshToken
- *
- * @method string getToken()
- * @method void setToken(string $token)
- * @method int getClientId()
- * @method void setClientId(int $clientId)
- * @method string getUserId()
- * @method void setUserId(string $userId)
- */
-class RefreshToken extends Entity {
+class AuthorizationCodeTest extends PHPUnit_Framework_TestCase {
 
-    protected $token;
-    protected $clientId;
-    protected $userId;
+	/** @var AuthorizationCode $authorizationCode */
+	private $authorizationCode;
 
-    public function __construct() {
-        $this->addType('id', 'int');
-        $this->addType('token', 'string');
-        $this->addType('client_id', 'int');
-        $this->addType('user_id', 'string');
-    }
+	public function setUp() {
+		parent::setUp();
+
+		$this->authorizationCode = new AuthorizationCode();
+	}
+
+	public function testResetExpires() {
+		$expected = time() + 600;
+		$this->authorizationCode->resetExpires();
+		$this->assertEquals($expected, $this->authorizationCode->getExpires(), '', 1);
+	}
+
+	public function testHasExpired() {
+		$this->assertTrue($this->authorizationCode->hasExpired());
+		$this->authorizationCode->setExpires(10);
+		$this->assertTrue($this->authorizationCode->hasExpired());
+		$this->authorizationCode->resetExpires();
+		$this->assertFalse($this->authorizationCode->hasExpired());
+	}
 
 }
