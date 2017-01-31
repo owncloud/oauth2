@@ -25,6 +25,7 @@
 namespace OCA\OAuth2\Db;
 
 use InvalidArgumentException;
+use OCA\OAuth2\AppInfo\Application;
 use OCP\AppFramework\Db\Entity;
 use OCP\IDb;
 use OCP\AppFramework\Db\Mapper;
@@ -47,6 +48,9 @@ class AuthorizationCodeMapper extends Mapper {
 	 */
 	public function __construct(IDb $db, ILogger $logger, $appName) {
 		parent::__construct($db, 'oauth2_authorization_codes');
+
+		$this->logger = $logger;
+		$this->appName = $appName;
 	}
 
 	/**
