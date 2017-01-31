@@ -158,8 +158,8 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$result = $this->controller->generateToken('unknown');
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
-		$this->assertNotEmpty($json->message);
-		$this->assertEquals('Unknown credentials.', $json->message);
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('invalid_grant', $json->error);
 		$this->assertEquals(400, $result->getStatus());
 	}
 
@@ -170,8 +170,8 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
-		$this->assertNotEmpty($json->message);
-		$this->assertEquals('Missing credentials.', $json->message);
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('invalid_request', $json->error);
 		$this->assertEquals(400, $result->getStatus());
 
 		$_SERVER['PHP_AUTH_USER'] = 'test';
@@ -180,8 +180,8 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
-		$this->assertNotEmpty($json->message);
-		$this->assertEquals('Unknown credentials.', $json->message);
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('invalid_client', $json->error);
 		$this->assertEquals(400, $result->getStatus());
 
 		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
@@ -190,8 +190,8 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
-		$this->assertNotEmpty($json->message);
-		$this->assertEquals('Unknown credentials.', $json->message);
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('invalid_client', $json->error);
 		$this->assertEquals(400, $result->getStatus());
 
 		$_SERVER['PHP_AUTH_PW'] = $this->clientSecret;
@@ -199,8 +199,8 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$result = $this->controller->generateToken('authorization_code', null);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
-		$this->assertNotEmpty($json->message);
-		$this->assertEquals('Missing credentials.', $json->message);
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('invalid_request', $json->error);
 		$this->assertEquals(400, $result->getStatus());
 
 		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier2;
@@ -208,8 +208,8 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
-		$this->assertNotEmpty($json->message);
-		$this->assertEquals('Unknown credentials.', $json->message);
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('invalid_grant', $json->error);
 		$this->assertEquals(400, $result->getStatus());
 
 		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
@@ -217,15 +217,15 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$result = $this->controller->generateToken('authorization_code', 'test', $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
-		$this->assertNotEmpty($json->message);
-		$this->assertEquals('Unknown credentials.', $json->message);
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('invalid_grant', $json->error);
 		$this->assertEquals(400, $result->getStatus());
 
 		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), 'http://www.example.org');
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
-		$this->assertNotEmpty($json->message);
-		$this->assertEquals('Unknown credentials.', $json->message);
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('invalid_grant', $json->error);
 		$this->assertEquals(400, $result->getStatus());
 
 		$this->authorizationCode->setExpires(time() - 1);
@@ -233,8 +233,8 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
-		$this->assertNotEmpty($json->message);
-		$this->assertEquals('Unknown credentials.', $json->message);
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('invalid_grant', $json->error);
 		$this->assertEquals(400, $result->getStatus());
 
 		$this->authorizationCode->resetExpires();
@@ -265,8 +265,8 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
-		$this->assertNotEmpty($json->message);
-		$this->assertEquals('Missing credentials.', $json->message);
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('invalid_request', $json->error);
 		$this->assertEquals(400, $result->getStatus());
 
 		$_SERVER['PHP_AUTH_USER'] = 'test';
@@ -275,8 +275,8 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
-		$this->assertNotEmpty($json->message);
-		$this->assertEquals('Unknown credentials.', $json->message);
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('invalid_client', $json->error);
 		$this->assertEquals(400, $result->getStatus());
 
 		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
@@ -285,8 +285,8 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
-		$this->assertNotEmpty($json->message);
-		$this->assertEquals('Unknown credentials.', $json->message);
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('invalid_client', $json->error);
 		$this->assertEquals(400, $result->getStatus());
 
 		$_SERVER['PHP_AUTH_PW'] = $this->clientSecret;
@@ -294,8 +294,8 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$result = $this->controller->generateToken('refresh_token', null, null, null);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
-		$this->assertNotEmpty($json->message);
-		$this->assertEquals('Missing credentials.', $json->message);
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('invalid_request', $json->error);
 		$this->assertEquals(400, $result->getStatus());
 
 		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier2;
@@ -303,8 +303,8 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
-		$this->assertNotEmpty($json->message);
-		$this->assertEquals('Unknown credentials.', $json->message);
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('invalid_grant', $json->error);
 		$this->assertEquals(400, $result->getStatus());
 
 		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
@@ -312,8 +312,8 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$result = $this->controller->generateToken('refresh_token', null, null, 'test');
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
-		$this->assertNotEmpty($json->message);
-		$this->assertEquals('Unknown credentials.', $json->message);
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('invalid_grant', $json->error);
 		$this->assertEquals(400, $result->getStatus());
 
 		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());

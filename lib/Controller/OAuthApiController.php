@@ -86,68 +86,72 @@ class OAuthApiController extends ApiController {
 	 * @CORS
 	 */
 	public function generateToken($grant_type, $code = null, $redirect_uri = null, $refresh_token = null) {
-		if (!is_string($grant_type) || is_null($_SERVER['PHP_AUTH_USER']) || is_null($_SERVER['PHP_AUTH_PW'])) {
-			return new JSONResponse(['message' => 'Missing credentials.'], Http::STATUS_BAD_REQUEST);
+		if (!is_string($grant_type)) {
+			return new JSONResponse(['error' => 'invalid_request'], Http::STATUS_BAD_REQUEST);
+		}
+
+		if (is_null($_SERVER['PHP_AUTH_USER']) || is_null($_SERVER['PHP_AUTH_PW'])) {
+			return new JSONResponse(['error' => 'invalid_request'], Http::STATUS_BAD_REQUEST);
 		}
 
 		try {
 			/** @var Client $client */
 			$client = $this->clientMapper->findByIdentifier($_SERVER['PHP_AUTH_USER']);
 		} catch (DoesNotExistException $exception) {
-			return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+			return new JSONResponse(['error' => 'invalid_client'], Http::STATUS_BAD_REQUEST);
 		}
 
 		if (strcmp($client->getSecret(), $_SERVER['PHP_AUTH_PW']) !== 0) {
-			return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+			return new JSONResponse(['error' => 'invalid_client'], Http::STATUS_BAD_REQUEST);
 		}
 
 		switch ($grant_type) {
 			case 'authorization_code':
 				if (!is_string($code) || !is_string($redirect_uri)) {
-					return new JSONResponse(['message' => 'Missing credentials.'], Http::STATUS_BAD_REQUEST);
+					return new JSONResponse(['error' => 'invalid_request'], Http::STATUS_BAD_REQUEST);
 				}
 
 				try {
 					/** @var AuthorizationCode $authorizationCode */
 					$authorizationCode = $this->authorizationCodeMapper->findByCode($code);
 				} catch (DoesNotExistException $exception) {
-					return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
 
 				if (strcmp($authorizationCode->getClientId(), $client->getId()) !== 0) {
-					return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
 
 				if ($authorizationCode->hasExpired()) {
-					return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
 
 				if (!Utilities::validateRedirectUri($client->getRedirectUri(), urldecode($redirect_uri), $client->getAllowSubdomains())) {
-					return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
 
 				$userId = $authorizationCode->getUserId();
 				break;
 			case 'refresh_token':
 				if (!is_string($refresh_token)) {
-					return new JSONResponse(['message' => 'Missing credentials.'], Http::STATUS_BAD_REQUEST);
+					return new JSONResponse(['error' => 'invalid_request'], Http::STATUS_BAD_REQUEST);
 				}
 
 				try {
 					/** @var RefreshToken $refreshToken */
 					$refreshToken = $this->refreshTokenMapper->findByToken($refresh_token);
 				} catch (DoesNotExistException $exception) {
-					return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
 
 				if (strcmp($refreshToken->getClientId(), $client->getId()) !== 0) {
-					return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
 
 				$userId = $refreshToken->getUserId();
 				break;
 			default:
-				return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
+				return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 		}
 
 		$this->authorizationCodeMapper->deleteByClient($client->getId());
