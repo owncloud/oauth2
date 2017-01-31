@@ -165,11 +165,11 @@ class AccessTokenMapper extends Mapper {
 	}
 
 	/**
-	 * Deletes all expired access tokens.
+	 * Deletes all access tokens that expired one week before.
 	 */
 	public function cleanUp() {
 		$this->logger->info('Cleaning up expired Access Tokens.', ['app' => $this->appName]);
-		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `expires` <= ' . time();
+		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `expires` <= ' . (time() - 60 * 60 * 24 * 7);
 		$stmt = $this->execute($sql);
 		$stmt->closeCursor();
 	}
