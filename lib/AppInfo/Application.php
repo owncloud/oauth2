@@ -39,9 +39,7 @@ class Application extends App {
 
 		$container = $this->getContainer();
 
-		/**
-		 * Hooks
-		 */
+		// Hooks
 		$container->registerService('UserHooks', function ($c) {
 			return new UserHooks(
 				$c->query('ServerContainer')->getUserManager(),
@@ -49,6 +47,11 @@ class Application extends App {
 				$c->query('OCA\OAuth2\Db\AccessTokenMapper'),
 				$c->query('OCA\OAuth2\Db\RefreshTokenMapper')
 			);
+		});
+
+		// Logger
+		$container->registerService('Logger', function ($c) {
+			return $c->query('ServerContainer')->getLogger();
 		});
 	}
 

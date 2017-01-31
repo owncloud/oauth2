@@ -25,14 +25,32 @@
 namespace OCA\OAuth2\Db;
 
 use InvalidArgumentException;
+use OCA\OAuth2\AppInfo\Application;
 use OCP\AppFramework\Db\Entity;
 use OCP\IDb;
 use OCP\AppFramework\Db\Mapper;
+use OCP\ILogger;
 
 class AuthorizationCodeMapper extends Mapper {
 
-	public function __construct(IDb $db) {
+	/** @var ILogger */
+	private $logger;
+
+	/** @var string */
+	private $appName;
+
+	/**
+	 * AuthorizationCodeMapper constructor.
+	 *
+	 * @param IDb $db Instance of the Db abstraction layer.
+	 * @param ILogger $logger The logger.
+	 * @param null|string $appName The app's name.
+	 */
+	public function __construct(IDb $db, ILogger $logger, $appName) {
 		parent::__construct($db, 'oauth2_authorization_codes');
+
+		$this->logger = $logger;
+		$this->appName = $appName;
 	}
 
 	/**
@@ -143,6 +161,16 @@ class AuthorizationCodeMapper extends Mapper {
 	public function deleteAll() {
 		$sql = 'DELETE FROM `' . $this->tableName . '`';
 		$stmt = $this->execute($sql, []);
+		$stmt->closeCursor();
+	}
+
+	/**
+	 * Deletes all expired authorization codes.
+	 */
+	public function cleanUp() {
+		$this->logger->info('Cleaning up expired Authorization Codes.', ['app' => $this->appName]);
+		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `expires` <= ' . time();
+		$stmt = $this->execute($sql);
 		$stmt->closeCursor();
 	}
 

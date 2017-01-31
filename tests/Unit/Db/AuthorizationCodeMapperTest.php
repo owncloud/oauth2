@@ -261,4 +261,11 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(0, count($this->authorizationCodeMapper->findAll()));
 	}
 
+	public function testCleanUp() {
+		$this->assertEquals(2, count($this->authorizationCodeMapper->findAll()));
+		$this->authorizationCodeMapper->cleanUp();
+		$this->assertEquals(1, count($this->authorizationCodeMapper->findAll()));
+		$this->assertEquals($this->authorizationCode2->getCode(), $this->authorizationCodeMapper->findAll()[0]->getCode());
+	}
+
 }

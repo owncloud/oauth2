@@ -261,4 +261,11 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(0, count($this->accessTokenMapper->findAll()));
 	}
 
+	public function testCleanUp() {
+		$this->assertEquals(2, count($this->accessTokenMapper->findAll()));
+		$this->accessTokenMapper->cleanUp();
+		$this->assertEquals(1, count($this->accessTokenMapper->findAll()));
+		$this->assertEquals($this->accessToken2->getToken(), $this->accessTokenMapper->findAll()[0]->getToken());
+	}
+
 }

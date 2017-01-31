@@ -22,7 +22,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-namespace OCA\OAuth2\Tests\Integration\Controller;
+namespace OCA\OAuth2\Tests\Integration;
 
 use OCA\OAuth2\AppInfo\Application;
 use OCP\App\IAppManager;

@@ -22,7 +22,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-namespace OCA\OAuth2\Tests\Unit\Controller;
+namespace OCA\OAuth2\Tests\Unit\AppInfo;
 
 use OCA\OAuth2\AppInfo\Application;
 use PHPUnit_Framework_TestCase;
