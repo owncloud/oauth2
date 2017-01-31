@@ -150,9 +150,9 @@ class OAuthApiController extends ApiController {
 				return new JSONResponse(['message' => 'Unknown credentials.'], Http::STATUS_BAD_REQUEST);
 		}
 
-		$this->authorizationCodeMapper->deleteByClient($client->getId());
-		$this->accessTokenMapper->deleteByClient($client->getId());
-		$this->refreshTokenMapper->deleteByClient($client->getId());
+		$this->authorizationCodeMapper->deleteByClientUser($client->getId(), $userId);
+		$this->accessTokenMapper->deleteByClientUser($client->getId(), $userId);
+		$this->refreshTokenMapper->deleteByClientUser($client->getId(), $userId);
 
 		$token = Utilities::generateRandom();
 		$accessToken = new AccessToken();
