@@ -167,6 +167,13 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$_SERVER['PHP_AUTH_USER'] = null;
 		$_SERVER['PHP_AUTH_PW'] = null;
 
+		$result = $this->controller->generateToken(null, $this->authorizationCode->getCode(), $this->redirectUri);
+		$this->assertTrue($result instanceof JSONResponse);
+		$json = json_decode($result->render());
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('invalid_request', $json->error);
+		$this->assertEquals(400, $result->getStatus());
+
 		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = json_decode($result->render());
