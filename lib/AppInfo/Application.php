@@ -25,7 +25,10 @@
 namespace OCA\OAuth2\AppInfo;
 
 use OCA\OAuth2\Hooks\UserHooks;
+use OCA\OAuth2\Sabre\OAuth2;
 use OCP\AppFramework\App;
+use OCP\SabrePluginEvent;
+use Sabre\DAV\Auth\Plugin;
 
 class Application extends App {
 
@@ -52,6 +55,17 @@ class Application extends App {
 		// Logger
 		$container->registerService('Logger', function ($c) {
 			return $c->query('ServerContainer')->getLogger();
+		});
+
+		// Add event listener
+		$dispatcher = $this->getContainer()->getServer()->getEventDispatcher();
+		$dispatcher->addListener('OCA\DAV\Connector\Sabre::authInit', function($event) use($container) {
+			if ($event instanceof SabrePluginEvent) {
+				$authPlugin = $event->getServer()->getPlugin('auth');
+				if ($authPlugin instanceof Plugin) {
+					$authPlugin->addBackend(new OAuth2());
+				}
+			}
 		});
 	}
 
