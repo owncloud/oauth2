@@ -5,10 +5,13 @@
     <description>Application for using OAuth 2.0 in ownCloud</description>
     <licence>AGPL</licence>
     <author>Lukas Biermann, Nina Herrmann, Wladislaw  Iwanzow, Dennis Meis, Jonathan Neugebauer</author>
-    <version>0.4.3</version>
+    <version>0.4.4</version>
     <namespace>OAuth2</namespace>
     <category>other</category>
     <dependencies>
         <owncloud min-version="9.1" max-version="10.0"/>
     </dependencies>
+    <types>
+        <authentication/>
+    </types>
 </info>

@@ -60,8 +60,6 @@ class Application extends App {
 		// Add event listener
 		$dispatcher = $this->getContainer()->getServer()->getEventDispatcher();
 		$dispatcher->addListener('OCA\DAV\Connector\Sabre::authInit', function($event) use($container) {
-			throw new \Exception("das");
-
 			if ($event instanceof SabrePluginEvent) {
 				$authPlugin = $event->getServer()->getPlugin('auth');
 				if ($authPlugin instanceof Plugin) {
