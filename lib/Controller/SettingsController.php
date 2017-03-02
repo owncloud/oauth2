@@ -82,7 +82,7 @@ class SettingsController extends Controller {
     public function addClient() {
 		if (!isset($_POST['redirect_uri']) || !isset($_POST['name'])
 			|| filter_var($_POST['redirect_uri'], FILTER_VALIDATE_URL) === false) {
-            return new RedirectResponse('../../settings/admin#oauth-2.0');
+            return new RedirectResponse('../../settings/admin?sectionid=additional#oauth2');
         }
 
         $client = new Client();
@@ -99,7 +99,7 @@ class SettingsController extends Controller {
 
         $this->clientMapper->insert($client);
 
-        return new RedirectResponse('../../settings/admin#oauth-2.0');
+        return new RedirectResponse('../../settings/admin?sectionid=additional#oauth2');
     }
 
     /**
@@ -114,7 +114,7 @@ class SettingsController extends Controller {
      */
     public function deleteClient($id) {
 		if (!is_int($id)) {
-			return new RedirectResponse('../../../../settings/admin#oauth-2.0');
+			return new RedirectResponse('../../../../settings/admin?sectionid=additional#oauth2');
 		}
 
         $client = $this->clientMapper->find($id);
@@ -124,7 +124,7 @@ class SettingsController extends Controller {
         $this->accessTokenMapper->deleteByClient($id);
         $this->refreshTokenMapper->deleteByClient($id);
 
-        return new RedirectResponse('../../../../settings/admin#oauth-2.0');
+        return new RedirectResponse('../../../../settings/admin?sectionid=additional#oauth2');
     }
 
 	/**
@@ -140,14 +140,14 @@ class SettingsController extends Controller {
 	 */
 	public function revokeAuthorization($id, $user_id) {
 		if (!is_int($id) || !is_string($user_id)) {
-			return new RedirectResponse('../../../../settings/personal#oauth-2.0');
+			return new RedirectResponse('../../../../settings/personal?sectionid=additional#oauth2');
 		}
 
 		$this->authorizationCodeMapper->deleteByClientUser($id, $user_id);
 		$this->accessTokenMapper->deleteByClientUser($id, $user_id);
 		$this->refreshTokenMapper->deleteByClientUser($id, $user_id);
 
-		return new RedirectResponse('../../../../settings/personal#oauth-2.0');
+		return new RedirectResponse('../../../../settings/personal?sectionid=additional#oauth2');
 	}
 
 }
