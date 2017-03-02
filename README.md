@@ -38,5 +38,8 @@ Place the content of this repository in **owncloud/apps/oauth2**.
 }
 ```
 
+## Limitations
+Since no user passwords are handled by the app at all only master key encryption is working (similiar to the Shibboleth app).
+
 ## Possible improvements
 - [ ] Add option for using different [scopes](https://tools.ietf.org/html/rfc6749#section-3.3).
