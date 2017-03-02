@@ -24,16 +24,18 @@
 
 namespace OCA\OAuth2\Sabre;
 
-use OCA\OAuth2\AppInfo\Application;
+use OC\User\Session;
+use OCA\DAV\Connector\Sabre\Auth;
+use OCP\IRequest;
+use OCP\ISession;
 use Sabre\DAV\Auth\Backend\AbstractBearer;
-use OCA\OAuth2\Db\AccessToken;
-use OCA\OAuth2\Db\AccessTokenMapper;
-use OCP\AppFramework\Db\DoesNotExistException;
 
 /**
  * OAuth 2.0 authentication backend class.
  */
 class OAuth2 extends AbstractBearer {
+
+	const DAV_AUTHENTICATED = Auth::DAV_AUTHENTICATED;
 
 	/**
 	 * This is the prefix that will be used to generate principal urls.
@@ -42,16 +44,48 @@ class OAuth2 extends AbstractBearer {
 	 */
 	protected $principalPrefix;
 
+	/** @var ISession */
+	private $session;
+
+	/** @var Session */
+	private $userSession;
+
+	/** @var IRequest */
+	private $request;
+
 	/**
 	 * OAuth2 constructor.
 	 *
 	 * @param string $principalPrefix
 	 */
-	public function __construct($principalPrefix = 'principals/users/') {
+	public function __construct(ISession $session,
+								Session $userSession,
+								IRequest $request,
+								$principalPrefix = 'principals/users/') {
+		$this->session = $session;
+		$this->userSession = $userSession;
+		$this->request = $request;
 		$this->principalPrefix = $principalPrefix;
 
+		// setup realm
 		$defaults = new \OC_Defaults();
 		$this->realm = $defaults->getName();
+	}
+
+	/**
+	 * Whether the user has initially authenticated via DAV
+	 *
+	 * This is required for WebDAV clients that resent the cookies even when the
+	 * account was changed.
+	 *
+	 * @see https://github.com/owncloud/core/issues/13245
+	 *
+	 * @param string $username
+	 * @return bool
+	 */
+	public function isDavAuthenticated($username) {
+		return !is_null($this->session->get(self::DAV_AUTHENTICATED)) &&
+			$this->session->get(self::DAV_AUTHENTICATED) === $username;
 	}
 
 	/**
@@ -64,29 +98,25 @@ class OAuth2 extends AbstractBearer {
 	 * @return string|false
 	 */
 	protected function validateBearerToken($bearerToken) {
-		if (!is_string($bearerToken)) {
-			return false;
-		}
+		if ($this->userSession->isLoggedIn() &&
+			$this->isDavAuthenticated($this->userSession->getUser()->getUID())
+		) {
+			\OC_Util::setupFS($this->userSession->getUser()->getUID());
+			$this->session->close();
+			return true;
+		} else {
+			\OC_Util::setupFS(); //login hooks may need early access to the filesystem
 
-		$app = new Application();
-		/** @var AccessTokenMapper $accessTokenMapper */
-		$accessTokenMapper = $app->getContainer()->query('OCA\OAuth2\Db\AccessTokenMapper');
-
-		try {
-			/** @var AccessToken $accessToken */
-			$accessToken = $accessTokenMapper->findByToken($bearerToken);
-
-			if ($accessToken->hasExpired()) {
+			if ($this->userSession->tryAuthModuleLogin($this->request)) {
+				$userId = $this->userSession->getUser()->getUID();
+				\OC_Util::setupFS($userId);
+				$this->session->set(self::DAV_AUTHENTICATED, $userId);
+				$this->session->close();
+				return $this->principalPrefix . $userId;
+			} else {
+				$this->session->close();
 				return false;
 			}
-
-			$userId = $accessToken->getUserId();
-
-			\OC_Util::setupFS($userId);
-
-			return $this->principalPrefix . $userId;
-		} catch (DoesNotExistException $exception) {
-			return false;
 		}
 	}
 

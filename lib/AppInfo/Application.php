@@ -63,7 +63,12 @@ class Application extends App {
 			if ($event instanceof SabrePluginEvent) {
 				$authPlugin = $event->getServer()->getPlugin('auth');
 				if ($authPlugin instanceof Plugin) {
-					$authPlugin->addBackend(new OAuth2());
+					$authPlugin->addBackend(
+						new OAuth2(\OC::$server->getSession(),
+						\OC::$server->getUserSession(),
+						\OC::$server->getRequest(),
+						'principals/')
+					);
 				}
 			}
 		});
