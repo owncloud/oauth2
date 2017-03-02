@@ -72,4 +72,18 @@ class AuthModule implements IAuthModule {
 		return $user;
 	}
 
+	/**
+	 * Returns an empty string because the user's password is not handled in
+	 * the app.
+	 *
+	 * Note: This means that only master key encryption is working with the app.
+	 *
+	 * @param IRequest $request The request.
+	 *
+	 * @return String An empty string.
+	 */
+	public function getUserPassword(IRequest $request) {
+		return '';
+	}
+
 }
