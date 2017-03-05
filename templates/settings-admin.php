@@ -1,14 +1,31 @@
 <?php
 /**
- * ownCloud - oauth2
- *
- * This file is licensed under the Affero General Public License version 3 or
- * later. See the COPYING file.
- *
  * @author Lukas Biermann
- * @copyright Lukas Biermann 2016
+ * @author Nina Herrmann
+ * @author Wladislaw Iwanzow
+ * @author Dennis Meis
+ * @author Jonathan Neugebauer
+ *
+ * @copyright Copyright (c) 2017, Project Seminar "PSSL16" at the University of Muenster.
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
+
+/** @var \OCA\OAuth2\Db\Client $client */
+script('oauth2', 'settings');
 ?>
+
 <div class="section" id="oauth2">
     <h2><?php p($l->t('OAuth 2.0')); ?></h2>
 
@@ -37,7 +54,7 @@
                     <td><?php p($client->getSecret()); ?></td>
 					<td style='text-align:center'><?php if ($client->getAllowSubdomains()) {?> <img alt="" src="/core/img/actions/checkmark.svg"> <?php } ?></td>
                     <td>
-                        <form action="../apps/oauth2/clients/<?php p($client->getId()); ?>/delete" method="post" style='display:inline;'>
+                        <form class="delete" data-confirm="<?php p($l->t('Are you sure you want to delete this item?')); ?>" action="../apps/oauth2/clients/<?php p($client->getId()); ?>/delete" method="post" style='display:inline;'>
                             <input type="submit" class="button icon-delete" value="">
                         </form>
                     </td>
