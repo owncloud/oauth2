@@ -24,6 +24,7 @@
 
 /** @var \OCA\OAuth2\Db\Client $client */
 script('oauth2', 'settings');
+style('oauth2', 'main');
 ?>
 
 <div class="section" id="oauth2">
@@ -46,7 +47,7 @@ script('oauth2', 'settings');
 			<tr>
 				<td><?php p($client->getName()); ?></td>
 				<td>
-					<form class="delete" data-confirm="<?php p($l->t('Are you sure you want to delete this item?')); ?>" action="../apps/oauth2/clients/<?php p($client->getId()); ?>/revoke?user_id=<?php p($_['user_id']); ?>" method="post" style='display:inline;'>
+					<form id="form-inline" class="delete" data-confirm="<?php p($l->t('Are you sure you want to delete this item?')); ?>" action="../apps/oauth2/clients/<?php p($client->getId()); ?>/revoke?user_id=<?php p($_['user_id']); ?>" method="post">
 						<input type="submit" class="button icon-delete" value="">
 					</form>
 				</td>

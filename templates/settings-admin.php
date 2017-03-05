@@ -24,6 +24,8 @@
 
 /** @var \OCA\OAuth2\Db\Client $client */
 script('oauth2', 'settings');
+style('oauth2', 'main');
+style('oauth2', 'settings-admin');
 ?>
 
 <div class="section" id="oauth2">
@@ -52,9 +54,9 @@ script('oauth2', 'settings');
                     <td><?php p($client->getRedirectUri()); ?></td>
                     <td><?php p($client->getIdentifier()); ?></td>
                     <td><?php p($client->getSecret()); ?></td>
-					<td style='text-align:center'><?php if ($client->getAllowSubdomains()) {?> <img alt="" src="/core/img/actions/checkmark.svg"> <?php } ?></td>
+					<td id="td-allow-subdomains"><?php if ($client->getAllowSubdomains()) {?> <img alt="" src="/core/img/actions/checkmark.svg"> <?php } ?></td>
                     <td>
-                        <form class="delete" data-confirm="<?php p($l->t('Are you sure you want to delete this item?')); ?>" action="../apps/oauth2/clients/<?php p($client->getId()); ?>/delete" method="post" style='display:inline;'>
+                        <form id="form-inline" class="delete" data-confirm="<?php p($l->t('Are you sure you want to delete this item?')); ?>" action="../apps/oauth2/clients/<?php p($client->getId()); ?>/delete" method="post">
                             <input type="submit" class="button icon-delete" value="">
                         </form>
                     </td>
