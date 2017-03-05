@@ -24,11 +24,11 @@
 
 namespace OCA\OAuth2\Hooks;
 
+use OC\User\User;
 use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
 use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCP\IUserManager;
-use OC\User\User;
 
 class UserHooks {
 
@@ -62,14 +62,18 @@ class UserHooks {
 		$this->refreshTokenMapper = $refreshTokenMapper;
 	}
 
+	/**
+	 * Registers a pre-delete hook for users to delete authorization codes,
+	 * access tokens and refresh tokens that reference the user.
+	 */
 	public function register() {
 		/**
 		 * @param User $user
 		 */
 		$callback = function ($user) {
 			if (!is_null($user->getUID())) {
-				$this->accessTokenMapper->deleteByUser($user->getUID());
 				$this->authorizationCodeMapper->deleteByUser($user->getUID());
+				$this->accessTokenMapper->deleteByUser($user->getUID());
 				$this->refreshTokenMapper->deleteByUser($user->getUID());
 			}
 		};
