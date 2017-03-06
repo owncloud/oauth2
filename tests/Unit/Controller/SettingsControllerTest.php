@@ -129,34 +129,34 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->addClient();
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../settings/admin#oauth-2.0', $result->getRedirectURL());
+		$this->assertEquals('../../settings/admin?sectionid=additional#oauth2', $result->getRedirectURL());
 		$this->assertEquals(0, count($this->clientMapper->findAll()));
 
 		$_POST['redirect_uri'] = 'test';
 		$result = $this->controller->addClient();
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../settings/admin#oauth-2.0', $result->getRedirectURL());
+		$this->assertEquals('../../settings/admin?sectionid=additional#oauth2', $result->getRedirectURL());
 		$this->assertEquals(0, count($this->clientMapper->findAll()));
 
 		$_POST['redirect_uri'] = null;
 		$_POST['name'] = 'test';
 		$result = $this->controller->addClient();
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../settings/admin#oauth-2.0', $result->getRedirectURL());
+		$this->assertEquals('../../settings/admin?sectionid=additional#oauth2', $result->getRedirectURL());
 		$this->assertEquals(0, count($this->clientMapper->findAll()));
 
 		$_POST['redirect_uri'] = 'test';
 		$_POST['name'] = 'test';
 		$result = $this->controller->addClient();
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../settings/admin#oauth-2.0', $result->getRedirectURL());
+		$this->assertEquals('../../settings/admin?sectionid=additional#oauth2', $result->getRedirectURL());
 		$this->assertEquals(0, count($this->clientMapper->findAll()));
 
 		$_POST['redirect_uri'] = $this->redirectUri;
 		$_POST['name'] = $this->name;
 		$result = $this->controller->addClient();
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../settings/admin#oauth-2.0', $result->getRedirectURL());
+		$this->assertEquals('../../settings/admin?sectionid=additional#oauth2', $result->getRedirectURL());
 		$this->assertEquals(1, count($this->clientMapper->findAll()));
 		/** @var Client $client */
 		$client = $this->clientMapper->findAll()[0];
@@ -169,7 +169,7 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 		$_POST['allow_subdomains'] = '1';
 		$result = $this->controller->addClient();
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../settings/admin#oauth-2.0', $result->getRedirectURL());
+		$this->assertEquals('../../settings/admin?sectionid=additional#oauth2', $result->getRedirectURL());
 		$this->assertEquals(1, count($this->clientMapper->findAll()));
 		/** @var Client $client */
 		$client = $this->clientMapper->findAll()[0];
@@ -181,24 +181,24 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 	public function testDeleteClient() {
 		$result = $this->controller->deleteClient(null);
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../../../settings/admin#oauth-2.0', $result->getRedirectURL());
+		$this->assertEquals('../../../../settings/admin?sectionid=additional#oauth2', $result->getRedirectURL());
 		$this->assertEquals(1, count($this->clientMapper->findAll()));
 
 		$result = $this->controller->deleteClient('test');
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../../../settings/admin#oauth-2.0', $result->getRedirectURL());
+		$this->assertEquals('../../../../settings/admin?sectionid=additional#oauth2', $result->getRedirectURL());
 		$this->assertEquals(1, count($this->clientMapper->findAll()));
 
 		$result = $this->controller->deleteClient($this->client->getId());
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../../../settings/admin#oauth-2.0', $result->getRedirectURL());
+		$this->assertEquals('../../../../settings/admin?sectionid=additional#oauth2', $result->getRedirectURL());
 		$this->assertEquals(0, count($this->clientMapper->findAll()));
 	}
 
 	public function testRevokeAuthorization() {
 		$result = $this->controller->revokeAuthorization(null, null);
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../../../settings/personal#oauth-2.0', $result->getRedirectURL());
+		$this->assertEquals('../../../../settings/personal?sectionid=additional#oauth2', $result->getRedirectURL());
 		$this->assertEquals(1, count($this->clientMapper->findAll()));
 		$this->assertEquals(1, count($this->authorizationCodeMapper->findAll()));
 		$this->assertEquals(1, count($this->accessTokenMapper->findAll()));
@@ -206,7 +206,7 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->revokeAuthorization('', '');
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../../../settings/personal#oauth-2.0', $result->getRedirectURL());
+		$this->assertEquals('../../../../settings/personal?sectionid=additional#oauth2', $result->getRedirectURL());
 		$this->assertEquals(1, count($this->clientMapper->findAll()));
 		$this->assertEquals(1, count($this->authorizationCodeMapper->findAll()));
 		$this->assertEquals(1, count($this->accessTokenMapper->findAll()));
@@ -214,7 +214,7 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->revokeAuthorization(12, 12);
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../../../settings/personal#oauth-2.0', $result->getRedirectURL());
+		$this->assertEquals('../../../../settings/personal?sectionid=additional#oauth2', $result->getRedirectURL());
 		$this->assertEquals(1, count($this->clientMapper->findAll()));
 		$this->assertEquals(1, count($this->authorizationCodeMapper->findAll()));
 		$this->assertEquals(1, count($this->accessTokenMapper->findAll()));
@@ -222,7 +222,7 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->revokeAuthorization($this->client->getId(), $this->userId);
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../../../settings/personal#oauth-2.0', $result->getRedirectURL());
+		$this->assertEquals('../../../../settings/personal?sectionid=additional#oauth2', $result->getRedirectURL());
 		$this->assertEquals(1, count($this->clientMapper->findAll()));
 		$this->assertEquals(0, count($this->authorizationCodeMapper->findAll()));
 		$this->assertEquals(0, count($this->accessTokenMapper->findAll()));
