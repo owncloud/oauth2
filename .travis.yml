@@ -57,3 +57,5 @@ after_success:
 
 addons:
     firefox: "latest"
+    
+    
