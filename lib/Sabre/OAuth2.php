@@ -101,9 +101,10 @@ class OAuth2 extends AbstractBearer {
 		if ($this->userSession->isLoggedIn() &&
 			$this->isDavAuthenticated($this->userSession->getUser()->getUID())
 		) {
-			\OC_Util::setupFS($this->userSession->getUser()->getUID());
+			$userId = $this->userSession->getUser()->getUID();
+			\OC_Util::setupFS($userId);
 			$this->session->close();
-			return true;
+			return $this->principalPrefix . $userId;
 		} else {
 			\OC_Util::setupFS(); //login hooks may need early access to the filesystem
 
