@@ -6,7 +6,7 @@
  * @author Dennis Meis
  * @author Jonathan Neugebauer
  *
- * @copyright Copyright (c) 2016, Project Seminar "PSSL16" at the University of Muenster.
+ * @copyright Copyright (c) 2017, Project Seminar "PSSL16" at the University of Muenster.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -27,8 +27,6 @@ namespace OCA\OAuth2\Db;
 use OCP\AppFramework\Db\Entity;
 
 /**
- * Class Client
- *
  * @method string getIdentifier()
  * @method void setIdentifier(string $identifier)
  * @method string getSecret()
@@ -42,19 +40,22 @@ use OCP\AppFramework\Db\Entity;
  */
 class Client extends Entity {
 
-    protected $identifier;
-    protected $secret;
-    protected $redirectUri;
-    protected $name;
-    protected $allowSubdomains;
+	protected $identifier;
+	protected $secret;
+	protected $redirectUri;
+	protected $name;
+	protected $allowSubdomains;
 
-    public function __construct() {
-        $this->addType('id', 'int');
-        $this->addType('identifier', 'string');
-        $this->addType('secret', 'string');
-        $this->addType('redirect_uri', 'string');
-        $this->addType('name', 'string');
+	/**
+	 * Client constructor.
+	 */
+	public function __construct() {
+		$this->addType('id', 'int');
+		$this->addType('identifier', 'string');
+		$this->addType('secret', 'string');
+		$this->addType('redirect_uri', 'string');
+		$this->addType('name', 'string');
 		$this->addType('allow_subdomains', 'boolean');
-    }
+	}
 
 }

@@ -6,7 +6,7 @@
  * @author Dennis Meis
  * @author Jonathan Neugebauer
  *
- * @copyright Copyright (c) 2016, Project Seminar "PSSL16" at the University of Muenster.
+ * @copyright Copyright (c) 2017, Project Seminar "PSSL16" at the University of Muenster.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -26,8 +26,8 @@ namespace OCA\OAuth2\Db;
 
 use InvalidArgumentException;
 use OCP\AppFramework\Db\Entity;
-use OCP\IDb;
 use OCP\AppFramework\Db\Mapper;
+use OCP\IDb;
 
 class ClientMapper extends Mapper {
 
@@ -60,25 +60,25 @@ class ClientMapper extends Mapper {
 		return $this->findEntity($sql, [$id], null, null);
 	}
 
-    /**
-     * Selects a client by its identifier.
-     *
-     * @param string $identifier The client's identifier.
-     *
-     * @return Entity The client entity.
-     *
-     * @throws \OCP\AppFramework\Db\DoesNotExistException if not found.
-     * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more
-     * than one result.
-     */
-    public function findByIdentifier($identifier) {
+	/**
+	 * Selects a client by its identifier.
+	 *
+	 * @param string $identifier The client's identifier.
+	 *
+	 * @return Entity The client entity.
+	 *
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found.
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more
+	 * than one result.
+	 */
+	public function findByIdentifier($identifier) {
 		if (!is_string($identifier)) {
 			throw new InvalidArgumentException('identifier must not be null');
 		}
 
-        $sql = 'SELECT * FROM `' . $this->tableName . '` WHERE `identifier` = ?';
-        return $this->findEntity($sql, [$identifier], null, null);
-    }
+		$sql = 'SELECT * FROM `' . $this->tableName . '` WHERE `identifier` = ?';
+		return $this->findEntity($sql, [$identifier], null, null);
+	}
 
 	/**
 	 * Selects all clients.
@@ -106,15 +106,15 @@ class ClientMapper extends Mapper {
 
 		$sql = 'SELECT * FROM `' . $this->tableName . '` '
 			. 'WHERE `id` IN ( '
-				. 'SELECT `client_id` FROM `oc_oauth2_authorization_codes` WHERE `user_id` = ? '
-				. 'UNION '
-				. 'SELECT `client_id` FROM `oc_oauth2_access_tokens` WHERE `user_id` = ? '
-			.')';
+			. 'SELECT `client_id` FROM `oc_oauth2_authorization_codes` WHERE `user_id` = ? '
+			. 'UNION '
+			. 'SELECT `client_id` FROM `oc_oauth2_access_tokens` WHERE `user_id` = ? '
+			. ')';
 		return $this->findEntities($sql, [$userId, $userId], null, null);
 	}
 
 	/**
-	 * Deletes all entities from the table
+	 * Deletes all entities in the table.
 	 */
 	public function deleteAll() {
 		$sql = 'DELETE FROM `' . $this->tableName . '`';

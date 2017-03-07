@@ -6,7 +6,7 @@
  * @author Dennis Meis
  * @author Jonathan Neugebauer
  *
- * @copyright Copyright (c) 2016, Project Seminar "PSSL16" at the University of Muenster.
+ * @copyright Copyright (c) 2017, Project Seminar "PSSL16" at the University of Muenster.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -25,19 +25,12 @@
 namespace OCA\OAuth2\Tests\Unit\Sabre;
 
 use OC\Core\Application;
-use OCA\OAuth2\Sabre\OAuth2;
 use OCA\OAuth2\Db\AccessToken;
 use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
 use Test\TestCase;
 
-/**
- * Class OAuth2Test
- *
- * @package OCA\DAV\Tests\unit\Connector\Sabre
- * @group DB
- */
 class OAuth2Test extends TestCase {
 
 	/** @var String $principalPrefix */

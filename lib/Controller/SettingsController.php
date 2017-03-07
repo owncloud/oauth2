@@ -6,7 +6,7 @@
  * @author Dennis Meis
  * @author Jonathan Neugebauer
  *
- * @copyright Copyright (c) 2016, Project Seminar "PSSL16" at the University of Muenster.
+ * @copyright Copyright (c) 2017, Project Seminar "PSSL16" at the University of Muenster.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -36,8 +36,8 @@ use OCP\IRequest;
 
 class SettingsController extends Controller {
 
-    /** @var ClientMapper */
-    private $clientMapper;
+	/** @var ClientMapper */
+	private $clientMapper;
 
 	/** @var AuthorizationCodeMapper */
 	private $authorizationCodeMapper;
@@ -48,84 +48,88 @@ class SettingsController extends Controller {
 	/** @var RefreshTokenMapper */
 	private $refreshTokenMapper;
 
-    /** @var string */
-    private $userId;
+	/** @var string */
+	private $userId;
 
-    /**
-     * SettingsController constructor.
-     *
-     * @param string $AppName
-     * @param IRequest $request
-     * @param ClientMapper $clientMapper
-	 * @param AuthorizationCodeMapper $authorizationCodeMapper
-	 * @param AccessTokenMapper $accessTokenMapper
-	 * @param RefreshTokenMapper $refreshTokenMapper
-     * @param string $UserId
-     */
-    public function __construct($AppName, IRequest $request, ClientMapper $clientMapper, AuthorizationCodeMapper $authorizationCodeMapper, AccessTokenMapper $accessTokenMapper, RefreshTokenMapper $refreshTokenMapper, $UserId) {
-        parent::__construct($AppName, $request);
-        $this->clientMapper = $clientMapper;
+	/**
+	 * SettingsController constructor.
+	 *
+	 * @param string $AppName The app's name.
+	 * @param IRequest $request The request.
+	 * @param ClientMapper $clientMapper The client mapper.
+	 * @param AuthorizationCodeMapper $authorizationCodeMapper The authorization code mapper.
+	 * @param AccessTokenMapper $accessTokenMapper The access token mapper.
+	 * @param RefreshTokenMapper $refreshTokenMapper The refresh token mapper.
+	 * @param string $UserId The user ID.
+	 */
+	public function __construct($AppName, IRequest $request,
+								ClientMapper $clientMapper,
+								AuthorizationCodeMapper $authorizationCodeMapper,
+								AccessTokenMapper $accessTokenMapper,
+								RefreshTokenMapper $refreshTokenMapper,
+								$UserId) {
+		parent::__construct($AppName, $request);
+		$this->clientMapper = $clientMapper;
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
 		$this->accessTokenMapper = $accessTokenMapper;
 		$this->refreshTokenMapper = $refreshTokenMapper;
-        $this->userId = $UserId;
-    }
+		$this->userId = $UserId;
+	}
 
-    /**
-     * Adds a client.
-     *
-     * @return RedirectResponse Redirection to the settings page.
-     *
-     * @NoCSRFRequired
-     *
-     */
-    public function addClient() {
+	/**
+	 * Adds a client.
+	 *
+	 * @return RedirectResponse Redirection to the settings page.
+	 *
+	 * @NoCSRFRequired
+	 */
+	public function addClient() {
 		if (!isset($_POST['redirect_uri']) || !isset($_POST['name'])
-			|| filter_var($_POST['redirect_uri'], FILTER_VALIDATE_URL) === false) {
-            return new RedirectResponse('../../settings/admin?sectionid=additional#oauth2');
-        }
-
-        $client = new Client();
-        $client->setIdentifier(Utilities::generateRandom());
-        $client->setSecret(Utilities::generateRandom());
-        $client->setRedirectUri(trim($_POST['redirect_uri']));
-        $client->setName(trim($_POST['name']));
-
-        if (isset($_POST['allow_subdomains'])) {
-        	$client->setAllowSubdomains(true);
-		} else {
-        	$client->setAllowSubdomains(false);
+			|| filter_var($_POST['redirect_uri'], FILTER_VALIDATE_URL) === false
+		) {
+			return new RedirectResponse('../../settings/admin?sectionid=additional#oauth2');
 		}
 
-        $this->clientMapper->insert($client);
+		$client = new Client();
+		$client->setIdentifier(Utilities::generateRandom());
+		$client->setSecret(Utilities::generateRandom());
+		$client->setRedirectUri(trim($_POST['redirect_uri']));
+		$client->setName(trim($_POST['name']));
 
-        return new RedirectResponse('../../settings/admin?sectionid=additional#oauth2');
-    }
+		if (isset($_POST['allow_subdomains'])) {
+			$client->setAllowSubdomains(true);
+		} else {
+			$client->setAllowSubdomains(false);
+		}
 
-    /**
-     * Deletes a client.
+		$this->clientMapper->insert($client);
+
+		return new RedirectResponse('../../settings/admin?sectionid=additional#oauth2');
+	}
+
+	/**
+	 * Deletes a client.
 	 *
 	 * @param int $id The client identifier.
-     *
-     * @return RedirectResponse Redirection to the settings page.
-     *
-     * @NoCSRFRequired
-     *
-     */
-    public function deleteClient($id) {
+	 *
+	 * @return RedirectResponse Redirection to the settings page.
+	 *
+	 * @NoCSRFRequired
+	 */
+	public function deleteClient($id) {
 		if (!is_int($id)) {
 			return new RedirectResponse('../../../../settings/admin?sectionid=additional#oauth2');
 		}
 
-        $client = $this->clientMapper->find($id);
-        $this->clientMapper->delete($client);
+		$client = $this->clientMapper->find($id);
+		$this->clientMapper->delete($client);
 
-        $this->authorizationCodeMapper->deleteByClient($id);
-        $this->accessTokenMapper->deleteByClient($id);
-        $this->refreshTokenMapper->deleteByClient($id);
+		$this->authorizationCodeMapper->deleteByClient($id);
+		$this->accessTokenMapper->deleteByClient($id);
+		$this->refreshTokenMapper->deleteByClient($id);
 
-        return new RedirectResponse('../../../../settings/admin?sectionid=additional#oauth2');
-    }
+		return new RedirectResponse('../../../../settings/admin?sectionid=additional#oauth2');
+	}
 
 	/**
 	 * Revokes the authorization for a client.
@@ -136,7 +140,6 @@ class SettingsController extends Controller {
 	 * @return RedirectResponse Redirection to the settings page.
 	 *
 	 * @NoCSRFRequired
-	 *
 	 */
 	public function revokeAuthorization($id, $user_id) {
 		if (!is_int($id) || !is_string($user_id)) {

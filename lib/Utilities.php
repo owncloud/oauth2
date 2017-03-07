@@ -6,7 +6,7 @@
  * @author Dennis Meis
  * @author Jonathan Neugebauer
  *
- * @copyright Copyright (c) 2016, Project Seminar "PSSL16" at the University of Muenster.
+ * @copyright Copyright (c) 2017, Project Seminar "PSSL16" at the University of Muenster.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -43,7 +43,7 @@ class Utilities {
 	 * @param string $actual The actual redirect URI.
 	 * @param boolean $allowSubdomains Whether to allow subdomains.
 	 *
-	 * @return True if the redirect URI is valid, false otherwise.
+	 * @return boolean True if the redirect URI is valid, false otherwise.
 	 */
 	public static function validateRedirectUri($expected, $actual, $allowSubdomains) {
 		if (strcmp(parse_url($expected, PHP_URL_SCHEME), parse_url($actual, PHP_URL_SCHEME)) !== 0) {

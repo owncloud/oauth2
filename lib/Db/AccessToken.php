@@ -6,7 +6,7 @@
  * @author Dennis Meis
  * @author Jonathan Neugebauer
  *
- * @copyright Copyright (c) 2016, Project Seminar "PSSL16" at the University of Muenster.
+ * @copyright Copyright (c) 2017, Project Seminar "PSSL16" at the University of Muenster.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -27,8 +27,6 @@ namespace OCA\OAuth2\Db;
 use OCP\AppFramework\Db\Entity;
 
 /**
- * Class AccessToken
- *
  * @method string getToken()
  * @method void setToken(string $token)
  * @method int getClientId()
@@ -40,24 +38,27 @@ use OCP\AppFramework\Db\Entity;
  */
 class AccessToken extends Entity {
 
-    protected $token;
-    protected $clientId;
-    protected $userId;
-    protected $expires;
+	protected $token;
+	protected $clientId;
+	protected $userId;
+	protected $expires;
 
-    public function __construct() {
-        $this->addType('id', 'int');
-        $this->addType('token', 'string');
-        $this->addType('client_id', 'int');
-        $this->addType('user_id', 'string');
+	/**
+	 * AccessToken constructor.
+	 */
+	public function __construct() {
+		$this->addType('id', 'int');
+		$this->addType('token', 'string');
+		$this->addType('client_id', 'int');
+		$this->addType('user_id', 'string');
 		$this->addType('expires', 'int');
-    }
+	}
 
 	/**
 	 * Resets the expiry time to 1 hour from now.
 	 */
-    public function resetExpires() {
-    	$this->setExpires(time() + 3600);
+	public function resetExpires() {
+		$this->setExpires(time() + 3600);
 	}
 
 	/**

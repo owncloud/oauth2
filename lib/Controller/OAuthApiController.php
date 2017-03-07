@@ -6,7 +6,7 @@
  * @author Dennis Meis
  * @author Jonathan Neugebauer
  *
- * @copyright Copyright (c) 2016, Project Seminar "PSSL16" at the University of Muenster.
+ * @copyright Copyright (c) 2017, Project Seminar "PSSL16" at the University of Muenster.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -33,11 +33,11 @@ use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Db\RefreshToken;
 use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCA\OAuth2\Utilities;
+use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
-use OCP\AppFramework\ApiController;
 
 class OAuthApiController extends ApiController {
 
@@ -56,15 +56,20 @@ class OAuthApiController extends ApiController {
 	/**
 	 * OAuthApiController constructor.
 	 *
-	 * @param string $appName
-	 * @param IRequest $request
-	 * @param ClientMapper $clientMapper
-	 * @param AuthorizationCodeMapper $authorizationCodeMapper
-	 * @param AccessTokenMapper $accessTokenMapper
-	 * @param RefreshTokenMapper $refreshTokenMapper
+	 * @param string $appName The app's name.
+	 * @param IRequest $request The request.
+	 * @param ClientMapper $clientMapper The client mapper.
+	 * @param AuthorizationCodeMapper $authorizationCodeMapper The authorization code mapper.
+	 * @param AccessTokenMapper $accessTokenMapper The access token mapper.
+	 * @param RefreshTokenMapper $refreshTokenMapper The refresh token mapper.
 	 */
-	public function __construct($appName, IRequest $request, ClientMapper $clientMapper, AuthorizationCodeMapper $authorizationCodeMapper, AccessTokenMapper $accessTokenMapper, RefreshTokenMapper $refreshTokenMapper) {
+	public function __construct($appName, IRequest $request,
+								ClientMapper $clientMapper,
+								AuthorizationCodeMapper $authorizationCodeMapper,
+								AccessTokenMapper $accessTokenMapper,
+								RefreshTokenMapper $refreshTokenMapper) {
 		parent::__construct($appName, $request);
+
 		$this->clientMapper = $clientMapper;
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
 		$this->accessTokenMapper = $accessTokenMapper;
@@ -85,7 +90,8 @@ class OAuthApiController extends ApiController {
 	 * @PublicPage
 	 * @CORS
 	 */
-	public function generateToken($grant_type, $code = null, $redirect_uri = null, $refresh_token = null) {
+	public function generateToken($grant_type, $code = null,
+								  $redirect_uri = null, $refresh_token = null) {
 		if (!is_string($grant_type)) {
 			return new JSONResponse(['error' => 'invalid_request'], Http::STATUS_BAD_REQUEST);
 		}

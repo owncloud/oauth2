@@ -6,7 +6,7 @@
  * @author Dennis Meis
  * @author Jonathan Neugebauer
  *
- * @copyright Copyright (c) 2016, Project Seminar "PSSL16" at the University of Muenster.
+ * @copyright Copyright (c) 2017, Project Seminar "PSSL16" at the University of Muenster.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -24,6 +24,7 @@
 
 namespace OCA\OAuth2\Tests\Unit\Controller;
 
+use OCA\OAuth2\AppInfo\Application;
 use OCA\OAuth2\Controller\OAuthApiController;
 use OCA\OAuth2\Db\AccessToken;
 use OCA\OAuth2\Db\AccessTokenMapper;
@@ -35,7 +36,6 @@ use OCA\OAuth2\Db\RefreshToken;
 use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCP\AppFramework\Http\JSONResponse;
 use PHPUnit_Framework_TestCase;
-use OCA\OAuth2\AppInfo\Application;
 
 class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 

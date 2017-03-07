@@ -6,7 +6,7 @@
  * @author Dennis Meis
  * @author Jonathan Neugebauer
  *
- * @copyright Copyright (c) 2016, Project Seminar "PSSL16" at the University of Muenster.
+ * @copyright Copyright (c) 2017, Project Seminar "PSSL16" at the University of Muenster.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -26,11 +26,16 @@ namespace OCA\OAuth2\Db;
 
 use InvalidArgumentException;
 use OCP\AppFramework\Db\Entity;
-use OCP\IDb;
 use OCP\AppFramework\Db\Mapper;
+use OCP\IDb;
 
 class RefreshTokenMapper extends Mapper {
 
+	/**
+	 * RefreshTokenMapper constructor.
+	 *
+	 * @param IDb $db Database Connection.
+	 */
 	public function __construct(IDb $db) {
 		parent::__construct($db, 'oauth2_refresh_tokens');
 	}
@@ -142,7 +147,7 @@ class RefreshTokenMapper extends Mapper {
 	}
 
 	/**
-	 * Deletes all entities from the table
+	 * Deletes all entities in the table.
 	 */
 	public function deleteAll() {
 		$sql = 'DELETE FROM `' . $this->tableName . '`';

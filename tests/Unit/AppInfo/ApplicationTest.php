@@ -6,7 +6,7 @@
  * @author Dennis Meis
  * @author Jonathan Neugebauer
  *
- * @copyright Copyright (c) 2016, Project Seminar "PSSL16" at the University of Muenster.
+ * @copyright Copyright (c) 2017, Project Seminar "PSSL16" at the University of Muenster.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -39,6 +39,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testRegisterSettings() {
+		// Calling the registerSettings() function to check for exceptions.
 		$this->application->registerSettings();
 	}
 

@@ -6,7 +6,7 @@
  * @author Dennis Meis
  * @author Jonathan Neugebauer
  *
- * @copyright Copyright (c) 2016, Project Seminar "PSSL16" at the University of Muenster.
+ * @copyright Copyright (c) 2017, Project Seminar "PSSL16" at the University of Muenster.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -24,7 +24,6 @@
 
 namespace OCA\OAuth2\Controller;
 
-use InvalidArgumentException;
 use OC_Util;
 use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\AuthorizationCode;
@@ -33,12 +32,12 @@ use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCA\OAuth2\Utilities;
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\IRequest;
-use OCP\AppFramework\Http\TemplateResponse;
-use OCP\AppFramework\Http\RedirectResponse;
-use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http\RedirectResponse;
+use OCP\AppFramework\Http\TemplateResponse;
+use OCP\IRequest;
 
 class PageController extends Controller {
 
@@ -60,7 +59,7 @@ class PageController extends Controller {
 	/**
 	 * PageController constructor.
 	 *
-	 * @param string $AppName The name of the app.
+	 * @param string $AppName The apps's name.
 	 * @param IRequest $request The request.
 	 * @param ClientMapper $clientMapper The client mapper.
 	 * @param AuthorizationCodeMapper $authorizationCodeMapper The authorization code mapper.
@@ -68,7 +67,12 @@ class PageController extends Controller {
 	 * @param RefreshTokenMapper $refreshTokenMapper The refresh token mapper.
 	 * @param string $UserId The user ID.
 	 */
-	public function __construct($AppName, IRequest $request, ClientMapper $clientMapper, AuthorizationCodeMapper $authorizationCodeMapper, AccessTokenMapper $accessTokenMapper, RefreshTokenMapper $refreshTokenMapper, $UserId) {
+	public function __construct($AppName, IRequest $request,
+								ClientMapper $clientMapper,
+								AuthorizationCodeMapper $authorizationCodeMapper,
+								AccessTokenMapper $accessTokenMapper,
+								RefreshTokenMapper $refreshTokenMapper,
+								$UserId) {
 		parent::__construct($AppName, $request);
 
 		$this->clientMapper = $clientMapper;
@@ -92,9 +96,11 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function authorize($response_type, $client_id, $redirect_uri, $state = null) {
+	public function authorize($response_type, $client_id, $redirect_uri,
+							  $state = null) {
 		if (!is_string($response_type) || !is_string($client_id)
-			|| !is_string($redirect_uri) || (isset($state) && !is_string($state))) {
+			|| !is_string($redirect_uri) || (isset($state) && !is_string($state))
+		) {
 			return new RedirectResponse(OC_Util::getDefaultPageUrl());
 		}
 
@@ -132,7 +138,8 @@ class PageController extends Controller {
 	 */
 	public function generateAuthorizationCode($response_type, $client_id, $redirect_uri, $state = null) {
 		if (!is_string($response_type) || !is_string($client_id)
-			|| !is_string($redirect_uri) || (isset($state) && !is_string($state))) {
+			|| !is_string($redirect_uri) || (isset($state) && !is_string($state))
+		) {
 			return new RedirectResponse(OC_Util::getDefaultPageUrl());
 		}
 

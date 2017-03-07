@@ -6,7 +6,7 @@
  * @author Dennis Meis
  * @author Jonathan Neugebauer
  *
- * @copyright Copyright (c) 2016, Project Seminar "PSSL16" at the University of Muenster.
+ * @copyright Copyright (c) 2017, Project Seminar "PSSL16" at the University of Muenster.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -56,7 +56,7 @@ class OAuth2 extends AbstractBearer {
 	/**
 	 * OAuth2 constructor.
 	 *
-	 * @param string $principalPrefix
+	 * @param string $principalPrefix The principal prefix.
 	 */
 	public function __construct(ISession $session,
 								Session $userSession,
@@ -73,15 +73,15 @@ class OAuth2 extends AbstractBearer {
 	}
 
 	/**
-	 * Whether the user has initially authenticated via DAV
+	 * Checks whether the user has initially authenticated via DAV.
 	 *
 	 * This is required for WebDAV clients that resent the cookies even when the
 	 * account was changed.
 	 *
 	 * @see https://github.com/owncloud/core/issues/13245
 	 *
-	 * @param string $username
-	 * @return bool
+	 * @param string $username The username.
+	 * @return bool True if the user initially authenticated via DAV, false otherwise.
 	 */
 	public function isDavAuthenticated($username) {
 		return !is_null($this->session->get(self::DAV_AUTHENTICATED)) &&
@@ -89,13 +89,13 @@ class OAuth2 extends AbstractBearer {
 	}
 
 	/**
-	 * Validates a Bearer token
+	 * Validates a Bearer token.
 	 *
 	 * This method should return the full principal url, or false if the
 	 * token was incorrect.
 	 *
-	 * @param string $bearerToken
-	 * @return string|false
+	 * @param string $bearerToken The Bearer token.
+	 * @return string|false The full principal URL, if the token is valid, false otherwise.
 	 */
 	protected function validateBearerToken($bearerToken) {
 		if ($this->userSession->isLoggedIn() &&

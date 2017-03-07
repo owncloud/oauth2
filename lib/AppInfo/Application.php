@@ -6,7 +6,7 @@
  * @author Dennis Meis
  * @author Jonathan Neugebauer
  *
- * @copyright Copyright (c) 2016, Project Seminar "PSSL16" at the University of Muenster.
+ * @copyright Copyright (c) 2017, Project Seminar "PSSL16" at the University of Muenster.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -35,7 +35,7 @@ class Application extends App {
 	/**
 	 * Application constructor.
 	 *
-	 * @param array $urlParams an array with variables extracted from the routes
+	 * @param array $urlParams Variables extracted from the routes.
 	 */
 	public function __construct(array $urlParams = array()) {
 		parent::__construct('oauth2', $urlParams);
@@ -59,15 +59,15 @@ class Application extends App {
 
 		// Add event listener
 		$dispatcher = $this->getContainer()->getServer()->getEventDispatcher();
-		$dispatcher->addListener('OCA\DAV\Connector\Sabre::authInit', function($event) use($container) {
+		$dispatcher->addListener('OCA\DAV\Connector\Sabre::authInit', function ($event) use ($container) {
 			if ($event instanceof SabrePluginEvent) {
 				$authPlugin = $event->getServer()->getPlugin('auth');
 				if ($authPlugin instanceof Plugin) {
 					$authPlugin->addBackend(
 						new OAuth2(\OC::$server->getSession(),
-						\OC::$server->getUserSession(),
-						\OC::$server->getRequest(),
-						'principals/')
+							\OC::$server->getUserSession(),
+							\OC::$server->getRequest(),
+							'principals/')
 					);
 				}
 			}

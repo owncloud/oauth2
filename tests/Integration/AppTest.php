@@ -6,7 +6,7 @@
  * @author Dennis Meis
  * @author Jonathan Neugebauer
  *
- * @copyright Copyright (c) 2016, Project Seminar "PSSL16" at the University of Muenster.
+ * @copyright Copyright (c) 2017, Project Seminar "PSSL16" at the University of Muenster.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -32,19 +32,19 @@ use Test\TestCase;
 class AppTest extends TestCase {
 
 	/** @var IAppContainer $container */
-    private $container;
+	private $container;
 
-    public function setUp() {
-        parent::setUp();
+	public function setUp() {
+		parent::setUp();
 
-        $app = new Application();
-        $this->container = $app->getContainer();
-    }
+		$app = new Application();
+		$this->container = $app->getContainer();
+	}
 
-    public function testAppInstalled() {
+	public function testAppInstalled() {
 		/** @var IAppManager $appManager */
-        $appManager = $this->container->query('OCP\App\IAppManager');
-        $this->assertTrue($appManager->isInstalled('oauth2'));
-    }
+		$appManager = $this->container->query('OCP\App\IAppManager');
+		$this->assertTrue($appManager->isInstalled('oauth2'));
+	}
 
 }
