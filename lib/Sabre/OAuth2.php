@@ -56,6 +56,9 @@ class OAuth2 extends AbstractBearer {
 	/**
 	 * OAuth2 constructor.
 	 *
+	 * @param ISession $session The session.
+	 * @param Session $userSession The user session.
+	 * @param IRequest $request The request.
 	 * @param string $principalPrefix The principal prefix.
 	 */
 	public function __construct(ISession $session,
