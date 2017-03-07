@@ -42,21 +42,6 @@ use Test\TestCase;
 
 class OAuth2Test extends TestCase {
 
-	/** @var ITimeFactory | PHPUnit_Framework_MockObject_MockObject $timeFactory */
-	private $timeFactory;
-
-	/** @var DefaultTokenProvider | PHPUnit_Framework_MockObject_MockObject $tokenProvider */
-	protected $tokenProvider;
-
-	/** @var IConfig | PHPUnit_Framework_MockObject_MockObject $config */
-	private $config;
-
-	/** @var IUserManager | PHPUnit_Framework_MockObject_MockObject $userManager */
-	private $userManager;
-
-	/** @var IUser | PHPUnit_Framework_MockObject_MockObject $user */
-	private $user;
-
 	/** @var IRequest | PHPUnit_Framework_MockObject_MockObject $request */
 	private $request;
 
@@ -81,17 +66,6 @@ class OAuth2Test extends TestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->timeFactory = $this->createMock(ITimeFactory::class);
-		$this->timeFactory->expects($this->any())
-			->method('getTime')
-			->will($this->returnValue(10000));
-		$this->tokenProvider = $this->createMock(IProvider::class);
-		$this->config = $this->createMock(IConfig::class);
-		$this->userManager = $this->createMock('\OC\User\Manager');
-		$this->user = $this->createMock('\OC\User\User');
-		$this->user->expects($this->any())
-			->method('getUID')
-			->will($this->returnValue($this->userId));
 		$this->request = $this->createMock('\OCP\IRequest');
 
 		$app = new Application();
