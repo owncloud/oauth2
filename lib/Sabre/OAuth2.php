@@ -30,9 +30,6 @@ use OCP\IRequest;
 use OCP\ISession;
 use Sabre\DAV\Auth\Backend\AbstractBearer;
 
-/**
- * OAuth 2.0 authentication backend class.
- */
 class OAuth2 extends AbstractBearer {
 
 	const DAV_AUTHENTICATED = Auth::DAV_AUTHENTICATED;
@@ -86,7 +83,7 @@ class OAuth2 extends AbstractBearer {
 	 * @param string $username The username.
 	 * @return bool True if the user initially authenticated via DAV, false otherwise.
 	 */
-	public function isDavAuthenticated($username) {
+	private function isDavAuthenticated($username) {
 		return !is_null($this->session->get(self::DAV_AUTHENTICATED)) &&
 			$this->session->get(self::DAV_AUTHENTICATED) === $username;
 	}
@@ -98,12 +95,11 @@ class OAuth2 extends AbstractBearer {
 	 * token was incorrect.
 	 *
 	 * @param string $bearerToken The Bearer token.
-	 * @return string|false The full principal URL, if the token is valid, false otherwise.
+	 * @return string|false The full principal url, if the token is valid, false otherwise.
 	 */
 	protected function validateBearerToken($bearerToken) {
 		if ($this->userSession->isLoggedIn() &&
-			$this->isDavAuthenticated($this->userSession->getUser()->getUID())
-		) {
+			$this->isDavAuthenticated($this->userSession->getUser()->getUID())) {
 			$userId = $this->userSession->getUser()->getUID();
 			\OC_Util::setupFS($userId);
 			$this->session->close();
