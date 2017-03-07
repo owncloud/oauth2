@@ -163,6 +163,6 @@ ifneq (,$(wildcard $(CURDIR)/package.json))
 	$(npm) run test
 endif
 	mkdir -p $(build_tools_directory)
-	curl -sSL https://phar.phpunit.de/phpunit.phar -o $(build_tools_directory)/phpunit.phar
+	curl -sSL https://phar.phpunit.de/phpunit-5.7.phar -o $(build_tools_directory)/phpunit.phar
 	php $(build_tools_directory)/phpunit.phar -c phpunit.xml --coverage-clover ./clover.xml
 	php $(build_tools_directory)/phpunit.phar -c phpunit.integration.xml
