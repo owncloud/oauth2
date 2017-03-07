@@ -24,19 +24,13 @@
 
 namespace OCA\OAuth2\Tests\Unit\Sabre;
 
-use OC\Authentication\Token\DefaultTokenProvider;
-use OC\Authentication\Token\IProvider;
 use OC\Core\Application;
 use OCA\OAuth2\Db\AccessToken;
 use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Sabre\OAuth2;
-use OCP\AppFramework\Utility\ITimeFactory;
-use OCP\IConfig;
 use OCP\IRequest;
-use OCP\IUser;
-use OCP\IUserManager;
 use PHPUnit_Framework_MockObject_MockObject;
 use Test\TestCase;
 
