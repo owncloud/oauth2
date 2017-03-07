@@ -29,15 +29,21 @@ use OCA\OAuth2\Db\AccessToken;
 use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
+use OCA\OAuth2\Sabre\OAuth2;
+use OCP\IRequest;
+use PHPUnit_Framework_MockObject_MockObject;
 use Test\TestCase;
 
 class OAuth2Test extends TestCase {
+
+	/** @var IRequest | PHPUnit_Framework_MockObject_MockObject $request */
+	private $request;
 
 	/** @var String $principalPrefix */
 	private $principalPrefix = 'principals/users/';
 
 	/** @var String $userId */
-	private $userId = 'john';
+	private $userId = 'travis';
 
 	/** @var ClientMapper $clientMapper */
 	private $clientMapper;
@@ -53,6 +59,8 @@ class OAuth2Test extends TestCase {
 
 	public function setUp() {
 		parent::setUp();
+
+		$this->request = $this->createMock('\OCP\IRequest');
 
 		$app = new Application();
 		$container = $app->getContainer();
@@ -83,38 +91,105 @@ class OAuth2Test extends TestCase {
 		$this->accessTokenMapper->deleteAll();
 	}
 
+	public function testIsDavAuthenticated() {
+		// User has not initially authenticated via DAV
+		$session = $this->createMock('\OC\Session\Memory');
+		$session->expects($this->any())
+			->method('get')
+			->with($this->equalTo(OAuth2::DAV_AUTHENTICATED))
+			->will($this->returnValue(null));
+		$userSession = $this->createMock('\OC\User\Session');
+		$oAuth2 = new OAuth2($session, $userSession, $this->request, $this->principalPrefix);
+		$this->assertFalse(
+			$this->invokePrivate(
+				$oAuth2,
+				'isDavAuthenticated',
+				[$this->userId])
+		);
+
+		// User has initially authenticated via DAV
+		$session = $this->createMock('\OC\Session\Memory');
+		$session->expects($this->any())
+			->method('get')
+			->with($this->equalTo(OAuth2::DAV_AUTHENTICATED))
+			->will($this->returnValue($this->userId));
+		$userSession = $this->createMock('\OC\User\Session');
+		$oAuth2 = new OAuth2($session, $userSession, $this->request, $this->principalPrefix);
+		$this->assertTrue(
+			$this->invokePrivate(
+				$oAuth2,
+				'isDavAuthenticated',
+				[$this->userId])
+		);
+	}
+
 	public function testValidateBearerToken() {
-		// TODO: make this test work. Potentially it is not working because of the mocks.
-		/*
-		$session = $this->getMockBuilder('\OCP\ISession')->disableOriginalConstructor()->getMock();
-		$userSession = $this->getMockBuilder('\OC\User\Session')->disableOriginalConstructor()->getMock();
-		$request = $this->getMockBuilder('\OCP\IRequest')->disableOriginalConstructor()->getMock();
+		$session = $this->createMock('\OC\Session\Memory');
+		$user = $this->createMock('\OC\User\User');
+		$user->expects($this->any())
+			->method('getUID')
+			->will($this->returnValue($this->userId));
 
-		$oAuth2 = new OAuth2($session, $userSession, $request, $this->principalPrefix);
-
-		$this->assertFalse($this->invokePrivate($oAuth2, 'validateBearerToken', [1]));
-
-		$this->assertFalse($this->invokePrivate($oAuth2, 'validateBearerToken', ['test']));
-
-		$this->accessToken->setExpires(time() - 1);
-		$this->accessTokenMapper->update($this->accessToken);
+		// Failing Login
+		$userSession = $this->createMock('\OC\User\Session');
+		$userSession->expects($this->any())
+			->method('getUser')
+			->will($this->returnValue($user));
+		$userSession->expects($this->once())
+			->method('isLoggedIn')
+			->will($this->returnValue(false));
+		$userSession->expects($this->once())
+			->method('tryAuthModuleLogin')
+			->will($this->returnValue(false));
+		$oAuth2 = new OAuth2($session, $userSession, $this->request, $this->principalPrefix);
 		$this->assertFalse(
 			$this->invokePrivate(
 				$oAuth2,
 				'validateBearerToken',
-				['sFz6FM9pecGF62kYz7us43M3amqVZaNQZyUZuMIkAJVJaCfVyr4Uf1v2IzvVZXCy'])
+				[$this->accessToken->getToken()])
 		);
 
-		$this->accessToken->resetExpires();
-		$this->accessTokenMapper->update($this->accessToken);
+		// Successful login
+		$userSession = $this->createMock('\OC\User\Session');
+		$userSession->expects($this->any())
+			->method('getUser')
+			->will($this->returnValue($user));
+		$userSession->expects($this->once())
+			->method('isLoggedIn')
+			->will($this->returnValue(false));
+		$userSession->expects($this->once())
+			->method('tryAuthModuleLogin')
+			->will($this->returnValue(true));
+		$oAuth2 = new OAuth2($session, $userSession, $this->request, $this->principalPrefix);
 		$this->assertEquals(
 			$this->principalPrefix . $this->userId,
 			$this->invokePrivate(
 				$oAuth2,
 				'validateBearerToken',
-				['sFz6FM9pecGF62kYz7us43M3amqVZaNQZyUZuMIkAJVJaCfVyr4Uf1v2IzvVZXCy'])
+				[$this->accessToken->getToken()])
 		);
-		*/
+
+		// User has initially authenticated via DAV
+		$session = $this->createMock('\OC\Session\Memory');
+		$session->expects($this->any())
+			->method('get')
+			->with($this->equalTo(OAuth2::DAV_AUTHENTICATED))
+			->will($this->returnValue($this->userId));
+		$userSession = $this->createMock('\OC\User\Session');
+		$userSession->expects($this->any())
+			->method('getUser')
+			->will($this->returnValue($user));
+		$userSession->expects($this->once())
+			->method('isLoggedIn')
+			->will($this->returnValue(true));
+		$oAuth2 = new OAuth2($session, $userSession, $this->request, $this->principalPrefix);
+		$this->assertEquals(
+			$this->principalPrefix . $this->userId,
+			$this->invokePrivate(
+				$oAuth2,
+				'validateBearerToken',
+				[$this->accessToken->getToken()])
+		);
 	}
 
 }
