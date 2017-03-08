@@ -87,8 +87,6 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$request = $this->getMockBuilder('OCP\IRequest')->getMock();
-
 		$app = new Application();
 		$container = $app->getContainer();
 
@@ -139,7 +137,15 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$refreshToken->setUserId($this->userId);
 		$this->refreshToken = $this->refreshTokenMapper->insert($refreshToken);
 
-		$this->controller = new OAuthApiController('oauth2', $request, $this->clientMapper, $this->authorizationCodeMapper, $this->accessTokenMapper, $this->refreshTokenMapper);
+		$this->controller = new OAuthApiController(
+			$container->query('AppName'),
+			$this->getMockBuilder('OCP\IRequest')->getMock(),
+			$this->clientMapper,
+			$this->authorizationCodeMapper,
+			$this->accessTokenMapper,
+			$this->refreshTokenMapper,
+			$container->query('OCP\ILogger')
+		);
 	}
 
 	public function tearDown() {

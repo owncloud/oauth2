@@ -69,8 +69,6 @@ class PageControllerTest extends TestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$request = $this->getMockBuilder('OCP\IRequest')->getMock();
-
 		$app = new Application();
 		$container = $app->getContainer();
 
@@ -92,7 +90,16 @@ class PageControllerTest extends TestCase {
 		/** @var RefreshTokenMapper $refreshTokenMapper */
 		$refreshTokenMapper = $container->query('OCA\OAuth2\Db\RefreshTokenMapper');
 
-		$this->controller = new PageController('oauth2', $request, $this->clientMapper, $this->authorizationCodeMapper, $accessTokenMapper, $refreshTokenMapper, $this->userId);
+		$this->controller = new PageController(
+			$container->query('AppName'),
+			$this->getMockBuilder('OCP\IRequest')->getMock(),
+			$this->clientMapper,
+			$this->authorizationCodeMapper,
+			$accessTokenMapper,
+			$refreshTokenMapper,
+			$this->userId,
+			$container->query('OCP\ILogger')
+		);
 	}
 
 	public function tearDown() {

@@ -42,19 +42,21 @@ class Application extends App {
 
 		$container = $this->getContainer();
 
+		// Logger
+		$container->registerService('Logger', function ($c) {
+			return $c->query('ServerContainer')->getLogger();
+		});
+
 		// Hooks
 		$container->registerService('UserHooks', function ($c) {
 			return new UserHooks(
 				$c->query('ServerContainer')->getUserManager(),
 				$c->query('OCA\OAuth2\Db\AuthorizationCodeMapper'),
 				$c->query('OCA\OAuth2\Db\AccessTokenMapper'),
-				$c->query('OCA\OAuth2\Db\RefreshTokenMapper')
+				$c->query('OCA\OAuth2\Db\RefreshTokenMapper'),
+				$c->query('OCP\ILogger'),
+				$c->query('AppName')
 			);
-		});
-
-		// Logger
-		$container->registerService('Logger', function ($c) {
-			return $c->query('ServerContainer')->getLogger();
 		});
 
 		// Add event listener

@@ -28,6 +28,7 @@ use OC\User\User;
 use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
 use OCA\OAuth2\Db\RefreshTokenMapper;
+use OCP\ILogger;
 use OCP\IUserManager;
 
 class UserHooks {
@@ -44,22 +45,34 @@ class UserHooks {
 	/** @var RefreshTokenMapper */
 	private $refreshTokenMapper;
 
+	/** @var ILogger */
+	private $logger;
+
+	/** @var string */
+	private $appName;
+
 	/**
 	 * UserHooks constructor.
 	 *
-	 * @param IUserManager $userManager The user manager
-	 * @param AuthorizationCodeMapper $authorizationCodeMapper The authorization code mapper
-	 * @param AccessTokenMapper $accessTokenMapper The access token mapper
-	 * @param RefreshTokenMapper $refreshTokenMapper The refresh token mapper
+	 * @param IUserManager $userManager The user manager.
+	 * @param AuthorizationCodeMapper $authorizationCodeMapper The authorization code mapper.
+	 * @param AccessTokenMapper $accessTokenMapper The access token mapper.
+	 * @param RefreshTokenMapper $refreshTokenMapper The refresh token mapper.
+	 * @param ILogger $logger The logger.
+	 * @param string $appName The app's name.
 	 */
 	public function __construct(IUserManager $userManager,
 								AuthorizationCodeMapper $authorizationCodeMapper,
 								AccessTokenMapper $accessTokenMapper,
-								RefreshTokenMapper $refreshTokenMapper) {
+								RefreshTokenMapper $refreshTokenMapper,
+								ILogger $logger,
+								$appName) {
 		$this->userManager = $userManager;
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
 		$this->accessTokenMapper = $accessTokenMapper;
 		$this->refreshTokenMapper = $refreshTokenMapper;
+		$this->logger = $logger;
+		$this->appName = $appName;
 	}
 
 	/**
@@ -68,10 +81,12 @@ class UserHooks {
 	 */
 	public function register() {
 		/**
-		 * @param User $user
+		 * @param User $user .
 		 */
 		$callback = function ($user) {
 			if (!is_null($user->getUID())) {
+				$this->logger->info('Deleting authorization codes, access tokens and refresh tokens referencing the user to be deleted "' . $user->getUID() . '".', ['app' => $this->appName]);
+
 				$this->authorizationCodeMapper->deleteByUser($user->getUID());
 				$this->accessTokenMapper->deleteByUser($user->getUID());
 				$this->refreshTokenMapper->deleteByUser($user->getUID());

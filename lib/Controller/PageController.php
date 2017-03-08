@@ -37,6 +37,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\ILogger;
 use OCP\IRequest;
 
 class PageController extends Controller {
@@ -56,30 +57,36 @@ class PageController extends Controller {
 	/** @var string */
 	private $userId;
 
+	/** @var ILogger */
+	private $logger;
+
 	/**
 	 * PageController constructor.
 	 *
-	 * @param string $AppName The apps's name.
+	 * @param string $appName The apps's name.
 	 * @param IRequest $request The request.
 	 * @param ClientMapper $clientMapper The client mapper.
 	 * @param AuthorizationCodeMapper $authorizationCodeMapper The authorization code mapper.
 	 * @param AccessTokenMapper $accessTokenMapper The access token mapper.
 	 * @param RefreshTokenMapper $refreshTokenMapper The refresh token mapper.
 	 * @param string $UserId The user ID.
+	 * @param ILogger $logger The logger.
 	 */
-	public function __construct($AppName, IRequest $request,
+	public function __construct($appName, IRequest $request,
 								ClientMapper $clientMapper,
 								AuthorizationCodeMapper $authorizationCodeMapper,
 								AccessTokenMapper $accessTokenMapper,
 								RefreshTokenMapper $refreshTokenMapper,
-								$UserId) {
-		parent::__construct($AppName, $request);
+								$UserId,
+								ILogger $logger) {
+		parent::__construct($appName, $request);
 
 		$this->clientMapper = $clientMapper;
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
 		$this->accessTokenMapper = $accessTokenMapper;
 		$this->refreshTokenMapper = $refreshTokenMapper;
 		$this->userId = $UserId;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -119,7 +126,7 @@ class PageController extends Controller {
 			return new RedirectResponse(OC_Util::getDefaultPageUrl());
 		}
 
-		return new TemplateResponse('oauth2', 'authorize', ['client_name' => $client->getName()]);
+		return new TemplateResponse($this->appName, 'authorize', ['client_name' => $client->getName()]);
 	}
 
 	/**
@@ -173,8 +180,10 @@ class PageController extends Controller {
 				if (!is_null($state)) {
 					$result = $result . '&state=' . urlencode($state);
 				}
+
+				$this->logger->info('An authorization code has been issued for the client "' . $client->getName() .'".', ['app' => $this->appName]);
+
 				return new RedirectResponse($result);
-				break;
 			default:
 				return new RedirectResponse(OC_Util::getDefaultPageUrl());
 		}

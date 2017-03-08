@@ -37,6 +37,7 @@ use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
+use OCP\ILogger;
 use OCP\IRequest;
 
 class OAuthApiController extends ApiController {
@@ -53,6 +54,9 @@ class OAuthApiController extends ApiController {
 	/** @var RefreshTokenMapper */
 	private $refreshTokenMapper;
 
+	/** @var ILogger */
+	private $logger;
+
 	/**
 	 * OAuthApiController constructor.
 	 *
@@ -62,18 +66,21 @@ class OAuthApiController extends ApiController {
 	 * @param AuthorizationCodeMapper $authorizationCodeMapper The authorization code mapper.
 	 * @param AccessTokenMapper $accessTokenMapper The access token mapper.
 	 * @param RefreshTokenMapper $refreshTokenMapper The refresh token mapper.
+	 * @param ILogger $logger The logger.
 	 */
 	public function __construct($appName, IRequest $request,
 								ClientMapper $clientMapper,
 								AuthorizationCodeMapper $authorizationCodeMapper,
 								AccessTokenMapper $accessTokenMapper,
-								RefreshTokenMapper $refreshTokenMapper) {
+								RefreshTokenMapper $refreshTokenMapper,
+								ILogger $logger) {
 		parent::__construct($appName, $request);
 
 		$this->clientMapper = $clientMapper;
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
 		$this->accessTokenMapper = $accessTokenMapper;
 		$this->refreshTokenMapper = $refreshTokenMapper;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -136,6 +143,8 @@ class OAuthApiController extends ApiController {
 					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
 
+				$this->logger->info('An authorization code has been used by the client "' . $client->getName() .'" to request an access token.', ['app' => $this->appName]);
+
 				$userId = $authorizationCode->getUserId();
 				break;
 			case 'refresh_token':
@@ -153,6 +162,8 @@ class OAuthApiController extends ApiController {
 				if (strcmp($refreshToken->getClientId(), $client->getId()) !== 0) {
 					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
+
+				$this->logger->info('A refresh token has been used by the client "' . $client->getName() .'" to request an access token.', ['app' => $this->appName]);
 
 				$userId = $refreshToken->getUserId();
 				break;

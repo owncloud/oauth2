@@ -39,12 +39,14 @@ class UserHooksTest extends PHPUnit_Framework_TestCase {
 		$app = new Application();
 		$container = $app->getContainer();
 
-		$userManager = $container->query('ServerContainer')->getUserManager();
-		$authorizationCodeMapper = $container->query('OCA\OAuth2\Db\AuthorizationCodeMapper');
-		$accessTokenMapper = $container->query('OCA\OAuth2\Db\AccessTokenMapper');
-		$refreshTokenMapper = $container->query('OCA\OAuth2\Db\RefreshTokenMapper');
-
-		$this->userHooks = new UserHooks($userManager, $authorizationCodeMapper, $accessTokenMapper, $refreshTokenMapper);
+		$this->userHooks = new UserHooks(
+			$container->query('ServerContainer')->getUserManager(),
+			$container->query('OCA\OAuth2\Db\AuthorizationCodeMapper'),
+			$container->query('OCA\OAuth2\Db\AccessTokenMapper'),
+			$container->query('OCA\OAuth2\Db\RefreshTokenMapper'),
+			$container->query('OCP\ILogger'),
+			$container->query('AppName')
+		);
 	}
 
 	public function testRegister() {
