@@ -44,7 +44,7 @@ class AccessTokenMapper extends Mapper {
 	 *
 	 * @param IDb $db Instance of the Db abstraction layer.
 	 * @param ILogger $logger The logger.
-	 * @param null|string $appName The app's name.
+	 * @param string $appName The app's name.
 	 */
 	public function __construct(IDb $db, ILogger $logger, $appName) {
 		parent::__construct($db, 'oauth2_access_tokens');
@@ -169,6 +169,7 @@ class AccessTokenMapper extends Mapper {
 	 */
 	public function cleanUp() {
 		$this->logger->info('Cleaning up expired Access Tokens.', ['app' => $this->appName]);
+
 		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `expires` <= ' . (time() - 60 * 60 * 24 * 7);
 		$stmt = $this->execute($sql);
 		$stmt->closeCursor();

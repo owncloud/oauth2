@@ -25,12 +25,14 @@
 namespace OCA\OAuth2\Tests\Unit\Sabre;
 
 use OC\Core\Application;
+use OC\User\Session;
 use OCA\OAuth2\Db\AccessToken;
 use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Sabre\OAuth2;
 use OCP\IRequest;
+use OCP\ISession;
 use PHPUnit_Framework_MockObject_MockObject;
 use Test\TestCase;
 
@@ -93,11 +95,13 @@ class OAuth2Test extends TestCase {
 
 	public function testIsDavAuthenticated() {
 		// User has not initially authenticated via DAV
+		/** @var ISession | PHPUnit_Framework_MockObject_MockObject $session */
 		$session = $this->createMock('\OC\Session\Memory');
 		$session->expects($this->any())
 			->method('get')
 			->with($this->equalTo(OAuth2::DAV_AUTHENTICATED))
 			->will($this->returnValue(null));
+		/** @var Session | PHPUnit_Framework_MockObject_MockObject $userSession */
 		$userSession = $this->createMock('\OC\User\Session');
 		$oAuth2 = new OAuth2($session, $userSession, $this->request, $this->principalPrefix);
 		$this->assertFalse(
@@ -124,6 +128,7 @@ class OAuth2Test extends TestCase {
 	}
 
 	public function testValidateBearerToken() {
+		/** @var ISession | PHPUnit_Framework_MockObject_MockObject $session */
 		$session = $this->createMock('\OC\Session\Memory');
 		$user = $this->createMock('\OC\User\User');
 		$user->expects($this->any())
@@ -131,6 +136,7 @@ class OAuth2Test extends TestCase {
 			->will($this->returnValue($this->userId));
 
 		// Failing Login
+		/** @var Session | PHPUnit_Framework_MockObject_MockObject $userSession */
 		$userSession = $this->createMock('\OC\User\Session');
 		$userSession->expects($this->any())
 			->method('getUser')
