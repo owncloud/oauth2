@@ -120,7 +120,7 @@ class AuthModuleTest extends PHPUnit_Framework_TestCase {
 		$request->expects($this->once())
 			->method('getHeader')
 			->with($this->equalTo('Authorization'))
-			->will($this->returnValue('Bearer sFz6FM9pecGF62kYz7us43M3amqVZaNQZyUZuMIkAJVJaCfVyr4Uf1v2IzvVZXCy'));
+			->will($this->returnValue('Bearer ' . $this->accessToken->getToken()));
 		$user = $this->authModule->auth($request);
 		$this->assertNotNull($user);
 		$this->assertEquals($this->userId, $user->getUID());
