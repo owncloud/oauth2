@@ -76,7 +76,7 @@ class AuthModuleTest extends PHPUnit_Framework_TestCase {
 		$accessToken->resetExpires();
 		$this->accessToken = $this->accessTokenMapper->insert($accessToken);
 
-		// $this->authModule = new AuthModule();
+		$this->authModule = new AuthModule();
 	}
 
 	protected function tearDown() {
@@ -87,9 +87,7 @@ class AuthModuleTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testAuth() {
-		// TODO: Add this test as soon as the PR is merged
-		// https://github.com/owncloud/core/pull/26742
-		/*// Wrong Authorization header
+		// Wrong Authorization header
 		$request = $this->getMockBuilder('\OCP\IRequest')->getMock();
 		$request->expects($this->once())
 			->method('getHeader')
@@ -125,14 +123,12 @@ class AuthModuleTest extends PHPUnit_Framework_TestCase {
 			->will($this->returnValue('Bearer sFz6FM9pecGF62kYz7us43M3amqVZaNQZyUZuMIkAJVJaCfVyr4Uf1v2IzvVZXCy'));
 		$user = $this->authModule->auth($request);
 		$this->assertNotNull($user);
-		$this->assertEquals($this->userId, $user->getUID());*/
+		$this->assertEquals($this->userId, $user->getUID());
 	}
 
 	public function testGetUserPassword() {
-		// TODO: Add this test as soon as the PR is merged
-		// https://github.com/owncloud/core/pull/26742
-		/*$request = $this->getMockBuilder('\OCP\IRequest')->getMock();
-		$this->assertEquals('', $this->authModule->getUserPassword($request));*/
+		$request = $this->getMockBuilder('\OCP\IRequest')->getMock();
+		$this->assertEquals('', $this->authModule->getUserPassword($request));
 	}
 
 }
