@@ -98,7 +98,7 @@ class PageControllerTest extends TestCase {
 			$accessTokenMapper,
 			$refreshTokenMapper,
 			$this->userId,
-			$container->query('OCP\ILogger')
+			$container->query('Logger')
 		);
 	}
 

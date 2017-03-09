@@ -69,7 +69,7 @@ class AuthModule implements IAuthModule {
 		}
 
 		/** @var IUserManager $userManager */
-		$userManager = $container->query('\OCP\IUserManager');
+		$userManager = $container->query('UserManager');
 		$user = $userManager->get($accessToken->getUserId());
 		return $user;
 	}

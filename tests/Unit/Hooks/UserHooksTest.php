@@ -44,7 +44,7 @@ class UserHooksTest extends PHPUnit_Framework_TestCase {
 			$container->query('OCA\OAuth2\Db\AuthorizationCodeMapper'),
 			$container->query('OCA\OAuth2\Db\AccessTokenMapper'),
 			$container->query('OCA\OAuth2\Db\RefreshTokenMapper'),
-			$container->query('OCP\ILogger'),
+			$container->query('Logger'),
 			$container->query('AppName')
 		);
 	}
