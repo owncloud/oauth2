@@ -45,7 +45,7 @@ class OAuth2Test extends TestCase {
 	private $principalPrefix = 'principals/users/';
 
 	/** @var String $userId */
-	private $userId = 'travis';
+	private $userId = 'john';
 
 	/** @var ClientMapper $clientMapper */
 	private $clientMapper;

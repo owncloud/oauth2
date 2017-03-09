@@ -144,7 +144,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 			$this->authorizationCodeMapper,
 			$this->accessTokenMapper,
 			$this->refreshTokenMapper,
-			$container->query('OCP\ILogger')
+			$container->query('Logger')
 		);
 	}
 

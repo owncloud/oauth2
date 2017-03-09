@@ -52,8 +52,10 @@ class AuthModule implements IAuthModule {
 		}
 
 		$app = new Application();
+		$container = $app->getContainer();
+
 		/** @var AccessTokenMapper $accessTokenMapper */
-		$accessTokenMapper = $app->getContainer()->query('OCA\OAuth2\Db\AccessTokenMapper');
+		$accessTokenMapper = $container->query('OCA\OAuth2\Db\AccessTokenMapper');
 
 		try {
 			/** @var AccessToken $accessToken */
@@ -67,7 +69,7 @@ class AuthModule implements IAuthModule {
 		}
 
 		/** @var IUserManager $userManager */
-		$userManager = $app->getContainer()->query('OCP\IUserManager');
+		$userManager = $container->query('UserManager');
 		$user = $userManager->get($accessToken->getUserId());
 		return $user;
 	}

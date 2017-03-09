@@ -43,13 +43,13 @@ class AuthorizationCodeMapper extends Mapper {
 	 *
 	 * @param IDb $db Instance of the Db abstraction layer.
 	 * @param ILogger $logger The logger.
-	 * @param string $appName The app's name.
+	 * @param string $AppName The app's name.
 	 */
-	public function __construct(IDb $db, ILogger $logger, $appName) {
+	public function __construct(IDb $db, ILogger $logger, $AppName) {
 		parent::__construct($db, 'oauth2_authorization_codes');
 
 		$this->logger = $logger;
-		$this->appName = $appName;
+		$this->appName = $AppName;
 	}
 
 	/**

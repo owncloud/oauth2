@@ -30,12 +30,16 @@ use OCA\OAuth2\Db\AccessToken;
 use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
+use OCP\IUserManager;
 use PHPUnit_Framework_TestCase;
 
 class AuthModuleTest extends PHPUnit_Framework_TestCase {
 
+	/** @var IUserManager $userManager */
+	private $userManager;
+
 	/** @var String $userId */
-	private $userId = 'travis';
+	private $userId = 'john';
 
 	/** @var ClientMapper $clientMapper */
 	private $clientMapper;
@@ -58,6 +62,9 @@ class AuthModuleTest extends PHPUnit_Framework_TestCase {
 		$app = new Application();
 		$container = $app->getContainer();
 
+		$this->userManager = $container->query('UserManager');
+		$this->userManager->createUser($this->userId, 'pass');
+
 		$this->clientMapper = $container->query('OCA\OAuth2\Db\ClientMapper');
 		$this->accessTokenMapper = $container->query('OCA\OAuth2\Db\AccessTokenMapper');
 
@@ -76,7 +83,7 @@ class AuthModuleTest extends PHPUnit_Framework_TestCase {
 		$accessToken->resetExpires();
 		$this->accessToken = $this->accessTokenMapper->insert($accessToken);
 
-		// $this->authModule = new AuthModule();
+		$this->authModule = new AuthModule();
 	}
 
 	protected function tearDown() {
@@ -84,12 +91,11 @@ class AuthModuleTest extends PHPUnit_Framework_TestCase {
 
 		$this->clientMapper->deleteAll();
 		$this->accessTokenMapper->deleteAll();
+		$this->userManager->get($this->userId)->delete();
 	}
 
 	public function testAuth() {
-		// TODO: Add this test as soon as the PR is merged
-		// https://github.com/owncloud/core/pull/26742
-		/*// Wrong Authorization header
+		// Wrong Authorization header
 		$request = $this->getMockBuilder('\OCP\IRequest')->getMock();
 		$request->expects($this->once())
 			->method('getHeader')
@@ -105,6 +111,16 @@ class AuthModuleTest extends PHPUnit_Framework_TestCase {
 			->will($this->returnValue('Bearer test'));
 		$this->assertNull($this->authModule->auth($request));
 
+		// Valid request
+		$request = $this->getMockBuilder('\OCP\IRequest')->getMock();
+		$request->expects($this->once())
+			->method('getHeader')
+			->with($this->equalTo('Authorization'))
+			->will($this->returnValue('Bearer ' . $this->accessToken->getToken()));
+		$user = $this->authModule->auth($request);
+		$this->assertNotNull($user);
+		$this->assertEquals($this->userId, $user->getUID());
+
 		// Expired token
 		$this->accessToken->setExpires(time() - 1);
 		$this->accessTokenMapper->update($this->accessToken);
@@ -112,27 +128,13 @@ class AuthModuleTest extends PHPUnit_Framework_TestCase {
 		$request->expects($this->once())
 			->method('getHeader')
 			->with($this->equalTo('Authorization'))
-			->will($this->returnValue('Bearer test'));
+			->will($this->returnValue('Bearer ' . $this->accessToken->getToken()));
 		$this->assertNull($this->authModule->auth($request));
-
-		// Valid request
-		$this->accessToken->resetExpires();
-		$this->accessTokenMapper->update($this->accessToken);
-		$request = $this->getMockBuilder('\OCP\IRequest')->getMock();
-		$request->expects($this->once())
-			->method('getHeader')
-			->with($this->equalTo('Authorization'))
-			->will($this->returnValue('Bearer sFz6FM9pecGF62kYz7us43M3amqVZaNQZyUZuMIkAJVJaCfVyr4Uf1v2IzvVZXCy'));
-		$user = $this->authModule->auth($request);
-		$this->assertNotNull($user);
-		$this->assertEquals($this->userId, $user->getUID());*/
 	}
 
 	public function testGetUserPassword() {
-		// TODO: Add this test as soon as the PR is merged
-		// https://github.com/owncloud/core/pull/26742
-		/*$request = $this->getMockBuilder('\OCP\IRequest')->getMock();
-		$this->assertEquals('', $this->authModule->getUserPassword($request));*/
+		$request = $this->getMockBuilder('\OCP\IRequest')->getMock();
+		$this->assertEquals('', $this->authModule->getUserPassword($request));
 	}
 
 }

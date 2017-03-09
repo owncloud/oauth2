@@ -60,7 +60,7 @@ class OAuthApiController extends ApiController {
 	/**
 	 * OAuthApiController constructor.
 	 *
-	 * @param string $appName The app's name.
+	 * @param string $AppName The app's name.
 	 * @param IRequest $request The request.
 	 * @param ClientMapper $clientMapper The client mapper.
 	 * @param AuthorizationCodeMapper $authorizationCodeMapper The authorization code mapper.
@@ -68,13 +68,13 @@ class OAuthApiController extends ApiController {
 	 * @param RefreshTokenMapper $refreshTokenMapper The refresh token mapper.
 	 * @param ILogger $logger The logger.
 	 */
-	public function __construct($appName, IRequest $request,
+	public function __construct($AppName, IRequest $request,
 								ClientMapper $clientMapper,
 								AuthorizationCodeMapper $authorizationCodeMapper,
 								AccessTokenMapper $accessTokenMapper,
 								RefreshTokenMapper $refreshTokenMapper,
 								ILogger $logger) {
-		parent::__construct($appName, $request);
+		parent::__construct($AppName, $request);
 
 		$this->clientMapper = $clientMapper;
 		$this->authorizationCodeMapper = $authorizationCodeMapper;

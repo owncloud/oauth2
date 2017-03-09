@@ -123,7 +123,7 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 			$this->accessTokenMapper,
 			$this->refreshTokenMapper,
 			$this->userId,
-			$container->query('OCP\ILogger')
+			$container->query('Logger')
 		);
 	}
 

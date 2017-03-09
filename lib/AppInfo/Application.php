@@ -47,6 +47,11 @@ class Application extends App {
 			return $c->query('ServerContainer')->getLogger();
 		});
 
+		// User Manager
+		$container->registerService('UserManager', function($c) {
+			return $c->query('ServerContainer')->getUserManager();
+		});
+
 		// Hooks
 		$container->registerService('UserHooks', function ($c) {
 			return new UserHooks(
@@ -54,7 +59,7 @@ class Application extends App {
 				$c->query('OCA\OAuth2\Db\AuthorizationCodeMapper'),
 				$c->query('OCA\OAuth2\Db\AccessTokenMapper'),
 				$c->query('OCA\OAuth2\Db\RefreshTokenMapper'),
-				$c->query('OCP\ILogger'),
+				$c->query('Logger'),
 				$c->query('AppName')
 			);
 		});
