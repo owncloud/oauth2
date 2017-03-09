@@ -30,12 +30,16 @@ use OCA\OAuth2\Db\AccessToken;
 use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
+use OCP\IUserManager;
 use PHPUnit_Framework_TestCase;
 
 class AuthModuleTest extends PHPUnit_Framework_TestCase {
 
+	/** @var IUserManager $userManager */
+	private $userManager;
+
 	/** @var String $userId */
-	private $userId = 'travis';
+	private $userId = 'john';
 
 	/** @var ClientMapper $clientMapper */
 	private $clientMapper;
@@ -57,6 +61,9 @@ class AuthModuleTest extends PHPUnit_Framework_TestCase {
 
 		$app = new Application();
 		$container = $app->getContainer();
+
+		$this->userManager = $container->query('UserManager');
+		$this->userManager->createUser($this->userId, 'pass');
 
 		$this->clientMapper = $container->query('OCA\OAuth2\Db\ClientMapper');
 		$this->accessTokenMapper = $container->query('OCA\OAuth2\Db\AccessTokenMapper');
@@ -84,6 +91,7 @@ class AuthModuleTest extends PHPUnit_Framework_TestCase {
 
 		$this->clientMapper->deleteAll();
 		$this->accessTokenMapper->deleteAll();
+		$this->userManager->get($this->userId)->delete();
 	}
 
 	public function testAuth() {
@@ -103,19 +111,7 @@ class AuthModuleTest extends PHPUnit_Framework_TestCase {
 			->will($this->returnValue('Bearer test'));
 		$this->assertNull($this->authModule->auth($request));
 
-		// Expired token
-		$this->accessToken->setExpires(time() - 1);
-		$this->accessTokenMapper->update($this->accessToken);
-		$request = $this->getMockBuilder('\OCP\IRequest')->getMock();
-		$request->expects($this->once())
-			->method('getHeader')
-			->with($this->equalTo('Authorization'))
-			->will($this->returnValue('Bearer test'));
-		$this->assertNull($this->authModule->auth($request));
-
 		// Valid request
-		$this->accessToken->resetExpires();
-		$this->accessTokenMapper->update($this->accessToken);
 		$request = $this->getMockBuilder('\OCP\IRequest')->getMock();
 		$request->expects($this->once())
 			->method('getHeader')
@@ -124,6 +120,16 @@ class AuthModuleTest extends PHPUnit_Framework_TestCase {
 		$user = $this->authModule->auth($request);
 		$this->assertNotNull($user);
 		$this->assertEquals($this->userId, $user->getUID());
+
+		// Expired token
+		$this->accessToken->setExpires(time() - 1);
+		$this->accessTokenMapper->update($this->accessToken);
+		$request = $this->getMockBuilder('\OCP\IRequest')->getMock();
+		$request->expects($this->once())
+			->method('getHeader')
+			->with($this->equalTo('Authorization'))
+			->will($this->returnValue('Bearer ' . $this->accessToken->getToken()));
+		$this->assertNull($this->authModule->auth($request));
 	}
 
 	public function testGetUserPassword() {
