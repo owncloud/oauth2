@@ -59,20 +59,20 @@ class UserHooks {
 	 * @param AccessTokenMapper $accessTokenMapper The access token mapper.
 	 * @param RefreshTokenMapper $refreshTokenMapper The refresh token mapper.
 	 * @param ILogger $logger The logger.
-	 * @param string $appName The app's name.
+	 * @param string $AppName The app's name.
 	 */
 	public function __construct(IUserManager $userManager,
 								AuthorizationCodeMapper $authorizationCodeMapper,
 								AccessTokenMapper $accessTokenMapper,
 								RefreshTokenMapper $refreshTokenMapper,
 								ILogger $logger,
-								$appName) {
+								$AppName) {
 		$this->userManager = $userManager;
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
 		$this->accessTokenMapper = $accessTokenMapper;
 		$this->refreshTokenMapper = $refreshTokenMapper;
 		$this->logger = $logger;
-		$this->appName = $appName;
+		$this->appName = $AppName;
 	}
 
 	/**

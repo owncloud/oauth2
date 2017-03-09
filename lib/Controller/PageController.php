@@ -63,7 +63,7 @@ class PageController extends Controller {
 	/**
 	 * PageController constructor.
 	 *
-	 * @param string $appName The apps's name.
+	 * @param string $AppName The app's name.
 	 * @param IRequest $request The request.
 	 * @param ClientMapper $clientMapper The client mapper.
 	 * @param AuthorizationCodeMapper $authorizationCodeMapper The authorization code mapper.
@@ -72,14 +72,14 @@ class PageController extends Controller {
 	 * @param string $UserId The user ID.
 	 * @param ILogger $logger The logger.
 	 */
-	public function __construct($appName, IRequest $request,
+	public function __construct($AppName, IRequest $request,
 								ClientMapper $clientMapper,
 								AuthorizationCodeMapper $authorizationCodeMapper,
 								AccessTokenMapper $accessTokenMapper,
 								RefreshTokenMapper $refreshTokenMapper,
 								$UserId,
 								ILogger $logger) {
-		parent::__construct($appName, $request);
+		parent::__construct($AppName, $request);
 
 		$this->clientMapper = $clientMapper;
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
