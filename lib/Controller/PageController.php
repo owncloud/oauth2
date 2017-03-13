@@ -108,22 +108,38 @@ class PageController extends Controller {
 		if (!is_string($response_type) || !is_string($client_id)
 			|| !is_string($redirect_uri) || (isset($state) && !is_string($state))
 		) {
-			return new RedirectResponse(OC_Util::getDefaultPageUrl());
+			return new TemplateResponse(
+				$this->appName,
+				'authorize-error',
+				['client_name' => null, 'back_url' => OC_Util::getDefaultPageUrl()]
+			);
 		}
 
 		try {
 			/** @var Client $client */
 			$client = $this->clientMapper->findByIdentifier($client_id);
 		} catch (DoesNotExistException $exception) {
-			return new RedirectResponse(OC_Util::getDefaultPageUrl());
+			return new TemplateResponse(
+				$this->appName,
+				'authorize-error',
+				['client_name' => null, 'back_url' => OC_Util::getDefaultPageUrl()]
+			);
 		}
 
 		if (!Utilities::validateRedirectUri($client->getRedirectUri(), urldecode($redirect_uri), $client->getAllowSubdomains())) {
-			return new RedirectResponse(OC_Util::getDefaultPageUrl());
+			return new TemplateResponse(
+				$this->appName,
+				'authorize-error',
+				['client_name' => $client->getName(), 'back_url' => OC_Util::getDefaultPageUrl()]
+			);
 		}
 
 		if (strcmp($response_type, 'code') !== 0) {
-			return new RedirectResponse(OC_Util::getDefaultPageUrl());
+			return new TemplateResponse(
+				$this->appName,
+				'authorize-error',
+				['client_name' => $client->getName(), 'back_url' => OC_Util::getDefaultPageUrl()]
+			);
 		}
 
 		return new TemplateResponse($this->appName, 'authorize', ['client_name' => $client->getName()]);
