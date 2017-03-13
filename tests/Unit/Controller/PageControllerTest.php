@@ -111,33 +111,61 @@ class PageControllerTest extends TestCase {
 	public function testAuthorize() {
 		// Wrong types
 		$result = $this->controller->authorize(1, 'qwertz', 'abcd', 'state');
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+		$this->assertTrue($result instanceof TemplateResponse);
+		$this->assertEquals('authorize-error', $result->getTemplateName());
+		$this->assertEquals(
+			['client_name' => null, 'back_url' => OC_Util::getDefaultPageUrl()],
+			$result->getParams()
+		);
 
 		$result = $this->controller->authorize('code', 2, 'abcd', 'state');
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+		$this->assertTrue($result instanceof TemplateResponse);
+		$this->assertEquals('authorize-error', $result->getTemplateName());
+		$this->assertEquals(
+			['client_name' => null, 'back_url' => OC_Util::getDefaultPageUrl()],
+			$result->getParams()
+		);
 
 		$result = $this->controller->authorize('code', 'qwertz', 3, 'state');
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+		$this->assertTrue($result instanceof TemplateResponse);
+		$this->assertEquals('authorize-error', $result->getTemplateName());
+		$this->assertEquals(
+			['client_name' => null, 'back_url' => OC_Util::getDefaultPageUrl()],
+			$result->getParams()
+		);
 
 		$result = $this->controller->authorize('code', $this->identifier, urldecode($this->redirectUri), 4);
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+		$this->assertTrue($result instanceof TemplateResponse);
+		$this->assertEquals('authorize-error', $result->getTemplateName());
+		$this->assertEquals(
+			['client_name' => null, 'back_url' => OC_Util::getDefaultPageUrl()],
+			$result->getParams()
+		);
 
 		// Wrong parameters
 		$result = $this->controller->authorize('code', 'qwertz', 'abcd', 'state');
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+		$this->assertTrue($result instanceof TemplateResponse);
+		$this->assertEquals('authorize-error', $result->getTemplateName());
+		$this->assertEquals(
+			['client_name' => null, 'back_url' => OC_Util::getDefaultPageUrl()],
+			$result->getParams()
+		);
 
 		$result = $this->controller->authorize('qwertz', $this->identifier, urldecode($this->redirectUri));
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+		$this->assertTrue($result instanceof TemplateResponse);
+		$this->assertEquals('authorize-error', $result->getTemplateName());
+		$this->assertEquals(
+			['client_name' => $this->name, 'back_url' => OC_Util::getDefaultPageUrl()],
+			$result->getParams()
+		);
 
 		$result = $this->controller->authorize('code', $this->identifier, urldecode('https://www.example.org'));
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+		$this->assertTrue($result instanceof TemplateResponse);
+		$this->assertEquals('authorize-error', $result->getTemplateName());
+		$this->assertEquals(
+			['client_name' => $this->name, 'back_url' => OC_Util::getDefaultPageUrl()],
+			$result->getParams()
+		);
 
 		$result = $this->controller->authorize('code', $this->identifier, urldecode($this->redirectUri));
 		$this->assertTrue($result instanceof TemplateResponse);
