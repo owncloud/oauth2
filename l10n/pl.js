@@ -12,8 +12,10 @@ OC.L10N.register(
     "Name" : "Nazwa",
     "Client Identifier" : "Identyfikator klienta",
     "Secret" : "Hasło",
+    "Subdomains allowed" : "Subdomeny dopuszczone",
     "Are you sure you want to delete this item?" : "Usunąć ten element?",
     "Add client" : "Dodaj klienta",
+    "Allow subdomains" : "Dopuść subdomeny",
     "Add" : "Dodaj",
     "Authorized Applications" : "Uwierzytelnione aplikacje",
     "No applications authorized." : "Brak uwierzytelnionych aplikacji"
