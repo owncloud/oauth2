@@ -1,7 +1,7 @@
 { "translations": {
     "Do you really like to authorize the application “" : "このアプリケーションを許可することに問題ありませんか？",
     "”?" : "\"?",
-    "The application will gain access to your username and will be allowed to manage files, folders and shares." : "このアプリケーションは、貴方のユーザーネームを利用してファイル、フォルダー及び共有アイテムの変更及び更新を実施します。",
+    "The application will gain access to your username and will be allowed to manage files, folders and shares." : "アプリケーションがあなたのユーザー名に対してアクセスを得れば、ファイル、フォルダー、共有を管理できるようになります。",
     "Authorize" : "許可",
     "Cancel" : "キャンセル",
     "OAuth 2.0" : "OAuth2.0",
