@@ -1,6 +1,7 @@
 OC.L10N.register(
     "oauth2",
     {
+    "Back" : "返回",
     "Do you really like to authorize the application “" : "您真的想要驗證應用程式嗎 “",
     "”?" : "”?",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "此應用程式將會得到您的帳號存取和允許管理檔案，資料夾和分享。",

@@ -1,4 +1,9 @@
 { "translations": {
+    "Request not valid" : "הבקשה אינה חוקית",
+    "This request is not valid. Please contact the administrator if this error persists." : "הבקשה אינה חוקית. יש ליצור קשר עם מנהל המערכת אם שגיאה זו תמשך.",
+    "This request is not valid. Please contact the administrator of “" : "הבקשה אינה חוקית. יש ליצור קשר עם מנהל המערכת של \"",
+    "” if this error persists." : "” אם שגיאה זו תמשך.",
+    "Back" : "אחורה",
     "Do you really like to authorize the application “" : "האם באמת לאשר את היישום “",
     "”?" : "”?",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "היישום יקבל גישה לשם המשתמש שלך ויהיה רשאי לנהל קבצים, תיקיות ושיתופים.",

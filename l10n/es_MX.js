@@ -1,6 +1,7 @@
 OC.L10N.register(
     "oauth2",
     {
+    "Back" : "Volver",
     "Do you really like to authorize the application “" : "Desea autorizar la aplicación \"",
     "”?" : "\"?",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "La aplicación tendrá acceso a su cuenta de usuario y será capaz de administrar archivos, carpetas y elementos compartidos.",

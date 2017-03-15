@@ -1,6 +1,7 @@
 OC.L10N.register(
     "oauth2",
     {
+    "Back" : "Tilbake",
     "Do you really like to authorize the application “" : "Vil du virkelig autorisere applikasjonen?",
     "”?" : "?",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Applikasjonen vil få tilgang til ditt brukernavn og vil kunne administrere filer, lokale mapper og delte mapper.",

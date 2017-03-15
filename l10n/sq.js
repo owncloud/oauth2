@@ -1,6 +1,11 @@
 OC.L10N.register(
     "oauth2",
     {
+    "Request not valid" : "Kërkesë jo e vlefshme",
+    "This request is not valid. Please contact the administrator if this error persists." : "Kjo kërkesë s’është e vlefshme. Ju lutemi, lidhuni me përgjegjësin, nëse vazhdon ky gabim.",
+    "This request is not valid. Please contact the administrator of “" : "Kjo kërkesë s’është e vlefshme. Ju lutemi, lidhuni me përgjegjësin e \"",
+    "” if this error persists." : "” nëse vazhdon ky gabim.",
+    "Back" : "Mbrapsht",
     "Do you really like to authorize the application “" : "Doni vërtet të autorizohet aplikacioni “",
     "”?" : "”?",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Aplikacioni do të mund të përdorë emrin tuaj të përdoruesit dhe do të lejohet të administrojë kartela, dosje dhe ndarje.",

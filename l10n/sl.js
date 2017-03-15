@@ -1,6 +1,7 @@
 OC.L10N.register(
     "oauth2",
     {
+    "Back" : "Nazaj",
     "Do you really like to authorize the application “" : "Ali ste prepričani, da želite overiti program »",
     "”?" : "”?",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Po overitvi pridobi program dovoljenje za uporabo uporabniškega imena, s čimer je omogočen dostop do upravljanja datotek, map in souporabe.",
