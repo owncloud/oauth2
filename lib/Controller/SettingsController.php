@@ -153,6 +153,7 @@ class SettingsController extends Controller {
 	 *
 	 * @return RedirectResponse Redirection to the settings page.
 	 *
+	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
 	public function revokeAuthorization($id, $user_id) {
