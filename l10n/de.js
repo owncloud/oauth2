@@ -1,6 +1,10 @@
 OC.L10N.register(
     "oauth2",
     {
+    "Request not valid" : "Anfrage nicht gültig",
+    "This request is not valid. Please contact the administrator if this error persists." : "Diese Anfrage ist nicht gültig. Bitte kontaktiere den Administrator, wenn der Fehler weiterhin erscheint.",
+    "This request is not valid. Please contact the administrator of “" : "Diese Anfrage ist nicht gültig. Bitte kontaktiere den Administrator von \"",
+    "” if this error persists." : "* wenn der Fehler weiterhin erscheint.",
     "Back" : "Zurück",
     "Do you really like to authorize the application “" : "Möchten Sie die Anwendung \"",
     "”?" : "\" wirklich autorisieren?",

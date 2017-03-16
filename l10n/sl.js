@@ -1,6 +1,9 @@
 OC.L10N.register(
     "oauth2",
     {
+    "Request not valid" : "Zahteva ni veljavna",
+    "This request is not valid. Please contact the administrator of “" : "Zahteva ni veljavna! Stopite v stik s skrbnikom »",
+    "” if this error persists." : "«, če se napaka pojavi večkrat.",
     "Back" : "Nazaj",
     "Do you really like to authorize the application “" : "Ali ste prepričani, da želite overiti program »",
     "”?" : "”?",
