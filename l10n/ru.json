@@ -1,4 +1,8 @@
 { "translations": {
+    "Request not valid" : "Запрос недопустим",
+    "This request is not valid. Please contact the administrator if this error persists." : "Запрос недопустим. Пожалуйста, свяжитесь с администратором, если эта ошибка остаётся.",
+    "This request is not valid. Please contact the administrator of “" : "Запрос недопустим. Пожалуйста, свяжитесь с администратором“",
+    "” if this error persists." : "” если эта ошибка остаётся.",
     "Back" : "Назад",
     "Do you really like to authorize the application “" : "Вы действительно хотите авторизировать приложение \"",
     "”?" : "\"?",
