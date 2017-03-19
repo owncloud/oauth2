@@ -14,7 +14,7 @@ Place the content of this repository in **owncloud/apps/oauth2**.
 * Access Token URL: `/index.php/apps/oauth2/api/v1/token`
 
 ### Protocol Flow
-1. [Client registration](https://tools.ietf.org/html/rfc6749#section-2): First the clients have to be registered in the admin settings: `/index.php/settings/admin#oauth2`. You need to specify a name for the client (the name is unrelated to the OAuth 2.0 protocol and is just used to recognize it later) and the redirect URI. A client identifier and client secret is being generated when adding a new client. They both consist of 64 characters.
+1. [Client registration](https://tools.ietf.org/html/rfc6749#section-2): First the clients have to be registered in the admin settings: `/index.php/settings/admin?sectionid=additional#oauth2`. You need to specify a name for the client (the name is unrelated to the OAuth 2.0 protocol and is just used to recognize it later) and the redirect URI. A client identifier and client secret is being generated when adding a new client. They both consist of 64 characters.
 
 2. [Authorization Request](https://tools.ietf.org/html/rfc6749#section-4.1.1): For every registered client an Authorization Request can be made. The client redirects the resource owner to the [Authorization URL](#endpoints) and requests authorization. The following URL parameters have to be specified: 
     1. `response_type` (required): needs to be `code` because at this time only the Authorization Code Flow is implemented.
