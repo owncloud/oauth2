@@ -1,12 +1,7 @@
 <?php
 /**
- * @author Lukas Biermann
- * @author Nina Herrmann
- * @author Wladislaw Iwanzow
- * @author Dennis Meis
- * @author Jonathan Neugebauer
- *
- * @copyright Copyright (c) 2017, Project Seminar "PSSL16" at the University of Muenster.
+ * @author Project Seminar "sciebo@Learnweb" of the University of Muenster
+ * @copyright Copyright (c) 2017, University of Muenster
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify

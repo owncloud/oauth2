@@ -1,6 +1,2 @@
 # Authors
-* Lukas Biermann
-* Nina Herrmann
-* Wladislaw  Iwanzow
-* Dennis Meis
-* Jonathan Neugebauer
+* Project Seminar "sciebo@Learnweb" of the University of Münster
