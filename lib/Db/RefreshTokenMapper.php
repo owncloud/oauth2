@@ -56,10 +56,6 @@ class RefreshTokenMapper extends Mapper {
 	}
 
 	/**
-	 * Selects all refresh codes.
-	 *
-	 * @param int $limit The maximum number of rows.
-	 * @param int $offset From which row we want to start.
 	 * Selects an refresh token by its token.
 	 *
 	 * @param string $token The refresh token.
