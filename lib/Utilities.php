@@ -32,13 +32,13 @@ class Utilities {
     }
 
 	/**
-	 * Validates a redirect URI.
+	 * Validates a redirection URI.
 	 *
-	 * @param string $expected The expected redirect URI.
-	 * @param string $actual The actual redirect URI.
+	 * @param string $expected The expected redirection URI.
+	 * @param string $actual The actual redirection URI.
 	 * @param boolean $allowSubdomains Whether to allow subdomains.
 	 *
-	 * @return boolean True if the redirect URI is valid, false otherwise.
+	 * @return boolean True if the redirection URI is valid, false otherwise.
 	 */
 	public static function validateRedirectUri($expected, $actual, $allowSubdomains) {
 		if (strcmp(parse_url($expected, PHP_URL_SCHEME), parse_url($actual, PHP_URL_SCHEME)) !== 0) {

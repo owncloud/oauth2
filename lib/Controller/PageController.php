@@ -89,7 +89,7 @@ class PageController extends Controller {
 	 *
 	 * @param string $response_type The expected response type.
 	 * @param string $client_id The client identifier.
-	 * @param string $redirect_uri The redirect URI.
+	 * @param string $redirect_uri The redirection URI.
 	 * @param string $state The state.
 	 *
 	 * @return TemplateResponse|RedirectResponse The authorize view or a
@@ -145,7 +145,7 @@ class PageController extends Controller {
 	 *
 	 * @param string $response_type The expected response type.
 	 * @param string $client_id The client identifier.
-	 * @param string $redirect_uri The redirect URI.
+	 * @param string $redirect_uri The redirection URI.
 	 * @param string $state The state.
 	 *
 	 * @return RedirectResponse|JSONResponse Redirection to the given
