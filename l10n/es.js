@@ -1,6 +1,10 @@
 OC.L10N.register(
     "oauth2",
     {
+    "Request not valid" : "Petición Inválida",
+    "This request is not valid. Please contact the administrator if this error persists." : "Petición inválida. Por favor contacte con el administrador si el error persiste.",
+    "This request is not valid. Please contact the administrator of “" : "Petición inválida. Por favor contacte con el administrador de \"",
+    "” if this error persists." : "\" si el error persiste.",
     "Back" : "Volver",
     "Do you really like to authorize the application “" : "¿Confirma que quiere autorizar la aplicación «",
     "”?" : "»?",
