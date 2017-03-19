@@ -26,8 +26,8 @@ Place the content of this repository in **owncloud/apps/oauth2**.
 
 4. [Access Token Request](https://tools.ietf.org/html/rfc6749#section-4.1.3): With the Authorization Code the client can request an Access Token using the [Access Token URL](#endpoints). [Client Authentication](https://tools.ietf.org/html/rfc6749#section-2.3) is done using Basic Auth with the client identifier as username and the client secret as password. The following URL parameters have to be specified:
     1. `grant_type `: Either `authorization_code` or `refresh_token`.
-    2. `code` and `redirect_uri` (if the grant type `authorization_code` is used)
-    3. `refresh_token` (if the grant type `refresh_token` is used)
+    2. `code` and `redirect_uri` (if the grant type `authorization_code` is used).
+    3. `refresh_token` (if the grant type `refresh_token` is used).
 
 5. [Access Token Response](https://tools.ietf.org/html/rfc6749#section-4.1.4): The app responses to a valid Access Token Request with an JSON response like the following. An Access Token is valid for 1 hour and can be refreshed with a Refresh Token.
 
