@@ -11,7 +11,6 @@ OC.L10N.register(
     "Registered clients" : "Regisztrált kliensek",
     "No clients registered." : "Nincs regisztrált kliens.",
     "Name" : "Név",
-    "Redirect URI" : "Átirányítási cím",
     "Client Identifier" : "Kliensazonosító",
     "Secret" : "Titok",
     "Subdomains allowed" : "Al-domain-ek engedélyezve",

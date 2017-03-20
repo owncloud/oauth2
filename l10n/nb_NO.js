@@ -11,7 +11,6 @@ OC.L10N.register(
     "Registered clients" : "Registrerte klienter",
     "No clients registered." : "Ingen klienter er registrert",
     "Name" : "Navn",
-    "Redirect URI" : "Omdirigerings URL",
     "Client Identifier" : "Klient id",
     "Secret" : "Secret",
     "Subdomains allowed" : "Underdomener tillatt",

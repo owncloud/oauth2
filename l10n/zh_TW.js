@@ -11,7 +11,6 @@ OC.L10N.register(
     "Registered clients" : "已註冊用戶",
     "No clients registered." : "沒有用戶註冊。",
     "Name" : "名稱",
-    "Redirect URI" : "轉向 URI",
     "Client Identifier" : "用戶身份",
     "Secret" : "密鑰",
     "Subdomains allowed" : "子網域已允許",

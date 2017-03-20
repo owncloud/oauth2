@@ -15,7 +15,6 @@ OC.L10N.register(
     "Registered clients" : "לקוחות רשומים",
     "No clients registered." : "אין לקוחות רשומים.",
     "Name" : "שם",
-    "Redirect URI" : "הפניה מחדש של URI",
     "Client Identifier" : "מזהה לקוח",
     "Secret" : "סוד",
     "Subdomains allowed" : "תיקיות משנה מאופשרות",

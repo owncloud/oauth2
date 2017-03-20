@@ -15,7 +15,6 @@ OC.L10N.register(
     "Registered clients" : "Angelegte Clients",
     "No clients registered." : "Keine Clients angelegt.",
     "Name" : "Name",
-    "Redirect URI" : "Weiterleitungs-URI",
     "Client Identifier" : "Client ID",
     "Secret" : "Geheime Zeichenkette",
     "Subdomains allowed" : "Subdomains erlaubt",

@@ -14,7 +14,6 @@ OC.L10N.register(
     "Registered clients" : "Vpisani odjemalci",
     "No clients registered." : "Ni vpisanih odjemalcev.",
     "Name" : "Ime",
-    "Redirect URI" : "Preusmeritveni naslov URI",
     "Client Identifier" : "Določilo odjemalca",
     "Secret" : "Skrivni ključ",
     "Subdomains allowed" : "Uporaba poddomen je dovoljena",

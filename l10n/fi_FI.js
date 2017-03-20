@@ -11,7 +11,6 @@ OC.L10N.register(
     "Registered clients" : "Rekisteröidyt asiakkaat",
     "No clients registered." : "Ei rekisteröityjä asiakkaita",
     "Name" : "Nimi",
-    "Redirect URI" : "Uudelleenohjattu URI",
     "Client Identifier" : "Asiakkaan tunniste",
     "Secret" : "Salaisuus",
     "Subdomains allowed" : "Alidomainit sallittu",
