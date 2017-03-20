@@ -11,12 +11,14 @@ env:
     - CORE_BRANCH=master DB=pgsql
     - CORE_BRANCH=master DB=sqlite
     - CORE_BRANCH=master DB=mysql
+    - CORE_BRANCH=stable9.1 DB=pgsql
+    - CORE_BRANCH=stable9.1 DB=sqlite
+    - CORE_BRANCH=stable9.1 DB=mysql
 
 matrix:
     allow_failures:
         - php: 7.1
         - php: nightly
-        - env: CORE_BRANCH=master
     fast_finish: true
 
 before_install:
