@@ -15,6 +15,7 @@ OC.L10N.register(
     "Registered clients" : "Klientë të regjistruar",
     "No clients registered." : "S’ka klientë të regjistruar.",
     "Name" : "Emër",
+    "Redirection URI" : "URI Ridrejtimi",
     "Client Identifier" : "Identifikues Klienti",
     "Secret" : "E fshehtë",
     "Subdomains allowed" : "Nënpërkatësi të lejuara",
