@@ -9,7 +9,7 @@
     <namespace>OAuth2</namespace>
     <category>other</category>
     <dependencies>
-        <owncloud min-version="10" max-version="10"/>
+        <owncloud min-version="9.1" max-version="10"/>
     </dependencies>
     <types>
         <authentication/>

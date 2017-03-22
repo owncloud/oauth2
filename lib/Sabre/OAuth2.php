@@ -23,7 +23,6 @@ use OC\User\Session;
 use OCA\DAV\Connector\Sabre\Auth;
 use OCP\IRequest;
 use OCP\ISession;
-use Sabre\DAV\Auth\Backend\AbstractBearer;
 
 class OAuth2 extends AbstractBearer {
 
