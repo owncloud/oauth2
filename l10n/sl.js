@@ -2,6 +2,7 @@ OC.L10N.register(
     "oauth2",
     {
     "Request not valid" : "Zahteva ni veljavna",
+    "This request is not valid. Please contact the administrator if this error persists." : "Zahteva ni veljavna! Stopite v stik s skrbnikom, če se napaka pojavlja pogosto.",
     "This request is not valid. Please contact the administrator of “" : "Zahteva ni veljavna! Stopite v stik s skrbnikom »",
     "” if this error persists." : "«, če se napaka pojavi večkrat.",
     "Back" : "Nazaj",
@@ -14,6 +15,7 @@ OC.L10N.register(
     "Registered clients" : "Vpisani odjemalci",
     "No clients registered." : "Ni vpisanih odjemalcev.",
     "Name" : "Ime",
+    "Redirection URI" : "Preusmeritveni naslov URI",
     "Client Identifier" : "Določilo odjemalca",
     "Secret" : "Skrivni ključ",
     "Subdomains allowed" : "Uporaba poddomen je dovoljena",

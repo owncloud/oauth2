@@ -1,6 +1,10 @@
 OC.L10N.register(
     "oauth2",
     {
+    "Request not valid" : "Pedido inválido",
+    "This request is not valid. Please contact the administrator if this error persists." : "Este pedido não é válido. Por favor contacte o administrador se o erro persistir.",
+    "This request is not valid. Please contact the administrator of “" : "Este pedido não é válido. Por favor contacte o administrador de \"",
+    "” if this error persists." : "\" se este erro persistir.",
     "Back" : "Voltar",
     "Do you really like to authorize the application “" : "Tem mesmo a certeza que pretende autorizar a aplicação \"",
     "”?" : "”?",
@@ -11,6 +15,7 @@ OC.L10N.register(
     "Registered clients" : "Clientes registados",
     "No clients registered." : "Sem clientes registados.",
     "Name" : "Nome",
+    "Redirection URI" : "Redirecionação URL",
     "Client Identifier" : "Identificador de Cliente",
     "Secret" : "Segredo",
     "Subdomains allowed" : "Permitidos subdomínios",
