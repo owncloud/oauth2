@@ -124,6 +124,7 @@ class RefreshTokenMapper extends Mapper {
 
 	/**
 	 * Deletes all refresh tokens for the given user ID.
+	 * Used for the token deletion by the UserHooks.
 	 *
 	 * @param string $userId The user ID.
 	 */

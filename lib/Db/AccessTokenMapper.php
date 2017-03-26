@@ -120,7 +120,7 @@ class AccessTokenMapper extends Mapper {
 	}
 
 	/**
-	 * Deletes all access token for the given user ID.
+	 * Deletes all access tokens for the given user ID.
 	 *
 	 * @param string $userId The user ID.
 	 */
@@ -135,7 +135,8 @@ class AccessTokenMapper extends Mapper {
 	}
 
 	/**
-	 * Deletes all access tokens for given client and user ID.
+	 * Deletes all access tokens for given client and user ID
+	 * Used for the token deletion by the UserHooks.
 	 *
 	 * @param int $clientId The client ID.
 	 * @param string $userId The user ID.

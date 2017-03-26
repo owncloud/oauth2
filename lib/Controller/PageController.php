@@ -92,8 +92,9 @@ class PageController extends Controller {
 	 * @param string $redirect_uri The redirection URI.
 	 * @param string $state The state.
 	 *
-	 * @return TemplateResponse The authorize view or a
-	 * redirection to the ownCloud main page.
+	 * @return TemplateResponse The authorize view or the
+	 * authorize-error view with a redirection to the
+	 * default page URL.
 	 *
 	 * @NoAdminRequired
 	 * @NoCSRFRequired

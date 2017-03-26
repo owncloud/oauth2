@@ -120,6 +120,7 @@ class AuthorizationCodeMapper extends Mapper {
 
 	/**
 	 * Deletes all authorization codes for the given user ID.
+	 * Used for the authorization code deletion by the UserHooks.
 	 *
 	 * @param string $userId The user ID.
 	 */
