@@ -8,18 +8,22 @@ php:
     - nightly
 
 env:
-    - CORE_BRANCH=master DB=pgsql
-    - CORE_BRANCH=master DB=sqlite
-    - CORE_BRANCH=master DB=mysql
-    - CORE_BRANCH=stable9.1 DB=pgsql
-    - CORE_BRANCH=stable9.1 DB=sqlite
-    - CORE_BRANCH=stable9.1 DB=mysql
+  global:
+    - CORE_BRANCH=stable9.1
+  matrix:
+    - DB=sqlite
+
 
 matrix:
-    allow_failures:
-        - php: 7.1
-        - php: nightly
-    fast_finish: true
+  include:
+    - php: 7.0
+      env: DB=mysql
+    - php: 7.1
+      env: DB=pgsql
+  allow_failures:
+    - php: 7.1
+    - php: nightly
+  fast_finish: true
 
 before_install:
     # enable a display for running JavaScript tests
