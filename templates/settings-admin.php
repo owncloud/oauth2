@@ -24,7 +24,7 @@ style('oauth2', 'settings-admin');
 ?>
 
 <div class="section" id="oauth2">
-    <h2><?php p($l->t('OAuth 2.0')); ?></h2>
+	<h2 class="app-name"><?php p($l->t('OAuth 2.0')); ?></h2>
 
     <h3><?php p($l->t('Registered clients')); ?></h3>
     <?php if (empty($_['clients'])) {

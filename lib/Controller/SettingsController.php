@@ -88,10 +88,10 @@ class SettingsController extends Controller {
 	 */
 	public function addClient() {
 		if (!isset($_POST['redirect_uri']) || !isset($_POST['name'])) {
-			return new RedirectResponse('../../settings/admin?sectionid=additional#' . $this->appName);
+			return new RedirectResponse('../../settings/admin?sectionid=authentication#oauth2');
 		}
 		if (!Utilities::isValidUrl($_POST['redirect_uri'])) {
-			return new RedirectResponse('../../settings/admin?sectionid=additional#' . $this->appName);
+			return new RedirectResponse('../../settings/admin?sectionid=authentication#oauth2');
 		}
 
 		$client = new Client();
@@ -110,7 +110,7 @@ class SettingsController extends Controller {
 
 		$this->logger->info('The client "' . $client->getName() . '" has been added.', ['app' => $this->appName]);
 
-		return new RedirectResponse('../../settings/admin?sectionid=additional#' . $this->appName);
+		return new RedirectResponse('../../settings/admin?sectionid=authentication#oauth2');
 	}
 
 	/**
@@ -124,7 +124,7 @@ class SettingsController extends Controller {
 	 */
 	public function deleteClient($id) {
 		if (!is_int($id)) {
-			return new RedirectResponse('../../../../settings/admin?sectionid=additional#' . $this->appName);
+			return new RedirectResponse('../../../../settings/admin?sectionid=authentication#oauth2');
 		}
 
 		/** @var Client $client */
@@ -138,7 +138,7 @@ class SettingsController extends Controller {
 
 		$this->logger->info('The client "' . $clientName . '" has been deleted.', ['app' => $this->appName]);
 
-		return new RedirectResponse('../../../../settings/admin?sectionid=additional#' . $this->appName);
+		return new RedirectResponse('../../../../settings/admin?sectionid=authentication');
 	}
 
 	/**
@@ -154,14 +154,14 @@ class SettingsController extends Controller {
 	 */
 	public function revokeAuthorization($id, $user_id) {
 		if (!is_int($id) || !is_string($user_id)) {
-			return new RedirectResponse('../../../../settings/personal?sectionid=additional#' . $this->appName);
+			return new RedirectResponse('../../../../settings/personal?sectionid=authentication');
 		}
 
 		$this->authorizationCodeMapper->deleteByClientUser($id, $user_id);
 		$this->accessTokenMapper->deleteByClientUser($id, $user_id);
 		$this->refreshTokenMapper->deleteByClientUser($id, $user_id);
 
-		return new RedirectResponse('../../../../settings/personal?sectionid=additional#' . $this->appName);
+		return new RedirectResponse('../../../../settings/personal?sectionid=authentication');
 	}
 
 }
