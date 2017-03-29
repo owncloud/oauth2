@@ -20,6 +20,7 @@
 namespace OCA\OAuth2\Panels;
 
 use OCA\OAuth2\Db\ClientMapper;
+use OCP\IURLGenerator;
 use OCP\IUserSession;
 use OCP\Settings\ISettings;
 use OCP\Template;
@@ -35,9 +36,18 @@ class PersonalPanel implements ISettings {
 	 */
 	protected $userSession;
 
-	public function __construct(ClientMapper $clientMapper, IUserSession $userSession) {
+	/**
+	 * @var IURLGenerator
+	 */
+	protected $urlGenerator;
+
+	public function __construct(
+		ClientMapper $clientMapper,
+		IUserSession $userSession,
+		IURLGenerator $urlGenerator) {
 		$this->clientMapper = $clientMapper;
 		$this->userSession = $userSession;
+		$this->urlGenerator = $urlGenerator;
 	}
 
 	public function getSectionID() {
@@ -52,6 +62,7 @@ class PersonalPanel implements ISettings {
 		$t = new Template('oauth2', 'settings-personal');
 		$t->assign('clients', $this->clientMapper->findByUser($userId));
 		$t->assign('user_id', $userId);
+		$t->assign('urlGenerator', $this->urlGenerator);
 		return $t;
 	}
 
