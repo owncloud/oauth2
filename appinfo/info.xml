@@ -21,4 +21,7 @@
         <personal>OCA\OAuth2\Panels\PersonalPanel</personal>
         <admin>OCA\OAuth2\Panels\AdminPanel</admin>
     </settings>
+    <background-jobs>
+        <job>OCA\OAuth2\BackgroundJob\CleanUp</job>
+    </background-jobs>
 </info>

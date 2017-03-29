@@ -19,19 +19,40 @@
 
 namespace OCA\OAuth2\BackgroundJob;
 
-use OCA\OAuth2\AppInfo\Application;
+use OC\BackgroundJob\TimedJob;
+use OCA\OAuth2\Db\AccessTokenMapper;
+use OCA\OAuth2\Db\AuthorizationCodeMapper;
 
-class CleanUp {
+class CleanUp extends TimedJob {
+
+	/**
+	 * @var AccessTokenMapper
+	 */
+	protected $accessTokenMapper;
+	/**
+	 * @var AuthorizationCodeMapper
+	 */
+	protected $authorizationCodeMapper;
+
+	/**
+	 * Cron interval in seconds
+	 */
+	protected $interval = 86400;
+
+	public function __construct(
+		AuthorizationCodeMapper $authorizationCodeMapper,
+		AccessTokenMapper $accessTokenMapper) {
+		$this->authorizationCodeMapper = $authorizationCodeMapper;
+		$this->accessTokenMapper = $accessTokenMapper;
+	}
 
 	/**
 	 * Cleans up expired authorization codes and access tokens.
+	 * @param $argument
 	 */
-	public static function run() {
-		$app = new Application();
-		$container = $app->getContainer();
-
-		$container->query('OCA\OAuth2\Db\AuthorizationCodeMapper')->cleanUp();
-		$container->query('OCA\OAuth2\Db\AccessTokenMapper')->cleanUp();
+	protected function run($argument) {
+		$this->authorizationCodeMapper->cleanUp();
+		$this->accessTokenMapper->cleanUp();
 	}
 
 }
