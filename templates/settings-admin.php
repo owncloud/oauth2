@@ -64,7 +64,7 @@ style('oauth2', 'settings-admin');
     <h3><?php p($l->t('Add client')); ?></h3>
     <form action="../apps/oauth2/clients" method="post">
 		<input id="name" name="name" type="text" placeholder="<?php p($l->t('Name')); ?>">
-        <input id="redirect_uri" name="redirect_uri" type="url" placeholder="<?php p($l->t('Redirection URI')); ?>">
+        <input id="redirect_uri" name="redirect_uri" type="text" placeholder="<?php p($l->t('Redirection URI')); ?>">
 		<input type="checkbox" class="checkbox" name="allow_subdomains" id="allow_subdomains" value="1"/>
 		<label for="allow_subdomains"><?php p($l->t('Allow subdomains'));?></label>
         <input type="submit" class="button" value="<?php p($l->t('Add')); ?>">

@@ -41,6 +41,11 @@ class Utilities {
 	 * @return boolean True if the redirection URI is valid, false otherwise.
 	 */
 	public static function validateRedirectUri($expected, $actual, $allowSubdomains) {
+		$validatePort = true;
+		if (strpos($expected, 'http://localhost:*') === 0) {
+			$expected = 'http://localhost' . substr($expected, 18);
+			$validatePort = false;
+		}
 		if (strcmp(parse_url($expected, PHP_URL_SCHEME), parse_url($actual, PHP_URL_SCHEME)) !== 0) {
 			return false;
 		}
@@ -60,8 +65,10 @@ class Utilities {
 			}
 		}
 
-		if (strcmp(parse_url($expected, PHP_URL_PORT), parse_url($actual, PHP_URL_PORT)) !== 0) {
-			return false;
+		if ($validatePort) {
+			if (strcmp(parse_url($expected, PHP_URL_PORT), parse_url($actual, PHP_URL_PORT)) !== 0) {
+				return false;
+			}
 		}
 
 		if (strcmp(parse_url($expected, PHP_URL_PATH), parse_url($actual, PHP_URL_PATH)) !== 0) {
