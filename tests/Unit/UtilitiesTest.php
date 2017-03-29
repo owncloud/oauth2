@@ -75,6 +75,12 @@ class UtilitiesTest extends PHPUnit_Framework_TestCase {
 				'https://owncloud.org:80/test?q=0',
 				false)
 		);
+		$this->assertTrue(
+			Utilities::validateRedirectUri(
+				'http://localhost:*/test?q=1',
+				'http://localhost:12345/test?q=1',
+				false)
+		);
 	}
 
 }

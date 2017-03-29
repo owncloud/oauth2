@@ -90,6 +90,9 @@ class SettingsController extends Controller {
 		if (!isset($_POST['redirect_uri']) || !isset($_POST['name'])) {
 			return new RedirectResponse('../../settings/admin?sectionid=additional#' . $this->appName);
 		}
+		if (!Utilities::isValidUrl($_POST['redirect_uri'])) {
+			return new RedirectResponse('../../settings/admin?sectionid=additional#' . $this->appName);
+		}
 
 		$client = new Client();
 		$client->setIdentifier(Utilities::generateRandom());

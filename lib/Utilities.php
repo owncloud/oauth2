@@ -82,4 +82,13 @@ class Utilities {
 		return true;
 	}
 
+	public static function isValidUrl($redirectUri) {
+		if (strpos($redirectUri, 'http://localhost:*') === 0) {
+			$redirectUri = 'http://localhost' . substr($redirectUri, 18);
+		}
+
+		return (filter_var($redirectUri, FILTER_VALIDATE_URL) !== false);
+
+	}
+
 }
