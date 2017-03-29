@@ -17,17 +17,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-use OCA\OAuth2\AppInfo\Application;
+namespace OCA\OAuth2\Panels;
+
 use OCA\OAuth2\Db\ClientMapper;
+use OCP\Settings\ISettings;
+use OCP\Template;
 
-$tmpl = new OCP\Template('oauth2', 'settings-personal');
+class AdminPanel implements ISettings {
 
-$app = new Application();
-$container = $app->getContainer();
+	/**
+	 * @var \OCA\OAuth2\Db\ClientMapper
+	 */
+	protected $clientMapper;
 
-/** @var ClientMapper $clientMapper */
-$clientMapper = $container->query('OCA\OAuth2\Db\ClientMapper');
+	public function __construct(ClientMapper $clientMapper) {
+		$this->clientMapper = $clientMapper;
+	}
 
-$userId = \OC::$server->getUserSession()->getUser()->getUID();
+	public function getSectionID() {
+		return 'authentication';
+	}
 
-return $tmpl->fetchPage(['clients' => $clientMapper->findByUser($userId), 'user_id' => $userId]);
+	/**
+	 * @return Template
+	 */
+	public function getPanel() {
+		$t = new Template('oauth2', 'settings-admin');
+		$t->assign('clients', $this->clientMapper->findAll());
+		return $t;
+	}
+
+
+	public function getPriority() {
+		return 20;
+	}
+
+}
