@@ -29,6 +29,7 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\ILogger;
 use OCP\IRequest;
+use OCP\IURLGenerator;
 
 class SettingsController extends Controller {
 
@@ -51,6 +52,11 @@ class SettingsController extends Controller {
 	private $logger;
 
 	/**
+	 * @var IURLGenerator
+	 */
+	private $urlGenerator;
+
+	/**
 	 * SettingsController constructor.
 	 *
 	 * @param string $AppName The app's name.
@@ -61,6 +67,7 @@ class SettingsController extends Controller {
 	 * @param RefreshTokenMapper $refreshTokenMapper The refresh token mapper.
 	 * @param string $UserId The user ID.
 	 * @param ILogger $logger The logger.
+	 * @param IURLGenerator $urlGenerator Use for url generation
 	 */
 	public function __construct($AppName, IRequest $request,
 								ClientMapper $clientMapper,
@@ -68,7 +75,8 @@ class SettingsController extends Controller {
 								AccessTokenMapper $accessTokenMapper,
 								RefreshTokenMapper $refreshTokenMapper,
 								$UserId,
-								ILogger $logger) {
+								ILogger $logger,
+								IURLGenerator $urlGenerator) {
 		parent::__construct($AppName, $request);
 
 		$this->clientMapper = $clientMapper;
@@ -77,6 +85,7 @@ class SettingsController extends Controller {
 		$this->refreshTokenMapper = $refreshTokenMapper;
 		$this->userId = $UserId;
 		$this->logger = $logger;
+		$this->urlGenerator = $urlGenerator;
 	}
 
 	/**
@@ -88,10 +97,18 @@ class SettingsController extends Controller {
 	 */
 	public function addClient() {
 		if (!isset($_POST['redirect_uri']) || !isset($_POST['name'])) {
-			return new RedirectResponse('../../settings/admin?sectionid=authentication#oauth2');
+			return new RedirectResponse(
+				$this->urlGenerator->linkToRouteAbsolute(
+					'settings.SettingsPage.getAdmin',
+					['sectionid' => 'authentication']
+				) . '#oauth2');
 		}
 		if (!Utilities::isValidUrl($_POST['redirect_uri'])) {
-			return new RedirectResponse('../../settings/admin?sectionid=authentication#oauth2');
+			return new RedirectResponse(
+				$this->urlGenerator->linkToRouteAbsolute(
+					'settings.SettingsPage.getAdmin',
+					['sectionid' => 'authentication']
+				) . '#oauth2');
 		}
 
 		$client = new Client();
@@ -110,7 +127,12 @@ class SettingsController extends Controller {
 
 		$this->logger->info('The client "' . $client->getName() . '" has been added.', ['app' => $this->appName]);
 
-		return new RedirectResponse('../../settings/admin?sectionid=authentication#oauth2');
+		return new RedirectResponse(
+			$this->urlGenerator->linkToRouteAbsolute(
+				'settings.SettingsPage.getAdmin',
+				['sectionid' => 'authentication']
+			) . '#oauth2'
+		);
 	}
 
 	/**
@@ -124,7 +146,11 @@ class SettingsController extends Controller {
 	 */
 	public function deleteClient($id) {
 		if (!is_int($id)) {
-			return new RedirectResponse('../../../../settings/admin?sectionid=authentication#oauth2');
+			return new RedirectResponse(
+				$this->urlGenerator->linkToRouteAbsolute(
+					'settings.SettingsPage.getAdmin',
+					['sectionid' => 'authentication']
+				) . '#oauth2');
 		}
 
 		/** @var Client $client */
@@ -138,7 +164,11 @@ class SettingsController extends Controller {
 
 		$this->logger->info('The client "' . $clientName . '" has been deleted.', ['app' => $this->appName]);
 
-		return new RedirectResponse('../../../../settings/admin?sectionid=authentication');
+		return new RedirectResponse(
+			$this->urlGenerator->linkToRouteAbsolute(
+				'settings.SettingsPage.getAdmin',
+				['sectionid' => 'authentication']
+			) . '#oauth2');
 	}
 
 	/**
@@ -154,14 +184,22 @@ class SettingsController extends Controller {
 	 */
 	public function revokeAuthorization($id, $user_id) {
 		if (!is_int($id) || !is_string($user_id)) {
-			return new RedirectResponse('../../../../settings/personal?sectionid=authentication');
+			return new RedirectResponse(
+				$this->urlGenerator->linkToRouteAbsolute(
+					'settings.SettingsPage.getPersonal',
+					['sectionid' => 'security']
+				) . '#oauth2');
 		}
 
 		$this->authorizationCodeMapper->deleteByClientUser($id, $user_id);
 		$this->accessTokenMapper->deleteByClientUser($id, $user_id);
 		$this->refreshTokenMapper->deleteByClientUser($id, $user_id);
 
-		return new RedirectResponse('../../../../settings/personal?sectionid=authentication');
+		return new RedirectResponse(
+			$this->urlGenerator->linkToRouteAbsolute(
+				'settings.SettingsPage.getPersonal',
+				['sectionid' => 'security']
+			) . '#oauth2');
 	}
 
 }
