@@ -9,7 +9,7 @@
     <namespace>OAuth2</namespace>
     <category>other</category>
     <dependencies>
-        <owncloud min-version="9.1" max-version="10"/>
+        <owncloud min-version="10" max-version="10"/>
     </dependencies>
     <types>
         <authentication/>
@@ -17,4 +17,8 @@
     <auth-modules>
         <module>OCA\OAuth2\AuthModule</module>
     </auth-modules>
+    <settings>
+        <personal>OCA\OAuth2\Panels\PersonalPanel</personal>
+        <admin>OCA\OAuth2\Panels\AdminPanel</admin>
+    </settings>
 </info>
