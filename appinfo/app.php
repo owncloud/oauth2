@@ -21,4 +21,3 @@ use OCA\OAuth2\AppInfo\Application;
 
 $app = new Application();
 $app->getContainer()->query('UserHooks')->register();
-\OC::$server->getJobList()->add('OC\BackgroundJob\Legacy\RegularJob', ['OCA\OAuth2\BackgroundJob\CleanUp', 'run']);
