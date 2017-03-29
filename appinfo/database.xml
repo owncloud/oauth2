@@ -45,6 +45,14 @@
                 <default>false</default>
                 <notnull>true</notnull>
             </field>
+            <index>
+                <name>name_idx</name>
+                <unique>true</unique>
+                <field>
+                    <name>name</name>
+                    <sorting>ascending</sorting>
+                </field>
+            </index>
         </declaration>
     </table>
     <table>
