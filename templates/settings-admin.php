@@ -51,7 +51,7 @@ style('oauth2', 'settings-admin');
                     <td><code><?php p($client->getSecret()); ?></code></td>
 					<td id="td-allow-subdomains"><?php if ($client->getAllowSubdomains()) {?> <img alt="" src="/core/img/actions/checkmark.svg"> <?php } ?></td>
                     <td>
-                        <form id="form-inline" class="delete" data-confirm="<?php p($l->t('Are you sure you want to delete this item?')); ?>" action="../apps/oauth2/clients/<?php p($client->getId()); ?>/delete" method="post">
+                        <form id="form-inline" class="delete" data-confirm="<?php p($l->t('Are you sure you want to delete this item?')); ?>" action="<?php p($_['urlGenerator']->linkToRoute('oauth2.settings.deleteClient', ['id' => $client->getId()])); ?>" method="post">
                             <input type="submit" class="button icon-delete" value="">
                         </form>
                     </td>
@@ -62,7 +62,7 @@ style('oauth2', 'settings-admin');
     <?php } ?>
 
     <h3><?php p($l->t('Add client')); ?></h3>
-    <form action="../apps/oauth2/clients" method="post">
+    <form action="<?php p($_['urlGenerator']->linkToRoute('oauth2.settings.addClient')); ?>" method="post">
 		<input id="name" name="name" type="text" placeholder="<?php p($l->t('Name')); ?>">
         <input id="redirect_uri" name="redirect_uri" type="text" placeholder="<?php p($l->t('Redirection URI')); ?>">
 		<input type="checkbox" class="checkbox" name="allow_subdomains" id="allow_subdomains" value="1"/>

@@ -42,7 +42,7 @@ style('oauth2', 'main');
 			<tr>
 				<td><?php p($client->getName()); ?></td>
 				<td>
-					<form id="form-inline" class="delete" data-confirm="<?php p($l->t('Are you sure you want to delete this item?')); ?>" action="../apps/oauth2/clients/<?php p($client->getId()); ?>/revoke?user_id=<?php p($_['user_id']); ?>" method="post">
+					<form id="form-inline" class="delete" data-confirm="<?php p($l->t('Are you sure you want to delete this item?')); ?>" action="<?php p($_['urlGenerator']->linkToRoute('oauth2.settings.revokeAuthorization', ['id' => $client->getId()])); ?>?user_id=<?php p($_['user_id']); ?>" method="post">
 						<input type="submit" class="button icon-delete" value="">
 					</form>
 				</td>

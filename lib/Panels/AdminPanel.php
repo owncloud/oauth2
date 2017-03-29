@@ -20,6 +20,7 @@
 namespace OCA\OAuth2\Panels;
 
 use OCA\OAuth2\Db\ClientMapper;
+use OCP\IURLGenerator;
 use OCP\Settings\ISettings;
 use OCP\Template;
 
@@ -30,8 +31,14 @@ class AdminPanel implements ISettings {
 	 */
 	protected $clientMapper;
 
-	public function __construct(ClientMapper $clientMapper) {
+	/**
+	 * @var IURLGenerator
+	 */
+	protected $urlGenerator;
+
+	public function __construct(ClientMapper $clientMapper, IURLGenerator $urlGenerator) {
 		$this->clientMapper = $clientMapper;
+		$this->urlGenerator = $urlGenerator;
 	}
 
 	public function getSectionID() {
@@ -44,6 +51,7 @@ class AdminPanel implements ISettings {
 	public function getPanel() {
 		$t = new Template('oauth2', 'settings-admin');
 		$t->assign('clients', $this->clientMapper->findAll());
+		$t->assign('urlGenerator', $this->urlGenerator);
 		return $t;
 	}
 
