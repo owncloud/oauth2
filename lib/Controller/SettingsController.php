@@ -87,9 +87,7 @@ class SettingsController extends Controller {
 	 * @NoCSRFRequired
 	 */
 	public function addClient() {
-		if (!isset($_POST['redirect_uri']) || !isset($_POST['name'])
-			|| filter_var($_POST['redirect_uri'], FILTER_VALIDATE_URL) === false
-		) {
+		if (!isset($_POST['redirect_uri']) || !isset($_POST['name'])) {
 			return new RedirectResponse('../../settings/admin?sectionid=additional#' . $this->appName);
 		}
 
