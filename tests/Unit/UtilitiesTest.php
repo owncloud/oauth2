@@ -83,4 +83,23 @@ class UtilitiesTest extends PHPUnit_Framework_TestCase {
 		);
 	}
 
+	public function providesUrls() {
+		return [
+			[true, 'http://localhost:*'],
+			[true, 'http://localhost:*/oc/10.0'],
+			[true, 'oc://com.android'],
+			[true, 'file://test.txt'],
+			[false, 'x'],
+			[false, 'http://owncloud.org:*'],
+		];
+	}
+	/**
+	 * @dataProvider providesUrls
+	 * @param $expected
+	 * @param $url
+	 */
+	public function testIsValidUrl($expected, $url) {
+		$this->assertEquals($expected, Utilities::isValidUrl($url));
+	}
+
 }
