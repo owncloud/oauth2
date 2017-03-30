@@ -50,7 +50,7 @@ class CleanUp extends TimedJob {
 	 * Cleans up expired authorization codes and access tokens.
 	 * @param $argument
 	 */
-	protected function run($argument) {
+	public function run($argument) {
 		$this->authorizationCodeMapper->cleanUp();
 		$this->accessTokenMapper->cleanUp();
 	}
