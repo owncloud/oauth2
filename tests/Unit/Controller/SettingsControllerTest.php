@@ -30,6 +30,8 @@ use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Db\RefreshToken;
 use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCP\AppFramework\Http\RedirectResponse;
+use OCP\IRequest;
+use OCP\IURLGenerator;
 use PHPUnit_Framework_TestCase;
 
 class SettingsControllerTest extends PHPUnit_Framework_TestCase {
@@ -51,6 +53,9 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 
 	/** @var RefreshTokenMapper */
 	private $refreshTokenMapper;
+
+	/** @var IURLGenerator */
+	private $urlGenerator;
 
 	/** @var string $userId */
 	private $userId = 'john';
@@ -110,15 +115,18 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 		$refreshToken->setUserId($this->userId);
 		$this->refreshTokenMapper->insert($refreshToken);
 
+		$this->urlGenerator = $this->getMockBuilder(IURLGenerator::class)->getMock();
+
 		$this->controller = new SettingsController(
 			$this->appName,
-			$this->getMockBuilder('OCP\IRequest')->getMock(),
+			$this->getMockBuilder(IRequest::class)->getMock(),
 			$this->clientMapper,
 			$this->authorizationCodeMapper,
 			$this->accessTokenMapper,
 			$this->refreshTokenMapper,
 			$this->userId,
-			$container->query('Logger')
+			$container->query('Logger'),
+			$this->urlGenerator
 		);
 	}
 

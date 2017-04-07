@@ -51,9 +51,7 @@ class SettingsController extends Controller {
 	/** @var ILogger */
 	private $logger;
 
-	/**
-	 * @var IURLGenerator
-	 */
+	/** @var IURLGenerator */
 	private $urlGenerator;
 
 	/**
