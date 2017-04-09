@@ -15,6 +15,7 @@ OC.L10N.register(
     "Registered clients" : "ไคลเอนต์ที่ลงทะเบียนแล้ว",
     "No clients registered." : "ไม่มีไคลเอนต์ที่ลงทะเบียน",
     "Name" : "ชื่อ",
+    "Redirection URI" : "การเปลี่ยนเส้นทาง URL",
     "Client Identifier" : "รหัสประจำตัวไคลเอนต์",
     "Secret" : "ความลับ",
     "Subdomains allowed" : "โดเมนย่อยได้รับอนุญาตแล้ว",
