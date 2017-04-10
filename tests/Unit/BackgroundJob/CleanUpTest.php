@@ -25,8 +25,8 @@ use PHPUnit_Framework_TestCase;
 class CleanUpTest extends PHPUnit_Framework_TestCase {
 
 	public function testRun() {
-		// Calling the run() function to check or exceptions.
-		CleanUp::run();
+		$c = \OC::$server->query(CleanUp::class);
+		$c->run('');
 	}
 
 }

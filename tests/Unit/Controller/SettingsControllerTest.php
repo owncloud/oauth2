@@ -54,7 +54,7 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 	/** @var RefreshTokenMapper */
 	private $refreshTokenMapper;
 
-	/** @var IURLGenerator */
+	/** @var IURLGenerator | \PHPUnit_Framework_MockObject_MockObject */
 	private $urlGenerator;
 
 	/** @var string $userId */
@@ -140,38 +140,39 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testAddClient() {
+		$this->urlGenerator->expects($this->any())->method('linkToRouteAbsolute')->willReturn('/personal');
 		$this->clientMapper->deleteAll();
 
 		$result = $this->controller->addClient();
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../settings/admin?sectionid=additional#' . $this->appName, $result->getRedirectURL());
+		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
 		$this->assertEquals(0, count($this->clientMapper->findAll()));
 
 		$_POST['redirect_uri'] = 'test';
 		$result = $this->controller->addClient();
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../settings/admin?sectionid=additional#' . $this->appName, $result->getRedirectURL());
+		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
 		$this->assertEquals(0, count($this->clientMapper->findAll()));
 
 		$_POST['redirect_uri'] = null;
 		$_POST['name'] = 'test';
 		$result = $this->controller->addClient();
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../settings/admin?sectionid=additional#' . $this->appName, $result->getRedirectURL());
+		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
 		$this->assertEquals(0, count($this->clientMapper->findAll()));
 
 		$_POST['redirect_uri'] = 'test';
 		$_POST['name'] = 'test';
 		$result = $this->controller->addClient();
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../settings/admin?sectionid=additional#' . $this->appName, $result->getRedirectURL());
+		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
 		$this->assertEquals(0, count($this->clientMapper->findAll()));
 
 		$_POST['redirect_uri'] = $this->redirectUri;
 		$_POST['name'] = $this->name;
 		$result = $this->controller->addClient();
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../settings/admin?sectionid=additional#' . $this->appName, $result->getRedirectURL());
+		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
 		$this->assertEquals(1, count($this->clientMapper->findAll()));
 		/** @var Client $client */
 		$client = $this->clientMapper->findAll()[0];
@@ -184,7 +185,7 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 		$_POST['allow_subdomains'] = '1';
 		$result = $this->controller->addClient();
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../settings/admin?sectionid=additional#' . $this->appName, $result->getRedirectURL());
+		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
 		$this->assertEquals(1, count($this->clientMapper->findAll()));
 		/** @var Client $client */
 		$client = $this->clientMapper->findAll()[0];
@@ -194,26 +195,30 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testDeleteClient() {
+		$this->urlGenerator->expects($this->any())->method('linkToRouteAbsolute')->willReturn('/personal');
+
 		$result = $this->controller->deleteClient(null);
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../../../settings/admin?sectionid=additional#' . $this->appName, $result->getRedirectURL());
+		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
 		$this->assertEquals(1, count($this->clientMapper->findAll()));
 
 		$result = $this->controller->deleteClient('test');
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../../../settings/admin?sectionid=additional#' . $this->appName, $result->getRedirectURL());
+		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
 		$this->assertEquals(1, count($this->clientMapper->findAll()));
 
 		$result = $this->controller->deleteClient($this->client->getId());
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../../../settings/admin?sectionid=additional#' . $this->appName, $result->getRedirectURL());
+		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
 		$this->assertEquals(0, count($this->clientMapper->findAll()));
 	}
 
 	public function testRevokeAuthorization() {
+		$this->urlGenerator->expects($this->any())->method('linkToRouteAbsolute')->willReturn('/personal');
+
 		$result = $this->controller->revokeAuthorization(null, null);
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../../../settings/personal?sectionid=additional#' . $this->appName, $result->getRedirectURL());
+		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
 		$this->assertEquals(1, count($this->clientMapper->findAll()));
 		$this->assertEquals(1, count($this->authorizationCodeMapper->findAll()));
 		$this->assertEquals(1, count($this->accessTokenMapper->findAll()));
@@ -221,7 +226,7 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->revokeAuthorization('', '');
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../../../settings/personal?sectionid=additional#' . $this->appName, $result->getRedirectURL());
+		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
 		$this->assertEquals(1, count($this->clientMapper->findAll()));
 		$this->assertEquals(1, count($this->authorizationCodeMapper->findAll()));
 		$this->assertEquals(1, count($this->accessTokenMapper->findAll()));
@@ -229,7 +234,7 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->revokeAuthorization(12, 12);
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../../../settings/personal?sectionid=additional#' . $this->appName, $result->getRedirectURL());
+		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
 		$this->assertEquals(1, count($this->clientMapper->findAll()));
 		$this->assertEquals(1, count($this->authorizationCodeMapper->findAll()));
 		$this->assertEquals(1, count($this->accessTokenMapper->findAll()));
@@ -237,7 +242,7 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->revokeAuthorization($this->client->getId(), $this->userId);
 		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('../../../../settings/personal?sectionid=additional#' . $this->appName, $result->getRedirectURL());
+		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
 		$this->assertEquals(1, count($this->clientMapper->findAll()));
 		$this->assertEquals(0, count($this->authorizationCodeMapper->findAll()));
 		$this->assertEquals(0, count($this->accessTokenMapper->findAll()));
