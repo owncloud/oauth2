@@ -17,6 +17,11 @@ matrix:
         - php: nightly
     fast_finish: true
 
+branches:
+  only:
+    - master
+    - /^stable\d*$/
+
 before_install:
     # enable a display for running JavaScript tests
     - export DISPLAY=:99.0
