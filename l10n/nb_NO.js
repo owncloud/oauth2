@@ -1,6 +1,8 @@
 OC.L10N.register(
     "oauth2",
     {
+    "Request not valid" : "Forespørsel ikke gyldig",
+    "” if this error persists." : "” hvis denne feilen vedvarer.",
     "Back" : "Tilbake",
     "Do you really like to authorize the application “" : "Vil du virkelig autorisere applikasjonen?",
     "”?" : "?",
