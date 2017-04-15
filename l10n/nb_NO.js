@@ -2,6 +2,8 @@ OC.L10N.register(
     "oauth2",
     {
     "Request not valid" : "Forespørsel ikke gyldig",
+    "This request is not valid. Please contact the administrator if this error persists." : "Denne forespørselen er ikke gyldig. Kontakt administratoren hvis feilen vedvarer.",
+    "This request is not valid. Please contact the administrator of “" : "Denne forespørselen er ikke gyldig. Kontakt administratoren av “",
     "” if this error persists." : "” hvis denne feilen vedvarer.",
     "Back" : "Tilbake",
     "Do you really like to authorize the application “" : "Vil du virkelig autorisere applikasjonen?",
@@ -13,6 +15,7 @@ OC.L10N.register(
     "Registered clients" : "Registrerte klienter",
     "No clients registered." : "Ingen klienter er registrert",
     "Name" : "Navn",
+    "Redirection URI" : "Omdirigerings-URL",
     "Client Identifier" : "Klient id",
     "Secret" : "Secret",
     "Subdomains allowed" : "Underdomener tillatt",
