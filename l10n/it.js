@@ -9,6 +9,7 @@ OC.L10N.register(
     "Authorize" : "Autorizza",
     "Cancel" : "Annulla",
     "OAuth 2.0" : "OAuth 2.0",
+    "Registered clients" : "Client registrati",
     "No clients registered." : "Nessun client registrato.",
     "Name" : "Nome",
     "Client Identifier" : "Identificatore client",
