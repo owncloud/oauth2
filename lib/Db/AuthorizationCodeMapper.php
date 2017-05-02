@@ -41,7 +41,7 @@ class AuthorizationCodeMapper extends Mapper {
 	 * @param string $AppName The app's name.
 	 */
 	public function __construct(IDb $db, ILogger $logger, $AppName) {
-		parent::__construct($db, 'oauth2_authorization_codes');
+		parent::__construct($db, 'oauth2_auth_codes');
 
 		$this->logger = $logger;
 		$this->appName = $AppName;
