@@ -56,7 +56,7 @@
         </declaration>
     </table>
     <table>
-        <name>*dbprefix*oauth2_authorization_codes</name>
+        <name>*dbprefix*oauth2_auth_codes</name>
         <declaration>
             <field>
                 <name>id</name>
