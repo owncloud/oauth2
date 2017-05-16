@@ -1,6 +1,7 @@
 OC.L10N.register(
     "oauth2",
     {
+    "Request not valid" : "リクエストは無効です",
     "Back" : "戻る",
     "Do you really like to authorize the application “" : "このアプリケーションを許可することに問題ありませんか？",
     "”?" : "\"?",
