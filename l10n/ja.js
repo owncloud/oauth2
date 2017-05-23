@@ -12,6 +12,7 @@ OC.L10N.register(
     "Registered clients" : "登録クライアント",
     "No clients registered." : "クライアント未登録",
     "Name" : "名前",
+    "Redirection URI" : "URIのリダイレクト",
     "Client Identifier" : "クライアント識別子",
     "Secret" : "シークレットキー",
     "Subdomains allowed" : "サブドメイン許可",
