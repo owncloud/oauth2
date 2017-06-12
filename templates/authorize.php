@@ -18,22 +18,24 @@
  */
 
 style('oauth2', 'main');
-style('oauth2', 'authorize');
+style('oauth2', 'authorization');
 ?>
 
 <div id="app">
-    <div id="app-content">
-        <div id="app-content-wrapper">
-            <div id="authorize-dialog">
-                <p><b><?php p($l->t('Do you really like to authorize the application “'));?><?php p($_['client_name']); ?><?php p($l->t('”?')); ?></b></p>
+	<div id="app-content">
+		<div id="app-content-wrapper">
+			<div id="authorization-dialog">
+				<p>
+					<b><?php p($l->t('Do you really like to authorize the application “')); ?><?php p($_['client_name']); ?><?php p($l->t('”?')); ?></b>
+				</p>
 				<p><?php p($l->t('The application will gain access to your username and will be allowed to manage files, folders and shares.')); ?></p>
-                <form id="form-inline" action="" method="post">
-                    <button type="submit"><?php p($l->t('Authorize')); ?></button>
-                </form>
-                <a href="../../">
-                    <button><?php p($l->t('Cancel')); ?></button>
-                </a>
-            </div>
-        </div>
-    </div>
+				<form id="form-inline" action="" method="post">
+					<button type="submit"><?php p($l->t('Authorize')); ?></button>
+				</form>
+				<a href="../../">
+					<button><?php p($l->t('Cancel')); ?></button>
+				</a>
+			</div>
+		</div>
+	</div>
 </div>

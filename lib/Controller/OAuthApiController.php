@@ -34,6 +34,7 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\ILogger;
 use OCP\IRequest;
+use OCP\IURLGenerator;
 
 class OAuthApiController extends ApiController {
 
@@ -49,6 +50,9 @@ class OAuthApiController extends ApiController {
 	/** @var RefreshTokenMapper */
 	private $refreshTokenMapper;
 
+	/** @var IURLGenerator */
+	private $urlGenerator;
+
 	/** @var ILogger */
 	private $logger;
 
@@ -61,6 +65,7 @@ class OAuthApiController extends ApiController {
 	 * @param AuthorizationCodeMapper $authorizationCodeMapper The authorization code mapper.
 	 * @param AccessTokenMapper $accessTokenMapper The access token mapper.
 	 * @param RefreshTokenMapper $refreshTokenMapper The refresh token mapper.
+	 * @param IURLGenerator $urlGenerator The URL generator.
 	 * @param ILogger $logger The logger.
 	 */
 	public function __construct($AppName, IRequest $request,
@@ -68,6 +73,7 @@ class OAuthApiController extends ApiController {
 								AuthorizationCodeMapper $authorizationCodeMapper,
 								AccessTokenMapper $accessTokenMapper,
 								RefreshTokenMapper $refreshTokenMapper,
+								IURLGenerator $urlGenerator,
 								ILogger $logger) {
 		parent::__construct($AppName, $request);
 
@@ -75,6 +81,7 @@ class OAuthApiController extends ApiController {
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
 		$this->accessTokenMapper = $accessTokenMapper;
 		$this->refreshTokenMapper = $refreshTokenMapper;
+		$this->urlGenerator = $urlGenerator;
 		$this->logger = $logger;
 	}
 
@@ -138,7 +145,7 @@ class OAuthApiController extends ApiController {
 					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
 
-				$this->logger->info('An authorization code has been used by the client "' . $client->getName() .'" to request an access token.', ['app' => $this->appName]);
+				$this->logger->info('An authorization code has been used by the client "' . $client->getName() . '" to request an access token.', ['app' => $this->appName]);
 
 				$userId = $authorizationCode->getUserId();
 				break;
@@ -158,7 +165,7 @@ class OAuthApiController extends ApiController {
 					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
 
-				$this->logger->info('A refresh token has been used by the client "' . $client->getName() .'" to request an access token.', ['app' => $this->appName]);
+				$this->logger->info('A refresh token has been used by the client "' . $client->getName() . '" to request an access token.', ['app' => $this->appName]);
 
 				$userId = $refreshToken->getUserId();
 				break;
@@ -191,7 +198,8 @@ class OAuthApiController extends ApiController {
 				'token_type' => 'Bearer',
 				'expires_in' => 3600,
 				'refresh_token' => $refreshToken->getToken(),
-				'user_id' => $userId
+				'user_id' => $userId,
+				'message_url' => $this->urlGenerator->linkToRouteAbsolute($this->appName . '.page.authorizationSuccessful')
 			]
 		);
 	}

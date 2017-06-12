@@ -79,6 +79,9 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 	/** @var RefreshToken $refreshToken */
 	private $refreshToken;
 
+	/** @var String $refreshToken */
+	private $authorizationSuccessfulMessageUrl;
+
 	public function setUp() {
 		parent::setUp();
 
@@ -132,6 +135,11 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$refreshToken->setUserId($this->userId);
 		$this->refreshToken = $this->refreshTokenMapper->insert($refreshToken);
 
+		$urlGenerator = $container->query('ServerContainer')->getURLGenerator();
+		$this->authorizationSuccessfulMessageUrl = $urlGenerator->linkToRouteAbsolute(
+			$container->query('AppName') . '.page.authorizationSuccessful'
+		);
+
 		$this->controller = new OAuthApiController(
 			$container->query('AppName'),
 			$this->getMockBuilder('OCP\IRequest')->getMock(),
@@ -139,6 +147,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 			$this->authorizationCodeMapper,
 			$this->accessTokenMapper,
 			$this->refreshTokenMapper,
+			$urlGenerator,
 			$container->query('Logger')
 		);
 	}
@@ -260,6 +269,8 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(64, strlen($json->refresh_token));
 		$this->assertNotEmpty($json->user_id);
 		$this->assertEquals($this->userId, $json->user_id);
+		$this->assertNotEmpty($json->message_url);
+		$this->assertEquals($this->authorizationSuccessfulMessageUrl, $json->message_url);
 		$this->assertEquals(200, $result->getStatus());
 		$this->assertEquals(0, count($this->authorizationCodeMapper->findAll()));
 		$this->assertEquals(1, count($this->accessTokenMapper->findAll()));
@@ -337,6 +348,8 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(64, strlen($json->refresh_token));
 		$this->assertNotEmpty($json->user_id);
 		$this->assertEquals($this->userId, $json->user_id);
+		$this->assertNotEmpty($json->message_url);
+		$this->assertEquals($this->authorizationSuccessfulMessageUrl, $json->message_url);
 		$this->assertEquals(200, $result->getStatus());
 		$this->assertEquals(1, count($this->accessTokenMapper->findAll()));
 		$this->assertEquals(1, count($this->refreshTokenMapper->findAll()));

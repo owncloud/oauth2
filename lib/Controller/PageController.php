@@ -193,12 +193,24 @@ class PageController extends Controller {
 					$result = $result . '&state=' . urlencode($state);
 				}
 
-				$this->logger->info('An authorization code has been issued for the client "' . $client->getName() .'".', ['app' => $this->appName]);
+				$this->logger->info('An authorization code has been issued for the client "' . $client->getName() . '".', ['app' => $this->appName]);
 
 				return new RedirectResponse($result);
 			default:
 				return new RedirectResponse(OC_Util::getDefaultPageUrl());
 		}
+	}
+
+	/**
+	 * Shows a message for successful authorization.
+	 *
+	 * @return TemplateResponse The authorization-successful view.
+	 *
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 */
+	public function authorizationSuccessful() {
+		return new TemplateResponse($this->appName, 'authorization-successful', []);
 	}
 
 }
