@@ -234,4 +234,10 @@ class PageControllerTest extends TestCase {
 		$this->authorizationCodeMapper->delete($this->authorizationCodeMapper->findByCode($parameters['code']));
 	}
 
+	public function testAuthorizationSuccessful() {
+		$result = $this->controller->authorizationSuccessful();
+		$this->assertTrue($result instanceof TemplateResponse);
+		$this->assertEquals('authorization-successful', $result->getTemplateName());
+	}
+
 }
