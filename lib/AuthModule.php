@@ -46,6 +46,28 @@ class AuthModule implements IAuthModule {
 			$bearerToken = substr($authHeader, 7);
 		}
 
+		return $this->authToken($bearerToken);
+	}
+
+	/**
+	 * Returns an empty string because the user's password is not handled in
+	 * the app.
+	 *
+	 * Note: This means that only master key encryption is working with the app.
+	 *
+	 * @param IRequest $request The request.
+	 *
+	 * @return String An empty string.
+	 */
+	public function getUserPassword(IRequest $request) {
+		return '';
+	}
+
+	/**
+	 * @param $bearerToken
+	 * @return null|IUser
+	 */
+	public function authToken($bearerToken) {
 		$app = new Application();
 		$container = $app->getContainer();
 
@@ -67,20 +89,6 @@ class AuthModule implements IAuthModule {
 		$userManager = $container->query('UserManager');
 		$user = $userManager->get($accessToken->getUserId());
 		return $user;
-	}
-
-	/**
-	 * Returns an empty string because the user's password is not handled in
-	 * the app.
-	 *
-	 * Note: This means that only master key encryption is working with the app.
-	 *
-	 * @param IRequest $request The request.
-	 *
-	 * @return String An empty string.
-	 */
-	public function getUserPassword(IRequest $request) {
-		return '';
 	}
 
 }
