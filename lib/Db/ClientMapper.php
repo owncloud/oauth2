@@ -101,9 +101,9 @@ class ClientMapper extends Mapper {
 
 		$sql = 'SELECT * FROM `' . $this->tableName . '` '
 			. 'WHERE `id` IN ( '
-			. 'SELECT `client_id` FROM `oc_oauth2_authorization_codes` WHERE `user_id` = ? '
+			. 'SELECT `client_id` FROM `*PREFIX*oauth2_authorization_codes` WHERE `user_id` = ? '
 			. 'UNION '
-			. 'SELECT `client_id` FROM `oc_oauth2_access_tokens` WHERE `user_id` = ? '
+			. 'SELECT `client_id` FROM `*PREFIX*oauth2_access_tokens` WHERE `user_id` = ? '
 			. ')';
 		return $this->findEntities($sql, [$userId, $userId], null, null);
 	}
