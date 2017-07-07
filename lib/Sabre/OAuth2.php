@@ -21,6 +21,7 @@ namespace OCA\OAuth2\Sabre;
 
 use OC\User\Session;
 use OCA\DAV\Connector\Sabre\Auth;
+use OCA\OAuth2\AuthModule;
 use OCP\IRequest;
 use OCP\ISession;
 
@@ -44,6 +45,9 @@ class OAuth2 extends AbstractBearer {
 	/** @var IRequest */
 	private $request;
 
+	/** @var AuthModule */
+	private $authModule;
+
 	/**
 	 * OAuth2 constructor.
 	 *
@@ -55,10 +59,12 @@ class OAuth2 extends AbstractBearer {
 	public function __construct(ISession $session,
 								Session $userSession,
 								IRequest $request,
+								AuthModule $authModule,
 								$principalPrefix = 'principals/users/') {
 		$this->session = $session;
 		$this->userSession = $userSession;
 		$this->request = $request;
+		$this->authModule = $authModule;
 		$this->principalPrefix = $principalPrefix;
 
 		// setup realm
@@ -94,6 +100,14 @@ class OAuth2 extends AbstractBearer {
 	protected function validateBearerToken($bearerToken) {
 		if ($this->userSession->isLoggedIn() &&
 			$this->isDavAuthenticated($this->userSession->getUser()->getUID())) {
+
+			// verify the bearer token
+			$tokenUser = $this->authModule->authToken($bearerToken);
+			if ($tokenUser === null) {
+				return false;
+			}
+
+			// setup the user
 			$userId = $this->userSession->getUser()->getUID();
 			\OC_Util::setupFS($userId);
 			$this->session->close();
@@ -113,5 +127,4 @@ class OAuth2 extends AbstractBearer {
 			}
 		}
 	}
-
 }

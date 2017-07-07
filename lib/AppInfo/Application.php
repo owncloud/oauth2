@@ -19,6 +19,7 @@
 
 namespace OCA\OAuth2\AppInfo;
 
+use OCA\OAuth2\AuthModule;
 use OCA\OAuth2\Hooks\UserHooks;
 use OCA\OAuth2\Sabre\OAuth2;
 use OCP\AppFramework\App;
@@ -69,6 +70,7 @@ class Application extends App {
 						new OAuth2(\OC::$server->getSession(),
 							\OC::$server->getUserSession(),
 							\OC::$server->getRequest(),
+							new AuthModule(),
 							'principals/')
 					);
 				}
