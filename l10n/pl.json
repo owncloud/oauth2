@@ -1,4 +1,8 @@
 { "translations": {
+    "Request not valid" : "Nieprawidłowe żądanie",
+    "This request is not valid. Please contact the administrator if this error persists." : "To żądanie jest nieprawidłowe. Skontaktuj się z administratorem, jeśli problem będzie się powtarzał.",
+    "This request is not valid. Please contact the administrator of “" : "To żądanie jest nieprawidłowe. Skontaktuj się z administratorem “",
+    "” if this error persists." : "” jeśli problem będzie się powtarzał.",
     "Back" : "Wróć",
     "Do you really like to authorize the application “" : "Uwierzytelnić aplikację „",
     "”?" : "”?",
