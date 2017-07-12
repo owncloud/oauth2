@@ -24,4 +24,5 @@
     <background-jobs>
         <job>OCA\OAuth2\BackgroundJob\CleanUp</job>
     </background-jobs>
+    <use-migrations>true</use-migrations>
 </info>
