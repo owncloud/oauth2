@@ -19,6 +19,7 @@
 
 namespace OCA\OAuth2\Db;
 
+use Doctrine\DBAL\Platforms\OraclePlatform;
 use OCP\AppFramework\Db\Entity;
 
 /**
@@ -31,7 +32,6 @@ use OCP\AppFramework\Db\Entity;
  * @method string getName()
  * @method void setName(string $name)
  * @method boolean getAllowSubdomains()
- * @method void setAllowSubdomains(boolean $value)
  */
 class Client extends Entity {
 
@@ -51,6 +51,18 @@ class Client extends Entity {
 		$this->addType('redirect_uri', 'string');
 		$this->addType('name', 'string');
 		$this->addType('allow_subdomains', 'boolean');
+	}
+
+	/**
+	 * @param boolean $value
+	 */
+	public function setAllowSubdomains($value) {
+		$value = (boolean)$value;
+		if (\OC::$server->getDatabaseConnection()->getDatabasePlatform() instanceof OraclePlatform) {
+			parent::setter('allowSubdomains', [$value ? 1 : 0]);
+		} else {
+			parent::setter('allowSubdomains', [$value]);
+		}
 	}
 
 }
