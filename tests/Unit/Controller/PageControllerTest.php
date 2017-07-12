@@ -32,6 +32,12 @@ use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use Test\TestCase;
 
+/**
+ * Class PageControllerTest
+ *
+ * @package OCA\OAuth2\Tests\Unit\Controller
+ * @group DB
+ */
 class PageControllerTest extends TestCase {
 
 	/** @var PageController $controller */
