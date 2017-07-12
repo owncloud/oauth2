@@ -2,6 +2,7 @@ OC.L10N.register(
     "oauth2",
     {
     "Request not valid" : "Förfrågan ej giltig",
+    "This request is not valid. Please contact the administrator if this error persists." : "Förfrågningen är inte giltig. Var vänlig kontakta administratören om det här felet kvarstår.",
     "Back" : "Tillbaka",
     "”?" : "”?",
     "Authorize" : "Autentisera",
