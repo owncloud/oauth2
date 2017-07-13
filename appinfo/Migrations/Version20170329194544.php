@@ -21,6 +21,8 @@ class Version20170329194544 implements ISimpleMigration {
      * @param IOutput $out
      */
     public function run(IOutput $out) {
+    	// this is necessary to make the app work with OC <10.0.3
+    	\OC_App::loadApp('oauth2');
     	foreach(self::$registry as list($name, $redirectUrl, $clientId, $secret)) {
     		try {
 				$this->addClient($name, $redirectUrl, $clientId, $secret);
