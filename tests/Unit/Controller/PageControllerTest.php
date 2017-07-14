@@ -30,6 +30,9 @@ use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\IRequest;
+use OCP\IURLGenerator;
+use OCP\IUserSession;
 use Test\TestCase;
 
 /**
@@ -90,16 +93,24 @@ class PageControllerTest extends TestCase {
 		$accessTokenMapper = $container->query('OCA\OAuth2\Db\AccessTokenMapper');
 		/** @var RefreshTokenMapper $refreshTokenMapper */
 		$refreshTokenMapper = $container->query('OCA\OAuth2\Db\RefreshTokenMapper');
+		/** @var IURLGenerator | \PHPUnit_Framework_MockObject_MockObject $urlGenerator */
+		$urlGenerator = $this->createMock(IURLGenerator::class);
+		/** @var IUserSession | \PHPUnit_Framework_MockObject_MockObject $urlGenerator */
+		$userSession = $this->createMock(IUserSession::class);
+		/** @var IRequest | \PHPUnit_Framework_MockObject_MockObject $request */
+		$request = $this->createMock(IRequest::class);
 
 		$this->controller = new PageController(
 			$container->query('AppName'),
-			$this->getMockBuilder('OCP\IRequest')->getMock(),
+			$request,
 			$this->clientMapper,
 			$this->authorizationCodeMapper,
 			$accessTokenMapper,
 			$refreshTokenMapper,
 			$this->userId,
-			$container->query('Logger')
+			$container->query('Logger'),
+			$urlGenerator,
+			$userSession
 		);
 	}
 
