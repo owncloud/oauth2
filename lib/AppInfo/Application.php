@@ -20,9 +20,12 @@
 namespace OCA\OAuth2\AppInfo;
 
 use OCA\OAuth2\AuthModule;
+use OCA\OAuth2\Db\Client;
+use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Hooks\UserHooks;
 use OCA\OAuth2\Sabre\OAuth2;
 use OCP\AppFramework\App;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\SabrePluginEvent;
 use Sabre\DAV\Auth\Plugin;
 
@@ -78,4 +81,33 @@ class Application extends App {
 		});
 	}
 
+	public function boot() {
+		$this->getContainer()->query('UserHooks')->register();
+		$request = $this->getContainer()->getServer()->getRequest();
+		$redirectUrl = $request->getParam('redirect_url');
+		if ($redirectUrl === null) {
+			return;
+		}
+
+		$urlParts = parse_url(urldecode($redirectUrl));
+		if (strpos($urlParts['path'], 'apps/oauth2/authorize') === false) {
+			return;
+		}
+		$params = [];
+		parse_str($urlParts['query'], $params);
+		if (!isset($params['client_id'])) {
+			return;
+		}
+		/** @var ClientMapper $mapper */
+		$mapper = \OC::$server->query(ClientMapper::class);
+		/** @var Client $client */
+		try {
+			$client = $mapper->findByIdentifier($params['client_id']);
+			\OCP\Util::addScript('oauth2', 'login');
+			\OCP\Util::addStyle('oauth2', 'login');
+			\OCP\Util::addHeader('data', ['key' => 'oauth2', 'value' => $client->getName()]);
+		} catch (DoesNotExistException $ex) {
+			// ignore - the given client id is not known
+		}
+	}
 }
