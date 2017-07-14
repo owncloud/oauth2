@@ -1,6 +1,7 @@
 OC.L10N.register(
     "oauth2",
     {
+    "The application was authorized successfully. You can now close this window." : "היישום אושר בהצלחה. ניתן לסגור עכשיו את החלון.",
     "Request not valid" : "הבקשה אינה חוקית",
     "This request is not valid. Please contact the administrator if this error persists." : "הבקשה אינה חוקית. יש ליצור קשר עם מנהל המערכת אם שגיאה זו תמשך.",
     "This request is not valid. Please contact the administrator of “" : "הבקשה אינה חוקית. יש ליצור קשר עם מנהל המערכת של \"",
