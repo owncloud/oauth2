@@ -33,26 +33,28 @@ use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\ILogger;
 use OCP\IRequest;
+use OCP\IURLGenerator;
+use OCP\IUserSession;
+use OCP\Util;
 
 class PageController extends Controller {
 
 	/** @var ClientMapper */
 	private $clientMapper;
-
 	/** @var AuthorizationCodeMapper */
 	private $authorizationCodeMapper;
-
 	/** @var AccessTokenMapper */
 	private $accessTokenMapper;
-
 	/** @var RefreshTokenMapper */
 	private $refreshTokenMapper;
-
 	/** @var string */
 	private $userId;
-
 	/** @var ILogger */
 	private $logger;
+	/** @var IURLGenerator */
+	private $urlGenerator;
+	/** @var IUserSession */
+	private $userSession;
 
 	/**
 	 * PageController constructor.
@@ -65,6 +67,8 @@ class PageController extends Controller {
 	 * @param RefreshTokenMapper $refreshTokenMapper The refresh token mapper.
 	 * @param string $UserId The user ID.
 	 * @param ILogger $logger The logger.
+	 * @param IURLGenerator $urlGenerator
+	 * @param IUserSession $userSession
 	 */
 	public function __construct($AppName, IRequest $request,
 								ClientMapper $clientMapper,
@@ -72,7 +76,10 @@ class PageController extends Controller {
 								AccessTokenMapper $accessTokenMapper,
 								RefreshTokenMapper $refreshTokenMapper,
 								$UserId,
-								ILogger $logger) {
+								ILogger $logger,
+								IURLGenerator $urlGenerator,
+								IUserSession $userSession
+	) {
 		parent::__construct($AppName, $request);
 
 		$this->clientMapper = $clientMapper;
@@ -81,6 +88,8 @@ class PageController extends Controller {
 		$this->refreshTokenMapper = $refreshTokenMapper;
 		$this->userId = $UserId;
 		$this->logger = $logger;
+		$this->urlGenerator = $urlGenerator;
+		$this->userSession = $userSession;
 	}
 
 	/**
@@ -90,16 +99,16 @@ class PageController extends Controller {
 	 * @param string $client_id The client identifier.
 	 * @param string $redirect_uri The redirection URI.
 	 * @param string $state The state.
+	 * @param string | null $user
 	 *
 	 * @return TemplateResponse The authorize view or the
 	 * authorize-error view with a redirection to the
 	 * default page URL.
-	 *
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
 	public function authorize($response_type, $client_id, $redirect_uri,
-							  $state = null) {
+							  $state = null, $user = null) {
 		if (!is_string($response_type) || !is_string($client_id)
 			|| !is_string($redirect_uri) || (isset($state) && !is_string($state))
 		) {
@@ -110,6 +119,24 @@ class PageController extends Controller {
 			);
 		}
 
+		if ($user !== null && $user !== $this->userId) {
+			$logoutUrl = $this->urlGenerator->linkToRouteAbsolute(
+				'oauth2.page.logout',[
+					'user' => $user,
+					'requesttoken' => Util::callRegister(),
+					'response_type' => $response_type,
+					'client_id' => $client_id,
+					'redirect_uri' => $redirect_uri,
+					'state' => $state
+				]
+			);
+			return new TemplateResponse(
+				$this->appName,
+				'switch-user',
+				['current_user' => $this->userId, 'requested_user' => $user,
+					'logout_url' => $logoutUrl, 'back_url' => OC_Util::getDefaultPageUrl()]
+			);
+		}
 		try {
 			/** @var Client $client */
 			$client = $this->clientMapper->findByIdentifier($client_id);
@@ -212,4 +239,42 @@ class PageController extends Controller {
 		return new TemplateResponse($this->appName, 'authorization-successful', []);
 	}
 
+	/**
+	 * @NoAdminRequired
+	 *
+	 * @param string $user
+	 * @param string $response_type
+	 * @param string $client_id
+	 * @param string $redirect_uri
+	 * @param string | null $state
+	 * @return RedirectResponse | TemplateResponse
+	 */
+	public function logout($user, $response_type, $client_id, $redirect_uri, $state = null) {
+		if (!is_string($response_type) || !is_string($client_id)
+			|| !is_string($redirect_uri) || (isset($state) && !is_string($state))
+		) {
+			return new TemplateResponse(
+				$this->appName,
+				'authorize-error',
+				['client_name' => null, 'back_url' => OC_Util::getDefaultPageUrl()]
+			);
+		}
+		// logout the current user
+		$this->userSession->logout();
+
+		$redirectUrl = $this->urlGenerator->linkToRoute('oauth2.page.authorize',[
+			'response_type' => $response_type,
+			'client_id' => $client_id,
+			'redirect_uri' => $redirect_uri,
+			'state' => $state,
+			'user' => $user
+		]);
+
+		// redirect the browser to the login page and set the redirect_url to the authorize page of oauth2
+		return new RedirectResponse($this->urlGenerator->linkToRouteAbsolute('core.login.showLoginForm',
+			[
+				'user' => $user,
+				'redirect_url' => $redirectUrl
+			]));
+	}
 }
