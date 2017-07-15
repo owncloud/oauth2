@@ -1,4 +1,5 @@
 { "translations": {
+    "The application was authorized successfully. You can now close this window." : "Die Anwendung wurde erfolgreich autorisiert. Du kannst das Fenster nun schließen.",
     "Request not valid" : "Anfrage nicht gültig",
     "This request is not valid. Please contact the administrator if this error persists." : "Diese Anfrage ist nicht gültig. Bitte kontaktiere den Administrator, wenn der Fehler weiterhin erscheint.",
     "This request is not valid. Please contact the administrator of “" : "Diese Anfrage ist nicht gültig. Bitte kontaktiere den Administrator von \"",
