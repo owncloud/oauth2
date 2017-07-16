@@ -1,6 +1,7 @@
 OC.L10N.register(
     "oauth2",
     {
+    "The application was authorized successfully. You can now close this window." : "O aplicativo foi autorizado com sucesso. Você já pode fechar esta janela.",
     "Request not valid" : "Pedido não válido",
     "This request is not valid. Please contact the administrator if this error persists." : "Este pedido não é válido. Entre em contato com o administrador se esse erro persistir.",
     "This request is not valid. Please contact the administrator of “" : "Este pedido não é válido. Entre em contato com o administrador de \"",
