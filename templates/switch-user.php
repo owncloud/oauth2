@@ -30,8 +30,5 @@ style('oauth2', 'authorization');
 		<a href="<?php p($_['logout_url']); ?>">
 			<button><?php p($l->t('Logout and login as %s', $_['requested_user'])); ?></button>
 		</a>
-		<a href="<?php p($_['back_url']); ?>">
-			<button><?php p($l->t('Cancel')); ?></button>
-		</a>
 	</form>
 </span>

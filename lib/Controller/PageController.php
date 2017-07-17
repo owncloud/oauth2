@@ -115,7 +115,7 @@ class PageController extends Controller {
 			return new TemplateResponse(
 				$this->appName,
 				'authorize-error',
-				['client_name' => null, 'back_url' => OC_Util::getDefaultPageUrl()]
+				['client_name' => null, 'back_url' => OC_Util::getDefaultPageUrl()], 'guest'
 			);
 		}
 
@@ -134,7 +134,7 @@ class PageController extends Controller {
 				$this->appName,
 				'switch-user',
 				['current_user' => $this->userId, 'requested_user' => $user,
-					'logout_url' => $logoutUrl, 'back_url' => OC_Util::getDefaultPageUrl()], 'guest'
+					'logout_url' => $logoutUrl], 'guest'
 			);
 		}
 		try {
@@ -144,7 +144,7 @@ class PageController extends Controller {
 			return new TemplateResponse(
 				$this->appName,
 				'authorize-error',
-				['client_name' => null, 'back_url' => OC_Util::getDefaultPageUrl()]
+				['client_name' => null, 'back_url' => OC_Util::getDefaultPageUrl()], 'guest'
 			);
 		}
 
@@ -152,7 +152,7 @@ class PageController extends Controller {
 			return new TemplateResponse(
 				$this->appName,
 				'authorize-error',
-				['client_name' => $client->getName(), 'back_url' => OC_Util::getDefaultPageUrl()]
+				['client_name' => $client->getName(), 'back_url' => OC_Util::getDefaultPageUrl()], 'guest'
 			);
 		}
 
@@ -160,7 +160,7 @@ class PageController extends Controller {
 			return new TemplateResponse(
 				$this->appName,
 				'authorize-error',
-				['client_name' => $client->getName(), 'back_url' => OC_Util::getDefaultPageUrl()]
+				['client_name' => $client->getName(), 'back_url' => OC_Util::getDefaultPageUrl()], 'guest'
 			);
 		}
 
@@ -236,7 +236,7 @@ class PageController extends Controller {
 	 * @NoCSRFRequired
 	 */
 	public function authorizationSuccessful() {
-		return new TemplateResponse($this->appName, 'authorization-successful', []);
+		return new TemplateResponse($this->appName, 'authorization-successful', [], 'guest');
 	}
 
 	/**
