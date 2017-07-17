@@ -1,11 +1,4 @@
-#authorization-dialog {
-	text-align: center;
-	position: absolute;
-	top: 40%;
-	left: 50%;
-	transform: translateX(-50%) translateY(-50%);
-	border: 1px solid #1e2d43;
-	background-color: #f8f8f8;
-	padding: 10px;
-	margin: 15px;
+button {
+	width: 100%;
+	font-size: larger;
 }
