@@ -4,14 +4,9 @@ OC.L10N.register(
     "The application was authorized successfully. You can now close this window." : "היישום אושר בהצלחה. ניתן לסגור עכשיו את החלון.",
     "Request not valid" : "הבקשה אינה חוקית",
     "This request is not valid. Please contact the administrator if this error persists." : "הבקשה אינה חוקית. יש ליצור קשר עם מנהל המערכת אם שגיאה זו תמשך.",
-    "This request is not valid. Please contact the administrator of “" : "הבקשה אינה חוקית. יש ליצור קשר עם מנהל המערכת של \"",
-    "” if this error persists." : "” אם שגיאה זו תמשך.",
     "Back" : "אחורה",
-    "Do you really like to authorize the application “" : "האם באמת לאשר את היישום “",
-    "”?" : "”?",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "היישום יקבל גישה לשם המשתמש שלך ויהיה רשאי לנהל קבצים, תיקיות ושיתופים.",
     "Authorize" : "הרשאה",
-    "Cancel" : "ביטול",
     "OAuth 2.0" : "OAuth 2.0",
     "Registered clients" : "לקוחות רשומים",
     "No clients registered." : "אין לקוחות רשומים.",
@@ -25,6 +20,7 @@ OC.L10N.register(
     "Allow subdomains" : "לאפשר תיקיות משנה",
     "Add" : "הוספה",
     "Authorized Applications" : "הרשאת יישום",
-    "No applications authorized." : "אין יישומים מאושרים."
+    "No applications authorized." : "אין יישומים מאושרים.",
+    "Cancel" : "ביטול"
 },
 "nplurals=2; plural=(n != 1);");

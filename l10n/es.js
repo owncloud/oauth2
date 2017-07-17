@@ -1,16 +1,12 @@
 OC.L10N.register(
     "oauth2",
     {
+    "The application was authorized successfully. You can now close this window." : "La aplicación ha sido autorizada,  ya puede cerrar esta ventana.",
     "Request not valid" : "Petición Inválida",
     "This request is not valid. Please contact the administrator if this error persists." : "Petición inválida. Por favor contacte con el administrador si el error persiste.",
-    "This request is not valid. Please contact the administrator of “" : "Petición inválida. Por favor contacte con el administrador de \"",
-    "” if this error persists." : "\" si el error persiste.",
     "Back" : "Volver",
-    "Do you really like to authorize the application “" : "¿Confirma que quiere autorizar la aplicación «",
-    "”?" : "»?",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "La aplicación tendrá acceso a su nombre de usuario y podrá administrar archivos, carpetas y recursos compartidos.",
     "Authorize" : "Autorizar",
-    "Cancel" : "Cancelar",
     "OAuth 2.0" : "OAuth 2.0",
     "Registered clients" : "Clientes registrados",
     "No clients registered." : "No hay clientes registrados.",
@@ -24,6 +20,7 @@ OC.L10N.register(
     "Allow subdomains" : "Permitir subdominios",
     "Add" : "Añadir",
     "Authorized Applications" : "Aplicaciones autorizadas",
-    "No applications authorized." : "No hay aplicaciones autorizadas."
+    "No applications authorized." : "No hay aplicaciones autorizadas.",
+    "Cancel" : "Cancelar"
 },
 "nplurals=2; plural=(n != 1);");
