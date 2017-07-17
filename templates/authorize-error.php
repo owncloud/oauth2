@@ -28,7 +28,7 @@ style('oauth2', 'authorization');
 				<?php if (is_null($_['client_name'])) { ?>
 					<p><?php p($l->t('This request is not valid. Please contact the administrator if this error persists.')); ?></p>
 				<?php } else { ?>
-					<p><?php p($l->t('This request is not valid. Please contact the administrator of “')); ?><?php p($_['client_name']); ?><?php p($l->t('” if this error persists.')); ?></p>
+					<p><?php p($l->t('This request is not valid. Please contact the administrator of “%s” if this error persists.', [$_['client_name']])); ?></p>
 				<?php } ?>
 				<a href="<?php p($_['back_url']); ?>">
 					<button><?php p($l->t('Back')); ?></button>

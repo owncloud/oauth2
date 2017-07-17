@@ -26,15 +26,12 @@ style('oauth2', 'authorization');
 		<div id="app-content-wrapper">
 			<div id="authorization-dialog">
 				<p>
-					<b><?php p($l->t('Do you really like to authorize the application “')); ?><?php p($_['client_name']); ?><?php p($l->t('”?')); ?></b>
+					<b><?php p($l->t('The “%s“ application would like permission to access your account', [$_['client_name']])); ?></b>
 				</p>
 				<p><?php p($l->t('The application will gain access to your username and will be allowed to manage files, folders and shares.')); ?></p>
 				<form id="form-inline" action="" method="post">
 					<button type="submit"><?php p($l->t('Authorize')); ?></button>
 				</form>
-				<a href="../../">
-					<button><?php p($l->t('Cancel')); ?></button>
-				</a>
 			</div>
 		</div>
 	</div>
