@@ -17,22 +17,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-style('oauth2', 'main');
 style('oauth2', 'authorization');
 ?>
 
-<div id="app">
-	<div id="app-content">
-		<div id="app-content-wrapper">
-			<div id="authorization-dialog">
-				<p>
-					<b><?php p($l->t('The “%s“ application would like permission to access your account', [$_['client_name']])); ?></b>
-				</p>
-				<p><?php p($l->t('The application will gain access to your username and will be allowed to manage files, folders and shares.')); ?></p>
-				<form id="form-inline" action="" method="post">
-					<button type="submit"><?php p($l->t('Authorize')); ?></button>
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
+<span class="error">
+	<form id="form-inline" action="" method="post">
+		<p>
+			<b><?php p($l->t('The “%s“ application would like permission to access your account', [$_['client_name']])); ?></b>
+		</p>
+		<br>
+		<p><?php p($l->t('The application will gain access to your username and will be allowed to manage files, folders and shares.')); ?></p>
+		<br>
+		<button type="submit"><?php p($l->t('Authorize')); ?></button>
+	</form>
+</span>

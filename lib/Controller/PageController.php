@@ -164,7 +164,7 @@ class PageController extends Controller {
 			);
 		}
 
-		return new TemplateResponse($this->appName, 'authorize', ['client_name' => $client->getName()]);
+		return new TemplateResponse($this->appName, 'authorize', ['client_name' => $client->getName()], 'guest');
 	}
 
 	/**
