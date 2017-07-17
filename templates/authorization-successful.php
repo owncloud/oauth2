@@ -17,18 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-style('oauth2', 'main');
 style('oauth2', 'authorization');
 ?>
 
-<div id="app">
-	<div id="app-content">
-		<div id="app-content-wrapper">
-			<div id="authorization-dialog">
-				<p>
-					<b><?php p($l->t('The application was authorized successfully. You can now close this window.')); ?></b>
-				</p>
-			</div>
-		</div>
-	</div>
-</div>
+<span class="error">
+	<p>
+		<b><?php p($l->t('The application was authorized successfully. You can now close this window.')); ?></b>
+	</p>
+</span>
