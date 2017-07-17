@@ -21,20 +21,17 @@
 style('oauth2', 'authorization');
 ?>
 
-<div id="app">
-	<div id="app-content">
-		<div id="app-content-wrapper">
-			<div id="authorization-dialog">
-				<p><b><?php p($l->t('Switch user')); ?></b></p>
-				<p><?php p($l->t('You are logged as %s but the application requested access for user %s.', [$_['current_user'], $_['requested_user']])); ?></p>
-				<br>
-				<a href="<?php p($_['logout_url']); ?>">
-					<button><?php p($l->t('Logout and login as %s', $_['requested_user'])); ?></button>
-				</a>
-				<a href="<?php p($_['back_url']); ?>">
-					<button><?php p($l->t('Cancel')); ?></button>
-				</a>
-			</div>
-		</div>
-	</div>
-</div>
+<span class="error">
+	<form id="form-inline" action="" method="post">
+		<p><b><?php p($l->t('Switch user')); ?></b></p>
+		<br>
+		<p><?php p($l->t('You are logged as %s but the application requested access for user %s.', [$_['current_user'], $_['requested_user']])); ?></p>
+		<br>
+		<a href="<?php p($_['logout_url']); ?>">
+			<button><?php p($l->t('Logout and login as %s', $_['requested_user'])); ?></button>
+		</a>
+		<a href="<?php p($_['back_url']); ?>">
+			<button><?php p($l->t('Cancel')); ?></button>
+		</a>
+	</form>
+</span>

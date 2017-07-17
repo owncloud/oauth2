@@ -134,7 +134,7 @@ class PageController extends Controller {
 				$this->appName,
 				'switch-user',
 				['current_user' => $this->userId, 'requested_user' => $user,
-					'logout_url' => $logoutUrl, 'back_url' => OC_Util::getDefaultPageUrl()]
+					'logout_url' => $logoutUrl, 'back_url' => OC_Util::getDefaultPageUrl()], 'guest'
 			);
 		}
 		try {
