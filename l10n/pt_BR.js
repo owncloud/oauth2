@@ -1,10 +1,13 @@
 OC.L10N.register(
     "oauth2",
     {
+    "The application \"{app}\" is requesting access to your account. To authorize it, please log in first." : "O aplicativo \"{app}\" está solicitando acesso à sua conta. Para autorizá-lo, faça o login primeiro.",
     "The application was authorized successfully. You can now close this window." : "O aplicativo foi autorizado com sucesso. Você já pode fechar esta janela.",
     "Request not valid" : "Pedido não válido",
     "This request is not valid. Please contact the administrator if this error persists." : "Este pedido não é válido. Entre em contato com o administrador se esse erro persistir.",
+    "This request is not valid. Please contact the administrator of “%s” if this error persists." : "Este pedido não é válido. Entre em contato com o administrador do \"%s\" se esse erro persistir.",
     "Back" : "Voltar",
+    "The “%s“ application would like permission to access your account" : "O  aplicativo \"%s\" gostaria de permissão de acesso a sua conta",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "O aplicativo ganhará acesso ao seu nome de usuário e terá permissão para gerenciar arquivos, pastas e compartilhamentos.",
     "Authorize" : "Autorizar ",
     "OAuth 2.0" : "OAuth 2.0",
@@ -21,6 +24,9 @@ OC.L10N.register(
     "Add" : "Adicionar",
     "Authorized Applications" : "Aplicações Autorizadas",
     "No applications authorized." : "Nenhum aplicação autorizada.",
+    "Switch user" : "Mudar de usuário",
+    "You are logged as %s but the application requested access for user %s." : "Você está conectado como %s mas o aplicativo requereu acesso para o usuário %s.",
+    "Logout and login as %s" : "Sair e fazer login como %s",
     "Cancel" : "Cancelar"
 },
 "nplurals=2; plural=(n > 1);");
