@@ -201,10 +201,6 @@ class PageController extends Controller {
 					return new RedirectResponse(OC_Util::getDefaultPageUrl());
 				}
 
-				$this->authorizationCodeMapper->deleteByClientUser($client->getId(), $this->userId);
-				$this->accessTokenMapper->deleteByClientUser($client->getId(), $this->userId);
-				$this->refreshTokenMapper->deleteByClientUser($client->getId(), $this->userId);
-
 				$code = Utilities::generateRandom();
 				$authorizationCode = new AuthorizationCode();
 				$authorizationCode->setCode($code);
