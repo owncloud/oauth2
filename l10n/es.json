@@ -18,7 +18,6 @@
     "Allow subdomains" : "Permitir subdominios",
     "Add" : "Añadir",
     "Authorized Applications" : "Aplicaciones autorizadas",
-    "No applications authorized." : "No hay aplicaciones autorizadas.",
-    "Cancel" : "Cancelar"
+    "No applications authorized." : "No hay aplicaciones autorizadas."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

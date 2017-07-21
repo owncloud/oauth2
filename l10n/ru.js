@@ -26,7 +26,6 @@ OC.L10N.register(
     "No applications authorized." : "Авторизованые приложения отсутствуют.",
     "Switch user" : "Переключить пользователя",
     "You are logged as %s but the application requested access for user %s." : "Вы вошли как %s, но приложение запросило доступ для пользователя %s.",
-    "Logout and login as %s" : "Выйти и войти как %s",
-    "Cancel" : "Отмена"
+    "Logout and login as %s" : "Выйти и войти как %s"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

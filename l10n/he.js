@@ -20,7 +20,6 @@ OC.L10N.register(
     "Allow subdomains" : "לאפשר תיקיות משנה",
     "Add" : "הוספה",
     "Authorized Applications" : "הרשאת יישום",
-    "No applications authorized." : "אין יישומים מאושרים.",
-    "Cancel" : "ביטול"
+    "No applications authorized." : "אין יישומים מאושרים."
 },
 "nplurals=2; plural=(n != 1);");

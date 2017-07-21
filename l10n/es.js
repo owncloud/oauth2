@@ -20,7 +20,6 @@ OC.L10N.register(
     "Allow subdomains" : "Permitir subdominios",
     "Add" : "Añadir",
     "Authorized Applications" : "Aplicaciones autorizadas",
-    "No applications authorized." : "No hay aplicaciones autorizadas.",
-    "Cancel" : "Cancelar"
+    "No applications authorized." : "No hay aplicaciones autorizadas."
 },
 "nplurals=2; plural=(n != 1);");
