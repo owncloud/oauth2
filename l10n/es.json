@@ -1,8 +1,11 @@
 { "translations": {
+    "The application \"{app}\" is requesting access to your account. To authorize it, please log in first." : "La aplicación \"{app}\" requiere acceso a su cuenta. para autorizarla, logese primero.",
     "The application was authorized successfully. You can now close this window." : "La aplicación ha sido autorizada,  ya puede cerrar esta ventana.",
     "Request not valid" : "Petición Inválida",
     "This request is not valid. Please contact the administrator if this error persists." : "Petición inválida. Por favor contacte con el administrador si el error persiste.",
+    "This request is not valid. Please contact the administrator of “%s” if this error persists." : "Esta petición no es válida. Por favor contacte con el administrador de “%s” si el error persiste.",
     "Back" : "Volver",
+    "The “%s“ application would like permission to access your account" : "La aplicación “%s“ puede necesitar permiso para acceder a su cuenta",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "La aplicación tendrá acceso a su nombre de usuario y podrá administrar archivos, carpetas y recursos compartidos.",
     "Authorize" : "Autorizar",
     "OAuth 2.0" : "OAuth 2.0",
@@ -18,6 +21,9 @@
     "Allow subdomains" : "Permitir subdominios",
     "Add" : "Añadir",
     "Authorized Applications" : "Aplicaciones autorizadas",
-    "No applications authorized." : "No hay aplicaciones autorizadas."
+    "No applications authorized." : "No hay aplicaciones autorizadas.",
+    "Switch user" : "Cambiar de usuario",
+    "You are logged as %s but the application requested access for user %s." : "Vd. se ha logado como %s pero la aplicación necesita acceso como usuario %s.",
+    "Logout and login as %s" : "Logout y login como %s"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
