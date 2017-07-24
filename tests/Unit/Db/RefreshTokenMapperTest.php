@@ -19,7 +19,10 @@
 
 namespace OCA\OAuth2\Tests\Unit\Db;
 
+use Doctrine\DBAL\Platforms\SqlitePlatform;
 use OCA\OAuth2\AppInfo\Application;
+use OCA\OAuth2\Db\AccessToken;
+use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\RefreshToken;
 use OCA\OAuth2\Db\RefreshTokenMapper;
 use PHPUnit_Framework_TestCase;
@@ -38,9 +41,6 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 	/** @var int $clientId */
 	private $clientId = 1;
 
-	/** @var int $expires */
-	private $expires = 12;
-
 	/** @var RefreshToken $refreshToken1 */
 	private $refreshToken1;
 
@@ -49,6 +49,8 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 
 	/** @var RefreshToken $refreshToken2 */
 	private $refreshToken2;
+	/** @var AccessTokenMapper */
+	private $accessTokenMapper;
 
 	public function setUp() {
 		parent::setUp();
@@ -59,18 +61,36 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$this->refreshTokenMapper = $container->query('OCA\OAuth2\Db\RefreshTokenMapper');
 		$this->refreshTokenMapper->deleteAll();
 
+		$this->accessTokenMapper = $container->query(AccessTokenMapper::class);
+
+		$accessToken = new AccessToken();
+		$accessToken->setToken('3M3amqVGF62kYz7us4yr4QZyUZuMIAZUf1v2IzvsFJVJaCfz6FM9pecVkVZaNXCy');
+		$accessToken->setClientId($this->clientId);
+		$accessToken->setUserId($this->userId);
+		$accessToken->resetExpires();
+		$this->accessTokenMapper->insert($accessToken);
+
 		$refreshToken = new RefreshToken();
 		$refreshToken->setToken($this->token);
 		$refreshToken->setClientId($this->clientId);
 		$refreshToken->setUserId($this->userId);
+		$refreshToken->setAccessTokenId($accessToken->getId());
 
 		$this->refreshToken1 = $this->refreshTokenMapper->insert($refreshToken);
 		$this->id = $this->refreshToken1->getId();
+
+		$accessToken = new AccessToken();
+		$accessToken->setToken('3M3amqVGF62kYz7us4yr4QZyUZuMIAZUf1v2IzvsFJVJaCfz6FM9pecVkVZaNXCy');
+		$accessToken->setClientId($this->clientId);
+		$accessToken->setUserId($this->userId);
+		$accessToken->resetExpires();
+		$this->accessTokenMapper->insert($accessToken);
 
 		$refreshToken = new RefreshToken();
 		$refreshToken->setToken('XCy4QZI7s4yr3MmkcVv2IzvkVZUf1asFZaYzuGF6uyUZ6FM9pef2AqVzMJ3VJaCN');
 		$refreshToken->setClientId(1);
 		$refreshToken->setUserId('max');
+		$refreshToken->setAccessTokenId($accessToken->getId());
 		$this->refreshToken2 = $this->refreshTokenMapper->insert($refreshToken);
 	}
 

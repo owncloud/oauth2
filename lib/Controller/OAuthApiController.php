@@ -148,6 +148,8 @@ class OAuthApiController extends ApiController {
 				$this->logger->info('An authorization code has been used by the client "' . $client->getName() . '" to request an access token.', ['app' => $this->appName]);
 
 				$userId = $authorizationCode->getUserId();
+				$this->authorizationCodeMapper->delete($authorizationCode);
+
 				break;
 			case 'refresh_token':
 				if (!is_string($refresh_token)) {
@@ -168,14 +170,14 @@ class OAuthApiController extends ApiController {
 				$this->logger->info('A refresh token has been used by the client "' . $client->getName() . '" to request an access token.', ['app' => $this->appName]);
 
 				$userId = $refreshToken->getUserId();
+				$relatedAccessToken = new AccessToken();
+				$relatedAccessToken->setId($refreshToken->getAccessTokenId());
+				$this->accessTokenMapper->delete($relatedAccessToken);
+				$this->refreshTokenMapper->delete($refreshToken);
 				break;
 			default:
 				return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 		}
-
-		$this->authorizationCodeMapper->deleteByClientUser($client->getId(), $userId);
-		$this->accessTokenMapper->deleteByClientUser($client->getId(), $userId);
-		$this->refreshTokenMapper->deleteByClientUser($client->getId(), $userId);
 
 		$token = Utilities::generateRandom();
 		$accessToken = new AccessToken();
@@ -190,6 +192,7 @@ class OAuthApiController extends ApiController {
 		$refreshToken->setToken($token);
 		$refreshToken->setClientId($client->getId());
 		$refreshToken->setUserId($userId);
+		$refreshToken->setAccessTokenId($accessToken->getId());
 		$this->refreshTokenMapper->insert($refreshToken);
 
 		return new JSONResponse(

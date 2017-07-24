@@ -30,6 +30,7 @@ use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Db\RefreshToken;
 use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCP\AppFramework\Http\JSONResponse;
+use OCP\IURLGenerator;
 use PHPUnit_Framework_TestCase;
 
 class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
@@ -133,8 +134,10 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$refreshToken->setToken('GF62kYz7us4yr4Uf1v2IzvsFZaNQZyUZuMIkAJVJaCfz6FM9pecVZXCy3M3amqVV');
 		$refreshToken->setClientId($this->client1->getId());
 		$refreshToken->setUserId($this->userId);
+		$refreshToken->setAccessTokenId($accessToken->getId());
 		$this->refreshToken = $this->refreshTokenMapper->insert($refreshToken);
 
+		/** @var IURLGenerator $urlGenerator */
 		$urlGenerator = $container->query('ServerContainer')->getURLGenerator();
 		$this->authorizationSuccessfulMessageUrl = $urlGenerator->linkToRouteAbsolute(
 			$container->query('AppName') . '.page.authorizationSuccessful'
@@ -273,8 +276,8 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($this->authorizationSuccessfulMessageUrl, $json->message_url);
 		$this->assertEquals(200, $result->getStatus());
 		$this->assertEquals(0, count($this->authorizationCodeMapper->findAll()));
-		$this->assertEquals(1, count($this->accessTokenMapper->findAll()));
-		$this->assertEquals(1, count($this->refreshTokenMapper->findAll()));
+		$this->assertEquals(2, count($this->accessTokenMapper->findAll()));
+		$this->assertEquals(2, count($this->refreshTokenMapper->findAll()));
 	}
 
 	public function testGenerateTokenWithRefreshToken() {
