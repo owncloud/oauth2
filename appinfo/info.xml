@@ -4,7 +4,7 @@
     <name>OAuth 2.0</name>
     <description>Application for using OAuth 2.0 in ownCloud</description>
     <licence>AGPL</licence>
-    <author>Project Seminar "sciebo@Learnweb" of the University of Münster</author>
+    <author>Project Seminar "sciebo@Learnweb" of the University of Münster, Thomas Müller</author>
     <version>0.1.1</version>
     <namespace>OAuth2</namespace>
     <category>integration</category>

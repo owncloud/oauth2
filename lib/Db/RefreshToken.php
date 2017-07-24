@@ -28,18 +28,22 @@ use OCP\AppFramework\Db\Entity;
  * @method void setClientId(int $clientId)
  * @method string getUserId()
  * @method void setUserId(string $userId)
+ * @method int getAccessTokenId()
+ * @method void setAccessTokenId(int $accessTokenId)
  */
 class RefreshToken extends Entity {
 
 	protected $token;
 	protected $clientId;
 	protected $userId;
+	protected $accessTokenId;
 
 	public function __construct() {
 		$this->addType('id', 'int');
 		$this->addType('token', 'string');
 		$this->addType('client_id', 'int');
 		$this->addType('user_id', 'string');
+		$this->addType('access_token_id', 'int');
 	}
 
 }
