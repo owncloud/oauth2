@@ -105,7 +105,11 @@ class Application extends App {
 			$client = $mapper->findByIdentifier($params['client_id']);
 			\OCP\Util::addScript('oauth2', 'login');
 			\OCP\Util::addStyle('oauth2', 'login');
-			\OCP\Util::addHeader('data', ['key' => 'oauth2', 'value' => $client->getName()]);
+			$data = ['key' => 'oauth2', 'client' => $client->getName()];
+			if (isset($params['user'])) {
+				$data['user'] = $params['user'];
+			}
+			\OCP\Util::addHeader('data', $data);
 		} catch (DoesNotExistException $ex) {
 			// ignore - the given client id is not known
 		}

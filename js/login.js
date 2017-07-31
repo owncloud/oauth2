@@ -21,8 +21,17 @@
 $(document).ready(function(){
 	var $loginMessage = $('#body-login').find('#message');
 	if ($loginMessage.length) {
-		var client = $("data[key='oauth2']").attr('value');
-		var msg = t('oauth2', 'The application "{app}" is requesting access to your account. To authorize it, please log in first.', {app : client});
+		var data = $("data[key='oauth2']");
+		var msg = t('oauth2', 'The application "{app}" is requesting access to your account. To authorize it, please log in first.', {app : data.attr('client')});
 		$loginMessage.parent().append('<div class="warning"><div class="icon-info-white" />'+msg+'</div>');
+		var user = data.attr('user');
+		if (user) {
+			$('#password')
+				.val('')
+				.get(0).focus();
+			$('#user')
+				.val(user)
+				.prop('readonly', true);
+		}
 	}
 });
