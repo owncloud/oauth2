@@ -21,14 +21,12 @@
 style('oauth2', 'authorization');
 ?>
 
-<span class="error">
-	<form id="form-inline" action="" method="post">
-		<p><b><?php p($l->t('Switch user')); ?></b></p>
-		<br>
-		<p><?php p($l->t('You are logged as %s but the application requested access for user %s.', [$_['current_user'], $_['requested_user']])); ?></p>
-		<br>
-		<a href="<?php p($_['logout_url']); ?>">
-			<button><?php p($l->t('Logout and login as %s', $_['requested_user'])); ?></button>
-		</a>
-	</form>
-</span>
+<div class="error">
+	<p><b><?php p($l->t('Switch user')); ?></b></p>
+	<br>
+	<p><?php p($l->t('You are logged as %s but the application requested access for user %s.', [$_['current_user'], $_['requested_user']])); ?></p>
+	<br>
+	<a href="<?php p($_['logout_url']); ?>">
+		<button><?php p($l->t('Logout and login as %s', $_['requested_user'])); ?></button>
+	</a>
+</div>

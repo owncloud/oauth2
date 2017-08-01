@@ -20,18 +20,16 @@
 style('oauth2', 'authorization');
 ?>
 
-<span class="error">
-	<form id="form-inline" action="" method="post">
-		<p><b><?php p($l->t('Request not valid')); ?></b></p>
-		<br>
-		<?php if (is_null($_['client_name'])) { ?>
-			<p><?php p($l->t('This request is not valid. Please contact the administrator if this error persists.')); ?></p>
-		<?php } else { ?>
-			<p><?php p($l->t('This request is not valid. Please contact the administrator of “%s” if this error persists.', [$_['client_name']])); ?></p>
-		<?php } ?>
-		<br>
-		<a href="<?php p($_['back_url']); ?>">
-			<button><?php p($l->t('Back')); ?></button>
-		</a>
-	</form>
-</span>
+<div class="error">
+	<p><b><?php p($l->t('Request not valid')); ?></b></p>
+	<br>
+	<?php if (is_null($_['client_name'])) { ?>
+		<p><?php p($l->t('This request is not valid. Please contact the administrator if this error persists.')); ?></p>
+	<?php } else { ?>
+		<p><?php p($l->t('This request is not valid. Please contact the administrator of “%s” if this error persists.', [$_['client_name']])); ?></p>
+	<?php } ?>
+	<br>
+	<a href="<?php p($_['back_url']); ?>">
+		<button><?php p($l->t('Back')); ?></button>
+	</a>
+</div>
