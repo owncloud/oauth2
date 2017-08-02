@@ -104,6 +104,7 @@ class PageController extends Controller {
 	 * @return TemplateResponse The authorize view or the
 	 * authorize-error view with a redirection to the
 	 * default page URL.
+	 *
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
@@ -179,7 +180,6 @@ class PageController extends Controller {
 	 * default page URL.
 	 *
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 */
 	public function generateAuthorizationCode($response_type, $client_id, $redirect_uri, $state = null) {
 		if (!is_string($response_type) || !is_string($client_id)
