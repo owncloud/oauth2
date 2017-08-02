@@ -169,14 +169,13 @@ class SettingsController extends Controller {
 	 * Revokes the authorization for a client.
 	 *
 	 * @param int $id The client identifier.
-	 * @param string $user_id The ID of the user logged in.
 	 *
 	 * @return RedirectResponse Redirection to the settings page.
 	 *
 	 * @NoAdminRequired
 	 */
-	public function revokeAuthorization($id, $user_id) {
-		if (!is_int($id) || !is_string($user_id)) {
+	public function revokeAuthorization($id) {
+		if (!is_int($id)) {
 			return new RedirectResponse(
 				$this->urlGenerator->linkToRouteAbsolute(
 					'settings.SettingsPage.getPersonal',
@@ -184,9 +183,9 @@ class SettingsController extends Controller {
 				) . '#oauth2');
 		}
 
-		$this->authorizationCodeMapper->deleteByClientUser($id, $user_id);
-		$this->accessTokenMapper->deleteByClientUser($id, $user_id);
-		$this->refreshTokenMapper->deleteByClientUser($id, $user_id);
+		$this->authorizationCodeMapper->deleteByClientUser($id, $this->userId);
+		$this->accessTokenMapper->deleteByClientUser($id, $this->userId);
+		$this->refreshTokenMapper->deleteByClientUser($id, $this->userId);
 
 		return new RedirectResponse(
 			$this->urlGenerator->linkToRouteAbsolute(
