@@ -52,6 +52,7 @@ style('oauth2', 'settings-admin');
 					<td id="td-allow-subdomains"><?php if ($client->getAllowSubdomains()) {?> <img alt="" src="/core/img/actions/checkmark.svg"> <?php } ?></td>
                     <td>
                         <form id="form-inline" class="delete" data-confirm="<?php p($l->t('Are you sure you want to delete this item?')); ?>" action="<?php p($_['urlGenerator']->linkToRoute('oauth2.settings.deleteClient', ['id' => $client->getId()])); ?>" method="post">
+							<input type="hidden" name="requesttoken" value="<?php p($_['requesttoken']) ?>" />
                             <input type="submit" class="button icon-delete" value="">
                         </form>
                     </td>
@@ -67,6 +68,7 @@ style('oauth2', 'settings-admin');
         <input id="redirect_uri" name="redirect_uri" type="text" placeholder="<?php p($l->t('Redirection URI')); ?>">
 		<input type="checkbox" class="checkbox" name="allow_subdomains" id="allow_subdomains" value="1"/>
 		<label for="allow_subdomains"><?php p($l->t('Allow subdomains'));?></label>
+		<input type="hidden" name="requesttoken" value="<?php p($_['requesttoken']) ?>" />
         <input type="submit" class="button" value="<?php p($l->t('Add')); ?>">
     </form>
 </div>
