@@ -90,8 +90,6 @@ class SettingsController extends Controller {
 	 * Adds a client.
 	 *
 	 * @return RedirectResponse Redirection to the settings page.
-	 *
-	 * @NoCSRFRequired
 	 */
 	public function addClient() {
 		if (!isset($_POST['redirect_uri']) || !isset($_POST['name'])) {
@@ -139,8 +137,6 @@ class SettingsController extends Controller {
 	 * @param int $id The client identifier.
 	 *
 	 * @return RedirectResponse Redirection to the settings page.
-	 *
-	 * @NoCSRFRequired
 	 */
 	public function deleteClient($id) {
 		if (!is_int($id)) {
@@ -178,7 +174,6 @@ class SettingsController extends Controller {
 	 * @return RedirectResponse Redirection to the settings page.
 	 *
 	 * @NoAdminRequired
-	 * @NoCSRFRequired
 	 */
 	public function revokeAuthorization($id, $user_id) {
 		if (!is_int($id) || !is_string($user_id)) {
