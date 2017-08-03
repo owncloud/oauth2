@@ -20,7 +20,7 @@ $(document).ready(function () {
 	var elements = document.querySelectorAll('.delete');
 
 	for (var i = 0; i < elements.length; i++) {
-		elements[i].addEventListener('submit', function () {
+		elements[i].addEventListener('submit', function (event) {
 			event.preventDefault();
 			if (confirm(this.getAttribute('data-confirm'))) {
 				this.submit();
