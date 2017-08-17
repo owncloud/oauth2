@@ -72,3 +72,20 @@ else
 	@echo $(sign_skip_msg)
 endif
 	tar -czf $(appstore_package_name).tar.gz -C $(appstore_package_name)/../ $(app_name)
+
+# Command for running JS and PHP tests. Works for package.json files in the js/
+# and root directory. If phpunit is not installed systemwide, a copy is fetched
+# from the internet
+.PHONY: test
+test:
+ifneq (,$(wildcard $(CURDIR)/js/package.json))
+	cd js && $(npm) run test
+endif
+ifneq (,$(wildcard $(CURDIR)/package.json))
+	$(npm) run test
+endif
+	mkdir -p $(build_tools_directory)
+	curl -sSL https://phar.phpunit.de/phpunit-5.7.phar -o $(build_tools_directory)/phpunit.phar
+	php $(build_tools_directory)/phpunit.phar -c phpunit.xml --coverage-clover ./clover.xml
+	php $(build_tools_directory)/phpunit.phar -c phpunit.integration.xml
+
