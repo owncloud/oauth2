@@ -3,8 +3,7 @@
     <id>oauth2</id>
     <name>OAuth2</name>
     <summary>OAuth2 token-based authorization interface</summary>
-    <description>
-OAuth2 is the open industry-standard protocol for secure authorization of clients. It can be used as a way for users to grant web services or applications access to their data stored in ownCloud.
+    <description>OAuth2 is the open industry-standard protocol for secure authorization of clients. It can be used as a way for users to grant web services or applications access to their data stored in ownCloud.
 The use of OAuth2 in ownCloud greatly enhances security while facilitating the integration of third party applications or web services:
 
 - Connect ownCloud clients (Desktop, Android, iOS) through a standardized and secure authorization mechanism
@@ -27,7 +26,7 @@ When using OAuth2 a unique access token is generated for each device or third pa
     <website>https://github.com/owncloud/oauth2</website>
     <bugs>https://github.com/owncloud/oauth2/issues</bugs>
     <repository type="git">https://github.com/owncloud/oauth2.git</repository>
-    <screenshot></screenshot>
+    <screenshot>https://raw.githubusercontent.com/owncloud/screenshots/master/oauth2/ownCloud-oauth2-app.jpg</screenshot>
     <dependencies>
         <owncloud min-version="10.0" max-version="10.0"/>
     </dependencies>
