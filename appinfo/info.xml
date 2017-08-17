@@ -1,28 +1,28 @@
 <?xml version="1.0"?>
 <info>
-    <id>oauth2</id>
-    <name>OAuth 2.0</name>
-    <description>Application for using OAuth 2.0 in ownCloud</description>
-    <licence>AGPL</licence>
-    <author>Project Seminar "sciebo@Learnweb" of the University of Münster, Thomas Müller</author>
-    <version>0.1.1</version>
-    <namespace>OAuth2</namespace>
-    <category>integration</category>
-    <dependencies>
-        <owncloud min-version="10.0" max-version="10.0"/>
-    </dependencies>
-    <types>
-        <authentication/>
-    </types>
-    <auth-modules>
-        <module>OCA\OAuth2\AuthModule</module>
-    </auth-modules>
-    <settings>
-        <personal>OCA\OAuth2\Panels\PersonalPanel</personal>
-        <admin>OCA\OAuth2\Panels\AdminPanel</admin>
-    </settings>
-    <background-jobs>
-        <job>OCA\OAuth2\BackgroundJob\CleanUp</job>
-    </background-jobs>
-    <use-migrations>true</use-migrations>
+  <id>oauth2</id>
+  <name>OAuth 2.0</name>
+  <description>Application for using OAuth 2.0 in ownCloud</description>
+  <licence>AGPL</licence>
+  <author>Project Seminar "sciebo@Learnweb" of the University of M&#xFC;nster, Thomas M&#xFC;ller</author>
+  <version>0.1.1-beta2</version>
+  <namespace>OAuth2</namespace>
+  <category>integration</category>
+  <dependencies>
+    <owncloud min-version="10.0" max-version="10.0"/>
+  </dependencies>
+  <types>
+    <authentication/>
+  </types>
+  <auth-modules>
+    <module>OCA\OAuth2\AuthModule</module>
+  </auth-modules>
+  <settings>
+    <personal>OCA\OAuth2\Panels\PersonalPanel</personal>
+    <admin>OCA\OAuth2\Panels\AdminPanel</admin>
+  </settings>
+  <background-jobs>
+    <job>OCA\OAuth2\BackgroundJob\CleanUp</job>
+  </background-jobs>
+  <use-migrations>true</use-migrations>
 </info>
