@@ -1,16 +1,15 @@
 OC.L10N.register(
     "oauth2",
     {
+    "The application \"{app}\" is requesting access to your account. To authorize it, please log in first." : "Programmet \"[app]\" ber om tilgang til kontoen din. Vennligst logg inn for å autorisere programmet. ",
+    "The application was authorized successfully. You can now close this window." : "Programmet ble autorisert. Du kan nå lukke dette vinduet. ",
     "Request not valid" : "Forespørsel ikke gyldig",
     "This request is not valid. Please contact the administrator if this error persists." : "Denne forespørselen er ikke gyldig. Kontakt administratoren hvis feilen vedvarer.",
-    "This request is not valid. Please contact the administrator of “" : "Denne forespørselen er ikke gyldig. Kontakt administratoren av “",
-    "” if this error persists." : "” hvis denne feilen vedvarer.",
+    "This request is not valid. Please contact the administrator of “%s” if this error persists." : "Denne forespørselen er ikke gyldig. Kontakt administratoren av \"%s\" hvis feilen vedvarer. ",
     "Back" : "Tilbake",
-    "Do you really like to authorize the application “" : "Vil du virkelig autorisere applikasjonen?",
-    "”?" : "?",
+    "The “%s“ application would like permission to access your account" : "Programmet \"%s\" ber om tilgangstillatelse til kontoen din. ",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Applikasjonen vil få tilgang til ditt brukernavn og vil kunne administrere filer, lokale mapper og delte mapper.",
     "Authorize" : "Autoriser",
-    "Cancel" : "Avbryt",
     "OAuth 2.0" : "OAuth 2.0",
     "Registered clients" : "Registrerte klienter",
     "No clients registered." : "Ingen klienter er registrert",
@@ -24,6 +23,9 @@ OC.L10N.register(
     "Allow subdomains" : "Tillat underdomener",
     "Add" : "Legg til",
     "Authorized Applications" : "Autoriser applikasjon",
-    "No applications authorized." : "Ingen applikasjoner er autorisert."
+    "No applications authorized." : "Ingen applikasjoner er autorisert.",
+    "Switch user" : "Bytt bruker",
+    "You are logged as %s but the application requested access for user %s." : "Du er logget inn som %s, men programmet ba om tilgang for %s. ",
+    "Logout and login as %s" : "Logg ut og logg inn som %s"
 },
 "nplurals=2; plural=(n != 1);");
