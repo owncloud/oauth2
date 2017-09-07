@@ -30,8 +30,7 @@ $(document).ready(function(){
 				.val('')
 				.get(0).focus();
 			$('#user')
-				.val(user)
-				.prop('readonly', true);
+				.val(user);
 		}
 	}
 });
