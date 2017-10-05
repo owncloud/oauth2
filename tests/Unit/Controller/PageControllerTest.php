@@ -32,6 +32,8 @@ use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IRequest;
 use OCP\IURLGenerator;
+use OCP\IUser;
+use OCP\IUserManager;
 use OCP\IUserSession;
 use Test\TestCase;
 
@@ -51,9 +53,6 @@ class PageControllerTest extends TestCase {
 
 	/** @var AuthorizationCodeMapper $authorizationCodeMapper */
 	private $authorizationCodeMapper;
-
-	/** @var string $userId */
-	private $userId = 'john';
 
 	/** @var string $identifier */
 	private $identifier = 'NXCy3M3a6FM9pecVyUZuGF62AJVJaCfmkYz7us4yr4QZqVzMIkVZUf1v2IzvsFZa';
@@ -95,10 +94,17 @@ class PageControllerTest extends TestCase {
 		$refreshTokenMapper = $container->query('OCA\OAuth2\Db\RefreshTokenMapper');
 		/** @var IURLGenerator | \PHPUnit_Framework_MockObject_MockObject $urlGenerator */
 		$urlGenerator = $this->createMock(IURLGenerator::class);
-		/** @var IUserSession | \PHPUnit_Framework_MockObject_MockObject $urlGenerator */
+		/** @var IUserSession | \PHPUnit_Framework_MockObject_MockObject $userSession */
 		$userSession = $this->createMock(IUserSession::class);
 		/** @var IRequest | \PHPUnit_Framework_MockObject_MockObject $request */
 		$request = $this->createMock(IRequest::class);
+		/** @var IUser $user */
+		$user = $this->createMock(IUser::class);
+		/** @var IUserManager | \PHPUnit_Framework_MockObject_MockObject $userManager */
+		$userManager = $this->createMock(IUserManager::class);
+		$userSession->expects($this->any())->method('getUser')->willReturn($user);
+		$userManager->expects($this->any())->method('get')->willReturn($user);
+		$user->expects($this->any())->method('getUID')->willReturn('Alice');
 
 		$this->controller = new PageController(
 			$container->query('AppName'),
@@ -107,10 +113,10 @@ class PageControllerTest extends TestCase {
 			$this->authorizationCodeMapper,
 			$accessTokenMapper,
 			$refreshTokenMapper,
-			$this->userId,
 			$container->query('Logger'),
 			$urlGenerator,
-			$userSession
+			$userSession,
+			$userManager
 		);
 	}
 
@@ -228,7 +234,7 @@ class PageControllerTest extends TestCase {
 		/** @var AuthorizationCode $authorizationCode */
 		$authorizationCode = $this->authorizationCodeMapper->findByCode($parameters['code']);
 		$this->assertEquals($expected, $authorizationCode->getExpires(), '', 1);
-		$this->assertEquals($this->userId, $authorizationCode->getUserId());
+		$this->assertEquals('Alice', $authorizationCode->getUserId());
 		$this->assertEquals($this->client->getId(), $authorizationCode->getClientId());
 		$this->authorizationCodeMapper->delete($this->authorizationCodeMapper->findByCode($parameters['code']));
 
@@ -246,7 +252,7 @@ class PageControllerTest extends TestCase {
 		/** @var AuthorizationCode $authorizationCode */
 		$authorizationCode = $this->authorizationCodeMapper->findByCode($parameters['code']);
 		$this->assertEquals($expected, $authorizationCode->getExpires(), '', 1);
-		$this->assertEquals($this->userId, $authorizationCode->getUserId());
+		$this->assertEquals('Alice', $authorizationCode->getUserId());
 		$this->assertEquals($this->client->getId(), $authorizationCode->getClientId());
 		$this->authorizationCodeMapper->delete($this->authorizationCodeMapper->findByCode($parameters['code']));
 	}
