@@ -34,6 +34,8 @@ use OCP\AppFramework\Http\TemplateResponse;
 use OCP\ILogger;
 use OCP\IRequest;
 use OCP\IURLGenerator;
+use OCP\IUser;
+use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\Util;
 
@@ -47,14 +49,14 @@ class PageController extends Controller {
 	private $accessTokenMapper;
 	/** @var RefreshTokenMapper */
 	private $refreshTokenMapper;
-	/** @var string */
-	private $userId;
 	/** @var ILogger */
 	private $logger;
 	/** @var IURLGenerator */
 	private $urlGenerator;
 	/** @var IUserSession */
 	private $userSession;
+	/** @var IUserManager */
+	private $userManager;
 
 	/**
 	 * PageController constructor.
@@ -65,20 +67,20 @@ class PageController extends Controller {
 	 * @param AuthorizationCodeMapper $authorizationCodeMapper The authorization code mapper.
 	 * @param AccessTokenMapper $accessTokenMapper The access token mapper.
 	 * @param RefreshTokenMapper $refreshTokenMapper The refresh token mapper.
-	 * @param string $UserId The user ID.
 	 * @param ILogger $logger The logger.
 	 * @param IURLGenerator $urlGenerator
 	 * @param IUserSession $userSession
+	 * @param IUserManager $userManager
 	 */
 	public function __construct($AppName, IRequest $request,
 								ClientMapper $clientMapper,
 								AuthorizationCodeMapper $authorizationCodeMapper,
 								AccessTokenMapper $accessTokenMapper,
 								RefreshTokenMapper $refreshTokenMapper,
-								$UserId,
 								ILogger $logger,
 								IURLGenerator $urlGenerator,
-								IUserSession $userSession
+								IUserSession $userSession,
+								IUserManager $userManager
 	) {
 		parent::__construct($AppName, $request);
 
@@ -86,10 +88,10 @@ class PageController extends Controller {
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
 		$this->accessTokenMapper = $accessTokenMapper;
 		$this->refreshTokenMapper = $refreshTokenMapper;
-		$this->userId = $UserId;
 		$this->logger = $logger;
 		$this->urlGenerator = $urlGenerator;
 		$this->userSession = $userSession;
+		$this->userManager = $userManager;
 	}
 
 	/**
@@ -120,7 +122,7 @@ class PageController extends Controller {
 			);
 		}
 
-		if ($user !== null && $user !== $this->userId) {
+		if ($user !== null && $user !== $this->userSession->getUser()->getUID()) {
 			$logoutUrl = $this->urlGenerator->linkToRouteAbsolute(
 				'oauth2.page.logout',[
 					'user' => $user,
@@ -131,10 +133,13 @@ class PageController extends Controller {
 					'state' => $state
 				]
 			);
+			$currentUser = $this->userSession->getUser();
+			$currentUser = $this->buildDisplayForUser($currentUser);
+			$requestedUser = $this->buildDisplayForUser($user);
 			return new TemplateResponse(
 				$this->appName,
 				'switch-user',
-				['current_user' => $this->userId, 'requested_user' => $user,
+				['current_user' => $currentUser, 'requested_user' => $requestedUser,
 					'logout_url' => $logoutUrl], 'guest'
 			);
 		}
@@ -205,7 +210,7 @@ class PageController extends Controller {
 				$authorizationCode = new AuthorizationCode();
 				$authorizationCode->setCode($code);
 				$authorizationCode->setClientId($client->getId());
-				$authorizationCode->setUserId($this->userId);
+				$authorizationCode->setUserId($this->userSession->getUser()->getUID());
 				$authorizationCode->resetExpires();
 				$this->authorizationCodeMapper->insert($authorizationCode);
 
@@ -272,5 +277,29 @@ class PageController extends Controller {
 				'user' => $user,
 				'redirect_url' => $redirectUrl
 			]));
+	}
+
+	/**
+	 * @param $userIdOrUser
+	 * @return string
+	 */
+	private function buildDisplayForUser($userIdOrUser) {
+		$currentUser = $userIdOrUser;
+		if (!$userIdOrUser instanceof IUser) {
+			$currentUser = $this->userManager->get($userIdOrUser);
+			if ($currentUser === null) {
+				$escapedUserId = \OCP\Util::sanitizeHTML($userIdOrUser);
+				return "<strong>$escapedUserId</strong>";
+			}
+		}
+		$displayName = $currentUser->getDisplayName();
+		$userId = $currentUser->getUID();
+		if (empty($displayName) || $displayName === $userId) {
+			$escapedUserId = \OCP\Util::sanitizeHTML($userId);
+			return "<strong>$escapedUserId</strong>";
+		}
+		$userId = \OCP\Util::sanitizeHTML($userId);
+		$escapedDisplayName = \OCP\Util::sanitizeHTML($displayName);
+		return "<span class='hasTooltip' data-original-title='$userId'><strong>$escapedDisplayName</strong></span>";
 	}
 }
