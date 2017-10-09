@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [0.2.0] - 2017-10-13
 
 ### Added
 
@@ -19,5 +19,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 - Security Hardening - [#71](https://github.com/owncloud/oauth2/pull/71)
 - Verify Bearer token even if the session is still valid - [#53](https://github.com/owncloud/oauth2/pull/53)
+- Use displayname on switch user screen - [#90](https://github.com/owncloud/oauth2/pull/90)
 
-[Unreleased]: https://github.com/owncloud/oauth2/compare/v0.1.0...master
+[0.2.0]: https://github.com/owncloud/oauth2/compare/v0.1.0...v0.2.0
