@@ -10,6 +10,8 @@ class Version20170724162518 implements ISchemaMigration {
 	public function changeSchema(Schema $schema, array $options) {
 		$prefix = $options['tablePrefix'];
 		$table = $schema->getTable("{$prefix}oauth2_refresh_tokens");
-		$table->addColumn('access_token_id', Type::INTEGER, ['notNull' => false]);
+		if (!$table->hasColumn('access_token_id')) {
+			$table->addColumn('access_token_id', Type::INTEGER, ['notNull' => false]);
+		}
     }
 }
