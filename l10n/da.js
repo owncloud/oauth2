@@ -24,8 +24,6 @@ OC.L10N.register(
     "Add" : "Tilføj",
     "Authorized Applications" : "Autoriser Applikationer",
     "No applications authorized." : "Ingen applikationer autoriseret. ",
-    "Switch user" : "Skift bruger",
-    "You are logged as %s but the application requested access for user %s." : "Du er logget ind som %s men applikationen beder om adgang til bruger %s",
-    "Logout and login as %s" : "Log ud og ind som %s"
+    "Switch user" : "Skift bruger"
 },
 "nplurals=2; plural=(n != 1);");

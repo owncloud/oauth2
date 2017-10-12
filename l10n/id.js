@@ -22,8 +22,6 @@ OC.L10N.register(
     "Add" : "Tambah",
     "Authorized Applications" : "Aplikasi Terotorisasi",
     "No applications authorized." : "Tidak ada aplikasi yang terotorisasi.",
-    "Switch user" : "Ganti pengguna",
-    "You are logged as %s but the application requested access for user %s." : "Anda masuk sebagai %s tetapi aplikasi meminta akses untuk akun%s",
-    "Logout and login as %s" : "Keluar dan masuk sebagai %s"
+    "Switch user" : "Ganti pengguna"
 },
 "nplurals=1; plural=0;");

@@ -21,8 +21,6 @@ OC.L10N.register(
     "Add" : "Toevoegen",
     "Authorized Applications" : "Geautoriseerde applicaties",
     "No applications authorized." : "Geen applicaties geautoriseerd.",
-    "Switch user" : "Omschakelen gebruiker",
-    "You are logged as %s but the application requested access for user %s." : "Je bent ingelogd als %s maar de applicatie vroeg toegang voor gebruiker%s.",
-    "Logout and login as %s" : "Afmelden en aanmelden als 1%s"
+    "Switch user" : "Omschakelen gebruiker"
 },
 "nplurals=2; plural=(n != 1);");

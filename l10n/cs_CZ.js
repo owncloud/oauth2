@@ -20,8 +20,6 @@ OC.L10N.register(
     "Add" : "Přidat",
     "Authorized Applications" : "Povolené aplikace",
     "No applications authorized." : "Žádné povolené aplikace",
-    "Switch user" : "Přepnout uživatele",
-    "You are logged as %s but the application requested access for user %s." : "Jste přihlášen jako %s ale aplikace je vyžaduje oprávnění uživatele %s.",
-    "Logout and login as %s" : "Odhlásit a přihlásit jako %s"
+    "Switch user" : "Přepnout uživatele"
 },
 "nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;");
