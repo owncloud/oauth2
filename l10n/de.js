@@ -24,6 +24,7 @@ OC.L10N.register(
     "Add" : "Hinzufügen",
     "Authorized Applications" : "Autorisierte Anwendungen",
     "No applications authorized." : "Keine Anwendungen autorisiert.",
-    "Switch user" : "Nutzer wechseln"
+    "Switch user" : "Nutzer wechseln",
+    "Switch users to continue" : "Benutzer wechseln, um fortzufahren"
 },
 "nplurals=2; plural=(n != 1);");
