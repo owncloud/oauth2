@@ -6,7 +6,7 @@
     <description>OAuth2 is the open industry-standard protocol for secure authorization of clients. It can be used as a way for users to grant web services or applications access to their data stored in ownCloud.
 The use of OAuth2 in ownCloud greatly enhances security while facilitating the integration of third party applications or web services:
 
-- Connect ownCloud clients (Desktop, Android, iOS) through a standardized and secure authorization mechanism
+- Connect ownCloud clients (Desktop, Android, iOS) through a standardized and secure authorization flow
 - Provide a user authorization interface for developers to facilitate the integration of ownCloud in third party applications
 
 ### Benefits provided by the OAuth2 interface
