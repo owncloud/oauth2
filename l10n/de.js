@@ -24,7 +24,8 @@ OC.L10N.register(
     "Add" : "Hinzufügen",
     "Authorized Applications" : "Autorisierte Anwendungen",
     "No applications authorized." : "Keine Anwendungen autorisiert.",
-    "Switch user" : "Nutzer wechseln",
+    "Switch user" : "Benutzer wechseln",
+    "You are logged in as %s but the application requested access for user %s." : "Du bist als %s angemeldet, die Anwendung benötigt aber Zugriff auf den Benutzer %s.",
     "Switch users to continue" : "Benutzer wechseln, um fortzufahren"
 },
 "nplurals=2; plural=(n != 1);");
