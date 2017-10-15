@@ -24,6 +24,8 @@ OC.L10N.register(
     "Add" : "הוספה",
     "Authorized Applications" : "הרשאת יישום",
     "No applications authorized." : "אין יישומים מאושרים.",
-    "Switch user" : "החלפת משתמש"
+    "Switch user" : "החלפת משתמש",
+    "You are logged in as %s but the application requested access for user %s." : "הנך מחובר כ-  %s אבל היישום מבקש הרשאת גישה עבור משתמש %s.",
+    "Switch users to continue" : "יש להחליף משתמש להמשך"
 },
 "nplurals=2; plural=(n != 1);");
