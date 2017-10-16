@@ -24,6 +24,8 @@ OC.L10N.register(
     "Add" : "เพิ่ม",
     "Authorized Applications" : "แอพพลิเคชันที่ได้รับอนุญาตแล้ว",
     "No applications authorized." : "ไม่มีแอพพลิเคชันที่ได้รับอนุญาต",
-    "Switch user" : "เปลี่ยนผู้ใช้"
+    "Switch user" : "เปลี่ยนผู้ใช้",
+    "You are logged in as %s but the application requested access for user %s." : "คุณเข้าสู่ระบบในชื่อ %s แต่แอพพลิเคชันให้สิทธิการเข้าถึงสำหรับผู้ใช้ %s เท่านั้น",
+    "Switch users to continue" : "เปลี่ยนผู้ใช้เพื่อดำเนินการต่อ"
 },
 "nplurals=1; plural=0;");
