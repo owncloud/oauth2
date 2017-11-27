@@ -84,6 +84,9 @@ class Application extends App {
 	public function boot() {
 		$this->getContainer()->query('UserHooks')->register();
 		$request = $this->getContainer()->getServer()->getRequest();
+		if ($request->getMethod() !== 'GET') {
+			return;
+		}
 		$redirectUrl = $request->getParam('redirect_url');
 		if ($redirectUrl === null) {
 			return;
