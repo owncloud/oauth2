@@ -1,14 +1,13 @@
 { "translations": {
+    "The application \"{app}\" is requesting access to your account. To authorize it, please log in first." : "Aplikacioni \"{app}\" po kërkon hyrje në llogarinë tuaj. Që ta autorizoni, ju lutemi, së pari bëni hyrjen në të.",
+    "The application was authorized successfully. You can now close this window." : "Aplikacioni u autorizua me sukses. Tani mund ta mbyllni këtë dritare.",
     "Request not valid" : "Kërkesë jo e vlefshme",
     "This request is not valid. Please contact the administrator if this error persists." : "Kjo kërkesë s’është e vlefshme. Ju lutemi, lidhuni me përgjegjësin, nëse vazhdon ky gabim.",
-    "This request is not valid. Please contact the administrator of “" : "Kjo kërkesë s’është e vlefshme. Ju lutemi, lidhuni me përgjegjësin e \"",
-    "” if this error persists." : "” nëse vazhdon ky gabim.",
+    "This request is not valid. Please contact the administrator of “%s” if this error persists." : "Kjo kërkesë s’është e vlefshme. Ju lutemi, nëse ky gabim vazhdon, lidhuni me përgjegjësin e “%s”.",
     "Back" : "Mbrapsht",
-    "Do you really like to authorize the application “" : "Doni vërtet të autorizohet aplikacioni “",
-    "”?" : "”?",
+    "The “%s“ application would like permission to access your account" : "Aplikacioni “%s“ do të donte leje të hynte në llogarinë tuaj",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Aplikacioni do të mund të përdorë emrin tuaj të përdoruesit dhe do të lejohet të administrojë kartela, dosje dhe ndarje.",
     "Authorize" : "Autorizoje",
-    "Cancel" : "Anuloje",
     "OAuth 2.0" : "OAuth 2.0",
     "Registered clients" : "Klientë të regjistruar",
     "No clients registered." : "S’ka klientë të regjistruar.",
@@ -22,6 +21,9 @@
     "Allow subdomains" : "Lejo nënpërkatësi",
     "Add" : "Shtoje",
     "Authorized Applications" : "Aplikacione të Autorizuar",
-    "No applications authorized." : "S’ka aplikacione të autorizuar."
+    "No applications authorized." : "S’ka aplikacione të autorizuar.",
+    "Switch user" : "Këmbe përdorues",
+    "You are logged in as %s but the application requested access for user %s." : "Keni bërë hyrjen si %s, por aplikacioni kërkoi hyrje për përdoruesin %s.",
+    "Switch users to continue" : "Që të vazhdohet, këmbeni përdorues"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
