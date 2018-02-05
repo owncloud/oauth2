@@ -36,17 +36,22 @@ class AuthModule implements IAuthModule {
 	 * @param IRequest $request The request.
 	 *
 	 * @return null|IUser The user if the request is authenticated, null otherwise.
+	 * @throws \Exception
 	 */
 	public function auth(IRequest $request) {
 		$authHeader = $request->getHeader('Authorization');
 
 		if (strpos($authHeader, 'Bearer ') === false) {
 			return null;
-		} else {
-			$bearerToken = substr($authHeader, 7);
 		}
 
-		return $this->authToken($bearerToken);
+		$bearerToken = substr($authHeader, 7);
+
+		$user = $this->authToken($bearerToken);
+		if ($user === null) {
+			throw new \Exception('Invalid token');
+		}
+		return $user;
 	}
 
 	/**
@@ -87,8 +92,7 @@ class AuthModule implements IAuthModule {
 
 		/** @var IUserManager $userManager */
 		$userManager = $container->query('UserManager');
-		$user = $userManager->get($accessToken->getUserId());
-		return $user;
+		return $userManager->get($accessToken->getUserId());
 	}
 
 }
