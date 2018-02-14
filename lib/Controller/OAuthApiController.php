@@ -199,7 +199,7 @@ class OAuthApiController extends ApiController {
 			[
 				'access_token' => $accessToken->getToken(),
 				'token_type' => 'Bearer',
-				'expires_in' => 3600,
+				'expires_in' => AccessToken::EXPIRATION_TIME,
 				'refresh_token' => $refreshToken->getToken(),
 				'user_id' => $userId,
 				'message_url' => $this->urlGenerator->linkToRouteAbsolute($this->appName . '.page.authorizationSuccessful')

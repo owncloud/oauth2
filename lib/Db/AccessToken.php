@@ -33,6 +33,8 @@ use OCP\AppFramework\Db\Entity;
  */
 class AccessToken extends Entity {
 
+	const EXPIRATION_TIME = 3600;
+
 	protected $token;
 	protected $clientId;
 	protected $userId;
@@ -50,10 +52,10 @@ class AccessToken extends Entity {
 	}
 
 	/**
-	 * Resets the expiry time to 1 hour from now.
+	 * Resets the expiry time to EXPIRATION_TIME seconds from now.
 	 */
 	public function resetExpires() {
-		$this->setExpires(time() + 3600);
+		$this->setExpires(time() + self::EXPIRATION_TIME);
 	}
 
 	/**
