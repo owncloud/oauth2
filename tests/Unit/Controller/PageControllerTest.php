@@ -230,7 +230,7 @@ class PageControllerTest extends TestCase {
 		$this->assertEquals($url, $this->redirectUri);
 		parse_str($query, $parameters);
 		$this->assertTrue(array_key_exists('code', $parameters));
-		$expected = time() + 600;
+		$expected = time() + AuthorizationCode::EXPIRATION_TIME;
 		/** @var AuthorizationCode $authorizationCode */
 		$authorizationCode = $this->authorizationCodeMapper->findByCode($parameters['code']);
 		$this->assertEquals($expected, $authorizationCode->getExpires(), '', 1);

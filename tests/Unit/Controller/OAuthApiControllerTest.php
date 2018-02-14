@@ -267,7 +267,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$this->assertNotEmpty($json->token_type);
 		$this->assertEquals('Bearer', $json->token_type);
 		$this->assertNotEmpty($json->expires_in);
-		$this->assertEquals(3600, $json->expires_in);
+		$this->assertEquals(AccessToken::EXPIRATION_TIME, $json->expires_in);
 		$this->assertNotEmpty($json->refresh_token);
 		$this->assertEquals(64, strlen($json->refresh_token));
 		$this->assertNotEmpty($json->user_id);
@@ -346,7 +346,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$this->assertNotEmpty($json->token_type);
 		$this->assertEquals('Bearer', $json->token_type);
 		$this->assertNotEmpty($json->expires_in);
-		$this->assertEquals(3600, $json->expires_in);
+		$this->assertEquals(AccessToken::EXPIRATION_TIME, $json->expires_in);
 		$this->assertNotEmpty($json->refresh_token);
 		$this->assertEquals(64, strlen($json->refresh_token));
 		$this->assertNotEmpty($json->user_id);
