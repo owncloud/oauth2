@@ -26,6 +26,8 @@ return [
 		# API endpoint for requesting a token
 		['name' => 'o_auth_api#generate_token', 'url' => '/api/v1/token', 'verb' => 'POST'],
 		['name' => 'o_auth_api#preflighted_cors', 'url' => '/api/v1/{path}', 'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
+		# OpenID connect
+		['name' => 'OpenIdConnect#userinfo', 'url' => '/api/v1/userinfo', 'verb' => 'GET'],
 		# Routes for authorization successful message
 		['name' => 'page#authorizationSuccessful', 'url' => '/authorization-successful', 'verb' => 'GET'],
 		# Routes for admin settings
