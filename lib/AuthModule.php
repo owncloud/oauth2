@@ -69,15 +69,16 @@ class AuthModule implements IAuthModule {
 	}
 
 	/**
-	 * @param $bearerToken
+	 * @param string $bearerToken
 	 * @return null|IUser
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
 	public function authToken($bearerToken) {
 		$app = new Application();
 		$container = $app->getContainer();
 
 		/** @var AccessTokenMapper $accessTokenMapper */
-		$accessTokenMapper = $container->query('OCA\OAuth2\Db\AccessTokenMapper');
+		$accessTokenMapper = $container->query(AccessTokenMapper::class);
 
 		try {
 			/** @var AccessToken $accessToken */
