@@ -84,7 +84,7 @@ class OAuth2 extends AbstractBearer {
 	 * @return bool True if the user initially authenticated via DAV, false otherwise.
 	 */
 	private function isDavAuthenticated($username) {
-		return !is_null($this->session->get(self::DAV_AUTHENTICATED)) &&
+		return $this->session->get(self::DAV_AUTHENTICATED) !== null &&
 			$this->session->get(self::DAV_AUTHENTICATED) === $username;
 	}
 
@@ -96,6 +96,7 @@ class OAuth2 extends AbstractBearer {
 	 *
 	 * @param string $bearerToken The Bearer token.
 	 * @return string|false The full principal url, if the token is valid, false otherwise.
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
 	protected function validateBearerToken($bearerToken) {
 		if ($this->userSession->isLoggedIn() &&
@@ -112,19 +113,24 @@ class OAuth2 extends AbstractBearer {
 			\OC_Util::setupFS($userId);
 			$this->session->close();
 			return $this->principalPrefix . $userId;
-		} else {
-			\OC_Util::setupFS(); //login hooks may need early access to the filesystem
+		}
 
+		\OC_Util::setupFS(); //login hooks may need early access to the filesystem
+
+		try {
 			if ($this->userSession->tryAuthModuleLogin($this->request)) {
 				$userId = $this->userSession->getUser()->getUID();
 				\OC_Util::setupFS($userId);
 				$this->session->set(self::DAV_AUTHENTICATED, $userId);
 				$this->session->close();
 				return $this->principalPrefix . $userId;
-			} else {
-				$this->session->close();
-				return false;
 			}
+
+			$this->session->close();
+			return false;
+		} catch (\Exception $ex) {
+			$this->session->close();
+			return false;
 		}
 	}
 }

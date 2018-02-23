@@ -23,6 +23,7 @@ use OCA\OAuth2\AppInfo\Application;
 use OCA\OAuth2\Db\AccessToken;
 use OCA\OAuth2\Db\AccessTokenMapper;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Authentication\IAuthModule;
 use OCP\IRequest;
 use OCP\IUser;
@@ -71,7 +72,6 @@ class AuthModule implements IAuthModule {
 	/**
 	 * @param string $bearerToken
 	 * @return null|IUser
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
 	public function authToken($bearerToken) {
 		$app = new Application();
@@ -88,6 +88,8 @@ class AuthModule implements IAuthModule {
 				return null;
 			}
 		} catch (DoesNotExistException $exception) {
+			return null;
+		} catch (MultipleObjectsReturnedException $e) {
 			return null;
 		}
 
