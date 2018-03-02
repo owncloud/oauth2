@@ -1,9 +1,13 @@
 OC.L10N.register(
     "oauth2",
     {
+    "The application \"{app}\" is requesting access to your account. To authorize it, please log in first." : "Forritið \"{app}\" er að biðja um aðgang að notandaaðganginum þínum. Til að heimila það þarftu fyrst að skrá þig inn.",
+    "The application was authorized successfully. You can now close this window." : "Það tókst að heimila forritið. Þú getur núna lokað þessum glugga.",
     "Request not valid" : "Beiðni ekki gild",
     "This request is not valid. Please contact the administrator if this error persists." : "Þessi beiðni er ógild. Hafðu samband við kerfisstjóra ef þessi villa kemur áfram upp.",
+    "This request is not valid. Please contact the administrator of “%s” if this error persists." : "Þessi beiðni er ógild. Hafðu samband við kerfisstjóra \"%s \" ef þessi villa kemur áfram upp.",
     "Back" : "Til baka",
+    "The “%s“ application would like permission to access your account" : "Forritið \"%s \" vill fá að tengjast aðganginum þínum",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Forritið mun fá aðgang að notandanafninu þínu og vera keyft að sýsla með skrár, möppur og sameignir.",
     "Authorize" : "Heimila",
     "OAuth 2.0" : "OAuth 2.0",
@@ -21,6 +25,7 @@ OC.L10N.register(
     "Authorized Applications" : "Heimiluð forrit",
     "No applications authorized." : "Engin forrit heimiluð.",
     "Switch user" : "Skipta um notanda",
+    "You are logged in as %s but the application requested access for user %s." : "Þú ert skráð(ur) inn sem %s en forritið er að biðja um aðgang að notandanum %s.",
     "Switch users to continue" : "Skiptu um notanda til að halda áfram"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");
