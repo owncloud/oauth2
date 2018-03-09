@@ -17,11 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-namespace OCA\OAuth2\Tests\Unit\Controller;
+namespace OCA\OAuth2\Controller;
 
 use OC_Util;
 use OCA\OAuth2\AppInfo\Application;
-use OCA\OAuth2\Controller\PageController;
 use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\AuthorizationCode;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
@@ -40,7 +39,7 @@ use Test\TestCase;
 /**
  * Class PageControllerTest
  *
- * @package OCA\OAuth2\Tests\Unit\Controller
+ * @package OCA\OAuth2\Controller
  * @group DB
  */
 class PageControllerTest extends TestCase {
@@ -75,7 +74,7 @@ class PageControllerTest extends TestCase {
 		$app = new Application();
 		$container = $app->getContainer();
 
-		$this->clientMapper = $container->query('OCA\OAuth2\Db\ClientMapper');
+		$this->clientMapper = $container->query(ClientMapper::class);
 		$this->clientMapper->deleteAll();
 
 		/** @var Client $client */
@@ -87,11 +86,11 @@ class PageControllerTest extends TestCase {
 		$client->setAllowSubdomains(false);
 		$this->client = $this->clientMapper->insert($client);
 
-		$this->authorizationCodeMapper = $container->query('OCA\OAuth2\Db\AuthorizationCodeMapper');
+		$this->authorizationCodeMapper = $container->query(AuthorizationCodeMapper::class);
 		/** @var AccessTokenMapper $accessTokenMapper */
-		$accessTokenMapper = $container->query('OCA\OAuth2\Db\AccessTokenMapper');
+		$accessTokenMapper = $container->query(AccessTokenMapper::class);
 		/** @var RefreshTokenMapper $refreshTokenMapper */
-		$refreshTokenMapper = $container->query('OCA\OAuth2\Db\RefreshTokenMapper');
+		$refreshTokenMapper = $container->query(RefreshTokenMapper::class);
 		/** @var IURLGenerator | \PHPUnit_Framework_MockObject_MockObject $urlGenerator */
 		$urlGenerator = $this->createMock(IURLGenerator::class);
 		/** @var IUserSession | \PHPUnit_Framework_MockObject_MockObject $userSession */

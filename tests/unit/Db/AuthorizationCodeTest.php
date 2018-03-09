@@ -17,36 +17,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-namespace OCA\OAuth2\Tests\Unit\Hooks;
+namespace OCA\OAuth2\Db;
 
-use OCA\OAuth2\AppInfo\Application;
-use OCA\OAuth2\Hooks\UserHooks;
-use PHPUnit_Framework_TestCase;
+use Test\TestCase;
 
-class UserHooksTest extends PHPUnit_Framework_TestCase {
+/**
+ * Class AuthorizationCodeTest
+ *
+ * @package OCA\OAuth2\Db
+ * @group DB
+ */
+class AuthorizationCodeTest extends TestCase {
 
-	/** @var UserHooks $userHooks */
-	private $userHooks;
+	/** @var AuthorizationCode $authorizationCode */
+	private $authorizationCode;
 
 	public function setUp() {
 		parent::setUp();
 
-		$app = new Application();
-		$container = $app->getContainer();
-
-		$this->userHooks = new UserHooks(
-			$container->query('ServerContainer')->getUserManager(),
-			$container->query('OCA\OAuth2\Db\AuthorizationCodeMapper'),
-			$container->query('OCA\OAuth2\Db\AccessTokenMapper'),
-			$container->query('OCA\OAuth2\Db\RefreshTokenMapper'),
-			$container->query('Logger'),
-			$container->query('AppName')
-		);
+		$this->authorizationCode = new AuthorizationCode();
 	}
 
-	public function testRegister() {
-		// Calling the register() function to check for exceptions.
-		$this->userHooks->register();
+	public function testResetExpires() {
+		$expected = time() + AuthorizationCode::EXPIRATION_TIME;
+		$this->authorizationCode->resetExpires();
+		$this->assertEquals($expected, $this->authorizationCode->getExpires(), '', 1);
+	}
+
+	public function testHasExpired() {
+		$this->assertTrue($this->authorizationCode->hasExpired());
+		$this->authorizationCode->setExpires(10);
+		$this->assertTrue($this->authorizationCode->hasExpired());
+		$this->authorizationCode->resetExpires();
+		$this->assertFalse($this->authorizationCode->hasExpired());
 	}
 
 }

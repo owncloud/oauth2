@@ -17,10 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-namespace OCA\OAuth2\Tests\Unit\Controller;
+namespace OCA\OAuth2\Controller;
 
 use OCA\OAuth2\AppInfo\Application;
-use OCA\OAuth2\Controller\SettingsController;
 use OCA\OAuth2\Db\AccessToken;
 use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\AuthorizationCode;
@@ -30,11 +29,18 @@ use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Db\RefreshToken;
 use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCP\AppFramework\Http\RedirectResponse;
+use OCP\ILogger;
 use OCP\IRequest;
 use OCP\IURLGenerator;
-use PHPUnit_Framework_TestCase;
+use Test\TestCase;
 
-class SettingsControllerTest extends PHPUnit_Framework_TestCase {
+/**
+ * Class SettingsControllerTest
+ *
+ * @package OCA\OAuth2\Controller
+ * @group DB
+ */
+class SettingsControllerTest extends TestCase {
 
 	/** @var string $name */
 	private $appName;
@@ -77,13 +83,13 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 
 		$this->appName = $container->query('AppName');
 
-		$this->clientMapper = $container->query('OCA\OAuth2\Db\ClientMapper');
+		$this->clientMapper = $container->query(ClientMapper::class);
 		$this->clientMapper->deleteAll();
-		$this->authorizationCodeMapper = $container->query('OCA\OAuth2\Db\AuthorizationCodeMapper');
+		$this->authorizationCodeMapper = $container->query(AuthorizationCodeMapper::class);
 		$this->authorizationCodeMapper->deleteAll();
-		$this->accessTokenMapper = $container->query('OCA\OAuth2\Db\AccessTokenMapper');
+		$this->accessTokenMapper = $container->query(AccessTokenMapper::class);
 		$this->accessTokenMapper->deleteAll();
-		$this->refreshTokenMapper = $container->query('OCA\OAuth2\Db\RefreshTokenMapper');
+		$this->refreshTokenMapper = $container->query(RefreshTokenMapper::class);
 		$this->refreshTokenMapper->deleteAll();
 
 		/** @var Client $client */
@@ -126,7 +132,7 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 			$this->accessTokenMapper,
 			$this->refreshTokenMapper,
 			$this->userId,
-			$container->query('Logger'),
+			$container->query(ILogger::class),
 			$this->urlGenerator
 		);
 	}

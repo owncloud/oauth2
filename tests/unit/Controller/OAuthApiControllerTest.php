@@ -17,10 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-namespace OCA\OAuth2\Tests\Unit\Controller;
+namespace OCA\OAuth2\Controller;
 
 use OCA\OAuth2\AppInfo\Application;
-use OCA\OAuth2\Controller\OAuthApiController;
 use OCA\OAuth2\Db\AccessToken;
 use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\AuthorizationCode;
@@ -30,10 +29,18 @@ use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Db\RefreshToken;
 use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCP\AppFramework\Http\JSONResponse;
+use OCP\ILogger;
+use OCP\IRequest;
 use OCP\IURLGenerator;
-use PHPUnit_Framework_TestCase;
+use Test\TestCase;
 
-class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
+/**
+ * Class OAuthApiControllerTest
+ *
+ * @package OCA\OAuth2\Controller
+ * @group DB
+ */
+class OAuthApiControllerTest extends TestCase {
 
 	/** @var OAuthApiController $controller */
 	private $controller;
@@ -89,13 +96,13 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$app = new Application();
 		$container = $app->getContainer();
 
-		$this->clientMapper = $container->query('OCA\OAuth2\Db\ClientMapper');
+		$this->clientMapper = $container->query(ClientMapper::class);
 		$this->clientMapper->deleteAll();
-		$this->authorizationCodeMapper = $container->query('OCA\OAuth2\Db\AuthorizationCodeMapper');
+		$this->authorizationCodeMapper = $container->query(AuthorizationCodeMapper::class);
 		$this->authorizationCodeMapper->deleteAll();
-		$this->accessTokenMapper = $container->query('OCA\OAuth2\Db\AccessTokenMapper');
+		$this->accessTokenMapper = $container->query(AccessTokenMapper::class);
 		$this->accessTokenMapper->deleteAll();
-		$this->refreshTokenMapper = $container->query('OCA\OAuth2\Db\RefreshTokenMapper');
+		$this->refreshTokenMapper = $container->query(RefreshTokenMapper::class);
 		$this->refreshTokenMapper->deleteAll();
 
 		/** @var Client $client */
@@ -145,13 +152,13 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$this->controller = new OAuthApiController(
 			$container->query('AppName'),
-			$this->getMockBuilder('OCP\IRequest')->getMock(),
+			$this->getMockBuilder(IRequest::class)->getMock(),
 			$this->clientMapper,
 			$this->authorizationCodeMapper,
 			$this->accessTokenMapper,
 			$this->refreshTokenMapper,
 			$urlGenerator,
-			$container->query('Logger')
+			$container->query(ILogger::class)
 		);
 	}
 

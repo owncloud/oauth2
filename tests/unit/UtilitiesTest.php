@@ -17,12 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-namespace OCA\OAuth2\Tests\Unit;
+namespace OCA\OAuth2;
 
-use OCA\OAuth2\Utilities;
-use PHPUnit_Framework_TestCase;
+use Test\TestCase;
 
-class UtilitiesTest extends PHPUnit_Framework_TestCase {
+class UtilitiesTest extends TestCase {
 
 	public function testGenerateRandom() {
 		$random = Utilities::generateRandom();

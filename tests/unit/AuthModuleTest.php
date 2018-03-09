@@ -17,19 +17,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-namespace OCA\OAuth2\Tests\Unit;
+namespace OCA\OAuth2;
 
 use OC\Core\Application;
-use OCA\OAuth2\AuthModule;
 use OCA\OAuth2\Db\AccessToken;
 use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
 use OCP\IUserManager;
-use PHPUnit_Framework_TestCase;
 use OCP\IRequest;
+use Test\TestCase;
 
-class AuthModuleTest extends PHPUnit_Framework_TestCase {
+/**
+ * Class AuthModuleTest
+ *
+ * @package OCA\OAuth2
+ * @group DB
+ */
+class AuthModuleTest extends TestCase {
 
 	/** @var IUserManager $userManager */
 	private $userManager;

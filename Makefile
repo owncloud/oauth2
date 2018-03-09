@@ -129,6 +129,6 @@ endif
 ifneq (,$(wildcard $(CURDIR)/package.json))
 	$(npm) run test
 endif
-	php $(PHPUNIT) -c phpunit.xml --coverage-clover ./clover.xml
+	php $(PHPUNIT) -c tests/unit/phpunit.xml --coverage-clover ./clover.xml
 	php $(PHPUNIT) -c phpunit.integration.xml
 

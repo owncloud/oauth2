@@ -17,14 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-namespace OCA\OAuth2\Tests\Unit\Db;
+namespace OCA\OAuth2\Db;
 
+use OCA\FederatedFileSharing\Tests\TestCase;
 use OCA\OAuth2\AppInfo\Application;
-use OCA\OAuth2\Db\AuthorizationCode;
-use OCA\OAuth2\Db\AuthorizationCodeMapper;
-use PHPUnit_Framework_TestCase;
 
-class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
+/**
+ * Class AuthorizationCodeMapperTest
+ *
+ * @package OCA\OAuth2\Db
+ * @group DB
+ */
+class AuthorizationCodeMapperTest extends TestCase {
 
 	/** @var AuthorizationCodeMapper $authorizationCodeMapper */
 	private $authorizationCodeMapper;
@@ -56,7 +60,7 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 		$app = new Application();
 		$container = $app->getContainer();
 
-		$this->authorizationCodeMapper = $container->query('OCA\OAuth2\Db\AuthorizationCodeMapper');
+		$this->authorizationCodeMapper = $container->query(AuthorizationCodeMapper::class);
 		$this->authorizationCodeMapper->deleteAll();
 
 		$authorizationCode = new AuthorizationCode();

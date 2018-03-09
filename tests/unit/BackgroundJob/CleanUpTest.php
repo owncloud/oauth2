@@ -17,12 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-namespace OCA\OAuth2\Tests\Unit\BackgroundJob;
+namespace OCA\OAuth2\BackgroundJob;
 
-use OCA\OAuth2\BackgroundJob\CleanUp;
-use PHPUnit_Framework_TestCase;
+use Test\TestCase;
 
-class CleanUpTest extends PHPUnit_Framework_TestCase {
+class CleanUpTest extends TestCase {
 
 	public function testRun() {
 		$c = \OC::$server->query(CleanUp::class);

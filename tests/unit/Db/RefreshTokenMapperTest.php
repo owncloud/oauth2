@@ -17,17 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-namespace OCA\OAuth2\Tests\Unit\Db;
+namespace OCA\OAuth2\Db;
 
-use Doctrine\DBAL\Platforms\SqlitePlatform;
 use OCA\OAuth2\AppInfo\Application;
-use OCA\OAuth2\Db\AccessToken;
-use OCA\OAuth2\Db\AccessTokenMapper;
-use OCA\OAuth2\Db\RefreshToken;
-use OCA\OAuth2\Db\RefreshTokenMapper;
-use PHPUnit_Framework_TestCase;
+use Test\TestCase;
 
-class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
+/**
+ * Class RefreshTokenMapperTest
+ *
+ * @package OCA\OAuth2\Db
+ * @group DB
+ */
+class RefreshTokenMapperTest extends TestCase {
 
 	/** @var RefreshTokenMapper $refreshTokenMapper */
 	private $refreshTokenMapper;
@@ -58,7 +59,7 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$app = new Application();
 		$container = $app->getContainer();
 
-		$this->refreshTokenMapper = $container->query('OCA\OAuth2\Db\RefreshTokenMapper');
+		$this->refreshTokenMapper = $container->query(RefreshTokenMapper::class);
 		$this->refreshTokenMapper->deleteAll();
 
 		$this->accessTokenMapper = $container->query(AccessTokenMapper::class);

@@ -17,18 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-namespace OCA\OAuth2\Tests\Unit\Db;
+namespace OCA\OAuth2\Db;
 
 use OCA\OAuth2\AppInfo\Application;
-use OCA\OAuth2\Db\AccessToken;
-use OCA\OAuth2\Db\AccessTokenMapper;
-use OCA\OAuth2\Db\AuthorizationCode;
-use OCA\OAuth2\Db\AuthorizationCodeMapper;
-use OCA\OAuth2\Db\Client;
-use OCA\OAuth2\Db\ClientMapper;
-use PHPUnit_Framework_TestCase;
+use Test\TestCase;
 
-class ClientMapperTest extends PHPUnit_Framework_TestCase {
+/**
+ * Class ClientMapperTest
+ *
+ * @package OCA\OAuth2\Db
+ * @group DB
+ */
+class ClientMapperTest extends TestCase {
 
 	/** @var ClientMapper $clientMapper */
 	private $clientMapper;
@@ -78,7 +78,7 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 		$app = new Application();
 		$container = $app->getContainer();
 
-		$this->clientMapper = $container->query('OCA\OAuth2\Db\ClientMapper');
+		$this->clientMapper = $container->query(ClientMapper::class);
 		$this->clientMapper->deleteAll();
 
 		$client = new Client();
@@ -98,9 +98,9 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 		$client->setName('Google');
 		$this->client2 = $this->clientMapper->insert($client);
 
-		$this->authorizationCodeMapper = $container->query('OCA\OAuth2\Db\AuthorizationCodeMapper');
+		$this->authorizationCodeMapper = $container->query(AuthorizationCodeMapper::class);
 		$this->authorizationCodeMapper->deleteAll();
-		$this->accessTokenMapper = $container->query('OCA\OAuth2\Db\AccessTokenMapper');
+		$this->accessTokenMapper = $container->query(AccessTokenMapper::class);
 		$this->accessTokenMapper->deleteAll();
 
 		$authorizationCode = new AuthorizationCode();

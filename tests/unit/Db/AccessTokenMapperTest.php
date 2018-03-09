@@ -17,14 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-namespace OCA\OAuth2\Tests\Unit\Db;
+namespace OCA\OAuth2\Db;
 
 use OCA\OAuth2\AppInfo\Application;
-use OCA\OAuth2\Db\AccessToken;
-use OCA\OAuth2\Db\AccessTokenMapper;
-use PHPUnit_Framework_TestCase;
+use Test\TestCase;
 
-class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
+/**
+ * Class AccessTokenMapperTest
+ *
+ * @package OCA\OAuth2\Db
+ * @group DB
+ */
+class AccessTokenMapperTest extends TestCase {
 
 	/** @var AccessTokenMapper $accessTokenMapper */
 	private $accessTokenMapper;
@@ -56,7 +60,7 @@ class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
 		$app = new Application();
 		$container = $app->getContainer();
 
-		$this->accessTokenMapper = $container->query('OCA\OAuth2\Db\AccessTokenMapper');
+		$this->accessTokenMapper = $container->query(AccessTokenMapper::class);
 		$this->accessTokenMapper->deleteAll();
 
 		$accessToken = new AccessToken();

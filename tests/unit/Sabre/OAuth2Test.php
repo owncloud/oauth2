@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-namespace OCA\OAuth2\Tests\Unit\Sabre;
+namespace OCA\OAuth2\Sabre;
 
 use OC\Core\Application;
 use OC\User\Session;
@@ -26,7 +26,6 @@ use OCA\OAuth2\Db\AccessToken;
 use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
-use OCA\OAuth2\Sabre\OAuth2;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\IUser;
@@ -38,7 +37,7 @@ use OC\User\User;
 /**
  * Class OAuth2Test
  *
- * @package OCA\OAuth2\Tests\Unit\Sabre
+ * @package OCA\OAuth2\Sabre
  * @group DB
  */
 class OAuth2Test extends TestCase {

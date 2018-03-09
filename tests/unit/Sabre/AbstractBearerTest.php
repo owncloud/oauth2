@@ -1,16 +1,16 @@
 <?php
 
-namespace OCA\OAuth2\Tests\Unit\Sabre;
+namespace OCA\OAuth2\Sabre;
 
-use OCA\OAuth2\Sabre\AbstractBearer;
 use Sabre\HTTP;
+use Test\TestCase;
 
 /**
  * Note: This file was imported from sabre/dav 3.2. It was necessary to import
  * it in order to add compatibility with ownCloud 9.1, where an older version of
  * this library is used.
  */
-class AbstractBearerTest extends \PHPUnit_Framework_TestCase {
+class AbstractBearerTest extends TestCase {
 
 	function testCheckNoHeaders() {
 

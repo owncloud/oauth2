@@ -17,10 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-namespace OCA\OAuth2\Tests\Unit\Controller;
+namespace OCA\OAuth2\Controller;
 
 
-use OCA\OAuth2\Controller\OpenIdConnectController;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IAvatar;
 use OCP\IAvatarManager;
@@ -28,8 +27,9 @@ use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserSession;
+use Test\TestCase;
 
-class OpenIdConnectControllerTest extends \PHPUnit_Framework_TestCase {
+class OpenIdConnectControllerTest extends TestCase {
 
 	/** @var OpenIdConnectController */
 	private $controller;
