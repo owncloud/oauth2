@@ -85,11 +85,14 @@ class AuthModule implements IAuthModule {
 			$accessToken = $accessTokenMapper->findByToken($bearerToken);
 
 			if ($accessToken->hasExpired()) {
+				\OC::$server->getLogger()->debug("token expired $bearerToken", ['app'=>__CLASS__]);
 				return null;
 			}
 		} catch (DoesNotExistException $exception) {
+			\OC::$server->getLogger()->debug("token does not exist $bearerToken", ['app'=>__CLASS__]);
 			return null;
 		} catch (MultipleObjectsReturnedException $e) {
+			\OC::$server->getLogger()->debug("multiple tokens exist for $bearerToken", ['app'=>__CLASS__]);
 			return null;
 		}
 

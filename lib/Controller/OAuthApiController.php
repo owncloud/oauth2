@@ -130,18 +130,22 @@ class OAuthApiController extends ApiController {
 					/** @var AuthorizationCode $authorizationCode */
 					$authorizationCode = $this->authorizationCodeMapper->findByCode($code);
 				} catch (DoesNotExistException $exception) {
+					\OC::$server->getLogger()->logException($exception, ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
 
 				if (strcmp($authorizationCode->getClientId(), $client->getId()) !== 0) {
+					\OC::$server->getLogger()->debug("auth grant client ids mismatch: {$authorizationCode->getClientId()} != {$client->getId()}", ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
 
 				if ($authorizationCode->hasExpired()) {
+					\OC::$server->getLogger()->debug("auth grant expired: {$authorizationCode->getExpires()}", ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
 
 				if (!Utilities::validateRedirectUri($client->getRedirectUri(), urldecode($redirect_uri), $client->getAllowSubdomains())) {
+					\OC::$server->getLogger()->debug("auth grant redirect uri invalid: {$redirect_uri}", ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
 
@@ -160,10 +164,12 @@ class OAuthApiController extends ApiController {
 					/** @var RefreshToken $refreshToken */
 					$refreshToken = $this->refreshTokenMapper->findByToken($refresh_token);
 				} catch (DoesNotExistException $exception) {
+					\OC::$server->getLogger()->logException($exception, ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
 
 				if (strcmp($refreshToken->getClientId(), $client->getId()) !== 0) {
+					\OC::$server->getLogger()->debug("refresh grant client ids mismatch: {$refreshToken->getClientId()} != {$client->getId()}", ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
 
@@ -176,6 +182,7 @@ class OAuthApiController extends ApiController {
 				$this->refreshTokenMapper->delete($refreshToken);
 				break;
 			default:
+				\OC::$server->getLogger()->debug("unhandled grant type: {$grant_type}", ['app'=>__CLASS__]);
 				return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 		}
 
