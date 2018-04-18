@@ -56,17 +56,18 @@ class AuthModule implements IAuthModule {
 	}
 
 	/**
-	 * Returns an empty string because the user's password is not handled in
-	 * the app.
+	 * Returns null because the user's password is not handled in the app.
+	 * Triggers a \OC\Authentication\Exceptions\PasswordlessTokenException when
+	 * verifying the session, @see \OC\User\Session::checkTokenCredentials().
 	 *
 	 * Note: This means that only master key encryption is working with the app.
 	 *
 	 * @param IRequest $request The request.
 	 *
-	 * @return String An empty string.
+	 * @return null
 	 */
 	public function getUserPassword(IRequest $request) {
-		return '';
+		return null;
 	}
 
 	/**
