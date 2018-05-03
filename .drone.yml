@@ -1,0 +1,88 @@
+workspace:
+  base: /var/www/owncloud
+  path: apps/oauth2
+
+branches: [master, release*]
+
+pipeline:
+  install-server:
+    image: owncloudci/core
+    pull: true
+    version: ${OC_VERSION}
+
+  install-app:
+    image: owncloudci/php:${PHP_VERSION}
+    pull: true
+    commands:
+      - cd /var/www/owncloud/
+      - php occ a:l
+      - php occ a:e oauth2
+      - php occ a:e testing
+      - php occ a:l
+      - php occ config:system:set trusted_domains 1 --value=owncloud
+      - php occ log:manage --level 0
+
+  owncloud-log:
+    image: owncloud/ubuntu:16.04
+    detach: true
+    pull: true
+    commands:
+      - tail -f /var/www/owncloud/data/owncloud.log
+
+  webui-acceptance-tests:
+    image: owncloudci/php:${PHP_VERSION}
+    pull: true
+    environment:
+      - BROWSER=chrome
+      - SELENIUM_HOST=selenium
+      - SRV_HOST_NAME=owncloud
+      - SRV_HOST_PORT=80
+      - SKELETON_DIR=/var/www/owncloud/tests/acceptance/webUISkeleton
+      - SELENIUM_PORT=4444
+      - PLATFORM=Linux
+    commands:
+      - cd /var/www/owncloud
+      - chown www-data * -R
+      - chmod 777 /var/www/owncloud/tests/acceptance/filesForUpload -R
+      - bash tests/travis/start_ui_tests.sh --remote --config /var/www/owncloud/apps/oauth2/tests/acceptance/config/behat.yml
+    when:
+      matrix:
+        TEST_SUITE: acceptance
+
+  notify:
+    image: plugins/slack:1
+    pull: true
+    secrets: [ slack_webhook ]
+    channel: builds
+    when:
+      status: [ failure, changed ]
+      event: [ push, tag ]
+
+services:
+  owncloud:
+    image: owncloudci/php:${PHP_VERSION}
+    pull: true
+    environment:
+      - APACHE_WEBROOT=/var/www/owncloud/
+    command: [ "/usr/local/bin/apachectl", "-e", "debug", "-D", "FOREGROUND" ]
+    when:
+      matrix:
+        TEST_SUITE: acceptance
+
+  selenium:
+    image: selenium/standalone-chrome-debug:latest
+    pull: true
+    when:
+      matrix:
+        TEST_SUITE: acceptance
+
+matrix:
+  include:
+    - PHP_VERSION: 7.1
+      OC_VERSION: daily-master-qa
+      TEST_SUITE: acceptance
+      BEHAT_SUITE: webUIOauth2
+    - PHP_VERSION: 5.6
+      OC_VERSION: daily-stable10-qa
+      TEST_SUITE: acceptance
+      BEHAT_SUITE: webUIOauth2
