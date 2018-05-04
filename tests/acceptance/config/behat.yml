@@ -1,0 +1,27 @@
+default:
+  autoload:
+    '': %paths.base%/../features/bootstrap
+  extensions:
+    SensioLabs\Behat\PageObjectExtension: ~
+
+  suites:
+    webUIOauth2:
+      paths:
+        - %paths.base%/../features/webUIOauth2
+      context:
+        parameters:
+          ocPath: apps/testing/api/v1/occ
+          adminUsername: admin
+          adminPassword: admin
+          regularUserPassword: 123456
+      contexts:
+        - Oauth2Context:
+        - FeatureContext:
+            baseUrl:  http://localhost:8080
+            adminUsername: admin
+            adminPassword: admin
+            regularUserPassword: 123456
+            ocPath: ../../../../
+        - WebUIGeneralContext:
+        - WebUILoginContext:
+        - WebUIUserContext:
