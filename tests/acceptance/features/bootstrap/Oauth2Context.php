@@ -265,6 +265,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 		$error = $this->oauth2AuthRequestPage->getErrorMessageHeading();
 		PHPUnit_Framework_Assert::assertSame("Request not valid", $error);
 	}
+
 	/**
 	 * This will run before EVERY scenario.
 	 * It will set the properties for this object.
@@ -282,15 +283,15 @@ class Oauth2Context extends RawMinkContext implements Context {
 		$this->featureContext = $environment->getContext('FeatureContext');
 		$this->webUIGeneralContext = $environment->getContext('WebUIGeneralContext');
 		$this->webUILoginContext = $environment->getContext('WebUILoginContext');
-		$this->redirectUriPort = $this->findAvaliablePort();
+		$this->redirectUriPort = $this->findAvailablePort();
 	}
 
 	/**
-	 * finds an availibale network port
+	 * finds an available network port
 	 * 
 	 * @return int port number
 	 */
-	private function findAvaliablePort() {
+	private function findAvailablePort() {
 		$socket = \socket_create_listen(0);
 		\socket_getsockname($socket, $address, $port);
 		\socket_close($socket);

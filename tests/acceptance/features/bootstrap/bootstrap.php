@@ -3,7 +3,7 @@
  * ownCloud
  *
  * @author Artur Neumann <info@jankaritech.com>
- * @copyright Copyright (c) 2017 Artur Neumann info@jankaritech.com
+ * @copyright Copyright (c) 2018 Artur Neumann info@jankaritech.com
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
