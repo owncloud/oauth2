@@ -207,6 +207,21 @@ class Oauth2Context extends RawMinkContext implements Context {
 	}
 
 	/**
+	 * @When the user requests :url with :method using oauth
+	 * @Given the user has requested :url with :method using oauth
+	 *
+	 * @param string $url
+	 * @param string $method
+	 *
+	 * @return void
+	 */
+	public function userRequestsURLWithOAuth($url, $method) {
+		$this->featureContext->sendRequest(
+			$url, $method, 'Bearer ' . $this->accessTokenResponse->access_token
+		);
+	}
+
+	/**
 	 * @Then the client app should be able to download the file :file of :user using the access token for authentication
 	 *
 	 * @param string $file
