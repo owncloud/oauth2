@@ -27,6 +27,18 @@ Feature: obtaining an access token
 		When the client app refreshes the access token
 		Then the client app should be able to download the file "lorem.txt" of "user1" using the access token for authentication
 
+	Scenario: use OCS with oauth
+		Given the user "user1" has correctly established an oauth session
+		When the user requests "/ocs/v1.php/apps/files_sharing/api/v1/remote_shares" with "GET" using oauth
+		Then the OCS status code should be "100"
+		And the HTTP status code should be "200"
+
+	Scenario: use OCS with oauth
+		Given the user "user1" has correctly established an oauth session
+		When the user requests "/ocs/v2.php/apps/files_sharing/api/v1/remote_shares" with "GET" using oauth
+		Then the OCS status code should be "200"
+		And the HTTP status code should be "200"
+
 	Scenario: receive an access token when user is already logged in and use it to access a file
 		Given the user has browsed to the login page
 		And the user has logged in with username "user1" and password "1234" using the webUI
