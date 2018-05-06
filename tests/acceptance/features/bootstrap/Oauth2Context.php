@@ -24,8 +24,10 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Page\Oauth2AuthRequestPage;
+use Page\Oauth2OnPersonalSecuritySettingsPage;
 use TestHelpers\WebDavHelper;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 
 require_once 'bootstrap.php';
 
@@ -56,6 +58,12 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 */
 	private $oauth2AuthRequestPage;
 	
+	/**
+	 * 
+	 * @var Oauth2OnPersonalSecuritySettingsPage
+	 */
+	private $oath2OnPersonalSecurityPage;
+
 	private $clientId = 'xdXOt13JKxym1B1QcEncf2XDkLAexMBFwiT9j6EfhhHFJhs2KM9jbjTmf8JBXE69';
 	private $clientSecret = 'UBntmLjC2yYCeHwsyj73Uwo9TAaecAetRwMw0xYcvNL9yRdLSUi0hUAHfvCHFeFh';
 	private $redirectUriPort;
@@ -75,8 +83,12 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 * 
 	 * @return void
 	 */
-	public function __construct(Oauth2AuthRequestPage $oauth2AuthRequestPage) {
+	public function __construct(
+		Oauth2AuthRequestPage $oauth2AuthRequestPage,
+		Oauth2OnPersonalSecuritySettingsPage $oath2OnPersonalSecurityPage
+	) {
 		$this->oauth2AuthRequestPage = $oauth2AuthRequestPage;
+		$this->oath2OnPersonalSecurityPage = $oath2OnPersonalSecurityPage;
 	}
 
 	/**
@@ -222,26 +234,61 @@ class Oauth2Context extends RawMinkContext implements Context {
 	}
 
 	/**
-	 * @Then the client app should be able to download the file :file of :user using the access token for authentication
+	 * @When the user revokes the oauth app :appName using the webUI
+	 * 
+	 * @param string $appName
+	 * 
+	 * @return void
+	 */
+	public function revokeOauthAppUsingTheWebUI($appName) {
+		$this->oath2OnPersonalSecurityPage->revokeApp(
+			$this->getSession(), $appName
+		);
+	}
+	/**
+	 * @Then /^the client app should (not|)\s?be able to download the file ((?:'[^']*')|(?:"[^"]*")) of ((?:'[^']*')|(?:"[^"]*")) using the access token for authentication$/
 	 *
+	 * @param string $shouldOrNot
 	 * @param string $file
 	 * @param string $user
 	 * 
 	 * @return void
 	 */
-	public function accessFileUsingOauthToken($file, $user) {
-		$result = WebDavHelper::makeDavRequest(
-			$this->featureContext->getBaseUrl(),
-			$user, $this->accessTokenResponse->access_token,
-			'GET', $file, [], null, null, 2, "files", null, "bearer"
-		);
-		$originalFile = \getenv("SRC_SKELETON_DIR") . "/" . \trim($file);
-		$localContent = \file_get_contents($originalFile);
-		$downloadedContent = $result->getBody()->getContents();
+	public function accessFileUsingOauthToken($shouldOrNot, $file, $user) {
+		$should = ($shouldOrNot !== "not");
+		// The capturing groups of the regex include the quotes at each
+		// end of the captured string, so trim them.
+		if ($user !== "") {
+			$user = \trim($user, $user[0]);
+		}
+		if ($file !== "") {
+			$file = \trim($file, $file[0]);
+		}
+		try {
+			$result = WebDavHelper::makeDavRequest(
+				$this->featureContext->getBaseUrl(),
+				$user, $this->accessTokenResponse->access_token,
+				'GET', $file, [], null, null, 2, "files", null, "bearer"
+			);
+			if (!$should) {
+				throw new \Exception(
+					__METHOD__ . " should not be able to access file, but can"
+				);
+			}
+			$originalFile = \getenv("SRC_SKELETON_DIR") . "/" . \trim($file);
+			$localContent = \file_get_contents($originalFile);
+			$downloadedContent = $result->getBody()->getContents();
 			PHPUnit_Framework_Assert::assertSame(
 				$localContent, $downloadedContent,
 				__METHOD__ . " content of downloaded file is not as expected"
 			);
+		} catch (ClientException $e) {
+			if ($should) {
+				throw new \Exception(
+					__METHOD__ . " should be able to access file, but can not"
+				);
+			}
+		}
 	}
 
 	/**

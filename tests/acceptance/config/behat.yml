@@ -25,3 +25,5 @@ default:
         - WebUIGeneralContext:
         - WebUILoginContext:
         - WebUIUserContext:
+        - WebUIPersonalSecuritySettingsContext:
+
