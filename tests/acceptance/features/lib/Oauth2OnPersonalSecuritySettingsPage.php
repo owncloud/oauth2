@@ -4,7 +4,7 @@
  * ownCloud
  *
  * @author Artur Neumann <artur@jankaritech.com>
- * @copyright Copyright (c) 2017 Artur Neumann artur@jankaritech.com
+ * @copyright Copyright (c) 2018 Artur Neumann artur@jankaritech.com
  *
  * This code is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License,
@@ -26,7 +26,7 @@ use Behat\Mink\Session;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Exception\ElementNotFoundException;
 
 /**
- * Personal Security Settings page.
+ * Oauth2-specific items on the Personal Security Settings page.
  */
 class Oauth2OnPersonalSecuritySettingsPage extends OwncloudPage {
 	private $deleteBtnByAppNameXpath = '//td[text()="%s"]/..//input[contains(@class,"delete")]';
