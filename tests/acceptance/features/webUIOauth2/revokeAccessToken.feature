@@ -14,3 +14,9 @@ Feature: revoke an access token
 		And the user has browsed to the personal security settings page
 		When the user revokes the oauth app "Desktop Client" using the webUI
 		Then the client app should not be able to download the file "lorem.txt" of "user1" using the access token for authentication
+
+	Scenario: receiving a new access token by using the refresh token should not work after revoking the app
+		Given the user "user1" has correctly established an oauth session
+		And the user has browsed to the personal security settings page
+		When the user revokes the oauth app "Desktop Client" using the webUI
+		Then the client app should not be able to refresh the access token
