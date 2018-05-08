@@ -21,6 +21,7 @@ Place the content of this repository in **owncloud/apps/oauth2**.
     2. `client_id` (required): the client identifier obtained when registering the client.
     3. `redirect_uri` (required): the redirection URI specified when registering the client.
     4. `state` (optional): can be set by the client "to maintain state between the request and callback" ([RFC 6749](https://tools.ietf.org/html/rfc6749#section-4.1.1)).
+    5. `user` (optional): can be set to indicate the username of the resource owner 
 
 3. [Authorization Response](https://tools.ietf.org/html/rfc6749#section-4.1.2): After the resource owner's authorization the app redirects to the `redirect_uri` specified in the Authorization Request and adds the Authorization Code as URL parameter `code`. An Authorization Code is valid for 10 minutes.
 
