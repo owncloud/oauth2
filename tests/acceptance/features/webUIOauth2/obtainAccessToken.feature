@@ -16,16 +16,24 @@ Feature: obtaining an access token
 		Then the client app should receive an authorization code
 
 	Scenario: receive an access token and use it to access a file
+		Given these users have been created:
+			|username|password|displayname|email       |
+			|user2   |1234    |User Two   |u2@oc.com.np|
 		When the user sends an oauth2 authorization request using the webUI
 		And the user logs in with username "user1" and password "1234" using the webUI after a redirect from the oauth2AuthRequest page
 		And the user authorizes the oauth app using the webUI
 		And the client app requests an access token
 		Then the client app should be able to download the file "lorem.txt" of "user1" using the access token for authentication
+		But the client app should not be able to download the file "lorem.txt" of "user2" using the access token for authentication
 
 	Scenario: receive a new access token by using the refresh token
-		Given the user "user1" has correctly established an oauth session
+		Given these users have been created:
+			|username|password|displayname|email       |
+			|user2   |1234    |User Two   |u2@oc.com.np|
+		And the user "user1" has correctly established an oauth session
 		When the client app refreshes the access token
 		Then the client app should be able to download the file "lorem.txt" of "user1" using the access token for authentication
+		But the client app should not be able to download the file "lorem.txt" of "user2" using the access token for authentication
 
 	Scenario: use OCS with oauth
 		Given the user "user1" has correctly established an oauth session

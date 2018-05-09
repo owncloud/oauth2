@@ -329,6 +329,28 @@ class Oauth2Context extends RawMinkContext implements Context {
 	}
 
 	/**
+	 * @Then the client app should not be able to refresh the access token
+	 * 
+	 * @return void
+	 */
+	public function appShouldNotBeAbleToRefreshToken() {
+		try {
+			$this->refreshAccessToken();
+			throw new \Exception(
+				__METHOD__ .
+				" app should not be able to refresh token but looks like it can"
+			);
+		} catch (ClientException $e) {
+			PHPUnit_Framework_Assert::assertSame(
+				400, $e->getCode(),
+				__METHOD__ .
+				" expected '400' as HTTP error code, but received '" .
+				$e->getCode() . "'"
+			);
+		}
+	}
+
+	/**
 	 * This will run before EVERY scenario.
 	 * It will set the properties for this object.
 	 *
