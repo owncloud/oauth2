@@ -21,6 +21,7 @@
  */
 
 use Behat\Behat\Context\Context;
+use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Page\Oauth2AuthRequestPage;
@@ -28,6 +29,7 @@ use Page\Oauth2OnPersonalSecuritySettingsPage;
 use TestHelpers\WebDavHelper;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use Page\Oauth2AdminSettingsPage;
 
 require_once 'bootstrap.php';
 
@@ -60,6 +62,11 @@ class Oauth2Context extends RawMinkContext implements Context {
 	
 	/**
 	 * 
+	 * @var Oauth2AdminSettingsPage
+	 */
+	private $oauth2AdminSettingsPage;
+	/**
+	 * 
 	 * @var Oauth2OnPersonalSecuritySettingsPage
 	 */
 	private $oath2OnPersonalSecurityPage;
@@ -76,19 +83,30 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 * @link https://github.com/owncloud/oauth2#protocol-flow
 	 */
 	private $accessTokenResponse;
-	
+
+	/**
+	 * 
+	 * @var string[][] array of associated arrays with information about the clients
+	 *                 keys: name,redirection_uri,client_id,client_secret,id
+	 */
+	private $createdOauthClients = [];
+
 	/**
 	 * 
 	 * @param Oauth2AuthRequestPage $oauth2AuthRequestPage
+	 * @param Oauth2OnPersonalSecuritySettingsPage $oath2OnPersonalSecurityPage
+	 * @param Oauth2AdminSettingsPage $oauth2AdminSettingsPage
 	 * 
 	 * @return void
 	 */
 	public function __construct(
 		Oauth2AuthRequestPage $oauth2AuthRequestPage,
-		Oauth2OnPersonalSecuritySettingsPage $oath2OnPersonalSecurityPage
+		Oauth2OnPersonalSecuritySettingsPage $oath2OnPersonalSecurityPage,
+		Oauth2AdminSettingsPage $oauth2AdminSettingsPage
 	) {
 		$this->oauth2AuthRequestPage = $oauth2AuthRequestPage;
 		$this->oath2OnPersonalSecurityPage = $oath2OnPersonalSecurityPage;
+		$this->oauth2AdminSettingsPage = $oauth2AdminSettingsPage;
 	}
 
 	/**
@@ -96,13 +114,19 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 * @Given /^the user(?: "([^"]*)")? has sent an oauth2 authorization request$/
 	 * 
 	 * @param string $username
+	 * @param string $clientId
 	 * 
 	 * @return void
 	 */
-	public function oauthAuthorizationRequestUsingTheWebui($username = null) {
+	public function oauthAuthorizationRequestUsingTheWebui(
+		$username = null, $clientId = null
+	) {
+		if ($clientId === null) {
+			$clientId = $this->clientId;
+		}
 		$fullUrl = $this->featureContext->getBaseUrl() .
 		'/index.php/apps/oauth2/authorize?response_type=code&client_id=' .
-		$this->clientId .
+		$clientId .
 		'&redirect_uri=http://' .
 		$this->redirectUriHost . ':' .
 		$this->redirectUriPort;
@@ -110,6 +134,21 @@ class Oauth2Context extends RawMinkContext implements Context {
 			$fullUrl = $fullUrl . "&user=$username";
 		}
 		$this->visitPath($fullUrl);
+	}
+
+	/**
+	 * @When /^the user(?: "([^"]*)")? sends an oauth2 authorization request with the new client-id using the webUI$/
+	 * 
+	 * @param string $username
+	 * 
+	 * @return void
+	 */
+	public function oauthAuthorizationRequestWithNewClientIdUsingTheWebui(
+		$username = null
+	) {
+		$this->oauthAuthorizationRequestUsingTheWebui(
+			$username, \end($this->createdOauthClients)['client_id']
+		);
 	}
 
 	/**
@@ -190,12 +229,20 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 * 
 	 * @return void
 	 */
-	public function clientAppRequestsAccessToken($refreshToken = null) {
+	public function clientAppRequestsAccessToken(
+		$refreshToken = null, $clientId = null, $clientSecret = null
+	) {
 		$redirectUri = \parse_url($this->getSession()->getCurrentUrl());
 		parse_str($redirectUri['query'], $parameters);
+		if ($clientId === null) {
+			$clientId = $this->clientId;
+		}
+		if ($clientSecret === null) {
+			$clientSecret = $this->clientSecret;
+		}
 		$client = new Client();
 		$options = [];
-		$options['auth'] = [$this->clientId, $this->clientSecret];
+		$options['auth'] = [$clientId, $clientSecret];
 	
 		if ($refreshToken === null) {
 			$options['body'] = [
@@ -216,6 +263,24 @@ class Oauth2Context extends RawMinkContext implements Context {
 		$request = $client->createRequest('POST', $fullUrl, $options);
 		$response = $client->send($request);
 		$this->accessTokenResponse = json_decode($response->getBody()->getContents());
+	}
+
+	/**
+	 * @When the client app requests an access token with the new client-id and client-secret
+	 * @Given the client app has requested an access token with the new client-id and client-secret
+	 * 
+	 * @param string $refreshToken see clientAppRequestsAccessToken()
+	 * 
+	 * @return void
+	 */
+	public function clientAppRequestsAccessTokenWithNewClientId(
+		$refreshToken = null
+	) {
+		$this->clientAppRequestsAccessToken(
+			$refreshToken,
+			\end($this->createdOauthClients)['client_id'],
+			\end($this->createdOauthClients)['client_secret']
+		);
 	}
 
 	/**
@@ -245,6 +310,46 @@ class Oauth2Context extends RawMinkContext implements Context {
 			$this->getSession(), $appName
 		);
 	}
+
+	/**
+	 * @When the administrator/user browses to the oauth admin settings page
+	 * @Given the administrator/user has browsed to the oauth admin settings page
+	 * 
+	 * @return void
+	 */
+	public function theUserBrowsesToTheOauth2AdminSettingsPage() {
+		$this->oauth2AdminSettingsPage->open();
+	}
+
+	/**
+	 * @When the administrator/user adds a new oauth client with the name :name and the uri :uri using the webUI
+	 * 
+	 * @param string $name
+	 * @param string $uri
+	 * 
+	 * @return void
+	 */
+	public function addNewOauthClientUsingTheWebUI($name, $uri) {
+		$this->oauth2AdminSettingsPage->addClient($name, $uri);
+		$client = $this->oauth2AdminSettingsPage->getClientInformationByName($name);
+		$this->createdOauthClients[] = $client;
+	}
+
+	/**
+	 * @Given the administrator has added a new oauth client with the name :name and the uri :uri
+	 * 
+	 * @param string $name
+	 * @param string $uri
+	 * 
+	 * @return void
+	 */
+	public function addNewOauthClient($name, $uri) {
+		$this->webUIGeneralContext->adminLogsInUsingTheWebUI();
+		$this->theUserBrowsesToTheOauth2AdminSettingsPage();
+		$this->addNewOauthClientUsingTheWebUI($name, $uri);
+		$this->webUIGeneralContext->theUserLogsOutOfTheWebUI();
+	}
+
 	/**
 	 * @Then /^the client app should (not|)\s?be able to download the file ((?:'[^']*')|(?:"[^"]*")) of ((?:'[^']*')|(?:"[^"]*")) using the access token for authentication$/
 	 *
@@ -351,6 +456,24 @@ class Oauth2Context extends RawMinkContext implements Context {
 	}
 
 	/**
+	 * @Then a new client with the name :name and the uri :uri should be listed on the webUI
+	 * 
+	 * @param string $name
+	 * @param string $uri
+	 * 
+	 * @return void
+	 */
+	public function assertClientIsListedOnWebUI($name, $uri) {
+		$client = $this->oauth2AdminSettingsPage->getClientInformationByName($name);
+		PHPUnit_Framework_Assert::assertSame(
+			$name, $client['name'], "name of displayed client is wrong"
+		);
+		PHPUnit_Framework_Assert::assertSame(
+			$uri, $client['redirection_uri'], "uri of displayed client is wrong"
+		);
+	}
+
+	/**
 	 * This will run before EVERY scenario.
 	 * It will set the properties for this object.
 	 *
@@ -368,6 +491,27 @@ class Oauth2Context extends RawMinkContext implements Context {
 		$this->webUIGeneralContext = $environment->getContext('WebUIGeneralContext');
 		$this->webUILoginContext = $environment->getContext('WebUILoginContext');
 		$this->redirectUriPort = $this->findAvailablePort();
+	}
+
+	/**
+	 * @AfterScenario @webUI
+	 * 
+	 * @param AfterScenarioScope $scope
+	 * 
+	 * @return void
+	 */
+	public function after(AfterScenarioScope $scope) {
+		$this->featureContext->aNewBrowserSessionForHasBeenStarted(
+			$this->featureContext->getAdminUsername()
+		);
+		foreach ($this->createdOauthClients as $createdOauthClient) {
+			$this->featureContext->sendRequest(
+				"/index.php/apps/oauth2/clients/" .
+				$createdOauthClient['id'] .
+				"/delete",
+				"POST", null, true
+			);
+		}
 	}
 
 	/**
