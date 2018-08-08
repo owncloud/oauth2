@@ -35,16 +35,17 @@ pipeline:
     environment:
       - BROWSER=chrome
       - SELENIUM_HOST=selenium
-      - SRV_HOST_NAME=owncloud
-      - SRV_HOST_PORT=80
+      - TEST_SERVER_URL=http://owncloud
       - SKELETON_DIR=/var/www/owncloud/tests/acceptance/webUISkeleton
       - SELENIUM_PORT=4444
       - PLATFORM=Linux
+      - BEHAT_SUITE=${BEHAT_SUITE}
     commands:
-      - cd /var/www/owncloud
-      - chown www-data * -R
+      - chown www-data /var/www/owncloud -R
       - chmod 777 /var/www/owncloud/tests/acceptance/filesForUpload -R
-      - bash tests/travis/start_ui_tests.sh --remote --config /var/www/owncloud/apps/oauth2/tests/acceptance/config/behat.yml
+      - cd /var/www/owncloud/tests/acceptance
+      - chmod +x run.sh
+      - su-exec www-data ./run.sh --remote --config /var/www/owncloud/apps/oauth2/tests/acceptance/config/behat.yml
     when:
       matrix:
         TEST_SUITE: acceptance
