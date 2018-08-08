@@ -30,6 +30,7 @@ use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Db\RefreshToken;
 use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCP\AppFramework\Http\JSONResponse;
+use OCP\IRequest;
 use OCP\IURLGenerator;
 use PHPUnit_Framework_TestCase;
 
@@ -37,6 +38,9 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 	/** @var OAuthApiController $controller */
 	private $controller;
+
+	/** @var IRequest | \PHPUnit_Framework_MockObject_MockObject */
+	private $request;
 
 	/** @var ClientMapper $clientMapper */
 	private $clientMapper;
@@ -143,9 +147,11 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 			$container->query('AppName') . '.page.authorizationSuccessful'
 		);
 
+		$this->request = $this->createMock(IRequest::class);
+
 		$this->controller = new OAuthApiController(
 			$container->query('AppName'),
-			$this->getMockBuilder('OCP\IRequest')->getMock(),
+			$this->request,
 			$this->clientMapper,
 			$this->authorizationCodeMapper,
 			$this->accessTokenMapper,
@@ -358,4 +364,85 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(1, count($this->refreshTokenMapper->findAll()));
 	}
 
+	public function testGenerateTokenWithRefreshTokenClient242() {
+		$this->request
+			->method('getHeader')
+			->with('User-Agent')
+			->willReturn('Mozilla\/5.0 (Macintosh) mirall\/2.4.2 (build 10200)');
+		$_SERVER['PHP_AUTH_USER'] = null;
+		$_SERVER['PHP_AUTH_PW'] = null;
+
+		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
+		$this->assertTrue($result instanceof JSONResponse);
+		$json = json_decode($result->render());
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('invalid_request', $json->error);
+		$this->assertEquals(400, $result->getStatus());
+
+		$_SERVER['PHP_AUTH_USER'] = 'test';
+		$_SERVER['PHP_AUTH_PW'] = $this->clientSecret;
+
+		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
+		$this->assertTrue($result instanceof JSONResponse);
+		$json = json_decode($result->render());
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('invalid_client', $json->error);
+		$this->assertEquals(400, $result->getStatus());
+
+		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
+		$_SERVER['PHP_AUTH_PW'] = 'test';
+
+		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
+		$this->assertTrue($result instanceof JSONResponse);
+		$json = json_decode($result->render());
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('invalid_client', $json->error);
+		$this->assertEquals(400, $result->getStatus());
+
+		$_SERVER['PHP_AUTH_PW'] = $this->clientSecret;
+
+		$result = $this->controller->generateToken('refresh_token', null, null, null);
+		$this->assertTrue($result instanceof JSONResponse);
+		$json = json_decode($result->render());
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('invalid_request', $json->error);
+		$this->assertEquals(200, $result->getStatus());
+
+		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier2;
+
+		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
+		$this->assertTrue($result instanceof JSONResponse);
+		$json = json_decode($result->render());
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('invalid_grant', $json->error);
+		$this->assertEquals(200, $result->getStatus());
+
+		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
+
+		$result = $this->controller->generateToken('refresh_token', null, null, 'test');
+		$this->assertTrue($result instanceof JSONResponse);
+		$json = json_decode($result->render());
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('invalid_grant', $json->error);
+		$this->assertEquals(200, $result->getStatus());
+
+		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
+		$this->assertTrue($result instanceof JSONResponse);
+		$json = json_decode($result->render());
+		$this->assertNotEmpty($json->access_token);
+		$this->assertEquals(64, strlen($json->access_token));
+		$this->assertNotEmpty($json->token_type);
+		$this->assertEquals('Bearer', $json->token_type);
+		$this->assertNotEmpty($json->expires_in);
+		$this->assertEquals(AccessToken::EXPIRATION_TIME, $json->expires_in);
+		$this->assertNotEmpty($json->refresh_token);
+		$this->assertEquals(64, strlen($json->refresh_token));
+		$this->assertNotEmpty($json->user_id);
+		$this->assertEquals($this->userId, $json->user_id);
+		$this->assertNotEmpty($json->message_url);
+		$this->assertEquals($this->authorizationSuccessfulMessageUrl, $json->message_url);
+		$this->assertEquals(200, $result->getStatus());
+		$this->assertEquals(1, count($this->accessTokenMapper->findAll()));
+		$this->assertEquals(1, count($this->refreshTokenMapper->findAll()));
+	}
 }

@@ -156,8 +156,14 @@ class OAuthApiController extends ApiController {
 
 				break;
 			case 'refresh_token':
+				$statusCode = Http::STATUS_BAD_REQUEST;
+				// This fixes the infinite loop issue with desktop client 2.4.2
+				if (preg_match('/\bmirall\b.+2\.4\.2/i', $this->request->getHeader('User-Agent'))) {
+					$statusCode = Http::STATUS_OK;
+				}
+
 				if (!is_string($refresh_token)) {
-					return new JSONResponse(['error' => 'invalid_request'], Http::STATUS_BAD_REQUEST);
+					return new JSONResponse(['error' => 'invalid_request'], $statusCode);
 				}
 
 				try {
@@ -165,12 +171,12 @@ class OAuthApiController extends ApiController {
 					$refreshToken = $this->refreshTokenMapper->findByToken($refresh_token);
 				} catch (DoesNotExistException $exception) {
 					\OC::$server->getLogger()->logException($exception, ['app'=>__CLASS__]);
-					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
+					return new JSONResponse(['error' => 'invalid_grant'], $statusCode);
 				}
 
 				if (strcmp($refreshToken->getClientId(), $client->getId()) !== 0) {
 					\OC::$server->getLogger()->debug("refresh grant client ids mismatch: {$refreshToken->getClientId()} != {$client->getId()}", ['app'=>__CLASS__]);
-					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
+					return new JSONResponse(['error' => 'invalid_grant'], $statusCode);
 				}
 
 				$this->logger->info('A refresh token has been used by the client "' . $client->getName() . '" to request an access token.', ['app' => $this->appName]);
