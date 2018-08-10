@@ -36,7 +36,6 @@ pipeline:
       - BROWSER=chrome
       - SELENIUM_HOST=selenium
       - TEST_SERVER_URL=http://owncloud
-      - SKELETON_DIR=/var/www/owncloud/tests/acceptance/webUISkeleton
       - SELENIUM_PORT=4444
       - PLATFORM=Linux
       - BEHAT_SUITE=${BEHAT_SUITE}
