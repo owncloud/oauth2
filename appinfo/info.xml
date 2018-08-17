@@ -10,9 +10,13 @@ The use of OAuth2 in ownCloud greatly enhances security while facilitating the i
 - Provide a user authorization interface for developers to facilitate the integration of ownCloud in third party applications
 
 ### Benefits provided by the OAuth2 interface
+
 - No user passwords are being stored in ownCloud clients or third party web applications
+        
 Instead of connecting clients with username/password, a user only needs to provide the information once in the browser. The respective client is then provided with a unique access token which is used for future connections to the ownCloud server. ownCloud clients or third party applications never get to know the actual login credentials.
+
 - The use of different access tokens per client provides the ability to selectively revoke user sessions
+
 When using OAuth2 a unique access token is generated for each device or third party application. Users can check their authorized clients in the personal settings and have the ability to selectively invalidate access tokens when e.g. a device is lost. This strengthens control and access security significantly.
 
 ### Resources
