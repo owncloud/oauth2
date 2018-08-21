@@ -29,7 +29,8 @@ use SensioLabs\Behat\PageObjectExtension\PageObject\Exception\ElementNotFoundExc
  * Oauth2-specific items on the Personal Security Settings page.
  */
 class Oauth2OnPersonalSecuritySettingsPage extends OwncloudPage {
-	private $deleteBtnByAppNameXpath = '//td[text()="%s"]/..//input[contains(@class,"delete")]';
+	private $deleteBtnByAppNameXpath
+		= '//td[text()="%s"]/..//input[contains(@class,"delete")]';
 
 	/**
 	 *

@@ -71,8 +71,10 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 */
 	private $oath2OnPersonalSecurityPage;
 
-	private $clientId = 'xdXOt13JKxym1B1QcEncf2XDkLAexMBFwiT9j6EfhhHFJhs2KM9jbjTmf8JBXE69';
-	private $clientSecret = 'UBntmLjC2yYCeHwsyj73Uwo9TAaecAetRwMw0xYcvNL9yRdLSUi0hUAHfvCHFeFh';
+	private $clientId
+		= 'xdXOt13JKxym1B1QcEncf2XDkLAexMBFwiT9j6EfhhHFJhs2KM9jbjTmf8JBXE69';
+	private $clientSecret
+		= 'UBntmLjC2yYCeHwsyj73Uwo9TAaecAetRwMw0xYcvNL9yRdLSUi0hUAHfvCHFeFh';
 	private $redirectUriPort;
 	private $redirectUriHost = "localhost";
 	/**
@@ -227,6 +229,8 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 *                             will be used with the given refresh token
 	 *                             to request a new access token
 	 *
+	 * @param string|null $clientId
+	 * @param string|null $clientSecret
 	 * @return void
 	 */
 	public function clientAppRequestsAccessToken(
@@ -262,7 +266,9 @@ class Oauth2Context extends RawMinkContext implements Context {
 				   '/index.php/apps/oauth2/api/v1/token';
 		$request = $client->createRequest('POST', $fullUrl, $options);
 		$response = $client->send($request);
-		$this->accessTokenResponse = \json_decode($response->getBody()->getContents());
+		$this->accessTokenResponse = \json_decode(
+			$response->getBody()->getContents()
+		);
 	}
 
 	/**
