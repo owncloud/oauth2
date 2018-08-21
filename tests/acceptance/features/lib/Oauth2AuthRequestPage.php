@@ -35,9 +35,9 @@ class Oauth2AuthRequestPage extends OwncloudPage {
 	private $switchUsersButtonXpath = '//div[@class="error"]//button';
 
 	/**
-	 * 
+	 *
 	 * @throws ElementNotFoundException
-	 * 
+	 *
 	 * @return void
 	 */
 	public function authorizeApp() {
@@ -49,14 +49,14 @@ class Oauth2AuthRequestPage extends OwncloudPage {
 				" xpath $this->authorizeButtonXpath " .
 				"could not find authorize button"
 			);
-		}	
+		}
 		$submitButton->click();
 	}
 
 	/**
-	 * 
+	 *
 	 * @throws ElementNotFoundException
-	 * 
+	 *
 	 * @return void
 	 */
 	public function switchUsers() {
@@ -73,9 +73,9 @@ class Oauth2AuthRequestPage extends OwncloudPage {
 	}
 
 	/**
-	 * 
+	 *
 	 * @throws ElementNotFoundException
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getErrorMessageHeading() {
@@ -113,8 +113,8 @@ class Oauth2AuthRequestPage extends OwncloudPage {
 			$errorMessageHeadingElement = $this->find(
 				"xpath", $this->errorMessageHeadingXpath
 			);
-			if (!\is_null($requestTokenInput)
-				|| !\is_null($errorMessageHeadingElement)
+			if ($requestTokenInput !== null
+				|| $errorMessageHeadingElement !== null
 			) {
 				break;
 			}

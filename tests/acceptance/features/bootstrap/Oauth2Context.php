@@ -40,33 +40,33 @@ require_once 'bootstrap.php';
 class Oauth2Context extends RawMinkContext implements Context {
 	
 	/**
-	 * 
+	 *
 	 * @var FeatureContext
 	 */
 	private $featureContext;
 	/**
-	 * 
+	 *
 	 * @var WebUIGeneralContext
 	 */
 	private $webUIGeneralContext;
 	/**
-	 * 
+	 *
 	 * @var WebUILoginContext
 	 */
 	private $webUILoginContext;
 	/**
-	 * 
+	 *
 	 * @var Oauth2AuthRequestPage
 	 */
 	private $oauth2AuthRequestPage;
 	
 	/**
-	 * 
+	 *
 	 * @var Oauth2AdminSettingsPage
 	 */
 	private $oauth2AdminSettingsPage;
 	/**
-	 * 
+	 *
 	 * @var Oauth2OnPersonalSecuritySettingsPage
 	 */
 	private $oath2OnPersonalSecurityPage;
@@ -76,27 +76,27 @@ class Oauth2Context extends RawMinkContext implements Context {
 	private $redirectUriPort;
 	private $redirectUriHost = "localhost";
 	/**
-	 * 
+	 *
 	 * @var stdClass
-	 * attributes: 
+	 * attributes:
 	 * access_token, token_type, expires_in, refresh_token, user_id, message_url
 	 * @link https://github.com/owncloud/oauth2#protocol-flow
 	 */
 	private $accessTokenResponse;
 
 	/**
-	 * 
+	 *
 	 * @var string[][] array of associated arrays with information about the clients
 	 *                 keys: name,redirection_uri,client_id,client_secret,id
 	 */
 	private $createdOauthClients = [];
 
 	/**
-	 * 
+	 *
 	 * @param Oauth2AuthRequestPage $oauth2AuthRequestPage
 	 * @param Oauth2OnPersonalSecuritySettingsPage $oath2OnPersonalSecurityPage
 	 * @param Oauth2AdminSettingsPage $oauth2AdminSettingsPage
-	 * 
+	 *
 	 * @return void
 	 */
 	public function __construct(
@@ -112,10 +112,10 @@ class Oauth2Context extends RawMinkContext implements Context {
 	/**
 	 * @When /^the user(?: "([^"]*)")? sends an oauth2 authorization request using the webUI$/
 	 * @Given /^the user(?: "([^"]*)")? has sent an oauth2 authorization request$/
-	 * 
+	 *
 	 * @param string $username
 	 * @param string $clientId
-	 * 
+	 *
 	 * @return void
 	 */
 	public function oauthAuthorizationRequestUsingTheWebui(
@@ -138,9 +138,9 @@ class Oauth2Context extends RawMinkContext implements Context {
 
 	/**
 	 * @When /^the user(?: "([^"]*)")? sends an oauth2 authorization request with the new client-id using the webUI$/
-	 * 
+	 *
 	 * @param string $username
-	 * 
+	 *
 	 * @return void
 	 */
 	public function oauthAuthorizationRequestWithNewClientIdUsingTheWebui(
@@ -168,7 +168,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 
 	/**
 	 * @When the user authorizes the oauth app using the webUI
-	 * 
+	 *
 	 * @return void
 	 */
 	public function theUserAuthorizesOauthAppUsingTheWebUI() {
@@ -177,9 +177,9 @@ class Oauth2Context extends RawMinkContext implements Context {
 
 	/**
 	 * @Given the user :user has correctly established an oauth session
-	 * 
+	 *
 	 * @param string $user
-	 * 
+	 *
 	 * @return void
 	 */
 	public function establishOauthSession($user) {
@@ -196,7 +196,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 
 	/**
 	 * @When the client app refreshes the access token
-	 * 
+	 *
 	 * @return void
 	 */
 	public function refreshAccessToken() {
@@ -222,18 +222,18 @@ class Oauth2Context extends RawMinkContext implements Context {
 	/**
 	 * @When the client app requests an access token
 	 * @Given the client app has requested an access token
-	 * 
+	 *
 	 * @param string $refreshToken if set the `grant_type` `refresh_token`
 	 *                             will be used with the given refresh token
 	 *                             to request a new access token
-	 * 
+	 *
 	 * @return void
 	 */
 	public function clientAppRequestsAccessToken(
 		$refreshToken = null, $clientId = null, $clientSecret = null
 	) {
 		$redirectUri = \parse_url($this->getSession()->getCurrentUrl());
-		parse_str($redirectUri['query'], $parameters);
+		\parse_str($redirectUri['query'], $parameters);
 		if ($clientId === null) {
 			$clientId = $this->clientId;
 		}
@@ -262,15 +262,15 @@ class Oauth2Context extends RawMinkContext implements Context {
 				   '/index.php/apps/oauth2/api/v1/token';
 		$request = $client->createRequest('POST', $fullUrl, $options);
 		$response = $client->send($request);
-		$this->accessTokenResponse = json_decode($response->getBody()->getContents());
+		$this->accessTokenResponse = \json_decode($response->getBody()->getContents());
 	}
 
 	/**
 	 * @When the client app requests an access token with the new client-id and client-secret
 	 * @Given the client app has requested an access token with the new client-id and client-secret
-	 * 
+	 *
 	 * @param string $refreshToken see clientAppRequestsAccessToken()
-	 * 
+	 *
 	 * @return void
 	 */
 	public function clientAppRequestsAccessTokenWithNewClientId(
@@ -300,9 +300,9 @@ class Oauth2Context extends RawMinkContext implements Context {
 
 	/**
 	 * @When the user revokes the oauth app :appName using the webUI
-	 * 
+	 *
 	 * @param string $appName
-	 * 
+	 *
 	 * @return void
 	 */
 	public function revokeOauthAppUsingTheWebUI($appName) {
@@ -314,7 +314,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 	/**
 	 * @When the administrator/user browses to the oauth admin settings page
 	 * @Given the administrator/user has browsed to the oauth admin settings page
-	 * 
+	 *
 	 * @return void
 	 */
 	public function theUserBrowsesToTheOauth2AdminSettingsPage() {
@@ -323,10 +323,10 @@ class Oauth2Context extends RawMinkContext implements Context {
 
 	/**
 	 * @When the administrator/user adds a new oauth client with the name :name and the uri :uri using the webUI
-	 * 
+	 *
 	 * @param string $name
 	 * @param string $uri
-	 * 
+	 *
 	 * @return void
 	 */
 	public function addNewOauthClientUsingTheWebUI($name, $uri) {
@@ -337,10 +337,10 @@ class Oauth2Context extends RawMinkContext implements Context {
 
 	/**
 	 * @Given the administrator has added a new oauth client with the name :name and the uri :uri
-	 * 
+	 *
 	 * @param string $name
 	 * @param string $uri
-	 * 
+	 *
 	 * @return void
 	 */
 	public function addNewOauthClient($name, $uri) {
@@ -356,7 +356,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 * @param string $shouldOrNot
 	 * @param string $file
 	 * @param string $user
-	 * 
+	 *
 	 * @return void
 	 */
 	public function accessFileUsingOauthToken($shouldOrNot, $file, $user) {
@@ -398,7 +398,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 
 	/**
 	 * @Then the client app should receive an authorization code
-	 * 
+	 *
 	 * @return void
 	 */
 	public function clientAppShouldReceiveAuthCode() {
@@ -415,17 +415,17 @@ class Oauth2Context extends RawMinkContext implements Context {
 			$this->redirectUriPort . "' but it is '" .
 			$redirectUri['port'] . "'"
 		);
-		parse_str($redirectUri['query'], $parameters);
+		\parse_str($redirectUri['query'], $parameters);
 		PHPUnit_Framework_Assert::assertEquals(
-			64, strlen($parameters['code']), 
+			64, \strlen($parameters['code']),
 			__METHOD__ . " received code should be 64 char long but its " .
-			strlen($parameters['code']) . " long"
+			\strlen($parameters['code']) . " long"
 		);
 	}
 
 	/**
 	 * @Then an invalid oauth request message should be shown
-	 * 
+	 *
 	 * @return void
 	 */
 	public function invalidOauthRequestMessageShouldBeShown() {
@@ -435,7 +435,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 
 	/**
 	 * @Then the client app should not be able to refresh the access token
-	 * 
+	 *
 	 * @return void
 	 */
 	public function appShouldNotBeAbleToRefreshToken() {
@@ -457,10 +457,10 @@ class Oauth2Context extends RawMinkContext implements Context {
 
 	/**
 	 * @Then a new client with the name :name and the uri :uri should be listed on the webUI
-	 * 
+	 *
 	 * @param string $name
 	 * @param string $uri
-	 * 
+	 *
 	 * @return void
 	 */
 	public function assertClientIsListedOnWebUI($name, $uri) {
@@ -495,9 +495,9 @@ class Oauth2Context extends RawMinkContext implements Context {
 
 	/**
 	 * @AfterScenario @webUI
-	 * 
+	 *
 	 * @param AfterScenarioScope $scope
-	 * 
+	 *
 	 * @return void
 	 */
 	public function after(AfterScenarioScope $scope) {
@@ -516,7 +516,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 
 	/**
 	 * finds an available network port
-	 * 
+	 *
 	 * @return int port number
 	 */
 	private function findAvailablePort() {
