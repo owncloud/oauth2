@@ -36,13 +36,13 @@ class Oauth2AdminSettingsPage extends OwncloudPage {
 	private $clientRowByNameXpath = "//*[@id='oauth2']//td[text()='%s']/../*";
 
 	/**
-	 * 
+	 *
 	 * @param string $appName
 	 * @param string $redirctionUri
 	 * @param boolean $allowSubdomains
-	 * 
+	 *
 	 * @throws ElementNotFoundException
-	 * 
+	 *
 	 * @return void
 	 */
 	public function addClient($appName, $redirctionUri, $allowSubdomains = false) {
@@ -73,17 +73,17 @@ class Oauth2AdminSettingsPage extends OwncloudPage {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param string $name
-	 * 
+	 *
 	 * @throws ElementNotFoundException
-	 * 
+	 *
 	 * @return string[] arrray with keys name,redirection_uri,client_id,client_secret,id
 	 */
 	public function getClientInformationByName($name) {
-		$xpath = sprintf($this->clientRowByNameXpath, $name);
+		$xpath = \sprintf($this->clientRowByNameXpath, $name);
 		$tds = $this->findAll("xpath", $xpath);
-		if (count($tds) === 0) {
+		if (\count($tds) === 0) {
 			throw new ElementNotFoundException(
 				__METHOD__ .
 				"xpath: " . $xpath .
@@ -97,7 +97,7 @@ class Oauth2AdminSettingsPage extends OwncloudPage {
 		$actionLink = $tds[5]->find("xpath", "/form")->getAttribute("action");
 		$linkArray = \explode("/", $actionLink);
 		\end($linkArray);
-		$result['id'] = prev($linkArray);
+		$result['id'] = \prev($linkArray);
 		
 		return $result;
 	}

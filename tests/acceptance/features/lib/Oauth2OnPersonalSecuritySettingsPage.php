@@ -29,19 +29,20 @@ use SensioLabs\Behat\PageObjectExtension\PageObject\Exception\ElementNotFoundExc
  * Oauth2-specific items on the Personal Security Settings page.
  */
 class Oauth2OnPersonalSecuritySettingsPage extends OwncloudPage {
-	private $deleteBtnByAppNameXpath = '//td[text()="%s"]/..//input[contains(@class,"delete")]';
+	private $deleteBtnByAppNameXpath
+		= '//td[text()="%s"]/..//input[contains(@class,"delete")]';
 
 	/**
-	 * 
+	 *
 	 * @param Session $session
 	 * @param string $app
-	 * 
+	 *
 	 * @throws ElementNotFoundException
-	 * 
+	 *
 	 * @return void
 	 */
 	public function revokeApp(Session $session, $app) {
-		$xpath = sprintf($this->deleteBtnByAppNameXpath, $app);
+		$xpath = \sprintf($this->deleteBtnByAppNameXpath, $app);
 		$revokeBtn = $this->find("xpath", $xpath);
 		if ($revokeBtn === null) {
 			throw new ElementNotFoundException(
