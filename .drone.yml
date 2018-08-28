@@ -44,7 +44,7 @@ pipeline:
       - chmod 777 /var/www/owncloud/tests/acceptance/filesForUpload -R
       - cd /var/www/owncloud/tests/acceptance
       - chmod +x run.sh
-      - su-exec www-data ./run.sh --remote --config /var/www/owncloud/apps/oauth2/tests/acceptance/config/behat.yml
+      - ./run.sh --remote --config /var/www/owncloud/apps/oauth2/tests/acceptance/config/behat.yml
     when:
       matrix:
         TEST_SUITE: acceptance
