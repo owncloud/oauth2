@@ -375,15 +375,20 @@ class Oauth2Context extends RawMinkContext implements Context {
 		if ($file !== "") {
 			$file = \trim($file, $file[0]);
 		}
-		try {
-			$result = WebDavHelper::makeDavRequest(
-				$this->featureContext->getBaseUrl(),
-				$user, $this->accessTokenResponse->access_token,
-				'GET', $file, [], null, null, 2, "files", null, "bearer"
+		$result = WebDavHelper::makeDavRequest(
+			$this->featureContext->getBaseUrl(),
+			$user, $this->accessTokenResponse->access_token,
+			'GET', $file, [], null, null, 2, "files", null, "bearer"
+		);
+		if (!$should && $result->getStatusCode() < 400) {
+			throw new \Exception(
+				__METHOD__ . " should not be able to access file, but can"
 			);
-			if (!$should) {
+		}
+		if ($should) {
+			if ($result->getStatusCode() >= 400) {
 				throw new \Exception(
-					__METHOD__ . " should not be able to access file, but can"
+					__METHOD__ . " should be able to access file, but can not"
 				);
 			}
 			$originalFile = \getenv("SRC_SKELETON_DIR") . "/" . \trim($file);
@@ -393,12 +398,6 @@ class Oauth2Context extends RawMinkContext implements Context {
 				$localContent, $downloadedContent,
 				__METHOD__ . " content of downloaded file is not as expected"
 			);
-		} catch (ClientException $e) {
-			if ($should) {
-				throw new \Exception(
-					__METHOD__ . " should be able to access file, but can not"
-				);
-			}
 		}
 	}
 
