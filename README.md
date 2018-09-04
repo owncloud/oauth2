@@ -4,6 +4,8 @@
 
 This app implements the [OAuth 2.0 Authorization Code Flow](https://tools.ietf.org/html/rfc6749#section-4.1).
 
+Trigger CI
+
 ## Installing the app
 Place the content of this repository in **owncloud/apps/oauth2**.
 
