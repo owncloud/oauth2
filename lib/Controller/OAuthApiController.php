@@ -91,6 +91,7 @@ class OAuthApiController extends ApiController {
 	 * @param string $grant_type The authorization grant type.
 	 * @param string $code The authorization code.
 	 * @param string $redirect_uri The redirect URI.
+	 * @param string $client_id The client id
 	 * @param string $refresh_token The refresh token.
 	 * @return JSONResponse The Access Token or an empty JSON Object.
 	 *
@@ -100,23 +101,26 @@ class OAuthApiController extends ApiController {
 	 * @CORS
 	 */
 	public function generateToken($grant_type, $code = null,
-								  $redirect_uri = null, $refresh_token = null) {
+								  $redirect_uri = null, $client_id = null, $refresh_token = null) {
 		if (!is_string($grant_type)) {
 			return new JSONResponse(['error' => 'invalid_request'], Http::STATUS_BAD_REQUEST);
 		}
 
-		if (is_null($_SERVER['PHP_AUTH_USER']) || is_null($_SERVER['PHP_AUTH_PW'])) {
+		if ($client_id === null) {
+			$client_id = $_SERVER['PHP_AUTH_USER'];
+		}
+		if ($client_id === null) {
 			return new JSONResponse(['error' => 'invalid_request'], Http::STATUS_BAD_REQUEST);
 		}
 
 		try {
 			/** @var Client $client */
-			$client = $this->clientMapper->findByIdentifier($_SERVER['PHP_AUTH_USER']);
+			$client = $this->clientMapper->findByIdentifier($client_id);
 		} catch (DoesNotExistException $exception) {
 			return new JSONResponse(['error' => 'invalid_client'], Http::STATUS_BAD_REQUEST);
 		}
 
-		if (strcmp($client->getSecret(), $_SERVER['PHP_AUTH_PW']) !== 0) {
+		if ($_SERVER['PHP_AUTH_PW'] !== null && strcmp($client->getSecret(), $_SERVER['PHP_AUTH_PW']) !== 0) {
 			return new JSONResponse(['error' => 'invalid_client'], Http::STATUS_BAD_REQUEST);
 		}
 

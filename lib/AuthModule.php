@@ -19,6 +19,7 @@
 
 namespace OCA\OAuth2;
 
+use OC\User\LoginException;
 use OCA\OAuth2\AppInfo\Application;
 use OCA\OAuth2\Db\AccessToken;
 use OCA\OAuth2\Db\AccessTokenMapper;
@@ -50,7 +51,7 @@ class AuthModule implements IAuthModule {
 
 		$user = $this->authToken($bearerToken);
 		if ($user === null) {
-			throw new \Exception('Invalid token');
+			throw new LoginException('Invalid token');
 		}
 		return $user;
 	}
