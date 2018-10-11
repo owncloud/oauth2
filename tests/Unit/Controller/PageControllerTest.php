@@ -27,7 +27,6 @@ use OCA\OAuth2\Db\AuthorizationCode;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
-use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IRequest;
@@ -75,7 +74,7 @@ class PageControllerTest extends TestCase {
 		$app = new Application();
 		$container = $app->getContainer();
 
-		$this->clientMapper = $container->query('OCA\OAuth2\Db\ClientMapper');
+		$this->clientMapper = $container->query(ClientMapper::class);
 		$this->clientMapper->deleteAll();
 
 		/** @var Client $client */
@@ -87,24 +86,22 @@ class PageControllerTest extends TestCase {
 		$client->setAllowSubdomains(false);
 		$this->client = $this->clientMapper->insert($client);
 
-		$this->authorizationCodeMapper = $container->query('OCA\OAuth2\Db\AuthorizationCodeMapper');
+		$this->authorizationCodeMapper = $container->query(AuthorizationCodeMapper::class);
 		/** @var AccessTokenMapper $accessTokenMapper */
-		$accessTokenMapper = $container->query('OCA\OAuth2\Db\AccessTokenMapper');
-		/** @var RefreshTokenMapper $refreshTokenMapper */
-		$refreshTokenMapper = $container->query('OCA\OAuth2\Db\RefreshTokenMapper');
+		$accessTokenMapper = $container->query(AccessTokenMapper::class);
 		/** @var IURLGenerator | \PHPUnit_Framework_MockObject_MockObject $urlGenerator */
 		$urlGenerator = $this->createMock(IURLGenerator::class);
 		/** @var IUserSession | \PHPUnit_Framework_MockObject_MockObject $userSession */
 		$userSession = $this->createMock(IUserSession::class);
 		/** @var IRequest | \PHPUnit_Framework_MockObject_MockObject $request */
 		$request = $this->createMock(IRequest::class);
-		/** @var IUser $user */
+		/** @var IUser | \PHPUnit_Framework_MockObject_MockObject $user */
 		$user = $this->createMock(IUser::class);
 		/** @var IUserManager | \PHPUnit_Framework_MockObject_MockObject $userManager */
 		$userManager = $this->createMock(IUserManager::class);
-		$userSession->expects($this->any())->method('getUser')->willReturn($user);
-		$userManager->expects($this->any())->method('get')->willReturn($user);
-		$user->expects($this->any())->method('getUID')->willReturn('Alice');
+		$userSession->method('getUser')->willReturn($user);
+		$userManager->method('get')->willReturn($user);
+		$user->method('getUID')->willReturn('Alice');
 
 		$this->controller = new PageController(
 			$container->query('AppName'),
@@ -112,7 +109,6 @@ class PageControllerTest extends TestCase {
 			$this->clientMapper,
 			$this->authorizationCodeMapper,
 			$accessTokenMapper,
-			$refreshTokenMapper,
 			$container->query('Logger'),
 			$urlGenerator,
 			$userSession,
@@ -129,7 +125,7 @@ class PageControllerTest extends TestCase {
 	public function testAuthorize() {
 		// Wrong types
 		$result = $this->controller->authorize(1, 'qwertz', 'abcd', 'state');
-		$this->assertTrue($result instanceof TemplateResponse);
+		$this->assertInstanceOf(TemplateResponse::class, $result);
 		$this->assertEquals('authorize-error', $result->getTemplateName());
 		$this->assertEquals(
 			['client_name' => null, 'back_url' => OC_Util::getDefaultPageUrl()],
@@ -137,7 +133,7 @@ class PageControllerTest extends TestCase {
 		);
 
 		$result = $this->controller->authorize('code', 2, 'abcd', 'state');
-		$this->assertTrue($result instanceof TemplateResponse);
+		$this->assertInstanceOf(TemplateResponse::class, $result);
 		$this->assertEquals('authorize-error', $result->getTemplateName());
 		$this->assertEquals(
 			['client_name' => null, 'back_url' => OC_Util::getDefaultPageUrl()],
@@ -145,7 +141,7 @@ class PageControllerTest extends TestCase {
 		);
 
 		$result = $this->controller->authorize('code', 'qwertz', 3, 'state');
-		$this->assertTrue($result instanceof TemplateResponse);
+		$this->assertInstanceOf(TemplateResponse::class, $result);
 		$this->assertEquals('authorize-error', $result->getTemplateName());
 		$this->assertEquals(
 			['client_name' => null, 'back_url' => OC_Util::getDefaultPageUrl()],
@@ -153,7 +149,7 @@ class PageControllerTest extends TestCase {
 		);
 
 		$result = $this->controller->authorize('code', $this->identifier, urldecode($this->redirectUri), 4);
-		$this->assertTrue($result instanceof TemplateResponse);
+		$this->assertInstanceOf(TemplateResponse::class, $result);
 		$this->assertEquals('authorize-error', $result->getTemplateName());
 		$this->assertEquals(
 			['client_name' => null, 'back_url' => OC_Util::getDefaultPageUrl()],
@@ -162,7 +158,7 @@ class PageControllerTest extends TestCase {
 
 		// Wrong parameters
 		$result = $this->controller->authorize('code', 'qwertz', 'abcd', 'state');
-		$this->assertTrue($result instanceof TemplateResponse);
+		$this->assertInstanceOf(TemplateResponse::class, $result);
 		$this->assertEquals('authorize-error', $result->getTemplateName());
 		$this->assertEquals(
 			['client_name' => null, 'back_url' => OC_Util::getDefaultPageUrl()],
@@ -170,7 +166,7 @@ class PageControllerTest extends TestCase {
 		);
 
 		$result = $this->controller->authorize('qwertz', $this->identifier, urldecode($this->redirectUri));
-		$this->assertTrue($result instanceof TemplateResponse);
+		$this->assertInstanceOf(TemplateResponse::class, $result);
 		$this->assertEquals('authorize-error', $result->getTemplateName());
 		$this->assertEquals(
 			['client_name' => $this->name, 'back_url' => OC_Util::getDefaultPageUrl()],
@@ -178,7 +174,7 @@ class PageControllerTest extends TestCase {
 		);
 
 		$result = $this->controller->authorize('code', $this->identifier, urldecode('https://www.example.org'));
-		$this->assertTrue($result instanceof TemplateResponse);
+		$this->assertInstanceOf(TemplateResponse::class, $result);
 		$this->assertEquals('authorize-error', $result->getTemplateName());
 		$this->assertEquals(
 			['client_name' => $this->name, 'back_url' => OC_Util::getDefaultPageUrl()],
@@ -186,7 +182,7 @@ class PageControllerTest extends TestCase {
 		);
 
 		$result = $this->controller->authorize('code', $this->identifier, urldecode($this->redirectUri));
-		$this->assertTrue($result instanceof TemplateResponse);
+		$this->assertInstanceOf(TemplateResponse::class, $result);
 		$this->assertEquals('authorize', $result->getTemplateName());
 		$this->assertEquals(['client_name' => $this->name], $result->getParams());
 	}
@@ -194,38 +190,38 @@ class PageControllerTest extends TestCase {
 	public function testGenerateAuthorizationCode() {
 		// Wrong types
 		$result = $this->controller->generateAuthorizationCode(1, 'qwertz', 'abcd', 'state');
-		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertInstanceOf(RedirectResponse::class, $result);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
 		$result = $this->controller->generateAuthorizationCode('code', 2, 'abcd', 'state');
-		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertInstanceOf(RedirectResponse::class, $result);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
 		$result = $this->controller->generateAuthorizationCode('code', 'qwertz', 3, 'state');
-		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertInstanceOf(RedirectResponse::class, $result);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
 		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, urldecode($this->redirectUri), 4);
-		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertInstanceOf(RedirectResponse::class, $result);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
 		// Wrong parameters
-		$result = $this->controller->generateAuthorizationCode('code', 'qwertz', 'abcd', 'state', 'scope');
-		$this->assertTrue($result instanceof RedirectResponse);
+		$result = $this->controller->generateAuthorizationCode('code', 'qwertz', 'abcd', 'state');
+		$this->assertInstanceOf(RedirectResponse::class, $result);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
 		$result = $this->controller->generateAuthorizationCode('qwertz', $this->identifier, urldecode($this->redirectUri));
-		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertInstanceOf(RedirectResponse::class, $result);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
 		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, urldecode('https://www.example.org'));
-		$this->assertTrue($result instanceof RedirectResponse);
+		$this->assertInstanceOf(RedirectResponse::class, $result);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
-		$this->assertEquals(0, count($this->authorizationCodeMapper->findAll()));
+		$this->assertCount(0, $this->authorizationCodeMapper->findAll());
 		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, urldecode($this->redirectUri));
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals(1, count($this->authorizationCodeMapper->findAll()));
+		$this->assertInstanceOf(RedirectResponse::class, $result);
+		$this->assertCount(1, $this->authorizationCodeMapper->findAll());
 		list($url, $query) = explode('?', $result->getRedirectURL());
 		$this->assertEquals($url, $this->redirectUri);
 		parse_str($query, $parameters);
@@ -238,10 +234,10 @@ class PageControllerTest extends TestCase {
 		$this->assertEquals($this->client->getId(), $authorizationCode->getClientId());
 		$this->authorizationCodeMapper->delete($this->authorizationCodeMapper->findByCode($parameters['code']));
 
-		$this->assertEquals(0, count($this->authorizationCodeMapper->findAll()));
+		$this->assertCount(0, $this->authorizationCodeMapper->findAll());
 		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, urldecode($this->redirectUri), 'testingState');
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals(1, count($this->authorizationCodeMapper->findAll()));
+		$this->assertInstanceOf(RedirectResponse::class, $result);
+		$this->assertCount(1, $this->authorizationCodeMapper->findAll());
 		list($url, $query) = explode('?', $result->getRedirectURL());
 		$this->assertEquals($url, $this->redirectUri);
 		parse_str($query, $parameters);
@@ -259,7 +255,7 @@ class PageControllerTest extends TestCase {
 
 	public function testAuthorizationSuccessful() {
 		$result = $this->controller->authorizationSuccessful();
-		$this->assertTrue($result instanceof TemplateResponse);
+		$this->assertInstanceOf(TemplateResponse::class, $result);
 		$this->assertEquals('authorization-successful', $result->getTemplateName());
 	}
 
