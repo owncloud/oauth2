@@ -50,4 +50,7 @@ When using OAuth2 a unique access token is generated for each device or third pa
         <job>OCA\OAuth2\BackgroundJob\CleanUp</job>
     </background-jobs>
     <use-migrations>true</use-migrations>
+    <commands>
+        <command>OCA\OAuth2\Commands\AddClient</command>
+    </commands>
 </info>
