@@ -33,6 +33,8 @@ use OCP\AppFramework\Db\Entity;
  */
 class RefreshToken extends Entity {
 
+	const EXPIRATION_DAYS = 30;
+
 	protected $token;
 	protected $clientId;
 	protected $userId;
@@ -44,6 +46,24 @@ class RefreshToken extends Entity {
 		$this->addType('client_id', 'int');
 		$this->addType('user_id', 'string');
 		$this->addType('access_token_id', 'int');
+		$this->addType('expires', 'int');
+
 	}
+
+	/**
+	* Resets the expiry time to EXPIRATION_DAYS days from now.
+	*/
+	public function resetExpires() {
+		$this->setExpires(time() + (self::EXPIRATION_DAYS * 86400));
+	}
+
+	/**
+	* Determines if an refresh token has expired.
+	*
+	* @return boolean true if the refresh token has expired, false otherwise.
+	*/
+	public function hasExpired() {
+		return time() >= $this->getExpires();
+ 	}
 
 }

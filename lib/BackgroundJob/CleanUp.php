@@ -35,15 +35,22 @@ class CleanUp extends TimedJob {
 	protected $authorizationCodeMapper;
 
 	/**
+	 * @var RefreshTokenMapper
+	 */
+	protected $refreshTokenMapper;  
+
+	/**
 	 * Cron interval in seconds
 	 */
 	protected $interval = 86400;
 
 	public function __construct(
 		AuthorizationCodeMapper $authorizationCodeMapper,
-		AccessTokenMapper $accessTokenMapper) {
+		AccessTokenMapper $accessTokenMapper,
+		RefreshTokenMapper $refreshTokenMapper) {
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
 		$this->accessTokenMapper = $accessTokenMapper;
+		$this->refreshTokenMapper = $refreshTokenMapper;
 	}
 
 	/**
@@ -53,6 +60,7 @@ class CleanUp extends TimedJob {
 	public function run($argument) {
 		$this->authorizationCodeMapper->cleanUp();
 		$this->accessTokenMapper->cleanUp();
+		$this->refreshTokenMapper->cleanUp();
 	}
 
 }

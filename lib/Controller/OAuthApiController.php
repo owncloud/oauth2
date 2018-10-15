@@ -172,6 +172,7 @@ class OAuthApiController extends ApiController {
 				} catch (DoesNotExistException $exception) {
 					\OC::$server->getLogger()->logException($exception, ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], $statusCode);
+					exit();
 				}
 
 				if (strcmp($refreshToken->getClientId(), $client->getId()) !== 0) {
@@ -206,6 +207,7 @@ class OAuthApiController extends ApiController {
 		$refreshToken->setClientId($client->getId());
 		$refreshToken->setUserId($userId);
 		$refreshToken->setAccessTokenId($accessToken->getId());
+		$refreshToken->resetExpires();
 		$this->refreshTokenMapper->insert($refreshToken);
 
 		return new JSONResponse(
