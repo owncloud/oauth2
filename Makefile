@@ -10,7 +10,11 @@ endif
 
 NODE_PREFIX=$(shell pwd)
 
-PHPUNIT="$(CURDIR)/../../lib/composer/phpunit/phpunit/phpunit"
+# bin file definitions
+PHPUNIT=php -d zend.enable_gc=0 ../../lib/composer/bin/phpunit
+PHPUNITDBG=phpdbg -qrr -d memory_limit=4096M -d zend.enable_gc=0 "../../lib/composer/bin/phpunit"
+PHPLINT=php -d zend.enable_gc=0  vendor-bin/php-parallel-lint/vendor/bin/parallel-lint
+PHP_CS_FIXER=php -d zend.enable_gc=0 vendor-bin/owncloud-codestyle/vendor/bin/php-cs-fixer
 BOWER=$(NODE_PREFIX)/node_modules/bower/bin/bower
 JSDOC=$(NODE_PREFIX)/node_modules/.bin/jsdoc
 
@@ -118,17 +122,15 @@ clean-build:
 clean-deps: clean-composer-deps
 	rm -Rf $(nodejs_deps) $(bower_deps)
 
-# Command for running JS and PHP tests. Works for package.json files in the js/
-# and root directory. If phpunit is not installed systemwide, a copy is fetched
-# from the internet
-.PHONY: test
-test:
-ifneq (,$(wildcard $(CURDIR)/js/package.json))
-	cd js && $(npm) run test
-endif
-ifneq (,$(wildcard $(CURDIR)/package.json))
-	$(npm) run test
-endif
-	php $(PHPUNIT) -c phpunit.xml --coverage-clover ./clover.xml
-	php $(PHPUNIT) -c phpunit.integration.xml
+
+.PHONY: test-php-unit
+test-php-unit:             ## Run php unit tests
+test-php-unit: ../../lib/composer/bin/phpunit
+	$(PHPUNIT) --configuration ./phpunit.xml --testsuite testing-unit
+
+
+.PHONY: test-php-unit-dbg
+test-php-unit-dbg:         ## Run php unit tests using phpdbg
+test-php-unit-dbg: ../../lib/composer/bin/phpunit
+	$(PHPUNITDBG) --configuration ./phpunit.xml --testsuite testing-unit
 
