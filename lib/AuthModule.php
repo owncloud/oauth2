@@ -19,6 +19,7 @@
 
 namespace OCA\OAuth2;
 
+use Firebase\JWT\JWT;
 use OC\User\LoginException;
 use OCA\OAuth2\AppInfo\Application;
 use OCA\OAuth2\Db\AccessToken;
@@ -29,6 +30,9 @@ use OCP\Authentication\IAuthModule;
 use OCP\IRequest;
 use OCP\IUser;
 use OCP\IUserManager;
+use Okta\JwtVerifier\Request;
+
+require_once __DIR__ . '/../vendor/autoload.php';
 
 class AuthModule implements IAuthModule {
 
@@ -48,6 +52,18 @@ class AuthModule implements IAuthModule {
 		}
 
 		$bearerToken = substr($authHeader, 7);
+
+		// openid connect route
+		$openId = new \Jumbojett\OpenIDConnectClient(
+			'https://mykonnect.local:8443',
+			'ownCloud'
+		);
+		$openId->setVerifyHost(false);
+		$openId->setVerifyPeer(false);
+		$openId->verifyJWTsignature($bearerToken);
+		$openId->setAccessToken($bearerToken);
+		$userInfo = $openId->requestUserInfo();
+		// TODO: map userInfo tp user is
 
 		$user = $this->authToken($bearerToken);
 		if ($user === null) {

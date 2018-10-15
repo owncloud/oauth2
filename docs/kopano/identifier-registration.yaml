@@ -1,0 +1,43 @@
+---
+
+# OpenID Connect client registry.
+clients:
+  - id: ownCloud
+    name: ownCloud
+    trusted: yes
+    application_type: web
+    insecure: yes
+    redirect_uris:
+       - http://deepdiver:8300
+
+
+#  - id: playground.js
+#    name: OIDC Playground
+#    application_type: web
+#    redirect_uris:
+#       - https://my-host:8509/
+
+#  - id: playground-trusted.js
+#    name: Trusted OIDC Playground
+#    trusted: yes
+#    application_type: web
+#    redirect_uris:
+#       - https://my-host:8509/
+
+#  - id: playground-trusted.js
+#    name: Trusted Insecure OIDC Playground
+#    trusted: yes
+#    application_type: web
+#    insecure: yes
+
+#  - id: first
+#    secret: lala
+#    application_type: native
+#    redirect_uris:
+#      - my://app
+
+#  - id: second
+#    secret: lulu
+#    application_type: native
+#    redirect_uris:
+#      - http://localhost

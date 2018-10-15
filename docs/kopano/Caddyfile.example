@@ -1,0 +1,23 @@
+# Example Caddyfile to use with https://caddyserver.com
+#
+# This assumes Konnect is running with identifier on konnectd:8777.
+
+0.0.0.0:8443 {
+	errors stderr
+	log stdout
+
+	tls self_signed
+
+	# konnect oidc
+	proxy /.well-known/openid-configuration konnectd:8777
+	proxy /konnect/v1/jwks.json konnectd:8777
+	proxy /konnect/v1/token konnectd:8777
+	proxy /konnect/v1/userinfo konnectd:8777
+	proxy /konnect/v1/static konnectd:8777
+	proxy /konnect/v1/session konnectd:8777
+
+	# konnect identifier login area
+	proxy /signin/ konnectd:8777 {
+		transparent
+	}
+}

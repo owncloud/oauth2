@@ -1,0 +1,68 @@
+version: '2'
+services:
+  openldap:
+    image: osixia/openldap:latest
+    container_name: openldap
+    environment:
+      LDAP_TLS: 'false'
+      LDAP_ORGANISATION: "ownCloud"
+      LDAP_DOMAIN: "owncloud.team"
+      LDAP_BASE_DN: "dc=owncloud,dc=team"
+      LDAP_TLS_CIPHER_SUITE: "NORMAL"
+      LDAP_TLS_VERIFY_CLIENT: "allow"
+    tty: true
+    stdin_open: true
+    volumes:
+      - /var/lib/ldap
+      - /etc/ldap/slapd.d
+      - /container/service/slapd/assets/certs/
+    ports:
+      - "389:389"
+      - "639:639"
+
+  phpldapadmin:
+    image: osixia/phpldapadmin:latest
+    container_name: phpldapadmin
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: "openldap"
+      PHPLDAPADMIN_HTTPS=false:
+    ports:
+    - "8088:80"
+    depends_on:
+    - openldap
+
+  konnectd:
+    image: kopano/konnectd:latest
+    container_name: konnectd
+    environment:
+      LDAP_URI: ldap://openldap:389
+      LDAP_BINDDN: "cn=admin,dc=owncloud,dc=team"
+      LDAP_BINDPW: "admin"
+      LDAP_BASEDN: "dc=owncloud,dc=team"
+      LDAP_SCOPE: sub
+      LDAP_LOGIN_ATTRIBUTE: uid
+      LDAP_EMAIL_ATTRIBUTE: mail
+      LDAP_NAME_ATTRIBUTE: cn
+      LDAP_UUID_ATTRIBUTE: uidNumber
+      LDAP_UUID_ATTRIBUTE_TYPE: text
+      LDAP_FILTER: "(objectClass=*)"
+      IDENTIFIER_REGISTRATION_CONF: /etc/kopano/konnectd-identifier-registration.yaml
+    ports:
+    - "8777:8777"
+    user: ${CURRENT_UID}
+    volumes:
+      - ./identifier-registration.yaml:/etc/kopano/konnectd-identifier-registration.yaml:ro
+      - ./etc/private-key.pem:/run/secrets/konnectd_signing_private_key:ro
+      - ./etc/konnectd-encryption-secret.key:/run/secrets/konnectd_encryption_secret:ro
+    depends_on:
+    - openldap
+    command:
+      "konnectd serve --iss=https://mykonnect.local:8443 --log-level=debug --identifier-registration-conf=/etc/kopano/konnectd-identifier-registration.yaml --signing-method RS256 ldap"
+
+  caddy:
+    image: abiosoft/caddy
+    container_name: caddy
+    volumes:
+      - ./Caddyfile.example:/etc/Caddyfile
+    ports:
+      - 8443:8443
