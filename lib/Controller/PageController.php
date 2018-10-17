@@ -20,12 +20,12 @@
 namespace OCA\OAuth2\Controller;
 
 use OC_Util;
+use OCA\OAuth2\Db\AccessToken;
 use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\AuthorizationCode;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
-use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCA\OAuth2\Utilities;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -47,8 +47,6 @@ class PageController extends Controller {
 	private $authorizationCodeMapper;
 	/** @var AccessTokenMapper */
 	private $accessTokenMapper;
-	/** @var RefreshTokenMapper */
-	private $refreshTokenMapper;
 	/** @var ILogger */
 	private $logger;
 	/** @var IURLGenerator */
@@ -66,7 +64,6 @@ class PageController extends Controller {
 	 * @param ClientMapper $clientMapper The client mapper.
 	 * @param AuthorizationCodeMapper $authorizationCodeMapper The authorization code mapper.
 	 * @param AccessTokenMapper $accessTokenMapper The access token mapper.
-	 * @param RefreshTokenMapper $refreshTokenMapper The refresh token mapper.
 	 * @param ILogger $logger The logger.
 	 * @param IURLGenerator $urlGenerator
 	 * @param IUserSession $userSession
@@ -76,7 +73,6 @@ class PageController extends Controller {
 								ClientMapper $clientMapper,
 								AuthorizationCodeMapper $authorizationCodeMapper,
 								AccessTokenMapper $accessTokenMapper,
-								RefreshTokenMapper $refreshTokenMapper,
 								ILogger $logger,
 								IURLGenerator $urlGenerator,
 								IUserSession $userSession,
@@ -87,7 +83,6 @@ class PageController extends Controller {
 		$this->clientMapper = $clientMapper;
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
 		$this->accessTokenMapper = $accessTokenMapper;
-		$this->refreshTokenMapper = $refreshTokenMapper;
 		$this->logger = $logger;
 		$this->urlGenerator = $urlGenerator;
 		$this->userSession = $userSession;
@@ -107,13 +102,14 @@ class PageController extends Controller {
 	 * authorize-error view with a redirection to the
 	 * default page URL.
 	 *
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
 	public function authorize($response_type, $client_id, $redirect_uri,
 							  $state = null, $user = null) {
-		if (!is_string($response_type) || !is_string($client_id)
-			|| !is_string($redirect_uri) || (isset($state) && !is_string($state))
+		if (!\is_string($response_type) || !\is_string($client_id)
+			|| !\is_string($redirect_uri) || ($state !== null && !\is_string($state))
 		) {
 			return new TemplateResponse(
 				$this->appName,
@@ -162,7 +158,7 @@ class PageController extends Controller {
 			);
 		}
 
-		if (strcmp($response_type, 'code') !== 0) {
+		if (!\in_array($response_type, ['code', 'token'])) {
 			return new TemplateResponse(
 				$this->appName,
 				'authorize-error',
@@ -184,11 +180,12 @@ class PageController extends Controller {
 	 * @return RedirectResponse Redirection to the given redirect_uri or to the
 	 * default page URL.
 	 *
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @NoAdminRequired
 	 */
 	public function generateAuthorizationCode($response_type, $client_id, $redirect_uri, $state = null) {
-		if (!is_string($response_type) || !is_string($client_id)
-			|| !is_string($redirect_uri) || (isset($state) && !is_string($state))
+		if (!\is_string($response_type) || !\is_string($client_id)
+			|| !\is_string($redirect_uri) || ($state !== null && !\is_string($state))
 		) {
 			return new RedirectResponse(OC_Util::getDefaultPageUrl());
 		}
@@ -216,7 +213,37 @@ class PageController extends Controller {
 
 				$result = urldecode($redirect_uri);
 				$result = $result . '?code=' . $code;
-				if (!is_null($state)) {
+				if ($state !== null) {
+					$result = $result . '&state=' . urlencode($state);
+				}
+
+				$this->logger->info('An authorization code has been issued for the client "' . $client->getName() . '".', ['app' => $this->appName]);
+
+				return new RedirectResponse($result);
+			case 'token':
+				try {
+					/** @var Client $client */
+					$client = $this->clientMapper->findByIdentifier($client_id);
+				} catch (DoesNotExistException $exception) {
+					return new RedirectResponse(OC_Util::getDefaultPageUrl());
+				}
+
+				if (!Utilities::validateRedirectUri($client->getRedirectUri(), urldecode($redirect_uri), $client->getAllowSubdomains())) {
+					return new RedirectResponse(OC_Util::getDefaultPageUrl());
+				}
+
+				$token = Utilities::generateRandom();
+				$accessToken = new AccessToken();
+				$accessToken->setToken($token);
+				$accessToken->setClientId($client->getId());
+				$accessToken->setUserId($this->userSession->getUser()->getUID());
+				$accessToken->resetExpires();
+				$this->accessTokenMapper->insert($accessToken);
+
+				$result = urldecode($redirect_uri);
+				$result = $result . '?access_token=' . urlencode($accessToken->getToken());
+				$result = $result . '&expires_in=' . urlencode(AccessToken::EXPIRATION_TIME);
+				if ($state !== null) {
 					$result = $result . '&state=' . urlencode($state);
 				}
 
@@ -251,8 +278,8 @@ class PageController extends Controller {
 	 * @return RedirectResponse | TemplateResponse
 	 */
 	public function logout($user, $response_type, $client_id, $redirect_uri, $state = null) {
-		if (!is_string($response_type) || !is_string($client_id)
-			|| !is_string($redirect_uri) || (isset($state) && !is_string($state))
+		if (!\is_string($response_type) || !\is_string($client_id)
+			|| !\is_string($redirect_uri) || ($state !== null && !\is_string($state))
 		) {
 			return new TemplateResponse(
 				$this->appName,
@@ -288,18 +315,18 @@ class PageController extends Controller {
 		if (!$userIdOrUser instanceof IUser) {
 			$currentUser = $this->userManager->get($userIdOrUser);
 			if ($currentUser === null) {
-				$escapedUserId = \OCP\Util::sanitizeHTML($userIdOrUser);
+				$escapedUserId = Util::sanitizeHTML($userIdOrUser);
 				return "<strong>$escapedUserId</strong>";
 			}
 		}
 		$displayName = $currentUser->getDisplayName();
 		$userId = $currentUser->getUID();
 		if (empty($displayName) || $displayName === $userId) {
-			$escapedUserId = \OCP\Util::sanitizeHTML($userId);
+			$escapedUserId = Util::sanitizeHTML($userId);
 			return "<strong>$escapedUserId</strong>";
 		}
-		$userId = \OCP\Util::sanitizeHTML($userId);
-		$escapedDisplayName = \OCP\Util::sanitizeHTML($displayName);
+		$userId = Util::sanitizeHTML($userId);
+		$escapedDisplayName = Util::sanitizeHTML($displayName);
 		return "<span class='hasTooltip' data-original-title='$userId'><strong>$escapedDisplayName</strong></span>";
 	}
 }
