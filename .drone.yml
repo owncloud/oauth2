@@ -20,37 +20,37 @@ pipeline:
     image: owncloudci/php:${PHP_VERSION}
     pull: true
     commands:
-      - cd /var/www/owncloud/
-      - php occ a:l
-      - php occ a:e oauth2
-      - php occ a:e testing
-      - php occ a:l
-      - php occ config:system:set trusted_domains 1 --value=owncloud
-      - php occ log:manage --level 0
+    - cd /var/www/owncloud/
+    - php occ a:l
+    - php occ a:e oauth2
+    - php occ a:e testing
+    - php occ a:l
+    - php occ config:system:set trusted_domains 1 --value=owncloud
+    - php occ log:manage --level 0
 
   owncloud-log:
     image: owncloud/ubuntu:16.04
     detach: true
     pull: true
     commands:
-      - tail -f /var/www/owncloud/data/owncloud.log
+    - tail -f /var/www/owncloud/data/owncloud.log
 
   webui-acceptance-tests:
     image: owncloudci/php:${PHP_VERSION}
     pull: true
     environment:
-      - BROWSER=chrome
-      - SELENIUM_HOST=selenium
-      - TEST_SERVER_URL=http://owncloud
-      - SELENIUM_PORT=4444
-      - PLATFORM=Linux
-      - BEHAT_SUITE=${BEHAT_SUITE}
+    - BROWSER=chrome
+    - SELENIUM_HOST=selenium
+    - TEST_SERVER_URL=http://owncloud
+    - SELENIUM_PORT=4444
+    - PLATFORM=Linux
+    - BEHAT_SUITE=${BEHAT_SUITE}
     commands:
-      - chown www-data /var/www/owncloud -R
-      - chmod 777 /var/www/owncloud/tests/acceptance/filesForUpload -R
-      - cd /var/www/owncloud/tests/acceptance
-      - chmod +x run.sh
-      - ./run.sh --remote --config /var/www/owncloud/apps/oauth2/tests/acceptance/config/behat.yml
+    - chown www-data /var/www/owncloud -R
+    - chmod 777 /var/www/owncloud/tests/acceptance/filesForUpload -R
+    - cd /var/www/owncloud/tests/acceptance
+    - chmod +x run.sh
+    - ./run.sh --remote --config /var/www/owncloud/apps/oauth2/tests/acceptance/config/behat.yml
     when:
       matrix:
         TEST_SUITE: acceptance
@@ -63,6 +63,16 @@ pipeline:
     when:
       matrix:
         TEST_SUITE: phpunit
+
+  php-cs-fixer:
+    image: owncloudci/php:${PHP_VERSION}
+    pull: true
+    commands:
+    - composer install
+    - vendor/bin/php-cs-fixer fix -v --diff --dry-run --allow-risky yes
+    when:
+      matrix:
+        TEST_SUITE: code-style
 
   codecov:
     image: plugins/codecov:2
@@ -92,7 +102,7 @@ services:
     image: owncloudci/php:${PHP_VERSION}
     pull: true
     environment:
-      - APACHE_WEBROOT=/var/www/owncloud/
+    - APACHE_WEBROOT=/var/www/owncloud/
     command: [ "/usr/local/bin/apachectl", "-e", "debug", "-D", "FOREGROUND" ]
     when:
       matrix:
@@ -139,49 +149,54 @@ services:
 
 matrix:
   include:
-    # acceptance tests
-    - PHP_VERSION: 7.1
-      OC_VERSION: daily-master-qa
-      TEST_SUITE: acceptance
-      BEHAT_SUITE: webUIOauth2
+  # code style
+  - PHP_VERSION: 7.1
+    OC_VERSION: daily-master-qa
+    TEST_SUITE: code-style
 
-    - PHP_VERSION: 5.6
-      OC_VERSION: daily-stable10-qa
-      TEST_SUITE: acceptance
-      BEHAT_SUITE: webUIOauth2
+  # acceptance tests
+  - PHP_VERSION: 7.1
+    OC_VERSION: daily-master-qa
+    TEST_SUITE: acceptance
+    BEHAT_SUITE: webUIOauth2
 
-    # unit tests
-    - PHP_VERSION: 7.2
-      OC_VERSION: daily-stable10-qa
-      TEST_SUITE: phpunit
-      DB_TYPE: mysql
-      COVERAGE: true
+  - PHP_VERSION: 5.6
+    OC_VERSION: daily-stable10-qa
+    TEST_SUITE: acceptance
+    BEHAT_SUITE: webUIOauth2
 
-    - PHP_VERSION: 7.2
-      OC_VERSION: daily-stable10-qa
-      TEST_SUITE: phpunit
-      DB_TYPE: pgsql
+  # unit tests
+  - PHP_VERSION: 7.2
+    OC_VERSION: daily-stable10-qa
+    TEST_SUITE: phpunit
+    DB_TYPE: mysql
+    COVERAGE: true
 
-    - PHP_VERSION: 7.2
-      OC_VERSION: daily-stable10-qa
-      TEST_SUITE: phpunit
-      DB_TYPE: oci
-      DB_NAME: XE
-      DB_USERNAME: autotest
+  - PHP_VERSION: 7.2
+    OC_VERSION: daily-stable10-qa
+    TEST_SUITE: phpunit
+    DB_TYPE: pgsql
 
-    - PHP_VERSION: 5.6
-      OC_VERSION: daily-stable10-qa
-      TEST_SUITE: phpunit
-      DB_TYPE: sqlite
+  - PHP_VERSION: 7.2
+    OC_VERSION: daily-stable10-qa
+    TEST_SUITE: phpunit
+    DB_TYPE: oci
+    DB_NAME: XE
+    DB_USERNAME: autotest
 
-    - PHP_VERSION: 7.1
-      OC_VERSION: daily-master-qa
-      TEST_SUITE: phpunit
-      DB_TYPE: sqlite
+  - PHP_VERSION: 5.6
+    OC_VERSION: daily-stable10-qa
+    TEST_SUITE: phpunit
+    DB_TYPE: sqlite
 
-    - PHP_VERSION: 7.2
-      OC_VERSION: daily-master-qa
-      TEST_SUITE: phpunit
-      DB_TYPE: sqlite
+  - PHP_VERSION: 7.1
+    OC_VERSION: daily-master-qa
+    TEST_SUITE: phpunit
+    DB_TYPE: sqlite
+
+  - PHP_VERSION: 7.2
+    OC_VERSION: daily-master-qa
+    TEST_SUITE: phpunit
+    DB_TYPE: sqlite
 
 
