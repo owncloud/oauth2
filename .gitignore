@@ -1,2 +1,5 @@
 /build/
 clover.xml
+.php_cs.cache
+
+/vendor/
