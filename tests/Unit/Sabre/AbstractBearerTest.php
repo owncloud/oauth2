@@ -10,11 +10,11 @@ use Sabre\HTTP;
  * it in order to add compatibility with ownCloud 9.1, where an older version of
  * this library is used.
  */
-class AbstractBearerTest extends \PHPUnit_Framework_TestCase {
+class AbstractBearerTest extends \PHPUnit\Framework\TestCase {
 
-	function testCheckNoHeaders() {
-
-		$request = new HTTP\Request();
+	public function testCheckNoHeaders()
+	{
+		$request = new HTTP\Request('GET', '/');
 		$response = new HTTP\Response();
 
 		$backend = new AbstractBearerMock();
@@ -22,13 +22,12 @@ class AbstractBearerTest extends \PHPUnit_Framework_TestCase {
 		$this->assertFalse(
 			$backend->check($request, $response)[0]
 		);
-
 	}
 
-	function testCheckInvalidToken() {
-
-		$request = HTTP\Sapi::createFromServerArray([
-			'HTTP_AUTHORIZATION' => 'Bearer foo',
+	public function testCheckInvalidToken()
+	{
+		$request = new HTTP\Request('GET', '/', [
+			'Authorization' => 'Bearer foo',
 		]);
 		$response = new HTTP\Response();
 
@@ -37,13 +36,12 @@ class AbstractBearerTest extends \PHPUnit_Framework_TestCase {
 		$this->assertFalse(
 			$backend->check($request, $response)[0]
 		);
-
 	}
 
-	function testCheckSuccess() {
-
-		$request = HTTP\Sapi::createFromServerArray([
-			'HTTP_AUTHORIZATION' => 'Bearer valid',
+	public function testCheckSuccess()
+	{
+		$request = new HTTP\Request('GET', '/', [
+			'Authorization' => 'Bearer valid',
 		]);
 		$response = new HTTP\Response();
 
@@ -52,12 +50,11 @@ class AbstractBearerTest extends \PHPUnit_Framework_TestCase {
 			[true, 'principals/username'],
 			$backend->check($request, $response)
 		);
-
 	}
 
-	function testRequireAuth() {
-
-		$request = new HTTP\Request();
+	public function testRequireAuth()
+	{
+		$request = new HTTP\Request('GET', '/');
 		$response = new HTTP\Response();
 
 		$backend = new AbstractBearerMock();
@@ -68,27 +65,23 @@ class AbstractBearerTest extends \PHPUnit_Framework_TestCase {
 			'Bearer realm="writing unittests on a saturday night"',
 			$response->getHeader('WWW-Authenticate')
 		);
-
 	}
-
 }
 
-
-class AbstractBearerMock extends AbstractBearer {
-
+class AbstractBearerMock extends AbstractBearer
+{
 	/**
-	 * Validates a bearer token
+	 * Validates a bearer token.
 	 *
 	 * This method should return true or false depending on if login
 	 * succeeded.
 	 *
 	 * @param string $bearerToken
+	 *
 	 * @return bool
 	 */
-	function validateBearerToken($bearerToken) {
-
+	public function validateBearerToken($bearerToken)
+	{
 		return 'valid' === $bearerToken ? 'principals/username' : false;
-
 	}
-
 }
