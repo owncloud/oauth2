@@ -36,7 +36,7 @@ class Application extends App {
 	 *
 	 * @param array $urlParams Variables extracted from the routes.
 	 */
-	public function __construct(array $urlParams = array()) {
+	public function __construct(array $urlParams = []) {
 		parent::__construct('oauth2', $urlParams);
 
 		$container = $this->getContainer();
@@ -47,7 +47,7 @@ class Application extends App {
 		});
 
 		// User Manager
-		$container->registerService('UserManager', function($c) {
+		$container->registerService('UserManager', function ($c) {
 			return $c->query('ServerContainer')->getUserManager();
 		});
 
@@ -92,12 +92,12 @@ class Application extends App {
 			return;
 		}
 
-		$urlParts = parse_url(urldecode($redirectUrl));
-		if (strpos($urlParts['path'], 'apps/oauth2/authorize') === false) {
+		$urlParts = \parse_url(\urldecode($redirectUrl));
+		if (\strpos($urlParts['path'], 'apps/oauth2/authorize') === false) {
 			return;
 		}
 		$params = [];
-		parse_str($urlParts['query'], $params);
+		\parse_str($urlParts['query'], $params);
 		if (!isset($params['client_id'])) {
 			return;
 		}

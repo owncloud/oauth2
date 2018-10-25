@@ -48,5 +48,4 @@ class UserHooksTest extends PHPUnit_Framework_TestCase {
 		// Calling the register() function to check for exceptions.
 		$this->userHooks->register();
 	}
-
 }

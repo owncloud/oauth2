@@ -79,7 +79,7 @@ class UserHooks {
 		 * @param User $user .
 		 */
 		$callback = function ($user) {
-			if (!is_null($user->getUID())) {
+			if ($user->getUID() !== null) {
 				$this->logger->info('Deleting authorization codes, access tokens and refresh tokens referencing the user to be deleted "' . $user->getUID() . '".', ['app' => $this->appName]);
 
 				$this->authorizationCodeMapper->deleteByUser($user->getUID());
@@ -90,5 +90,4 @@ class UserHooks {
 
 		$this->userManager->listen('\OC\User', 'preDelete', $callback);
 	}
-
 }

@@ -196,13 +196,13 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 	public function testFindAll() {
 		$clients = $this->clientMapper->findAll();
 
-		$this->assertEquals(2, count($clients));
+		$this->assertEquals(2, \count($clients));
 	}
 
 	public function testFindByUser() {
 		$clients = $this->clientMapper->findByUser($this->userId);
 
-		$this->assertEquals(1, count($clients));
+		$this->assertEquals(1, \count($clients));
 
 		/** @var Client $client */
 		$client = $clients[0];
@@ -232,9 +232,8 @@ class ClientMapperTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testDeleteAll() {
-		$this->assertEquals(2, count($this->clientMapper->findAll()));
+		$this->assertEquals(2, \count($this->clientMapper->findAll()));
 		$this->clientMapper->deleteAll();
-		$this->assertEquals(0, count($this->clientMapper->findAll()));
+		$this->assertEquals(0, \count($this->clientMapper->findAll()));
 	}
-
 }

@@ -23,13 +23,12 @@ use OCA\OAuth2\Utilities;
 use PHPUnit_Framework_TestCase;
 
 class UtilitiesTest extends PHPUnit_Framework_TestCase {
-
 	public function testGenerateRandom() {
 		$random = Utilities::generateRandom();
 
-		$this->assertEquals(64, strlen($random));
-		$this->assertFalse(strpos($random, '+'));
-		$this->assertFalse(strpos($random, '/'));
+		$this->assertEquals(64, \strlen($random));
+		$this->assertFalse(\strpos($random, '+'));
+		$this->assertFalse(\strpos($random, '/'));
 	}
 
 	public function testValidateRedirectUri() {
@@ -101,5 +100,4 @@ class UtilitiesTest extends PHPUnit_Framework_TestCase {
 	public function testIsValidUrl($expected, $url) {
 		$this->assertEquals($expected, Utilities::isValidUrl($url));
 	}
-
 }

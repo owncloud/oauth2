@@ -176,7 +176,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->generateToken('unknown');
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('invalid_grant', $json->error);
 		$this->assertEquals(400, $result->getStatus());
@@ -188,14 +188,14 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->generateToken(null, $this->authorizationCode->getCode(), $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('invalid_request', $json->error);
 		$this->assertEquals(400, $result->getStatus());
 
 		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('invalid_request', $json->error);
 		$this->assertEquals(400, $result->getStatus());
@@ -205,7 +205,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('invalid_client', $json->error);
 		$this->assertEquals(400, $result->getStatus());
@@ -215,7 +215,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('invalid_client', $json->error);
 		$this->assertEquals(400, $result->getStatus());
@@ -224,7 +224,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->generateToken('authorization_code', null);
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('invalid_request', $json->error);
 		$this->assertEquals(400, $result->getStatus());
@@ -233,7 +233,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('invalid_grant', $json->error);
 		$this->assertEquals(400, $result->getStatus());
@@ -242,23 +242,23 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->generateToken('authorization_code', 'test', $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('invalid_grant', $json->error);
 		$this->assertEquals(400, $result->getStatus());
 
 		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), 'http://www.example.org');
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('invalid_grant', $json->error);
 		$this->assertEquals(400, $result->getStatus());
 
-		$this->authorizationCode->setExpires(time() - 1);
+		$this->authorizationCode->setExpires(\time() - 1);
 		$this->authorizationCodeMapper->update($this->authorizationCode);
 		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('invalid_grant', $json->error);
 		$this->assertEquals(400, $result->getStatus());
@@ -267,23 +267,23 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 		$this->authorizationCodeMapper->update($this->authorizationCode);
 		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->access_token);
-		$this->assertEquals(64, strlen($json->access_token));
+		$this->assertEquals(64, \strlen($json->access_token));
 		$this->assertNotEmpty($json->token_type);
 		$this->assertEquals('Bearer', $json->token_type);
 		$this->assertNotEmpty($json->expires_in);
 		$this->assertEquals(AccessToken::EXPIRATION_TIME, $json->expires_in);
 		$this->assertNotEmpty($json->refresh_token);
-		$this->assertEquals(64, strlen($json->refresh_token));
+		$this->assertEquals(64, \strlen($json->refresh_token));
 		$this->assertNotEmpty($json->user_id);
 		$this->assertEquals($this->userId, $json->user_id);
 		$this->assertNotEmpty($json->message_url);
 		$this->assertEquals($this->authorizationSuccessfulMessageUrl, $json->message_url);
 		$this->assertEquals(200, $result->getStatus());
-		$this->assertEquals(0, count($this->authorizationCodeMapper->findAll()));
-		$this->assertEquals(2, count($this->accessTokenMapper->findAll()));
-		$this->assertEquals(2, count($this->refreshTokenMapper->findAll()));
+		$this->assertEquals(0, \count($this->authorizationCodeMapper->findAll()));
+		$this->assertEquals(2, \count($this->accessTokenMapper->findAll()));
+		$this->assertEquals(2, \count($this->refreshTokenMapper->findAll()));
 	}
 
 	public function testGenerateTokenWithRefreshToken() {
@@ -292,7 +292,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('invalid_request', $json->error);
 		$this->assertEquals(400, $result->getStatus());
@@ -302,7 +302,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('invalid_client', $json->error);
 		$this->assertEquals(400, $result->getStatus());
@@ -312,7 +312,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('invalid_client', $json->error);
 		$this->assertEquals(400, $result->getStatus());
@@ -321,7 +321,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->generateToken('refresh_token', null, null, null);
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('invalid_request', $json->error);
 		$this->assertEquals(400, $result->getStatus());
@@ -330,7 +330,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('invalid_grant', $json->error);
 		$this->assertEquals(400, $result->getStatus());
@@ -339,29 +339,29 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->generateToken('refresh_token', null, null, 'test');
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('invalid_grant', $json->error);
 		$this->assertEquals(400, $result->getStatus());
 
 		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->access_token);
-		$this->assertEquals(64, strlen($json->access_token));
+		$this->assertEquals(64, \strlen($json->access_token));
 		$this->assertNotEmpty($json->token_type);
 		$this->assertEquals('Bearer', $json->token_type);
 		$this->assertNotEmpty($json->expires_in);
 		$this->assertEquals(AccessToken::EXPIRATION_TIME, $json->expires_in);
 		$this->assertNotEmpty($json->refresh_token);
-		$this->assertEquals(64, strlen($json->refresh_token));
+		$this->assertEquals(64, \strlen($json->refresh_token));
 		$this->assertNotEmpty($json->user_id);
 		$this->assertEquals($this->userId, $json->user_id);
 		$this->assertNotEmpty($json->message_url);
 		$this->assertEquals($this->authorizationSuccessfulMessageUrl, $json->message_url);
 		$this->assertEquals(200, $result->getStatus());
-		$this->assertEquals(1, count($this->accessTokenMapper->findAll()));
-		$this->assertEquals(1, count($this->refreshTokenMapper->findAll()));
+		$this->assertEquals(1, \count($this->accessTokenMapper->findAll()));
+		$this->assertEquals(1, \count($this->refreshTokenMapper->findAll()));
 	}
 
 	public function testGenerateTokenWithRefreshTokenClient242() {
@@ -374,7 +374,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('invalid_request', $json->error);
 		$this->assertEquals(400, $result->getStatus());
@@ -384,7 +384,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('invalid_client', $json->error);
 		$this->assertEquals(400, $result->getStatus());
@@ -394,7 +394,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('invalid_client', $json->error);
 		$this->assertEquals(400, $result->getStatus());
@@ -403,7 +403,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->generateToken('refresh_token', null, null, null);
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('invalid_request', $json->error);
 		$this->assertEquals(200, $result->getStatus());
@@ -412,7 +412,7 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('invalid_grant', $json->error);
 		$this->assertEquals(200, $result->getStatus());
@@ -421,28 +421,28 @@ class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
 
 		$result = $this->controller->generateToken('refresh_token', null, null, 'test');
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('invalid_grant', $json->error);
 		$this->assertEquals(200, $result->getStatus());
 
 		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
 		$this->assertTrue($result instanceof JSONResponse);
-		$json = json_decode($result->render());
+		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->access_token);
-		$this->assertEquals(64, strlen($json->access_token));
+		$this->assertEquals(64, \strlen($json->access_token));
 		$this->assertNotEmpty($json->token_type);
 		$this->assertEquals('Bearer', $json->token_type);
 		$this->assertNotEmpty($json->expires_in);
 		$this->assertEquals(AccessToken::EXPIRATION_TIME, $json->expires_in);
 		$this->assertNotEmpty($json->refresh_token);
-		$this->assertEquals(64, strlen($json->refresh_token));
+		$this->assertEquals(64, \strlen($json->refresh_token));
 		$this->assertNotEmpty($json->user_id);
 		$this->assertEquals($this->userId, $json->user_id);
 		$this->assertNotEmpty($json->message_url);
 		$this->assertEquals($this->authorizationSuccessfulMessageUrl, $json->message_url);
 		$this->assertEquals(200, $result->getStatus());
-		$this->assertEquals(1, count($this->accessTokenMapper->findAll()));
-		$this->assertEquals(1, count($this->refreshTokenMapper->findAll()));
+		$this->assertEquals(1, \count($this->accessTokenMapper->findAll()));
+		$this->assertEquals(1, \count($this->refreshTokenMapper->findAll()));
 	}
 }

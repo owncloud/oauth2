@@ -19,7 +19,6 @@
 
 namespace OCA\OAuth2\Tests\Unit\Controller;
 
-
 use OCA\OAuth2\Controller\OpenIdConnectController;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IAvatar;
@@ -50,7 +49,7 @@ class OpenIdConnectControllerTest extends \PHPUnit_Framework_TestCase {
 		$this->avatarManager = $this->createMock(IAvatarManager::class);
 
 		$this->urlGenerator->method('linkTo')->willReturn('/remote.php');
-		$this->urlGenerator->method('getAbsoluteURL')->willReturnCallback(function($url) {
+		$this->urlGenerator->method('getAbsoluteURL')->willReturnCallback(function ($url) {
 			return "https://cloud.nasa.gov$url";
 		});
 

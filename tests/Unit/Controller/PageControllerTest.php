@@ -148,7 +148,7 @@ class PageControllerTest extends TestCase {
 			$result->getParams()
 		);
 
-		$result = $this->controller->authorize('code', $this->identifier, urldecode($this->redirectUri), 4);
+		$result = $this->controller->authorize('code', $this->identifier, \urldecode($this->redirectUri), 4);
 		$this->assertInstanceOf(TemplateResponse::class, $result);
 		$this->assertEquals('authorize-error', $result->getTemplateName());
 		$this->assertEquals(
@@ -165,7 +165,7 @@ class PageControllerTest extends TestCase {
 			$result->getParams()
 		);
 
-		$result = $this->controller->authorize('qwertz', $this->identifier, urldecode($this->redirectUri));
+		$result = $this->controller->authorize('qwertz', $this->identifier, \urldecode($this->redirectUri));
 		$this->assertInstanceOf(TemplateResponse::class, $result);
 		$this->assertEquals('authorize-error', $result->getTemplateName());
 		$this->assertEquals(
@@ -173,7 +173,7 @@ class PageControllerTest extends TestCase {
 			$result->getParams()
 		);
 
-		$result = $this->controller->authorize('code', $this->identifier, urldecode('https://www.example.org'));
+		$result = $this->controller->authorize('code', $this->identifier, \urldecode('https://www.example.org'));
 		$this->assertInstanceOf(TemplateResponse::class, $result);
 		$this->assertEquals('authorize-error', $result->getTemplateName());
 		$this->assertEquals(
@@ -181,7 +181,7 @@ class PageControllerTest extends TestCase {
 			$result->getParams()
 		);
 
-		$result = $this->controller->authorize('code', $this->identifier, urldecode($this->redirectUri));
+		$result = $this->controller->authorize('code', $this->identifier, \urldecode($this->redirectUri));
 		$this->assertInstanceOf(TemplateResponse::class, $result);
 		$this->assertEquals('authorize', $result->getTemplateName());
 		$this->assertEquals(['client_name' => $this->name], $result->getParams());
@@ -201,7 +201,7 @@ class PageControllerTest extends TestCase {
 		$this->assertInstanceOf(RedirectResponse::class, $result);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
-		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, urldecode($this->redirectUri), 4);
+		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, \urldecode($this->redirectUri), 4);
 		$this->assertInstanceOf(RedirectResponse::class, $result);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
@@ -210,23 +210,23 @@ class PageControllerTest extends TestCase {
 		$this->assertInstanceOf(RedirectResponse::class, $result);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
-		$result = $this->controller->generateAuthorizationCode('qwertz', $this->identifier, urldecode($this->redirectUri));
+		$result = $this->controller->generateAuthorizationCode('qwertz', $this->identifier, \urldecode($this->redirectUri));
 		$this->assertInstanceOf(RedirectResponse::class, $result);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
-		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, urldecode('https://www.example.org'));
+		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, \urldecode('https://www.example.org'));
 		$this->assertInstanceOf(RedirectResponse::class, $result);
 		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
 		$this->assertCount(0, $this->authorizationCodeMapper->findAll());
-		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, urldecode($this->redirectUri));
+		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, \urldecode($this->redirectUri));
 		$this->assertInstanceOf(RedirectResponse::class, $result);
 		$this->assertCount(1, $this->authorizationCodeMapper->findAll());
-		list($url, $query) = explode('?', $result->getRedirectURL());
+		list($url, $query) = \explode('?', $result->getRedirectURL());
 		$this->assertEquals($url, $this->redirectUri);
-		parse_str($query, $parameters);
-		$this->assertTrue(array_key_exists('code', $parameters));
-		$expected = time() + AuthorizationCode::EXPIRATION_TIME;
+		\parse_str($query, $parameters);
+		$this->assertTrue(\array_key_exists('code', $parameters));
+		$expected = \time() + AuthorizationCode::EXPIRATION_TIME;
 		/** @var AuthorizationCode $authorizationCode */
 		$authorizationCode = $this->authorizationCodeMapper->findByCode($parameters['code']);
 		$this->assertEquals($expected, $authorizationCode->getExpires(), '', 1);
@@ -235,16 +235,16 @@ class PageControllerTest extends TestCase {
 		$this->authorizationCodeMapper->delete($this->authorizationCodeMapper->findByCode($parameters['code']));
 
 		$this->assertCount(0, $this->authorizationCodeMapper->findAll());
-		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, urldecode($this->redirectUri), 'testingState');
+		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, \urldecode($this->redirectUri), 'testingState');
 		$this->assertInstanceOf(RedirectResponse::class, $result);
 		$this->assertCount(1, $this->authorizationCodeMapper->findAll());
-		list($url, $query) = explode('?', $result->getRedirectURL());
+		list($url, $query) = \explode('?', $result->getRedirectURL());
 		$this->assertEquals($url, $this->redirectUri);
-		parse_str($query, $parameters);
-		$this->assertTrue(array_key_exists('state', $parameters));
+		\parse_str($query, $parameters);
+		$this->assertTrue(\array_key_exists('state', $parameters));
 		$this->assertEquals('testingState', $parameters['state']);
-		$this->assertTrue(array_key_exists('code', $parameters));
-		$expected = time() + 600;
+		$this->assertTrue(\array_key_exists('code', $parameters));
+		$expected = \time() + 600;
 		/** @var AuthorizationCode $authorizationCode */
 		$authorizationCode = $this->authorizationCodeMapper->findByCode($parameters['code']);
 		$this->assertEquals($expected, $authorizationCode->getExpires(), '', 1);
@@ -258,5 +258,4 @@ class PageControllerTest extends TestCase {
 		$this->assertInstanceOf(TemplateResponse::class, $result);
 		$this->assertEquals('authorization-successful', $result->getTemplateName());
 	}
-
 }

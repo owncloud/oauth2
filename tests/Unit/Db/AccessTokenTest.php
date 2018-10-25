@@ -34,7 +34,7 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testResetExpires() {
-		$expected = time() + AccessToken::EXPIRATION_TIME;
+		$expected = \time() + AccessToken::EXPIRATION_TIME;
 		$this->accessToken->resetExpires();
 		$this->assertEquals($expected, $this->accessToken->getExpires(), '', 1);
 	}
@@ -46,5 +46,4 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase {
 		$this->accessToken->resetExpires();
 		$this->assertFalse($this->accessToken->hasExpired());
 	}
-
 }

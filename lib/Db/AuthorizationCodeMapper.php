@@ -59,7 +59,7 @@ class AuthorizationCodeMapper extends Mapper {
 	 * than one result.
 	 */
 	public function find($id) {
-		if (!is_int($id)) {
+		if (!\is_int($id)) {
 			throw new InvalidArgumentException('Argument id must be an int');
 		}
 
@@ -79,7 +79,7 @@ class AuthorizationCodeMapper extends Mapper {
 	 * than one result.
 	 */
 	public function findByCode($code) {
-		if (!is_string($code)) {
+		if (!\is_string($code)) {
 			throw new InvalidArgumentException('Argument code must be a string');
 		}
 
@@ -109,7 +109,7 @@ class AuthorizationCodeMapper extends Mapper {
 	 * @see SettingsController::deleteClient()
 	 */
 	public function deleteByClient($clientId) {
-		if (!is_int($clientId)) {
+		if (!\is_int($clientId)) {
 			throw new InvalidArgumentException('Argument client_id must be an int');
 		}
 
@@ -125,7 +125,7 @@ class AuthorizationCodeMapper extends Mapper {
 	 * @param string $userId The user ID.
 	 */
 	public function deleteByUser($userId) {
-		if (!is_string($userId)) {
+		if (!\is_string($userId)) {
 			throw new InvalidArgumentException('Argument user_id must be a string');
 		}
 
@@ -141,7 +141,7 @@ class AuthorizationCodeMapper extends Mapper {
 	 * @param string $userId The user ID.
 	 */
 	public function deleteByClientUser($clientId, $userId) {
-		if (!is_int($clientId) || !is_string($userId)) {
+		if (!\is_int($clientId) || !\is_string($userId)) {
 			throw new InvalidArgumentException('Argument client_id must be an int and user_id must be a string');
 		}
 
@@ -165,9 +165,8 @@ class AuthorizationCodeMapper extends Mapper {
 	public function cleanUp() {
 		$this->logger->info('Cleaning up expired Authorization Codes.', ['app' => $this->appName]);
 
-		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `expires` <= ' . (time() - 60 * 60 * 24 * 7);
+		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `expires` <= ' . (\time() - 60 * 60 * 24 * 7);
 		$stmt = $this->execute($sql);
 		$stmt->closeCursor();
 	}
-
 }

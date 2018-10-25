@@ -26,7 +26,6 @@ use OCP\IRequest;
 use OCP\ISession;
 
 class OAuth2 extends AbstractBearer {
-
 	const DAV_AUTHENTICATED = Auth::DAV_AUTHENTICATED;
 
 	/**

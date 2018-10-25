@@ -150,14 +150,14 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 	public function testFindAll() {
 		$authorizationCodes = $this->authorizationCodeMapper->findAll();
 
-		$this->assertEquals(2, count($authorizationCodes));
+		$this->assertEquals(2, \count($authorizationCodes));
 	}
 
 	public function testDeleteByClientUser() {
 		$this->authorizationCodeMapper->deleteByClientUser($this->clientId, $this->userId);
 
 		$authorizationCodes = $this->authorizationCodeMapper->findAll();
-		$this->assertEquals(1, count($authorizationCodes));
+		$this->assertEquals(1, \count($authorizationCodes));
 	}
 
 	/**
@@ -198,7 +198,7 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 
 	public function testDeleteByClient() {
 		$this->authorizationCodeMapper->deleteByClient($this->clientId);
-		$this->assertEquals(0, count($this->authorizationCodeMapper->findAll()));
+		$this->assertEquals(0, \count($this->authorizationCodeMapper->findAll()));
 	}
 
 	/**
@@ -225,7 +225,7 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 
 	public function testDeleteByUser() {
 		$this->authorizationCodeMapper->deleteByUser($this->userId);
-		$this->assertEquals(1, count($this->authorizationCodeMapper->findAll()));
+		$this->assertEquals(1, \count($this->authorizationCodeMapper->findAll()));
 	}
 
 	/**
@@ -251,16 +251,15 @@ class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testDeleteAll() {
-		$this->assertEquals(2, count($this->authorizationCodeMapper->findAll()));
+		$this->assertEquals(2, \count($this->authorizationCodeMapper->findAll()));
 		$this->authorizationCodeMapper->deleteAll();
-		$this->assertEquals(0, count($this->authorizationCodeMapper->findAll()));
+		$this->assertEquals(0, \count($this->authorizationCodeMapper->findAll()));
 	}
 
 	public function testCleanUp() {
-		$this->assertEquals(2, count($this->authorizationCodeMapper->findAll()));
+		$this->assertEquals(2, \count($this->authorizationCodeMapper->findAll()));
 		$this->authorizationCodeMapper->cleanUp();
-		$this->assertEquals(1, count($this->authorizationCodeMapper->findAll()));
+		$this->assertEquals(1, \count($this->authorizationCodeMapper->findAll()));
 		$this->assertEquals($this->authorizationCode2->getCode(), $this->authorizationCodeMapper->findAll()[0]->getCode());
 	}
-
 }

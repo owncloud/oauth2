@@ -23,10 +23,8 @@ use OCA\OAuth2\BackgroundJob\CleanUp;
 use PHPUnit_Framework_TestCase;
 
 class CleanUpTest extends PHPUnit_Framework_TestCase {
-
 	public function testRun() {
 		$c = \OC::$server->query(CleanUp::class);
 		$c->run('');
 	}
-
 }

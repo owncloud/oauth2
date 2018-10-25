@@ -166,14 +166,14 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 	public function testFindAll() {
 		$refreshTokens = $this->refreshTokenMapper->findAll();
 
-		$this->assertEquals(2, count($refreshTokens));
+		$this->assertEquals(2, \count($refreshTokens));
 	}
 
 	public function testDeleteByClientUser() {
 		$this->refreshTokenMapper->deleteByClientUser($this->clientId, $this->userId);
 
 		$refreshTokens = $this->refreshTokenMapper->findAll();
-		$this->assertEquals(1, count($refreshTokens));
+		$this->assertEquals(1, \count($refreshTokens));
 	}
 
 	/**
@@ -214,7 +214,7 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 
 	public function testDeleteByClient() {
 		$this->refreshTokenMapper->deleteByClient($this->clientId);
-		$this->assertEquals(0, count($this->refreshTokenMapper->findAll()));
+		$this->assertEquals(0, \count($this->refreshTokenMapper->findAll()));
 	}
 
 	/**
@@ -241,7 +241,7 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 
 	public function testDeleteByUser() {
 		$this->refreshTokenMapper->deleteByUser($this->userId);
-		$this->assertEquals(1, count($this->refreshTokenMapper->findAll()));
+		$this->assertEquals(1, \count($this->refreshTokenMapper->findAll()));
 	}
 
 	/**
@@ -267,9 +267,8 @@ class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testDeleteAll() {
-		$this->assertEquals(2, count($this->refreshTokenMapper->findAll()));
+		$this->assertEquals(2, \count($this->refreshTokenMapper->findAll()));
 		$this->refreshTokenMapper->deleteAll();
-		$this->assertEquals(0, count($this->refreshTokenMapper->findAll()));
+		$this->assertEquals(0, \count($this->refreshTokenMapper->findAll()));
 	}
-
 }

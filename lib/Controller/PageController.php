@@ -120,7 +120,7 @@ class PageController extends Controller {
 
 		if ($user !== null && $user !== $this->userSession->getUser()->getUID()) {
 			$logoutUrl = $this->urlGenerator->linkToRouteAbsolute(
-				'oauth2.page.logout',[
+				'oauth2.page.logout', [
 					'user' => $user,
 					'requesttoken' => Util::callRegister(),
 					'response_type' => $response_type,
@@ -150,7 +150,7 @@ class PageController extends Controller {
 			);
 		}
 
-		if (!Utilities::validateRedirectUri($client->getRedirectUri(), urldecode($redirect_uri), $client->getAllowSubdomains())) {
+		if (!Utilities::validateRedirectUri($client->getRedirectUri(), \urldecode($redirect_uri), $client->getAllowSubdomains())) {
 			return new TemplateResponse(
 				$this->appName,
 				'authorize-error',
@@ -199,7 +199,7 @@ class PageController extends Controller {
 					return new RedirectResponse(OC_Util::getDefaultPageUrl());
 				}
 
-				if (!Utilities::validateRedirectUri($client->getRedirectUri(), urldecode($redirect_uri), $client->getAllowSubdomains())) {
+				if (!Utilities::validateRedirectUri($client->getRedirectUri(), \urldecode($redirect_uri), $client->getAllowSubdomains())) {
 					return new RedirectResponse(OC_Util::getDefaultPageUrl());
 				}
 
@@ -211,10 +211,10 @@ class PageController extends Controller {
 				$authorizationCode->resetExpires();
 				$this->authorizationCodeMapper->insert($authorizationCode);
 
-				$result = urldecode($redirect_uri);
+				$result = \urldecode($redirect_uri);
 				$result = $result . '?code=' . $code;
 				if ($state !== null) {
-					$result = $result . '&state=' . urlencode($state);
+					$result = $result . '&state=' . \urlencode($state);
 				}
 
 				$this->logger->info('An authorization code has been issued for the client "' . $client->getName() . '".', ['app' => $this->appName]);
@@ -228,7 +228,7 @@ class PageController extends Controller {
 					return new RedirectResponse(OC_Util::getDefaultPageUrl());
 				}
 
-				if (!Utilities::validateRedirectUri($client->getRedirectUri(), urldecode($redirect_uri), $client->getAllowSubdomains())) {
+				if (!Utilities::validateRedirectUri($client->getRedirectUri(), \urldecode($redirect_uri), $client->getAllowSubdomains())) {
 					return new RedirectResponse(OC_Util::getDefaultPageUrl());
 				}
 
@@ -240,11 +240,11 @@ class PageController extends Controller {
 				$accessToken->resetExpires();
 				$this->accessTokenMapper->insert($accessToken);
 
-				$result = urldecode($redirect_uri);
-				$result = $result . '?access_token=' . urlencode($accessToken->getToken());
-				$result = $result . '&expires_in=' . urlencode(AccessToken::EXPIRATION_TIME);
+				$result = \urldecode($redirect_uri);
+				$result = $result . '?access_token=' . \urlencode($accessToken->getToken());
+				$result = $result . '&expires_in=' . \urlencode(AccessToken::EXPIRATION_TIME);
 				if ($state !== null) {
-					$result = $result . '&state=' . urlencode($state);
+					$result = $result . '&state=' . \urlencode($state);
 				}
 
 				$this->logger->info('An authorization code has been issued for the client "' . $client->getName() . '".', ['app' => $this->appName]);
@@ -290,7 +290,7 @@ class PageController extends Controller {
 		// logout the current user
 		$this->userSession->logout();
 
-		$redirectUrl = $this->urlGenerator->linkToRoute('oauth2.page.authorize',[
+		$redirectUrl = $this->urlGenerator->linkToRoute('oauth2.page.authorize', [
 			'response_type' => $response_type,
 			'client_id' => $client_id,
 			'redirect_uri' => $redirect_uri,

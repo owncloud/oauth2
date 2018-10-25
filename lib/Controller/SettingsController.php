@@ -110,8 +110,8 @@ class SettingsController extends Controller {
 		$client = new Client();
 		$client->setIdentifier(Utilities::generateRandom());
 		$client->setSecret(Utilities::generateRandom());
-		$client->setRedirectUri(trim($_POST['redirect_uri']));
-		$client->setName(trim($_POST['name']));
+		$client->setRedirectUri(\trim($_POST['redirect_uri']));
+		$client->setName(\trim($_POST['name']));
 
 		if (isset($_POST['allow_subdomains'])) {
 			$client->setAllowSubdomains(true);
@@ -139,7 +139,7 @@ class SettingsController extends Controller {
 	 * @return RedirectResponse Redirection to the settings page.
 	 */
 	public function deleteClient($id) {
-		if (!is_int($id)) {
+		if (!\is_int($id)) {
 			return new RedirectResponse(
 				$this->urlGenerator->linkToRouteAbsolute(
 					'settings.SettingsPage.getAdmin',
@@ -175,7 +175,7 @@ class SettingsController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function revokeAuthorization($id) {
-		if (!is_int($id)) {
+		if (!\is_int($id)) {
 			return new RedirectResponse(
 				$this->urlGenerator->linkToRouteAbsolute(
 					'settings.SettingsPage.getPersonal',
@@ -193,5 +193,4 @@ class SettingsController extends Controller {
 				['sectionid' => 'security']
 			) . '#oauth2');
 	}
-
 }

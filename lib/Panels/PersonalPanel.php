@@ -66,9 +66,7 @@ class PersonalPanel implements ISettings {
 		return $t;
 	}
 
-
 	public function getPriority() {
 		return 20;
 	}
-
 }
