@@ -234,5 +234,4 @@ class OAuth2Test extends TestCase {
 				[$this->accessToken->getToken()])
 		);
 	}
-
 }

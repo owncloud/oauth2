@@ -101,11 +101,11 @@ class OAuthApiController extends ApiController {
 	 */
 	public function generateToken($grant_type, $code = null,
 								  $redirect_uri = null, $refresh_token = null) {
-		if (!is_string($grant_type)) {
+		if (!\is_string($grant_type)) {
 			return new JSONResponse(['error' => 'invalid_request'], Http::STATUS_BAD_REQUEST);
 		}
 
-		if (is_null($_SERVER['PHP_AUTH_USER']) || is_null($_SERVER['PHP_AUTH_PW'])) {
+		if ($_SERVER['PHP_AUTH_USER'] === null || $_SERVER['PHP_AUTH_PW'] === null) {
 			return new JSONResponse(['error' => 'invalid_request'], Http::STATUS_BAD_REQUEST);
 		}
 
@@ -116,13 +116,13 @@ class OAuthApiController extends ApiController {
 			return new JSONResponse(['error' => 'invalid_client'], Http::STATUS_BAD_REQUEST);
 		}
 
-		if (strcmp($client->getSecret(), $_SERVER['PHP_AUTH_PW']) !== 0) {
+		if (\strcmp($client->getSecret(), $_SERVER['PHP_AUTH_PW']) !== 0) {
 			return new JSONResponse(['error' => 'invalid_client'], Http::STATUS_BAD_REQUEST);
 		}
 
 		switch ($grant_type) {
 			case 'authorization_code':
-				if (!is_string($code) || !is_string($redirect_uri)) {
+				if (!\is_string($code) || !\is_string($redirect_uri)) {
 					return new JSONResponse(['error' => 'invalid_request'], Http::STATUS_BAD_REQUEST);
 				}
 
@@ -134,7 +134,7 @@ class OAuthApiController extends ApiController {
 					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
 
-				if (strcmp($authorizationCode->getClientId(), $client->getId()) !== 0) {
+				if (\strcmp($authorizationCode->getClientId(), $client->getId()) !== 0) {
 					\OC::$server->getLogger()->debug("auth grant client ids mismatch: {$authorizationCode->getClientId()} != {$client->getId()}", ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
@@ -144,7 +144,7 @@ class OAuthApiController extends ApiController {
 					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
 
-				if (!Utilities::validateRedirectUri($client->getRedirectUri(), urldecode($redirect_uri), $client->getAllowSubdomains())) {
+				if (!Utilities::validateRedirectUri($client->getRedirectUri(), \urldecode($redirect_uri), $client->getAllowSubdomains())) {
 					\OC::$server->getLogger()->debug("auth grant redirect uri invalid: {$redirect_uri}", ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
@@ -158,11 +158,11 @@ class OAuthApiController extends ApiController {
 			case 'refresh_token':
 				$statusCode = Http::STATUS_BAD_REQUEST;
 				// This fixes the infinite loop issue with desktop client 2.4.2
-				if (preg_match('/\bmirall\b.+2\.4\.2/i', $this->request->getHeader('User-Agent'))) {
+				if (\preg_match('/\bmirall\b.+2\.4\.2/i', $this->request->getHeader('User-Agent'))) {
 					$statusCode = Http::STATUS_OK;
 				}
 
-				if (!is_string($refresh_token)) {
+				if (!\is_string($refresh_token)) {
 					return new JSONResponse(['error' => 'invalid_request'], $statusCode);
 				}
 
@@ -174,7 +174,7 @@ class OAuthApiController extends ApiController {
 					return new JSONResponse(['error' => 'invalid_grant'], $statusCode);
 				}
 
-				if (strcmp($refreshToken->getClientId(), $client->getId()) !== 0) {
+				if (\strcmp($refreshToken->getClientId(), $client->getId()) !== 0) {
 					\OC::$server->getLogger()->debug("refresh grant client ids mismatch: {$refreshToken->getClientId()} != {$client->getId()}", ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], $statusCode);
 				}
@@ -219,5 +219,4 @@ class OAuthApiController extends ApiController {
 			]
 		);
 	}
-
 }

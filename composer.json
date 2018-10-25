@@ -1,0 +1,13 @@
+{
+    "name": "owncloud/oauth2",
+    "license": "AGPL",
+    "authors": [
+        {
+            "name": "Thomas Müller",
+            "email": "thomas.mueller@tmit.eu"
+        }
+    ],
+    "require-dev": {
+        "owncloud/coding-standard": "^1.0"
+    }
+}

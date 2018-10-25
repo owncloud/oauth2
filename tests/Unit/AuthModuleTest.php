@@ -123,7 +123,7 @@ class AuthModuleTest extends PHPUnit_Framework_TestCase {
 	 * @throws \Exception
 	 */
 	public function testExpiredToken() {
-		$this->accessToken->setExpires(time() - 1);
+		$this->accessToken->setExpires(\time() - 1);
 		$this->accessTokenMapper->update($this->accessToken);
 		/** @var IRequest | \PHPUnit_Framework_MockObject_MockObject $request */
 		$request = $this->getMockBuilder(IRequest::class)->getMock();
@@ -154,5 +154,4 @@ class AuthModuleTest extends PHPUnit_Framework_TestCase {
 		$request = $this->getMockBuilder(IRequest::class)->getMock();
 		$this->assertEquals('', $this->authModule->getUserPassword($request));
 	}
-
 }

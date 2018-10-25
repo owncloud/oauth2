@@ -43,11 +43,11 @@ class AuthModule implements IAuthModule {
 	public function auth(IRequest $request) {
 		$authHeader = $request->getHeader('Authorization');
 
-		if (strpos($authHeader, 'Bearer ') === false) {
+		if (\strpos($authHeader, 'Bearer ') === false) {
 			return null;
 		}
 
-		$bearerToken = substr($authHeader, 7);
+		$bearerToken = \substr($authHeader, 7);
 
 		$user = $this->authToken($bearerToken);
 		if ($user === null) {
@@ -102,5 +102,4 @@ class AuthModule implements IAuthModule {
 		$userManager = $container->query('UserManager');
 		return $userManager->get($accessToken->getUserId());
 	}
-
 }

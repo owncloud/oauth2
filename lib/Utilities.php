@@ -21,15 +21,15 @@ namespace OCA\OAuth2;
 
 class Utilities {
 
-    /**
-     * Generates a random string with 64 characters.
-     *
-     * @return string The random string.
-     */
-    public static function generateRandom() {
-        return \OC::$server->getSecureRandom()->generate(64,
-            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
-    }
+	/**
+	 * Generates a random string with 64 characters.
+	 *
+	 * @return string The random string.
+	 */
+	public static function generateRandom() {
+		return \OC::$server->getSecureRandom()->generate(64,
+			'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
+	}
 
 	/**
 	 * Validates a redirection URI.
@@ -42,40 +42,40 @@ class Utilities {
 	 */
 	public static function validateRedirectUri($expected, $actual, $allowSubdomains) {
 		$validatePort = true;
-		if (strpos($expected, 'http://localhost:*') === 0) {
-			$expected = 'http://localhost' . substr($expected, 18);
+		if (\strpos($expected, 'http://localhost:*') === 0) {
+			$expected = 'http://localhost' . \substr($expected, 18);
 			$validatePort = false;
 		}
-		if (strcmp(parse_url($expected, PHP_URL_SCHEME), parse_url($actual, PHP_URL_SCHEME)) !== 0) {
+		if (\strcmp(\parse_url($expected, PHP_URL_SCHEME), \parse_url($actual, PHP_URL_SCHEME)) !== 0) {
 			return false;
 		}
 
-		$expectedHost = parse_url($expected, PHP_URL_HOST);
-		$actualHost = parse_url($actual, PHP_URL_HOST);
+		$expectedHost = \parse_url($expected, PHP_URL_HOST);
+		$actualHost = \parse_url($actual, PHP_URL_HOST);
 
 		if ($allowSubdomains) {
-			if (strcmp($expectedHost, $actualHost) !== 0
-				&& strcmp($expectedHost, str_replace(explode('.', $actualHost)[0] . '.', '', $actualHost)) !== 0
+			if (\strcmp($expectedHost, $actualHost) !== 0
+				&& \strcmp($expectedHost, \str_replace(\explode('.', $actualHost)[0] . '.', '', $actualHost)) !== 0
 			) {
 				return false;
 			}
 		} else {
-			if (strcmp($expectedHost, $actualHost) !== 0) {
+			if (\strcmp($expectedHost, $actualHost) !== 0) {
 				return false;
 			}
 		}
 
 		if ($validatePort) {
-			if (strcmp(parse_url($expected, PHP_URL_PORT), parse_url($actual, PHP_URL_PORT)) !== 0) {
+			if (\strcmp(\parse_url($expected, PHP_URL_PORT), \parse_url($actual, PHP_URL_PORT)) !== 0) {
 				return false;
 			}
 		}
 
-		if (strcmp(parse_url($expected, PHP_URL_PATH), parse_url($actual, PHP_URL_PATH)) !== 0) {
+		if (\strcmp(\parse_url($expected, PHP_URL_PATH), \parse_url($actual, PHP_URL_PATH)) !== 0) {
 			return false;
 		}
 
-		if (strcmp(parse_url($expected, PHP_URL_QUERY), parse_url($actual, PHP_URL_QUERY)) !== 0) {
+		if (\strcmp(\parse_url($expected, PHP_URL_QUERY), \parse_url($actual, PHP_URL_QUERY)) !== 0) {
 			return false;
 		}
 
@@ -83,12 +83,10 @@ class Utilities {
 	}
 
 	public static function isValidUrl($redirectUri) {
-		if (strpos($redirectUri, 'http://localhost:*') === 0) {
-			$redirectUri = 'http://localhost' . substr($redirectUri, 18);
+		if (\strpos($redirectUri, 'http://localhost:*') === 0) {
+			$redirectUri = 'http://localhost' . \substr($redirectUri, 18);
 		}
 
-		return (filter_var($redirectUri, FILTER_VALIDATE_URL) !== false);
-
+		return (\filter_var($redirectUri, FILTER_VALIDATE_URL) !== false);
 	}
-
 }

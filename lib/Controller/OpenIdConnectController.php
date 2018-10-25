@@ -112,5 +112,4 @@ class OpenIdConnectController extends ApiController {
 		$avatarUrl = $this->urlGenerator->getAbsoluteURL($avatarUrl);
 		return $avatarUrl;
 	}
-
 }

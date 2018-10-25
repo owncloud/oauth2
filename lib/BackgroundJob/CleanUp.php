@@ -54,5 +54,4 @@ class CleanUp extends TimedJob {
 		$this->authorizationCodeMapper->cleanUp();
 		$this->accessTokenMapper->cleanUp();
 	}
-
 }

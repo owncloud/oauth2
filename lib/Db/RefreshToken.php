@@ -32,7 +32,6 @@ use OCP\AppFramework\Db\Entity;
  * @method void setAccessTokenId(int $accessTokenId)
  */
 class RefreshToken extends Entity {
-
 	protected $token;
 	protected $clientId;
 	protected $userId;
@@ -45,5 +44,4 @@ class RefreshToken extends Entity {
 		$this->addType('user_id', 'string');
 		$this->addType('access_token_id', 'int');
 	}
-
 }

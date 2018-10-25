@@ -32,7 +32,6 @@ use OCP\AppFramework\Db\Entity;
  * @method void setExpires(int $value)
  */
 class AuthorizationCode extends Entity {
-
 	const EXPIRATION_TIME = 600;
 
 	protected $code;
@@ -55,7 +54,7 @@ class AuthorizationCode extends Entity {
 	 * Resets the expiry time to EXPIRATION_TIME seconds from now.
 	 */
 	public function resetExpires() {
-		$this->setExpires(time() + self::EXPIRATION_TIME);
+		$this->setExpires(\time() + self::EXPIRATION_TIME);
 	}
 
 	/**
@@ -64,7 +63,6 @@ class AuthorizationCode extends Entity {
 	 * @return boolean true if the authorization code has expired, false otherwise.
 	 */
 	public function hasExpired() {
-		return time() >= $this->getExpires();
+		return \time() >= $this->getExpires();
 	}
-
 }

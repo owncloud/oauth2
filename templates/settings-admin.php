@@ -28,9 +28,9 @@ style('oauth2', 'settings-admin');
 
     <h3><?php p($l->t('Registered clients')); ?></h3>
     <?php if (empty($_['clients'])) {
-        p($l->t('No clients registered.'));
-    }
-    else { ?>
+	p($l->t('No clients registered.'));
+} else {
+	?>
     <table class="grid">
         <thead>
         <tr>
@@ -43,13 +43,16 @@ style('oauth2', 'settings-admin');
         </tr>
         </thead>
         <tbody>
-            <?php foreach ($_['clients'] as $client) { ?>
+            <?php foreach ($_['clients'] as $client) {
+		?>
                 <tr>
                     <td><?php p($client->getName()); ?></td>
                     <td><?php p($client->getRedirectUri()); ?></td>
                     <td><code><?php p($client->getIdentifier()); ?></code></td>
                     <td><code><?php p($client->getSecret()); ?></code></td>
-					<td id="td-allow-subdomains"><?php if ($client->getAllowSubdomains()) {?> <img alt="" src="/core/img/actions/checkmark.svg"> <?php } ?></td>
+					<td id="td-allow-subdomains"><?php if ($client->getAllowSubdomains()) {
+			?> <img alt="" src="/core/img/actions/checkmark.svg"> <?php
+		} ?></td>
                     <td>
                         <form id="form-inline" class="delete" data-confirm="<?php p($l->t('Are you sure you want to delete this item?')); ?>" action="<?php p($_['urlGenerator']->linkToRoute('oauth2.settings.deleteClient', ['id' => $client->getId()])); ?>" method="post">
 							<input type="hidden" name="requesttoken" value="<?php p($_['requesttoken']) ?>" />
@@ -57,10 +60,12 @@ style('oauth2', 'settings-admin');
                         </form>
                     </td>
                 </tr>
-            <?php } ?>
+            <?php
+	} ?>
         </tbody>
     </table>
-    <?php } ?>
+    <?php
+} ?>
 
     <h3><?php p($l->t('Add client')); ?></h3>
     <form action="<?php p($_['urlGenerator']->linkToRoute('oauth2.settings.addClient')); ?>" method="post">

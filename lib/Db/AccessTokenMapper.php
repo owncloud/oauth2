@@ -60,7 +60,7 @@ class AccessTokenMapper extends Mapper {
 	 * than one result.
 	 */
 	public function find($id) {
-		if (!is_int($id)) {
+		if (!\is_int($id)) {
 			throw new InvalidArgumentException('Argument id must be an int');
 		}
 
@@ -80,7 +80,7 @@ class AccessTokenMapper extends Mapper {
 	 * than one result.
 	 */
 	public function findByToken($token) {
-		if (!is_string($token)) {
+		if (!\is_string($token)) {
 			throw new InvalidArgumentException('Argument token must be a string');
 		}
 
@@ -110,7 +110,7 @@ class AccessTokenMapper extends Mapper {
 	 * @see SettingsController::deleteClient()
 	 */
 	public function deleteByClient($clientId) {
-		if (!is_int($clientId)) {
+		if (!\is_int($clientId)) {
 			throw new InvalidArgumentException('Argument client_id must be an int');
 		}
 
@@ -125,7 +125,7 @@ class AccessTokenMapper extends Mapper {
 	 * @param string $userId The user ID.
 	 */
 	public function deleteByUser($userId) {
-		if (!is_string($userId)) {
+		if (!\is_string($userId)) {
 			throw new InvalidArgumentException('Argument user_id must be a string');
 		}
 
@@ -142,7 +142,7 @@ class AccessTokenMapper extends Mapper {
 	 * @param string $userId The user ID.
 	 */
 	public function deleteByClientUser($clientId, $userId) {
-		if (!is_int($clientId) || !is_string($userId)) {
+		if (!\is_int($clientId) || !\is_string($userId)) {
 			throw new InvalidArgumentException('Argument client_id must be an int and user_id must be a string');
 		}
 
@@ -166,9 +166,8 @@ class AccessTokenMapper extends Mapper {
 	public function cleanUp() {
 		$this->logger->info('Cleaning up expired Access Tokens.', ['app' => $this->appName]);
 
-		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `expires` <= ' . (time() - 60 * 60 * 24 * 7);
+		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `expires` <= ' . (\time() - 60 * 60 * 24 * 7);
 		$stmt = $this->execute($sql);
 		$stmt->closeCursor();
 	}
-
 }

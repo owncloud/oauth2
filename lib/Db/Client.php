@@ -34,7 +34,6 @@ use OCP\AppFramework\Db\Entity;
  * @method boolean getAllowSubdomains()
  */
 class Client extends Entity {
-
 	protected $identifier;
 	protected $secret;
 	protected $redirectUri;
@@ -64,5 +63,4 @@ class Client extends Entity {
 			parent::setter('allowSubdomains', [$value]);
 		}
 	}
-
 }

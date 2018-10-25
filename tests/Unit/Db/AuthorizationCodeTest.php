@@ -34,7 +34,7 @@ class AuthorizationCodeTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testResetExpires() {
-		$expected = time() + AuthorizationCode::EXPIRATION_TIME;
+		$expected = \time() + AuthorizationCode::EXPIRATION_TIME;
 		$this->authorizationCode->resetExpires();
 		$this->assertEquals($expected, $this->authorizationCode->getExpires(), '', 1);
 	}
@@ -46,5 +46,4 @@ class AuthorizationCodeTest extends PHPUnit_Framework_TestCase {
 		$this->authorizationCode->resetExpires();
 		$this->assertFalse($this->authorizationCode->hasExpired());
 	}
-
 }

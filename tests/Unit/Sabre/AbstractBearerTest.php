@@ -11,9 +11,7 @@ use Sabre\HTTP;
  * this library is used.
  */
 class AbstractBearerTest extends \PHPUnit\Framework\TestCase {
-
-	public function testCheckNoHeaders()
-	{
+	public function testCheckNoHeaders() {
 		$request = new HTTP\Request('GET', '/');
 		$response = new HTTP\Response();
 
@@ -24,8 +22,7 @@ class AbstractBearerTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testCheckInvalidToken()
-	{
+	public function testCheckInvalidToken() {
 		$request = new HTTP\Request('GET', '/', [
 			'Authorization' => 'Bearer foo',
 		]);
@@ -38,8 +35,7 @@ class AbstractBearerTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testCheckSuccess()
-	{
+	public function testCheckSuccess() {
 		$request = new HTTP\Request('GET', '/', [
 			'Authorization' => 'Bearer valid',
 		]);
@@ -52,8 +48,7 @@ class AbstractBearerTest extends \PHPUnit\Framework\TestCase {
 		);
 	}
 
-	public function testRequireAuth()
-	{
+	public function testRequireAuth() {
 		$request = new HTTP\Request('GET', '/');
 		$response = new HTTP\Response();
 
@@ -68,8 +63,7 @@ class AbstractBearerTest extends \PHPUnit\Framework\TestCase {
 	}
 }
 
-class AbstractBearerMock extends AbstractBearer
-{
+class AbstractBearerMock extends AbstractBearer {
 	/**
 	 * Validates a bearer token.
 	 *
@@ -80,8 +74,7 @@ class AbstractBearerMock extends AbstractBearer
 	 *
 	 * @return bool
 	 */
-	public function validateBearerToken($bearerToken)
-	{
-		return 'valid' === $bearerToken ? 'principals/username' : false;
+	public function validateBearerToken($bearerToken) {
+		return $bearerToken === 'valid' ? 'principals/username' : false;
 	}
 }
