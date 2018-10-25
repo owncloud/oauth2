@@ -174,7 +174,7 @@ matrix:
       TEST_SUITE: phpunit
       DB_TYPE: sqlite
 
-    - PHP_VERSION: 7.2
+    - PHP_VERSION: 7.1
       OC_VERSION: daily-master-qa
       TEST_SUITE: phpunit
       DB_TYPE: sqlite
