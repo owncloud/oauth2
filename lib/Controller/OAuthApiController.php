@@ -206,6 +206,7 @@ class OAuthApiController extends ApiController {
 		$refreshToken->setClientId($client->getId());
 		$refreshToken->setUserId($userId);
 		$refreshToken->setAccessTokenId($accessToken->getId());
+		$refreshToken->resetExpires();
 		$this->refreshTokenMapper->insert($refreshToken);
 
 		return new JSONResponse(
