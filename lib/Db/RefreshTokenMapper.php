@@ -23,16 +23,25 @@ use InvalidArgumentException;
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\Mapper;
 use OCP\IDb;
+use OCP\ILogger;
 
 class RefreshTokenMapper extends Mapper {
+
+	/** @var ILogger */
+	private $logger;
 
 	/**
 	 * RefreshTokenMapper constructor.
 	 *
-	 * @param IDb $db Database Connection.
+	 * @param IDb $db Instance of the Db abstraction layer.
+	 * @param ILogger $logger The logger.
+	 * @param string $AppName The app's name.
 	 */
-	public function __construct(IDb $db) {
+	public function __construct(IDb $db, ILogger $logger, $AppName) {
 		parent::__construct($db, 'oauth2_refresh_tokens');
+
+		$this->logger = $logger;
+		$this->appName = $AppName;
 	}
 
 	/**
@@ -144,6 +153,17 @@ class RefreshTokenMapper extends Mapper {
 	public function deleteAll() {
 		$sql = 'DELETE FROM `' . $this->tableName . '`';
 		$stmt = $this->execute($sql, []);
+		$stmt->closeCursor();
+	}
+
+	/**
+	* Deletes all refresh tokens that expired one week before.
+	*/
+	public function cleanUp() {
+		$this->logger->info('Cleaning up expired Refresh Tokens.', ['app' => $this->appName]);
+
+		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `expires` <= ' . (time());
+		$stmt = $this->execute($sql);
 		$stmt->closeCursor();
 	}
 }
