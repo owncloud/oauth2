@@ -31,6 +31,6 @@ script('oauth2', 'switch-user');
 	</p>
 	<br>
 	<a href="<?php p($_['logout_url']); ?>">
-		<button><?php p($l->t('Switch users to continue')); ?></button>
+		<button autofocus><?php p($l->t('Switch users to continue')); ?></button>
 	</a>
 </div>

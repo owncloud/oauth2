@@ -29,6 +29,6 @@ style('oauth2', 'authorization');
 		<p><?php p($l->t('The application will gain access to your username and will be allowed to manage files, folders and shares.')); ?></p>
 		<br>
 		<input type="hidden" name="requesttoken" value="<?php p($_['requesttoken']) ?>" />
-		<button type="submit"><?php p($l->t('Authorize')); ?></button>
+		<button type="submit" autofocus><?php p($l->t('Authorize')); ?></button>
 	</form>
 </span>
