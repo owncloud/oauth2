@@ -43,7 +43,7 @@ So that I can improve the security of the system by forbidding basic auth with u
 		
 	Scenario Outline: download a file with oauth when token auth is enforced
 		Given using <dav_version> DAV path
-		When user "user1" downloads the file "/lorem.txt" using the WebDAV API
+		When user "user1" downloads file "/lorem.txt" using the WebDAV API
 		Then the HTTP status code should be "401"
 		But the client app should be able to download the file "lorem.txt" of "user1" using the access token for authentication
 		Examples:
