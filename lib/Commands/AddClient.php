@@ -24,6 +24,7 @@ namespace OCA\OAuth2\Commands;
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Utilities;
+use OCP\AppFramework\Db\DoesNotExistException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -76,14 +77,19 @@ class AddClient extends Command {
 		if (!\is_bool($allowSubDomains)) {
 			throw new \InvalidArgumentException('Please enter true or false for allowed-sub-domains.');
 		}
+		try {
+			$this->clientMapper->findByIdentifier($id);
+			$output->writeln("Client <$id> is already known.");
+			return;
+		} catch (DoesNotExistException $ex) {
+			$client = new Client();
+			$client->setIdentifier($id);
+			$client->setName($name);
+			$client->setRedirectUri($url);
+			$client->setSecret($secret);
+			$client->setAllowSubdomains($allowSubDomains);
 
-		$client = new Client();
-		$client->setIdentifier($id);
-		$client->setName($name);
-		$client->setRedirectUri($url);
-		$client->setSecret($secret);
-		$client->setAllowSubdomains($allowSubDomains);
-
-		$this->clientMapper->insert($client);
+			$this->clientMapper->insert($client);
+		}
 	}
 }
