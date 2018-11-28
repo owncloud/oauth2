@@ -52,5 +52,6 @@ When using OAuth2 a unique access token is generated for each device or third pa
     <use-migrations>true</use-migrations>
     <commands>
         <command>OCA\OAuth2\Commands\AddClient</command>
+        <command>OCA\OAuth2\Commands\RemoveClient</command>
     </commands>
 </info>
