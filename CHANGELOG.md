@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - Expiry of refresh tokens [#174](https://github.com/owncloud/oauth2/pull/174)
+- Autofocus of buttons [#173](https://github.com/owncloud/oauth2/pull/173)
+- Support implicit grant [#166](https://github.com/owncloud/oauth2/pull/166)
+- Add occ commands to add and remove clients [#178](https://github.com/owncloud/oauth2/pull/178) + [#166](https://github.com/owncloud/oauth2/pull/166)
 
 ## [0.2.3] - 2018-08-09
 
