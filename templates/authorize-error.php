@@ -34,6 +34,6 @@ style('oauth2', 'authorization');
 	} ?>
 	<br>
 	<a href="<?php p($_['back_url']); ?>">
-		<button><?php p($l->t('Back')); ?></button>
+		<button autofocus><?php p($l->t('Back')); ?></button>
 	</a>
 </div>
