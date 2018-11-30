@@ -162,7 +162,7 @@ class RefreshTokenMapper extends Mapper {
 	public function cleanUp() {
 		$this->logger->info('Cleaning up expired Refresh Tokens.', ['app' => $this->appName]);
 
-		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `expires` <= ' . (time());
+		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `expires` <= ' . (\time());
 		$stmt = $this->execute($sql);
 		$stmt->closeCursor();
 	}

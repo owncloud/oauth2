@@ -22,6 +22,7 @@ namespace OCA\OAuth2\BackgroundJob;
 use OC\BackgroundJob\TimedJob;
 use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
+use OCA\OAuth2\Db\RefreshTokenMapper;
 
 class CleanUp extends TimedJob {
 
@@ -40,11 +41,6 @@ class CleanUp extends TimedJob {
 	 */
 	protected $refreshTokenMapper;
 
-	/**
-	 * Cron interval in seconds
-	 */
-	protected $interval = 86400;
-
 	public function __construct(
 		AuthorizationCodeMapper $authorizationCodeMapper,
 		AccessTokenMapper $accessTokenMapper,
@@ -52,6 +48,8 @@ class CleanUp extends TimedJob {
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
 		$this->accessTokenMapper = $accessTokenMapper;
 		$this->refreshTokenMapper = $refreshTokenMapper;
+
+		$this->setInterval(86400);
 	}
 
 	/**
@@ -63,5 +61,4 @@ class CleanUp extends TimedJob {
 		$this->accessTokenMapper->cleanUp();
 		$this->refreshTokenMapper->cleanUp();
 	}
-
 }
