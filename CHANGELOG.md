@@ -4,15 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
-## [0.3.0]
+## [Unreleased]
+
+## [0.3.0] - 2018-12-07
 
 ### Added
 
 - Added autofocus to buttons - [#173](https://github.com/owncloud/oauth2/issues/173)
 - Add occ oauth2:remove-client to remove a client by its id - [#178](https://github.com/owncloud/oauth2/issues/178)
-- Set max version to 10 because core platform is switching to Semver - [#180](https://github.com/owncloud/oauth2/issues/180)
 - Support for PHP 7.1 and 7.2 - [#161](https://github.com/owncloud/oauth2/issues/161)
 - Support for implicit grant - [#166](https://github.com/owncloud/oauth2/issues/166)
+
+### Changed
+
+- Set max version to 10 because core platform is switching to Semver - [#180](https://github.com/owncloud/oauth2/issues/180)
 
 ### Fixed
 
@@ -59,8 +64,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - Verify Bearer token even if the session is still valid - [#53](https://github.com/owncloud/oauth2/pull/53)
 - Use displayname on switch user screen - [#90](https://github.com/owncloud/oauth2/pull/90)
 
+[Unreleased]: https://github.com/owncloud/oauth2/compare/v0.3.0...master
 [0.3.0]: https://github.com/owncloud/oauth2/compare/v0.2.3...v0.3.0
 [0.2.3]: https://github.com/owncloud/oauth2/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/owncloud/oauth2/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/owncloud/oauth2/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/owncloud/oauth2/compare/v0.1.0...v0.2.0
+
