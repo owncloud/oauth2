@@ -5,7 +5,7 @@ workspace:
 branches: [master, release*]
 
 pipeline:
-  install-server:
+  install-core:
     image: owncloudci/core
     pull: true
     version: ${OC_VERSION}
@@ -15,78 +15,111 @@ pipeline:
     db_username: autotest
     db_password: owncloud
     db_timeout: 120
+    when:
+      matrix:
+        NEED_CORE: true
 
   install-app:
     image: owncloudci/php:${PHP_VERSION}
     pull: true
     commands:
-    - cd /var/www/owncloud/
-    - php occ a:l
-    - php occ a:e oauth2
-    - php occ a:e testing
-    - php occ a:l
-    - php occ config:system:set trusted_domains 1 --value=owncloud
-    - php occ log:manage --level 0
+      - cd /var/www/owncloud/
+      - php occ a:l
+      - php occ a:e oauth2
+      - php occ a:e testing
+      - php occ a:l
+      - php occ config:system:set trusted_domains 1 --value=owncloud
+      - php occ log:manage --level 0
+    when:
+      matrix:
+        NEED_INSTALL_APP: true
 
   owncloud-log:
     image: owncloud/ubuntu:16.04
     detach: true
     pull: true
     commands:
-    - tail -f /var/www/owncloud/data/owncloud.log
+      - tail -f /var/www/owncloud/data/owncloud.log
+    when:
+      matrix:
+        NEED_SERVER: true
+
+  fix-permissions:
+    image: owncloudci/php:${PHP_VERSION}
+    pull: true
+    commands:
+      - chown www-data /var/www/owncloud -R
+      - chmod 777 /var/www/owncloud/tests/acceptance/filesForUpload -R
+      - chmod +x /var/www/owncloud/tests/acceptance/run.sh
+    when:
+      matrix:
+        NEED_SERVER: true
 
   webui-acceptance-tests:
     image: owncloudci/php:${PHP_VERSION}
     pull: true
     environment:
-    - BROWSER=chrome
-    - SELENIUM_HOST=selenium
-    - TEST_SERVER_URL=http://owncloud
-    - SELENIUM_PORT=4444
-    - PLATFORM=Linux
-    - BEHAT_SUITE=${BEHAT_SUITE}
+      - BROWSER=chrome
+      - SELENIUM_HOST=selenium
+      - TEST_SERVER_URL=http://owncloud
+      - SELENIUM_PORT=4444
+      - PLATFORM=Linux
+      - BEHAT_SUITE=${BEHAT_SUITE}
     commands:
-    - chown www-data /var/www/owncloud -R
-    - chmod 777 /var/www/owncloud/tests/acceptance/filesForUpload -R
-    - cd /var/www/owncloud/tests/acceptance
-    - chmod +x run.sh
-    - ./run.sh --remote --config /var/www/owncloud/apps/oauth2/tests/acceptance/config/behat.yml
+      - make test-acceptance-webui
     when:
       matrix:
-        TEST_SUITE: acceptance
+        TEST_SUITE: webui-acceptance
 
   phpunit-unit-tests:
     image: owncloudci/php:${PHP_VERSION}
     pull: true
+    environment:
+      - COVERAGE=${COVERAGE}
     commands:
-    - make test-php-unit-dbg
+      - if [ -z "${COVERAGE}" ]; then make test-php-unit; fi
+      - if [ "${COVERAGE}" = "true" ]; then make test-php-unit-dbg; fi
     when:
       matrix:
         TEST_SUITE: phpunit
 
-  php-cs-fixer:
+  owncloud-coding-standard:
     image: owncloudci/php:${PHP_VERSION}
     pull: true
     commands:
-    - composer install
-    - vendor/bin/php-cs-fixer fix -v --diff --dry-run --allow-risky yes
+      - make test-php-style
     when:
       matrix:
-        TEST_SUITE: code-style
+        TEST_SUITE: owncloud-coding-standard
+
+  phan:
+    image: owncloudci/php:7.1
+    pull: true
+    commands:
+      - make test-php-phan
+    when:
+      matrix:
+        TEST_SUITE: phan
+
+  phpstan:
+    image: owncloudci/php:7.1
+    pull: true
+    commands:
+      - make test-php-phpstan
+    when:
+      matrix:
+        TEST_SUITE: phpstan
 
   codecov:
     image: plugins/codecov:2
     secrets: [codecov_token]
     pull: true
-    files:
-    - '*.xml'
     paths:
-    - tests/output
+      - tests/output/*.xml
     when:
       event: [push, pull_request]
       matrix:
         COVERAGE: true
-
 
   notify:
     image: plugins/slack:1
@@ -102,26 +135,26 @@ services:
     image: owncloudci/php:${PHP_VERSION}
     pull: true
     environment:
-    - APACHE_WEBROOT=/var/www/owncloud/
+      - APACHE_WEBROOT=/var/www/owncloud/
     command: [ "/usr/local/bin/apachectl", "-e", "debug", "-D", "FOREGROUND" ]
     when:
       matrix:
-        TEST_SUITE: acceptance
+        NEED_SERVER: true
 
   selenium:
     image: selenium/standalone-chrome-debug:latest
     pull: true
     when:
       matrix:
-        TEST_SUITE: acceptance
+        TEST_SUITE: webui-acceptance
 
   mysql:
     image: mysql:5.5
     environment:
-    - MYSQL_USER=autotest
-    - MYSQL_PASSWORD=owncloud
-    - MYSQL_DATABASE=${DB_NAME=owncloud}
-    - MYSQL_ROOT_PASSWORD=owncloud
+      - MYSQL_USER=autotest
+      - MYSQL_PASSWORD=owncloud
+      - MYSQL_DATABASE=${DB_NAME=owncloud}
+      - MYSQL_ROOT_PASSWORD=owncloud
     when:
       matrix:
         DB_TYPE: mysql
@@ -129,9 +162,9 @@ services:
   pgsql:
     image: postgres:9.4
     environment:
-    - POSTGRES_USER=autotest
-    - POSTGRES_PASSWORD=owncloud
-    - POSTGRES_DB=${DB_NAME=owncloud}
+      - POSTGRES_USER=autotest
+      - POSTGRES_PASSWORD=owncloud
+      - POSTGRES_DB=${DB_NAME=owncloud}
     when:
       matrix:
         DB_TYPE: pgsql
@@ -139,9 +172,9 @@ services:
   oci:
     image: deepdiver/docker-oracle-xe-11g
     environment:
-    - ORACLE_USER=system
-    - ORACLE_PASSWORD=oracle
-    - ORACLE_DB=${DB_NAME=owncloud}
+      - ORACLE_USER=system
+      - ORACLE_PASSWORD=oracle
+      - ORACLE_DB=${DB_NAME=owncloud}
     when:
       matrix:
         DB_TYPE: oci
@@ -151,19 +184,24 @@ matrix:
   include:
   # code style
   - PHP_VERSION: 7.1
-    OC_VERSION: daily-master-qa
-    TEST_SUITE: code-style
+    TEST_SUITE: owncloud-coding-standard
 
   # acceptance tests
   - PHP_VERSION: 7.1
     OC_VERSION: daily-master-qa
-    TEST_SUITE: acceptance
+    TEST_SUITE: webui-acceptance
     BEHAT_SUITE: webUIOauth2
+    NEED_CORE: true
+    NEED_INSTALL_APP: true
+    NEED_SERVER: true
 
   - PHP_VERSION: 5.6
     OC_VERSION: daily-stable10-qa
-    TEST_SUITE: acceptance
+    TEST_SUITE: webui-acceptance
     BEHAT_SUITE: webUIOauth2
+    NEED_CORE: true
+    NEED_INSTALL_APP: true
+    NEED_SERVER: true
 
   # unit tests
   - PHP_VERSION: 7.2
@@ -171,11 +209,15 @@ matrix:
     TEST_SUITE: phpunit
     DB_TYPE: mysql
     COVERAGE: true
+    NEED_CORE: true
+    NEED_INSTALL_APP: true
 
   - PHP_VERSION: 7.2
     OC_VERSION: daily-stable10-qa
     TEST_SUITE: phpunit
     DB_TYPE: pgsql
+    NEED_CORE: true
+    NEED_INSTALL_APP: true
 
   - PHP_VERSION: 7.2
     OC_VERSION: daily-stable10-qa
@@ -183,20 +225,26 @@ matrix:
     DB_TYPE: oci
     DB_NAME: XE
     DB_USERNAME: autotest
+    NEED_CORE: true
+    NEED_INSTALL_APP: true
 
   - PHP_VERSION: 5.6
     OC_VERSION: daily-stable10-qa
     TEST_SUITE: phpunit
     DB_TYPE: sqlite
+    NEED_CORE: true
+    NEED_INSTALL_APP: true
 
   - PHP_VERSION: 7.1
     OC_VERSION: daily-master-qa
     TEST_SUITE: phpunit
     DB_TYPE: sqlite
+    NEED_CORE: true
+    NEED_INSTALL_APP: true
 
   - PHP_VERSION: 7.2
     OC_VERSION: daily-master-qa
     TEST_SUITE: phpunit
     DB_TYPE: sqlite
-
-
+    NEED_CORE: true
+    NEED_INSTALL_APP: true

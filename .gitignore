@@ -1,5 +1,12 @@
 /build/
-clover.xml
+/l10n/.transifexrc
 .php_cs.cache
 
-/vendor/
+# Composer
+vendor/
+vendor-bin/**/vendor
+vendor-bin/**/composer.lock
+
+# Tests - auto-generated files
+/tests/acceptance/output*
+/tests/output
