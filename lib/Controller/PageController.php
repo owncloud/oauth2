@@ -166,7 +166,24 @@ class PageController extends Controller {
 			);
 		}
 
-		return new TemplateResponse($this->appName, 'authorize', ['client_name' => $client->getName()], 'guest');
+		$logoutUrl = $this->urlGenerator->linkToRouteAbsolute(
+			'oauth2.page.logout', [
+				'user' => $user,
+				'requesttoken' => Util::callRegister(),
+				'response_type' => $response_type,
+				'client_id' => $client_id,
+				'redirect_uri' => $redirect_uri,
+				'state' => $state
+			]
+		);
+		$currentUser = $this->userSession->getUser();
+		$currentUser = $this->buildDisplayForUser($currentUser);
+
+		return new TemplateResponse($this->appName, 'authorize', [
+			'client_name' => $client->getName(),
+			'current_user' => $currentUser,
+			'logout_url' => $logoutUrl
+		], 'guest');
 	}
 
 	/**

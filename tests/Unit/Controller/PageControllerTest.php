@@ -184,7 +184,8 @@ class PageControllerTest extends TestCase {
 		$result = $this->controller->authorize('code', $this->identifier, \urldecode($this->redirectUri));
 		$this->assertInstanceOf(TemplateResponse::class, $result);
 		$this->assertEquals('authorize', $result->getTemplateName());
-		$this->assertEquals(['client_name' => $this->name], $result->getParams());
+		$this->assertEquals(['client_name' => $this->name, 'logout_url' => null,
+			'current_user' => '<strong>Alice</strong>'], $result->getParams());
 	}
 
 	public function testGenerateAuthorizationCode() {
