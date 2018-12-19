@@ -10,6 +10,7 @@ OC.L10N.register(
     "The “%s“ application would like permission to access your account" : "Forritið \"%s \" vill fá að tengjast aðganginum þínum",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Forritið mun fá aðgang að notandanafninu þínu og vera keyft að sýsla með skrár, möppur og sameignir.",
     "Authorize" : "Heimila",
+    "Switch users to continue" : "Skiptu um notanda til að halda áfram",
     "OAuth 2.0" : "OAuth 2.0",
     "Registered clients" : "Skráð biðlaraforrit",
     "No clients registered." : "Engir biðlarar skráðir.",
@@ -25,7 +26,6 @@ OC.L10N.register(
     "Authorized Applications" : "Heimiluð forrit",
     "No applications authorized." : "Engin forrit heimiluð.",
     "Switch user" : "Skipta um notanda",
-    "You are logged in as %s but the application requested access for user %s." : "Þú ert skráð(ur) inn sem %s en forritið er að biðja um aðgang að notandanum %s.",
-    "Switch users to continue" : "Skiptu um notanda til að halda áfram"
+    "You are logged in as %s but the application requested access for user %s." : "Þú ert skráð(ur) inn sem %s en forritið er að biðja um aðgang að notandanum %s."
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

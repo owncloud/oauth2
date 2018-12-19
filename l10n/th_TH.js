@@ -10,6 +10,7 @@ OC.L10N.register(
     "The “%s“ application would like permission to access your account" : "แอพฯ “%s” ต้องการสิทธิ์ในการเข้าถึงบัญชีของคุณ",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "แอพพลิเคชันจะเข้าถึงชื่อผู้ใช้ของคุณและจะได้รับอนุญาตให้จัดการไฟล์ โฟลเดอร์และการแชร์ด้วย",
     "Authorize" : "การอนุญาต",
+    "Switch users to continue" : "เปลี่ยนผู้ใช้เพื่อดำเนินการต่อ",
     "OAuth 2.0" : "OAuth 2.0",
     "Registered clients" : "ไคลเอนต์ที่ลงทะเบียนแล้ว",
     "No clients registered." : "ไม่มีไคลเอนต์ที่ลงทะเบียน",
@@ -25,7 +26,6 @@ OC.L10N.register(
     "Authorized Applications" : "แอพพลิเคชันที่ได้รับอนุญาตแล้ว",
     "No applications authorized." : "ไม่มีแอพพลิเคชันที่ได้รับอนุญาต",
     "Switch user" : "เปลี่ยนผู้ใช้",
-    "You are logged in as %s but the application requested access for user %s." : "คุณเข้าสู่ระบบในชื่อ %s แต่แอพพลิเคชันให้สิทธิการเข้าถึงสำหรับผู้ใช้ %s เท่านั้น",
-    "Switch users to continue" : "เปลี่ยนผู้ใช้เพื่อดำเนินการต่อ"
+    "You are logged in as %s but the application requested access for user %s." : "คุณเข้าสู่ระบบในชื่อ %s แต่แอพพลิเคชันให้สิทธิการเข้าถึงสำหรับผู้ใช้ %s เท่านั้น"
 },
 "nplurals=1; plural=0;");

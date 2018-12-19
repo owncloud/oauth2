@@ -10,6 +10,7 @@ OC.L10N.register(
     "The “%s“ application would like permission to access your account" : "L'applicazione \"%s\" vorrebbe avere il permesso di accedere al tuo account.",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "L'applicazione accedera' al tuo nome utente e sara' autorizzata a gestire i file, le cartelle e le condivisioni.",
     "Authorize" : "Autorizza",
+    "Switch users to continue" : "Cambia utente per proseguire",
     "OAuth 2.0" : "OAuth 2.0",
     "Registered clients" : "Client registrati",
     "No clients registered." : "Nessun client registrato.",
@@ -25,7 +26,6 @@ OC.L10N.register(
     "Authorized Applications" : "Applicazioni autorizzate",
     "No applications authorized." : "Nessuna applicazione autorizzata.",
     "Switch user" : "Cambia utente",
-    "You are logged in as %s but the application requested access for user %s." : "Sei connesso come %s ma l'applicazione chiede l'accesso per l'utente %s.",
-    "Switch users to continue" : "Cambia utente per proseguire"
+    "You are logged in as %s but the application requested access for user %s." : "Sei connesso come %s ma l'applicazione chiede l'accesso per l'utente %s."
 },
 "nplurals=2; plural=(n != 1);");

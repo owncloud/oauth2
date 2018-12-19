@@ -10,6 +10,7 @@ OC.L10N.register(
     "The “%s“ application would like permission to access your account" : "Приложение “%s“ хочет получить разрешение на доступ к вашей учётной записи",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Приложение получит доступ к вашему логину, а так же сможет изменять файлы и папки.",
     "Authorize" : "Разрешить",
+    "Switch users to continue" : " Переключить пользователей для продолжения",
     "OAuth 2.0" : "OAuth 2.0",
     "Registered clients" : "Клиенты с доступом",
     "No clients registered." : "Клиенты с доступом отсутствуют.",
@@ -25,7 +26,6 @@ OC.L10N.register(
     "Authorized Applications" : "Авторизованые приложения",
     "No applications authorized." : "Авторизованые приложения отсутствуют.",
     "Switch user" : "Переключить пользователя",
-    "You are logged in as %s but the application requested access for user %s." : "Вы вошли как %s, но приложение запросило доступ для пользователя %s.",
-    "Switch users to continue" : " Переключить пользователей для продолжения"
+    "You are logged in as %s but the application requested access for user %s." : "Вы вошли как %s, но приложение запросило доступ для пользователя %s."
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

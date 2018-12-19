@@ -10,6 +10,7 @@ OC.L10N.register(
     "The “%s“ application would like permission to access your account" : "A (z) \"%s\" alkalmazás engedélyt kér a fiók elérésére",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Az alkalmazás ezáltal hozzá fog férni a felhasználónevéhez, és engedélyt kap a fájlok, mappák és megosztások kezelésére.",
     "Authorize" : "Engedélyezés",
+    "Switch users to continue" : "Kapcsolja át a felhasználókat a folytatáshoz",
     "OAuth 2.0" : "OAuth 2.0",
     "Registered clients" : "Regisztrált kliensek",
     "No clients registered." : "Nincs regisztrált kliens.",
@@ -25,7 +26,6 @@ OC.L10N.register(
     "Authorized Applications" : "Engedélyezett alkalmazások",
     "No applications authorized." : "Nincs engedélyezett alkalmazás.",
     "Switch user" : "Felhasználó váltás",
-    "You are logged in as %s but the application requested access for user %s." : "%s-ként jelentkezett be, de az alkalmazás a (z)%s felhasználóhoz hozzáférést kért.",
-    "Switch users to continue" : "Kapcsolja át a felhasználókat a folytatáshoz"
+    "You are logged in as %s but the application requested access for user %s." : "%s-ként jelentkezett be, de az alkalmazás a (z)%s felhasználóhoz hozzáférést kért."
 },
 "nplurals=2; plural=(n != 1);");

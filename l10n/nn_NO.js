@@ -10,6 +10,7 @@ OC.L10N.register(
     "The “%s“ application would like permission to access your account" : "Programmet “%s” ber om tilgang til din konto",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Applikasjonen vil få tilgang til brukarnamn og kan administrere filer, katalogar og deling.",
     "Authorize" : "Autoriser",
+    "Switch users to continue" : "Bytt brukar for å fortsette",
     "OAuth 2.0" : "OAuth 2.0",
     "Registered clients" : "Registrerte klientar",
     "No clients registered." : "Ingen klientar registrert",
@@ -25,7 +26,6 @@ OC.L10N.register(
     "Authorized Applications" : "Autoriserte applikasjonar",
     "No applications authorized." : "Ingen applikasjonar er autorisert",
     "Switch user" : "Bytt brukar",
-    "You are logged in as %s but the application requested access for user %s." : "Du er logga inn som %s men programmet ynskjer tilgang for brukar %s.",
-    "Switch users to continue" : "Bytt brukar for å fortsette"
+    "You are logged in as %s but the application requested access for user %s." : "Du er logga inn som %s men programmet ynskjer tilgang for brukar %s."
 },
 "nplurals=2; plural=(n != 1);");

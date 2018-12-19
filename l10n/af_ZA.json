@@ -8,6 +8,7 @@
     "The “%s“ application would like permission to access your account" : "Die “%s”-toepassing versoek toestemming om toegang tot u rekening te verkry",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Die toepassing sal toegang tot u gebruikersnaam verkry en sal toegelaat word om lêers, vouers en delings te bestuur.",
     "Authorize" : "Magtig",
+    "Switch users to continue" : "Wissel gebruikers om voort te gaan",
     "OAuth 2.0" : "OAuth 2.0",
     "Registered clients" : "Geregistreerde kliënte",
     "No clients registered." : "Geen kliënte geregistreer.",
@@ -23,7 +24,6 @@
     "Authorized Applications" : "Gemagtigde Toepassings",
     "No applications authorized." : "Geen toepassings gemagtig.",
     "Switch user" : "Wissel gebruiker",
-    "You are logged in as %s but the application requested access for user %s." : "U is as %s aangeteken maar die toepassing versoek toegang van gebruiker %s.",
-    "Switch users to continue" : "Wissel gebruikers om voort te gaan"
+    "You are logged in as %s but the application requested access for user %s." : "U is as %s aangeteken maar die toepassing versoek toegang van gebruiker %s."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

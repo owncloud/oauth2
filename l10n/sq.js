@@ -10,6 +10,7 @@ OC.L10N.register(
     "The “%s“ application would like permission to access your account" : "Aplikacioni “%s“ do të donte leje të hynte në llogarinë tuaj",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Aplikacioni do të mund të përdorë emrin tuaj të përdoruesit dhe do të lejohet të administrojë kartela, dosje dhe ndarje.",
     "Authorize" : "Autorizoje",
+    "Switch users to continue" : "Që të vazhdohet, këmbeni përdorues",
     "OAuth 2.0" : "OAuth 2.0",
     "Registered clients" : "Klientë të regjistruar",
     "No clients registered." : "S’ka klientë të regjistruar.",
@@ -25,7 +26,6 @@ OC.L10N.register(
     "Authorized Applications" : "Aplikacione të Autorizuar",
     "No applications authorized." : "S’ka aplikacione të autorizuar.",
     "Switch user" : "Këmbe përdorues",
-    "You are logged in as %s but the application requested access for user %s." : "Keni bërë hyrjen si %s, por aplikacioni kërkoi hyrje për përdoruesin %s.",
-    "Switch users to continue" : "Që të vazhdohet, këmbeni përdorues"
+    "You are logged in as %s but the application requested access for user %s." : "Keni bërë hyrjen si %s, por aplikacioni kërkoi hyrje për përdoruesin %s."
 },
 "nplurals=2; plural=(n != 1);");

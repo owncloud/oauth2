@@ -8,6 +8,7 @@
     "The “%s“ application would like permission to access your account" : "The “%s“ application would like permission to access your account",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "The application will gain access to your username and will be allowed to manage files, folders and shares.",
     "Authorize" : "Authorise",
+    "Switch users to continue" : "Switch users to continue",
     "OAuth 2.0" : "OAuth 2.0",
     "Registered clients" : "Registered clients",
     "No clients registered." : "No clients registered.",
@@ -23,7 +24,6 @@
     "Authorized Applications" : "Authorised Applications",
     "No applications authorized." : "No applications authorised.",
     "Switch user" : "Switch user",
-    "You are logged in as %s but the application requested access for user %s." : "You are logged in as %s but the application requested access for user %s.",
-    "Switch users to continue" : "Switch users to continue"
+    "You are logged in as %s but the application requested access for user %s." : "You are logged in as %s but the application requested access for user %s."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

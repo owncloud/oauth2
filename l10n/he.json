@@ -8,6 +8,7 @@
     "The “%s“ application would like permission to access your account" : "היישום “%s“ מבקש הרשאה לגישה אל חשבונך",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "היישום יקבל גישה לשם המשתמש שלך ויהיה רשאי לנהל קבצים, תיקיות ושיתופים.",
     "Authorize" : "הרשאה",
+    "Switch users to continue" : "יש להחליף משתמש להמשך",
     "OAuth 2.0" : "OAuth 2.0",
     "Registered clients" : "לקוחות רשומים",
     "No clients registered." : "אין לקוחות רשומים.",
@@ -23,7 +24,6 @@
     "Authorized Applications" : "הרשאת יישום",
     "No applications authorized." : "אין יישומים מאושרים.",
     "Switch user" : "החלפת משתמש",
-    "You are logged in as %s but the application requested access for user %s." : "הנך מחובר כ-  %s אבל היישום מבקש הרשאת גישה עבור משתמש %s.",
-    "Switch users to continue" : "יש להחליף משתמש להמשך"
+    "You are logged in as %s but the application requested access for user %s." : "הנך מחובר כ-  %s אבל היישום מבקש הרשאת גישה עבור משתמש %s."
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;"
 }
