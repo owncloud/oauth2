@@ -8,6 +8,7 @@ OC.L10N.register(
     "This request is not valid. Please contact the administrator of “%s” if this error persists." : "Недопустимый запрос. Пожалуйста свяжитесь с администратором системы “%s”, если эта ошибка повторяется.",
     "Back" : "Назад",
     "The “%s“ application would like permission to access your account" : "Приложение “%s“ хочет получить разрешение на доступ к вашей учётной записи",
+    "You are logged in as %s." : "Вы вошли как %s.",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Приложение получит доступ к вашему логину, а так же сможет изменять файлы и папки.",
     "Authorize" : "Разрешить",
     "Switch users to continue" : " Переключить пользователей для продолжения",
