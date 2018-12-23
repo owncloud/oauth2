@@ -8,6 +8,7 @@ OC.L10N.register(
     "This request is not valid. Please contact the administrator of “%s” if this error persists." : "This request is not valid. Please contact the administrator of “%s” if this error persists.",
     "Back" : "Back",
     "The “%s“ application would like permission to access your account" : "The “%s“ application would like permission to access your account",
+    "You are logged in as %s." : "You are logged in as %s.",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "The application will gain access to your username and will be allowed to manage files, folders and shares.",
     "Authorize" : "Authorise",
     "Switch users to continue" : "Switch users to continue",
