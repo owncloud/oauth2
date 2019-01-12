@@ -6,6 +6,7 @@
     "This request is not valid. Please contact the administrator of “%s” if this error persists." : "คำขอนี้ไม่ถูกต้อง โปรดติดต่อผู้ดูแลระบบ “%s” ถ้ายังพบข้อผิดพลาดนี้อยู่",
     "Back" : "ย้อนกลับ",
     "The “%s“ application would like permission to access your account" : "แอพฯ “%s” ต้องการสิทธิ์ในการเข้าถึงบัญชีของคุณ",
+    "You are logged in as %s." : "คุณเข้าสู่ระบบในฐานะ %s",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "แอพพลิเคชันจะเข้าถึงชื่อผู้ใช้ของคุณและจะได้รับอนุญาตให้จัดการไฟล์ โฟลเดอร์และการแชร์ด้วย",
     "Authorize" : "การอนุญาต",
     "Switch users to continue" : "เปลี่ยนผู้ใช้เพื่อดำเนินการต่อ",
