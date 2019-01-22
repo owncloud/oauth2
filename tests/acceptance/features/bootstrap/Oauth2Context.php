@@ -228,9 +228,9 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 * @param string $refreshToken if set the `grant_type` `refresh_token`
 	 *                             will be used with the given refresh token
 	 *                             to request a new access token
-	 *
 	 * @param string|null $clientId
 	 * @param string|null $clientSecret
+	 *
 	 * @return void
 	 */
 	public function clientAppRequestsAccessToken(
