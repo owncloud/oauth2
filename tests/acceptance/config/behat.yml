@@ -1,11 +1,11 @@
 default:
   autoload:
-    '': %paths.base%/../features/bootstrap
+    '': '%paths.base%/../features/bootstrap'
 
   suites:
     webUIOauth2:
       paths:
-        - %paths.base%/../features/webUIOauth2
+        - '%paths.base%/../features/webUIOauth2'
       contexts:
         - Oauth2Context:
         - FeatureContext:
@@ -22,4 +22,4 @@ default:
   extensions:
       jarnaiz\JUnitFormatter\JUnitFormatterExtension:
           filename: report-oauth2.xml
-          outputDir: %paths.base%/../output/
+          outputDir: '%paths.base%/../output/'
