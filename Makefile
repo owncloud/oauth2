@@ -70,7 +70,6 @@ clean: clean-deps clean-dist clean-build
 
 .PHONY: clean-composer-deps
 clean-composer-deps:
-	rm -f $(COMPOSER_BIN)
 	rm -Rf $(composer_deps) $(composer_dev_deps)
 
 .PHONY: update-composer
