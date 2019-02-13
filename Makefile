@@ -35,7 +35,7 @@ build_dir=$(CURDIR)/build
 dist_dir=$(build_dir)/dist
 
 # internal aliases
-composer_deps=
+composer_deps=vendor
 composer_dev_deps=
 acceptance_test_deps=vendor-bin/behat/vendor
 nodejs_deps=
@@ -54,11 +54,7 @@ endif
 endif
 endif
 
-#
-# Catch-all rules
-#
-.PHONY: all
-all: $(composer_dev_deps) $(bower_deps)
+.DEFAULT_GOAL := help
 
 # start with displaying help
 help: ## Show this help message
@@ -71,6 +67,7 @@ clean: clean-deps clean-dist clean-build
 .PHONY: clean-composer-deps
 clean-composer-deps:
 	rm -Rf $(composer_deps) $(composer_dev_deps)
+	rm -Rf vendor-bin/**/vendor vendor-bin/**/composer.lock
 
 .PHONY: update-composer
 update-composer: $(COMPOSER_BIN)
@@ -119,7 +116,6 @@ clean-build:
 .PHONY: clean-deps
 clean-deps: clean-composer-deps
 	rm -Rf $(nodejs_deps) $(bower_deps)
-	rm -Rf vendor-bin/**/vendor vendor-bin/**/composer.lock
 
 ##------------------------
 ## Tests
