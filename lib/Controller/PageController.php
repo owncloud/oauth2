@@ -125,7 +125,7 @@ class PageController extends Controller {
 					'requesttoken' => Util::callRegister(),
 					'response_type' => $response_type,
 					'client_id' => $client_id,
-					'redirect_uri' => $redirect_uri,
+					'redirect_uri' => \urlencode($redirect_uri),
 					'state' => $state
 				]
 			);
@@ -172,7 +172,7 @@ class PageController extends Controller {
 				'requesttoken' => Util::callRegister(),
 				'response_type' => $response_type,
 				'client_id' => $client_id,
-				'redirect_uri' => $redirect_uri,
+				'redirect_uri' => \urlencode($redirect_uri),
 				'state' => $state
 			]
 		);
