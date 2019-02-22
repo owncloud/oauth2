@@ -30,6 +30,7 @@ use OCA\OAuth2\Db\ClientMapper;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IRequest;
+use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -93,6 +94,8 @@ class PageControllerTest extends TestCase {
 		$urlGenerator = $this->createMock(IURLGenerator::class);
 		/** @var IUserSession | \PHPUnit_Framework_MockObject_MockObject $userSession */
 		$userSession = $this->createMock(IUserSession::class);
+		/** @var ISession | \PHPUnit_Framework_MockObject_MockObject $session */
+		$session = $this->createMock(ISession::class);
 		/** @var IRequest | \PHPUnit_Framework_MockObject_MockObject $request */
 		$request = $this->createMock(IRequest::class);
 		/** @var IUser | \PHPUnit_Framework_MockObject_MockObject $user */
@@ -112,7 +115,8 @@ class PageControllerTest extends TestCase {
 			$container->query('Logger'),
 			$urlGenerator,
 			$userSession,
-			$userManager
+			$userManager,
+			$session
 		);
 	}
 

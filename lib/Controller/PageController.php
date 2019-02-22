@@ -33,6 +33,7 @@ use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\ILogger;
 use OCP\IRequest;
+use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -55,6 +56,8 @@ class PageController extends Controller {
 	private $userSession;
 	/** @var IUserManager */
 	private $userManager;
+	/** @var ISession */
+	private $session;
 
 	/**
 	 * PageController constructor.
@@ -68,6 +71,7 @@ class PageController extends Controller {
 	 * @param IURLGenerator $urlGenerator
 	 * @param IUserSession $userSession
 	 * @param IUserManager $userManager
+	 * @param ISession $session
 	 */
 	public function __construct($AppName, IRequest $request,
 								ClientMapper $clientMapper,
@@ -76,7 +80,9 @@ class PageController extends Controller {
 								ILogger $logger,
 								IURLGenerator $urlGenerator,
 								IUserSession $userSession,
-								IUserManager $userManager
+								IUserManager $userManager,
+								ISession $session
+
 	) {
 		parent::__construct($AppName, $request);
 
@@ -87,6 +93,7 @@ class PageController extends Controller {
 		$this->urlGenerator = $urlGenerator;
 		$this->userSession = $userSession;
 		$this->userManager = $userManager;
+		$this->session = $session;
 	}
 
 	/**
@@ -98,7 +105,7 @@ class PageController extends Controller {
 	 * @param string $state The state.
 	 * @param string | null $user
 	 *
-	 * @return TemplateResponse The authorize view or the
+	 * @return TemplateResponse|RedirectResponse The authorize view or the
 	 * authorize-error view with a redirection to the
 	 * default page URL.
 	 *
@@ -166,6 +173,12 @@ class PageController extends Controller {
 			);
 		}
 
+		// if the user already authorized the client once within the current session we move on to the code generation
+		if ($this->session->exists($client->getIdentifier())) {
+			return $this->generateAuthorizationCode($response_type,
+				$client_id, $redirect_uri, $state);
+		}
+
 		$logoutUrl = $this->urlGenerator->linkToRouteAbsolute(
 			'oauth2.page.logout', [
 				'user' => $user,
@@ -199,6 +212,7 @@ class PageController extends Controller {
 	 *
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 * @NoAdminRequired
+	 * @UseSession
 	 */
 	public function generateAuthorizationCode($response_type, $client_id, $redirect_uri, $state = null) {
 		if (!\is_string($response_type) || !\is_string($client_id)
@@ -236,6 +250,8 @@ class PageController extends Controller {
 
 				$this->logger->info('An authorization code has been issued for the client "' . $client->getName() . '".', ['app' => $this->appName]);
 
+				// the user only needs to authorize the client once in a session
+				$this->session->set($client->getIdentifier(), true);
 				return new RedirectResponse($result);
 			case 'token':
 				try {
@@ -266,6 +282,8 @@ class PageController extends Controller {
 
 				$this->logger->info('An authorization code has been issued for the client "' . $client->getName() . '".', ['app' => $this->appName]);
 
+				// the user only needs to authorize the client once in a session
+				$this->session->set($client->getIdentifier(), true);
 				return new RedirectResponse($result);
 			default:
 				return new RedirectResponse(OC_Util::getDefaultPageUrl());
