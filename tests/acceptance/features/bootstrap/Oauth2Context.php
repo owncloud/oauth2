@@ -30,6 +30,8 @@ use TestHelpers\WebDavHelper;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Page\Oauth2AdminSettingsPage;
+use TestHelpers\DownloadHelper;
+use TestHelpers\SetupHelper;
 
 require_once 'bootstrap.php';
 
@@ -391,8 +393,18 @@ class Oauth2Context extends RawMinkContext implements Context {
 					__METHOD__ . " should be able to access file, but can not"
 				);
 			}
-			$originalFile = \getenv("SRC_SKELETON_DIR") . "/" . \trim($file);
-			$localContent = \file_get_contents($originalFile);
+
+			if ($this->featureContext->getTokenAuthHasBeenSetTo() === 'true') {
+				$adminPassword = $this->featureContext->generateAuthTokenForAdmin();
+			} else {
+				$adminPassword = $this->featureContext->getAdminPassword();
+			}
+
+			$localContent = SetupHelper::readSkeletonFile(
+				$file, $this->featureContext->getBaseUrl(),
+				$this->featureContext->getAdminUsername(),
+				$adminPassword
+			);
 			$downloadedContent = $result->getBody()->getContents();
 			PHPUnit_Framework_Assert::assertSame(
 				$localContent, $downloadedContent,
