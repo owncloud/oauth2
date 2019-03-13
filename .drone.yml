@@ -195,7 +195,7 @@ matrix:
     NEED_INSTALL_APP: true
     NEED_SERVER: true
 
-  - PHP_VERSION: 5.6
+  - PHP_VERSION: 7.0
     OC_VERSION: daily-stable10-qa
     TEST_SUITE: webui-acceptance
     BEHAT_SUITE: webUIOauth2
@@ -228,7 +228,7 @@ matrix:
     NEED_CORE: true
     NEED_INSTALL_APP: true
 
-  - PHP_VERSION: 5.6
+  - PHP_VERSION: 7.0
     OC_VERSION: daily-stable10-qa
     TEST_SUITE: phpunit
     DB_TYPE: sqlite
