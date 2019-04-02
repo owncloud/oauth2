@@ -19,7 +19,6 @@
 
 namespace OCA\OAuth2\Tests\Unit\Db;
 
-use Doctrine\DBAL\Platforms\SqlitePlatform;
 use OCA\OAuth2\AppInfo\Application;
 use OCA\OAuth2\Db\AccessToken;
 use OCA\OAuth2\Db\AccessTokenMapper;

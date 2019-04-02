@@ -30,7 +30,6 @@ use OCA\OAuth2\Sabre\OAuth2;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\IUser;
-use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 use OC\Session\Memory;
 use OC\User\User;

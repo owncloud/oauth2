@@ -31,7 +31,6 @@ use TestHelpers\WebDavHelper;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Page\Oauth2AdminSettingsPage;
-use TestHelpers\DownloadHelper;
 use TestHelpers\SetupHelper;
 
 require_once 'bootstrap.php';
