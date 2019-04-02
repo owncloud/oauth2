@@ -89,15 +89,15 @@ class PageControllerTest extends TestCase {
 		$this->authorizationCodeMapper = $container->query(AuthorizationCodeMapper::class);
 		/** @var AccessTokenMapper $accessTokenMapper */
 		$accessTokenMapper = $container->query(AccessTokenMapper::class);
-		/** @var IURLGenerator | \PHPUnit_Framework_MockObject_MockObject $urlGenerator */
+		/** @var IURLGenerator | \PHPUnit\Framework\MockObject\MockObject $urlGenerator */
 		$urlGenerator = $this->createMock(IURLGenerator::class);
-		/** @var IUserSession | \PHPUnit_Framework_MockObject_MockObject $userSession */
+		/** @var IUserSession | \PHPUnit\Framework\MockObject\MockObject $userSession */
 		$userSession = $this->createMock(IUserSession::class);
-		/** @var IRequest | \PHPUnit_Framework_MockObject_MockObject $request */
+		/** @var IRequest | \PHPUnit\Framework\MockObject\MockObject $request */
 		$request = $this->createMock(IRequest::class);
-		/** @var IUser | \PHPUnit_Framework_MockObject_MockObject $user */
+		/** @var IUser | \PHPUnit\Framework\MockObject\MockObject $user */
 		$user = $this->createMock(IUser::class);
-		/** @var IUserManager | \PHPUnit_Framework_MockObject_MockObject $userManager */
+		/** @var IUserManager | \PHPUnit\Framework\MockObject\MockObject $userManager */
 		$userManager = $this->createMock(IUserManager::class);
 		$userSession->method('getUser')->willReturn($user);
 		$userManager->method('get')->willReturn($user);

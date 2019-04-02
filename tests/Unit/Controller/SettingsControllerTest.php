@@ -32,9 +32,9 @@ use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\IRequest;
 use OCP\IURLGenerator;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class SettingsControllerTest extends PHPUnit_Framework_TestCase {
+class SettingsControllerTest extends TestCase {
 
 	/** @var string $name */
 	private $appName;
@@ -54,7 +54,7 @@ class SettingsControllerTest extends PHPUnit_Framework_TestCase {
 	/** @var RefreshTokenMapper */
 	private $refreshTokenMapper;
 
-	/** @var IURLGenerator | \PHPUnit_Framework_MockObject_MockObject */
+	/** @var IURLGenerator | \PHPUnit\Framework\MockObject\MockObject */
 	private $urlGenerator;
 
 	/** @var string $userId */

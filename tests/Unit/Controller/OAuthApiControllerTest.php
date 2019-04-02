@@ -32,14 +32,14 @@ use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 use OCP\IURLGenerator;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class OAuthApiControllerTest extends PHPUnit_Framework_TestCase {
+class OAuthApiControllerTest extends TestCase {
 
 	/** @var OAuthApiController $controller */
 	private $controller;
 
-	/** @var IRequest | \PHPUnit_Framework_MockObject_MockObject */
+	/** @var IRequest | \PHPUnit\Framework\MockObject\MockObject */
 	private $request;
 
 	/** @var ClientMapper $clientMapper */

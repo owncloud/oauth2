@@ -30,7 +30,7 @@ use OCA\OAuth2\Sabre\OAuth2;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\IUser;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 use OC\Session\Memory;
 use OC\User\User;
@@ -43,7 +43,7 @@ use OC\User\User;
  */
 class OAuth2Test extends TestCase {
 
-	/** @var IRequest | PHPUnit_Framework_MockObject_MockObject $request */
+	/** @var IRequest | PHPUnit\Framework\MockObject\MockObject $request */
 	private $request;
 
 	/** @var String $principalPrefix */
@@ -60,9 +60,9 @@ class OAuth2Test extends TestCase {
 	private $client;
 	/** @var AccessToken */
 	private $accessToken;
-	/** @var IUser | PHPUnit_Framework_MockObject_MockObject */
+	/** @var IUser | PHPUnit\Framework\MockObject\MockObject */
 	private $user;
-	/** @var ISession | PHPUnit_Framework_MockObject_MockObject */
+	/** @var ISession | PHPUnit\Framework\MockObject\MockObject */
 	private $session;
 
 	public function setUp() {
@@ -114,15 +114,15 @@ class OAuth2Test extends TestCase {
 
 	public function testIsDavAuthenticated() {
 		// User has not initially authenticated via DAV
-		/** @var ISession | PHPUnit_Framework_MockObject_MockObject $session */
+		/** @var ISession | PHPUnit\Framework\MockObject\MockObject $session */
 		$session = $this->createMock(Memory::class);
 		$session->expects($this->any())
 			->method('get')
 			->with($this->equalTo(OAuth2::DAV_AUTHENTICATED))
 			->willReturn(null);
-		/** @var Session | PHPUnit_Framework_MockObject_MockObject $userSession */
+		/** @var Session | PHPUnit\Framework\MockObject\MockObject $userSession */
 		$userSession = $this->createMock(Session::class);
-		/** @var AuthModule | PHPUnit_Framework_MockObject_MockObject $authModule */
+		/** @var AuthModule | PHPUnit\Framework\MockObject\MockObject $authModule */
 		$authModule = $this->createMock(AuthModule::class);
 		$oAuth2 = new OAuth2($session, $userSession, $this->request, $authModule, $this->principalPrefix);
 		$this->assertFalse(
@@ -139,7 +139,7 @@ class OAuth2Test extends TestCase {
 			->with($this->equalTo(OAuth2::DAV_AUTHENTICATED))
 			->willReturn($this->userId);
 		$userSession = $this->createMock(Session::class);
-		/** @var AuthModule | PHPUnit_Framework_MockObject_MockObject $authModule */
+		/** @var AuthModule | PHPUnit\Framework\MockObject\MockObject $authModule */
 		$authModule = $this->createMock(AuthModule::class);
 		$oAuth2 = new OAuth2($session, $userSession, $this->request, $authModule, $this->principalPrefix);
 		$this->assertTrue(
@@ -155,7 +155,7 @@ class OAuth2Test extends TestCase {
 	 * @param bool $invalidToken
 	 */
 	public function testValidateBearerTokenFailedLogin($invalidToken) {
-		/** @var Session | PHPUnit_Framework_MockObject_MockObject $userSession */
+		/** @var Session | PHPUnit\Framework\MockObject\MockObject $userSession */
 		$userSession = $this->createMock(Session::class);
 		$userSession->expects($this->any())
 			->method('getUser')
@@ -173,7 +173,7 @@ class OAuth2Test extends TestCase {
 				->method('tryAuthModuleLogin')
 				->willThrowException(new \Exception('Invalid token'));
 		}
-		/** @var AuthModule | PHPUnit_Framework_MockObject_MockObject $authModule */
+		/** @var AuthModule | PHPUnit\Framework\MockObject\MockObject $authModule */
 		$authModule = $this->createMock(AuthModule::class);
 		$oAuth2 = new OAuth2($this->session, $userSession, $this->request, $authModule, $this->principalPrefix);
 		$this->assertFalse(
@@ -186,7 +186,7 @@ class OAuth2Test extends TestCase {
 
 	public function testValidateBearerToken() {
 		// Successful login
-		/** @var Session | PHPUnit_Framework_MockObject_MockObject $userSession */
+		/** @var Session | PHPUnit\Framework\MockObject\MockObject $userSession */
 		$userSession = $this->createMock(Session::class);
 		$userSession->expects($this->any())
 			->method('getUser')
@@ -197,7 +197,7 @@ class OAuth2Test extends TestCase {
 		$userSession->expects($this->once())
 			->method('tryAuthModuleLogin')
 			->willReturn(true);
-		/** @var AuthModule | PHPUnit_Framework_MockObject_MockObject $authModule */
+		/** @var AuthModule | PHPUnit\Framework\MockObject\MockObject $authModule */
 		$authModule = $this->createMock(AuthModule::class);
 		$oAuth2 = new OAuth2($this->session, $userSession, $this->request, $authModule, $this->principalPrefix);
 		$this->assertEquals(
@@ -222,7 +222,7 @@ class OAuth2Test extends TestCase {
 			->willReturn(true);
 
 		$john = $this->createMock(IUser::class);
-		/** @var AuthModule | PHPUnit_Framework_MockObject_MockObject $authModule */
+		/** @var AuthModule | PHPUnit\Framework\MockObject\MockObject $authModule */
 		$authModule = $this->createMock(AuthModule::class);
 		$authModule->expects($this->once())->method('authToken')->willReturn($john);
 		$oAuth2 = new OAuth2($this->session, $userSession, $this->request, $authModule, $this->principalPrefix);

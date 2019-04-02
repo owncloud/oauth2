@@ -20,9 +20,9 @@
 namespace OCA\OAuth2\Tests\Unit\Db;
 
 use OCA\OAuth2\Db\AccessToken;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class AccessTokenTest extends PHPUnit_Framework_TestCase {
+class AccessTokenTest extends TestCase {
 
 	/** @var AccessToken $accessToken */
 	private $accessToken;

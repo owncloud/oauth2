@@ -25,9 +25,9 @@ use OCA\OAuth2\Db\AccessToken;
 use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\RefreshToken;
 use OCA\OAuth2\Db\RefreshTokenMapper;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class RefreshTokenMapperTest extends PHPUnit_Framework_TestCase {
+class RefreshTokenMapperTest extends TestCase {
 
 	/** @var RefreshTokenMapper $refreshTokenMapper */
 	private $refreshTokenMapper;

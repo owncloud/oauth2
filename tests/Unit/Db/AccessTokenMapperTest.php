@@ -22,9 +22,9 @@ namespace OCA\OAuth2\Tests\Unit\Db;
 use OCA\OAuth2\AppInfo\Application;
 use OCA\OAuth2\Db\AccessToken;
 use OCA\OAuth2\Db\AccessTokenMapper;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class AccessTokenMapperTest extends PHPUnit_Framework_TestCase {
+class AccessTokenMapperTest extends TestCase {
 
 	/** @var AccessTokenMapper $accessTokenMapper */
 	private $accessTokenMapper;
