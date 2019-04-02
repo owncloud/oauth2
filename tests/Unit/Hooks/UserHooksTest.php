@@ -46,6 +46,6 @@ class UserHooksTest extends TestCase {
 
 	public function testRegister() {
 		// Calling the register() function to check for exceptions.
-		$this->userHooks->register();
+		$this->assertNull($this->userHooks->register());
 	}
 }
