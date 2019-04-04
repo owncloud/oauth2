@@ -22,9 +22,9 @@ namespace OCA\OAuth2\Tests\Unit\Db;
 use OCA\OAuth2\AppInfo\Application;
 use OCA\OAuth2\Db\AuthorizationCode;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class AuthorizationCodeMapperTest extends PHPUnit_Framework_TestCase {
+class AuthorizationCodeMapperTest extends TestCase {
 
 	/** @var AuthorizationCodeMapper $authorizationCodeMapper */
 	private $authorizationCodeMapper;

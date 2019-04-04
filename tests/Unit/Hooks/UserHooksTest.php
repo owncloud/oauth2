@@ -21,9 +21,9 @@ namespace OCA\OAuth2\Tests\Unit\Hooks;
 
 use OCA\OAuth2\AppInfo\Application;
 use OCA\OAuth2\Hooks\UserHooks;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class UserHooksTest extends PHPUnit_Framework_TestCase {
+class UserHooksTest extends TestCase {
 
 	/** @var UserHooks $userHooks */
 	private $userHooks;
@@ -46,6 +46,6 @@ class UserHooksTest extends PHPUnit_Framework_TestCase {
 
 	public function testRegister() {
 		// Calling the register() function to check for exceptions.
-		$this->userHooks->register();
+		$this->assertNull($this->userHooks->register());
 	}
 }

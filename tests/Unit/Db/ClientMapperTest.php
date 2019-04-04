@@ -26,9 +26,9 @@ use OCA\OAuth2\Db\AuthorizationCode;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ClientMapperTest extends PHPUnit_Framework_TestCase {
+class ClientMapperTest extends TestCase {
 
 	/** @var ClientMapper $clientMapper */
 	private $clientMapper;

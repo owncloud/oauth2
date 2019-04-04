@@ -26,10 +26,10 @@ use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
 use OCP\IUserManager;
-use PHPUnit_Framework_TestCase;
 use OCP\IRequest;
+use PHPUnit\Framework\TestCase;
 
-class AuthModuleTest extends PHPUnit_Framework_TestCase {
+class AuthModuleTest extends TestCase {
 
 	/** @var IUserManager $userManager */
 	private $userManager;
@@ -98,7 +98,7 @@ class AuthModuleTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testAuth() {
 		// Wrong Authorization header
-		/** @var IRequest | \PHPUnit_Framework_MockObject_MockObject $request */
+		/** @var IRequest | \PHPUnit\Framework\MockObject\MockObject $request */
 		$request = $this->getMockBuilder(IRequest::class)->getMock();
 		$request->expects($this->once())
 			->method('getHeader')
@@ -125,7 +125,7 @@ class AuthModuleTest extends PHPUnit_Framework_TestCase {
 	public function testExpiredToken() {
 		$this->accessToken->setExpires(\time() - 1);
 		$this->accessTokenMapper->update($this->accessToken);
-		/** @var IRequest | \PHPUnit_Framework_MockObject_MockObject $request */
+		/** @var IRequest | \PHPUnit\Framework\MockObject\MockObject $request */
 		$request = $this->getMockBuilder(IRequest::class)->getMock();
 		$request->expects($this->once())
 			->method('getHeader')
@@ -140,7 +140,7 @@ class AuthModuleTest extends PHPUnit_Framework_TestCase {
 	 * @throws \Exception
 	 */
 	public function testInvalidToken() {
-		/** @var IRequest | \PHPUnit_Framework_MockObject_MockObject $request */
+		/** @var IRequest | \PHPUnit\Framework\MockObject\MockObject $request */
 		$request = $this->getMockBuilder(IRequest::class)->getMock();
 		$request->expects($this->once())
 			->method('getHeader')
@@ -150,7 +150,7 @@ class AuthModuleTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testGetUserPassword() {
-		/** @var IRequest | \PHPUnit_Framework_MockObject_MockObject $request */
+		/** @var IRequest | \PHPUnit\Framework\MockObject\MockObject $request */
 		$request = $this->getMockBuilder(IRequest::class)->getMock();
 		$this->assertEquals('', $this->authModule->getUserPassword($request));
 	}

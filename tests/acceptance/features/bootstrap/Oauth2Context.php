@@ -26,11 +26,11 @@ use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Page\Oauth2AuthRequestPage;
 use Page\Oauth2OnPersonalSecuritySettingsPage;
+use PHPUnit\Framework\Assert;
 use TestHelpers\WebDavHelper;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Page\Oauth2AdminSettingsPage;
-use TestHelpers\DownloadHelper;
 use TestHelpers\SetupHelper;
 
 require_once 'bootstrap.php';
@@ -208,7 +208,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 		$this->clientAppRequestsAccessToken(
 			$this->accessTokenResponse->refresh_token
 		);
-		PHPUnit_Framework_Assert::assertNotSame(
+		Assert::assertNotSame(
 			$oldAccessToken, $this->accessTokenResponse->access_token,
 			__METHOD__ . " the new token is not different to the old one"
 		);
@@ -406,7 +406,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 				$adminPassword
 			);
 			$downloadedContent = $result->getBody()->getContents();
-			PHPUnit_Framework_Assert::assertSame(
+			Assert::assertSame(
 				$localContent, $downloadedContent,
 				__METHOD__ . " content of downloaded file is not as expected"
 			);
@@ -420,20 +420,20 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 */
 	public function clientAppShouldReceiveAuthCode() {
 		$redirectUri = \parse_url($this->getSession()->getCurrentUrl());
-		PHPUnit_Framework_Assert::assertEquals(
+		Assert::assertEquals(
 			$this->redirectUriHost, $redirectUri['host'],
 			__METHOD__ . " the host of redirect uri should be '" .
 			$this->redirectUriHost . "' but it is '" .
 			$redirectUri['host'] . "'"
 		);
-		PHPUnit_Framework_Assert::assertEquals(
+		Assert::assertEquals(
 			$this->redirectUriPort, $redirectUri['port'],
 			__METHOD__ . " the port of redirect uri should be '" .
 			$this->redirectUriPort . "' but it is '" .
 			$redirectUri['port'] . "'"
 		);
 		\parse_str($redirectUri['query'], $parameters);
-		PHPUnit_Framework_Assert::assertEquals(
+		Assert::assertEquals(
 			64, \strlen($parameters['code']),
 			__METHOD__ . " received code should be 64 char long but its " .
 			\strlen($parameters['code']) . " long"
@@ -447,7 +447,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 */
 	public function invalidOauthRequestMessageShouldBeShown() {
 		$error = $this->oauth2AuthRequestPage->getErrorMessageHeading();
-		PHPUnit_Framework_Assert::assertSame("Request not valid", $error);
+		Assert::assertSame("Request not valid", $error);
 	}
 
 	/**
@@ -463,7 +463,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 				" app should not be able to refresh token but looks like it can"
 			);
 		} catch (ClientException $e) {
-			PHPUnit_Framework_Assert::assertSame(
+			Assert::assertSame(
 				400, $e->getCode(),
 				__METHOD__ .
 				" expected '400' as HTTP error code, but received '" .
@@ -482,10 +482,10 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 */
 	public function assertClientIsListedOnWebUI($name, $uri) {
 		$client = $this->oauth2AdminSettingsPage->getClientInformationByName($name);
-		PHPUnit_Framework_Assert::assertSame(
+		Assert::assertSame(
 			$name, $client['name'], "name of displayed client is wrong"
 		);
-		PHPUnit_Framework_Assert::assertSame(
+		Assert::assertSame(
 			$uri, $client['redirection_uri'], "uri of displayed client is wrong"
 		);
 	}

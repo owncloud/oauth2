@@ -27,18 +27,19 @@ use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserSession;
+use PHPUnit\Framework\TestCase;
 
-class OpenIdConnectControllerTest extends \PHPUnit_Framework_TestCase {
+class OpenIdConnectControllerTest extends TestCase {
 
 	/** @var OpenIdConnectController */
 	private $controller;
-	/** @var IRequest | \PHPUnit_Framework_MockObject_MockObject */
+	/** @var IRequest | \PHPUnit\Framework\MockObject\MockObject */
 	private $request;
-	/** @var IUserSession | \PHPUnit_Framework_MockObject_MockObject */
+	/** @var IUserSession | \PHPUnit\Framework\MockObject\MockObject */
 	private $userSession;
-	/** @var IURLGenerator | \PHPUnit_Framework_MockObject_MockObject */
+	/** @var IURLGenerator | \PHPUnit\Framework\MockObject\MockObject */
 	private $urlGenerator;
-	/** @var IAvatarManager | \PHPUnit_Framework_MockObject_MockObject */
+	/** @var IAvatarManager | \PHPUnit\Framework\MockObject\MockObject */
 	private $avatarManager;
 
 	public function setUp() {
@@ -94,7 +95,7 @@ class OpenIdConnectControllerTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @param null $displayName
 	 * @param null $email
-	 * @return \PHPUnit_Framework_MockObject_MockObject
+	 * @return \PHPUnit\Framework\MockObject\MockObject
 	 */
 	public function createUserMock($displayName = null, $email = null) {
 		$user1 = $this->createMock(IUser::class);

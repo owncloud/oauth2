@@ -20,9 +20,9 @@
 namespace OCA\OAuth2\Tests\Unit\Db;
 
 use OCA\OAuth2\Db\AuthorizationCode;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class AuthorizationCodeTest extends PHPUnit_Framework_TestCase {
+class AuthorizationCodeTest extends TestCase {
 
 	/** @var AuthorizationCode $authorizationCode */
 	private $authorizationCode;

@@ -20,9 +20,9 @@
 namespace OCA\OAuth2\Tests\Unit;
 
 use OCA\OAuth2\Utilities;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class UtilitiesTest extends PHPUnit_Framework_TestCase {
+class UtilitiesTest extends TestCase {
 	public function testGenerateRandom() {
 		$random = Utilities::generateRandom();
 

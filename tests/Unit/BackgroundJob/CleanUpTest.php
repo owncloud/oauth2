@@ -20,11 +20,11 @@
 namespace OCA\OAuth2\Tests\Unit\BackgroundJob;
 
 use OCA\OAuth2\BackgroundJob\CleanUp;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class CleanUpTest extends PHPUnit_Framework_TestCase {
+class CleanUpTest extends TestCase {
 	public function testRun() {
 		$c = \OC::$server->query(CleanUp::class);
-		$c->run('');
+		$this->assertNull($c->run(''));
 	}
 }
