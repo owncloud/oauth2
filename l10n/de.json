@@ -6,6 +6,7 @@
     "This request is not valid. Please contact the administrator of “%s” if this error persists." : "Diese Anfrage ist nicht gültig. Bitte kontaktiere den Administrator von \"%s\", wenn der Fehler weiterhin erscheint.",
     "Back" : "Zurück",
     "The “%s“ application would like permission to access your account" : "Die \"%s\"-Anwendung möchte die Genehmigung zum Zugriff auf dein Konto",
+    "You are logged in as %s." : "Du bist eingeloggt als %s.",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Die Anwendung erhält Zugriff auf Ihren Benutzernamen und die Erlaubnis, Ihre Dateien, Ordner und geteilten Inhalte zu verwalten.",
     "Authorize" : "Autorisieren",
     "Switch users to continue" : "Benutzer wechseln, um fortzufahren",
