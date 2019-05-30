@@ -6,6 +6,7 @@
     "This request is not valid. Please contact the administrator of “%s” if this error persists." : "הבקשה אינה חוקית. יש ליצור קשר עם מנהל המערכת של “%s” אם שגיאה זו חוזרת.",
     "Back" : "אחורה",
     "The “%s“ application would like permission to access your account" : "היישום “%s“ מבקש הרשאה לגישה אל חשבונך",
+    "You are logged in as %s." : "הנך מחובר כ- %s.",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "היישום יקבל גישה לשם המשתמש שלך ויהיה רשאי לנהל קבצים, תיקיות ושיתופים.",
     "Authorize" : "הרשאה",
     "Switch users to continue" : "יש להחליף משתמש להמשך",
