@@ -32,6 +32,8 @@ use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 use OCP\IURLGenerator;
+use OCP\IUserManager;
+use OCP\IUser;
 use PHPUnit\Framework\TestCase;
 
 class OAuthApiControllerTest extends TestCase {
@@ -53,6 +55,9 @@ class OAuthApiControllerTest extends TestCase {
 
 	/** @var RefreshTokenMapper */
 	private $refreshTokenMapper;
+
+	/** @var IUserManager */
+	private $userManager;
 
 	/** @var string $userId */
 	private $userId = 'john';
@@ -148,6 +153,7 @@ class OAuthApiControllerTest extends TestCase {
 		);
 
 		$this->request = $this->createMock(IRequest::class);
+		$this->userManager = $this->createMock(IUserManager::class);
 
 		$this->controller = new OAuthApiController(
 			$container->query('AppName'),
@@ -156,6 +162,7 @@ class OAuthApiControllerTest extends TestCase {
 			$this->authorizationCodeMapper,
 			$this->accessTokenMapper,
 			$this->refreshTokenMapper,
+			$this->userManager,
 			$urlGenerator,
 			$container->query('Logger')
 		);
@@ -263,6 +270,10 @@ class OAuthApiControllerTest extends TestCase {
 		$this->assertEquals('invalid_grant', $json->error);
 		$this->assertEquals(400, $result->getStatus());
 
+		$userMock = $this->createMock(IUser::class);
+		$userMock->method('isEnabled')->willReturn(true);
+		$this->userManager->method('get')->willReturn($userMock);
+
 		$this->authorizationCode->resetExpires();
 		$this->authorizationCodeMapper->update($this->authorizationCode);
 		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
@@ -343,6 +354,10 @@ class OAuthApiControllerTest extends TestCase {
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('invalid_grant', $json->error);
 		$this->assertEquals(400, $result->getStatus());
+
+		$userMock = $this->createMock(IUser::class);
+		$userMock->method('isEnabled')->willReturn(true);
+		$this->userManager->method('get')->willReturn($userMock);
 
 		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
 		$this->assertTrue($result instanceof JSONResponse);
@@ -426,6 +441,10 @@ class OAuthApiControllerTest extends TestCase {
 		$this->assertEquals('invalid_grant', $json->error);
 		$this->assertEquals(200, $result->getStatus());
 
+		$userMock = $this->createMock(IUser::class);
+		$userMock->method('isEnabled')->willReturn(true);
+		$this->userManager->method('get')->willReturn($userMock);
+
 		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = \json_decode($result->render());
@@ -444,5 +463,61 @@ class OAuthApiControllerTest extends TestCase {
 		$this->assertEquals(200, $result->getStatus());
 		$this->assertEquals(1, \count($this->accessTokenMapper->findAll()));
 		$this->assertEquals(1, \count($this->refreshTokenMapper->findAll()));
+	}
+
+	public function testGenerateTokenWithAuthorizationCodeDisabledUser() {
+		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
+		$_SERVER['PHP_AUTH_PW'] = $this->clientSecret;
+
+		$userMock = $this->createMock(IUser::class);
+		$userMock->method('isEnabled')->willReturn(false);
+		$this->userManager->method('get')->willReturn($userMock);
+
+		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
+		$json = \json_decode($result->render());
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('unauthorized_client', $json->error);
+		$this->assertEquals(400, $result->getStatus());
+	}
+
+	public function testGenerateTokenWithAuthorizationCodeMissingdUser() {
+		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
+		$_SERVER['PHP_AUTH_PW'] = $this->clientSecret;
+
+		$this->userManager->method('get')->willReturn(null);
+
+		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(), $this->redirectUri);
+		$json = \json_decode($result->render());
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('unauthorized_client', $json->error);
+		$this->assertEquals(400, $result->getStatus());
+	}
+
+	public function testGenerateTokenWithRefreshTokenDisabledUser() {
+		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
+		$_SERVER['PHP_AUTH_PW'] = $this->clientSecret;
+
+		$userMock = $this->createMock(IUser::class);
+		$userMock->method('isEnabled')->willReturn(false);
+		$this->userManager->method('get')->willReturn($userMock);
+
+		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
+		$json = \json_decode($result->render());
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('unauthorized_client', $json->error);
+		$this->assertEquals(400, $result->getStatus());
+	}
+
+	public function testGenerateTokenWithRefreshTokenMissingUser() {
+		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
+		$_SERVER['PHP_AUTH_PW'] = $this->clientSecret;
+
+		$this->userManager->method('get')->willReturn(null);
+
+		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
+		$json = \json_decode($result->render());
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('unauthorized_client', $json->error);
+		$this->assertEquals(400, $result->getStatus());
 	}
 }
