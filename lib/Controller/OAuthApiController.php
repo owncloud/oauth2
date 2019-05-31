@@ -35,6 +35,7 @@ use OCP\AppFramework\Http\JSONResponse;
 use OCP\ILogger;
 use OCP\IRequest;
 use OCP\IURLGenerator;
+use OCP\IUserManager;
 
 class OAuthApiController extends ApiController {
 
@@ -49,6 +50,9 @@ class OAuthApiController extends ApiController {
 
 	/** @var RefreshTokenMapper */
 	private $refreshTokenMapper;
+
+	/** @var IUserManager */
+	private $userManager;
 
 	/** @var IURLGenerator */
 	private $urlGenerator;
@@ -73,6 +77,7 @@ class OAuthApiController extends ApiController {
 								AuthorizationCodeMapper $authorizationCodeMapper,
 								AccessTokenMapper $accessTokenMapper,
 								RefreshTokenMapper $refreshTokenMapper,
+								IUserManager $userManager,
 								IURLGenerator $urlGenerator,
 								ILogger $logger) {
 		parent::__construct($AppName, $request);
@@ -81,6 +86,7 @@ class OAuthApiController extends ApiController {
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
 		$this->accessTokenMapper = $accessTokenMapper;
 		$this->refreshTokenMapper = $refreshTokenMapper;
+		$this->userManager = $userManager;
 		$this->urlGenerator = $urlGenerator;
 		$this->logger = $logger;
 	}
@@ -130,22 +136,22 @@ class OAuthApiController extends ApiController {
 					/** @var AuthorizationCode $authorizationCode */
 					$authorizationCode = $this->authorizationCodeMapper->findByCode($code);
 				} catch (DoesNotExistException $exception) {
-					\OC::$server->getLogger()->logException($exception, ['app'=>__CLASS__]);
+					$this->logger->logException($exception, ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
 
 				if (\strcmp($authorizationCode->getClientId(), $client->getId()) !== 0) {
-					\OC::$server->getLogger()->debug("auth grant client ids mismatch: {$authorizationCode->getClientId()} != {$client->getId()}", ['app'=>__CLASS__]);
+					$this->logger->debug("auth grant client ids mismatch: {$authorizationCode->getClientId()} != {$client->getId()}", ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
 
 				if ($authorizationCode->hasExpired()) {
-					\OC::$server->getLogger()->debug("auth grant expired: {$authorizationCode->getExpires()}", ['app'=>__CLASS__]);
+					$this->logger->debug("auth grant expired: {$authorizationCode->getExpires()}", ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
 
 				if (!Utilities::validateRedirectUri($client->getRedirectUri(), \urldecode($redirect_uri), $client->getAllowSubdomains())) {
-					\OC::$server->getLogger()->debug("auth grant redirect uri invalid: {$redirect_uri}", ['app'=>__CLASS__]);
+					$this->logger->debug("auth grant redirect uri invalid: {$redirect_uri}", ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
 
@@ -153,6 +159,12 @@ class OAuthApiController extends ApiController {
 
 				$userId = $authorizationCode->getUserId();
 				$this->authorizationCodeMapper->delete($authorizationCode);
+
+				$userObj = $this->userManager->get($userId);
+				if ($userObj === null || !$userObj->isEnabled()) {
+					$this->logger->debug("the matching user is missing or disabled", ['app'=>__CLASS__]);
+					return new JSONResponse(['error' => 'unauthorized_client', 'error_description' => 'user not enabled'], Http::STATUS_BAD_REQUEST);
+				}
 
 				break;
 			case 'refresh_token':
@@ -170,12 +182,12 @@ class OAuthApiController extends ApiController {
 					/** @var RefreshToken $refreshToken */
 					$refreshToken = $this->refreshTokenMapper->findByToken($refresh_token);
 				} catch (DoesNotExistException $exception) {
-					\OC::$server->getLogger()->logException($exception, ['app'=>__CLASS__]);
+					$this->logger->logException($exception, ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], $statusCode);
 				}
 
 				if (\strcmp($refreshToken->getClientId(), $client->getId()) !== 0) {
-					\OC::$server->getLogger()->debug("refresh grant client ids mismatch: {$refreshToken->getClientId()} != {$client->getId()}", ['app'=>__CLASS__]);
+					$this->logger->debug("refresh grant client ids mismatch: {$refreshToken->getClientId()} != {$client->getId()}", ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], $statusCode);
 				}
 
@@ -186,6 +198,12 @@ class OAuthApiController extends ApiController {
 				$relatedAccessToken->setId($refreshToken->getAccessTokenId());
 				$this->accessTokenMapper->delete($relatedAccessToken);
 				$this->refreshTokenMapper->delete($refreshToken);
+
+				$userObj = $this->userManager->get($userId);
+				if ($userObj === null || !$userObj->isEnabled()) {
+					$this->logger->debug("the matching user is missing or disabled", ['app'=>__CLASS__]);
+					return new JSONResponse(['error' => 'unauthorized_client', 'error_description' => 'user not enabled'], Http::STATUS_BAD_REQUEST);
+				}
 				break;
 			default:
 				\OC::$server->getLogger()->debug("unhandled grant type: {$grant_type}", ['app'=>__CLASS__]);
