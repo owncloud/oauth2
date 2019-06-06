@@ -24,7 +24,7 @@ When using OAuth2 a unique access token is generated for each device or third pa
 - [OAuth protocol web page](https://oauth.net/2/)</description>
     <licence>AGPL</licence>
     <author>Project Seminar "sciebo@Learnweb" of the University of Münster, Thomas Müller</author>
-    <version>0.4.0</version>
+    <version>0.4.1</version>
     <namespace>OAuth2</namespace>
     <category>security</category>
     <website>https://github.com/owncloud/oauth2</website>
