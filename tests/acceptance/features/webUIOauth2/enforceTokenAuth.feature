@@ -6,7 +6,7 @@ I want to be able to enforce token based auth
 So that I can improve the security of the system by forbidding basic auth with username & password
 
 	Background:
-		Given these users have been created:
+		Given these users have been created with skeleton files:
 			| username    | password | displayname  | email                 |
 			| user1       | 1234     | User One     | u1@oc.com.np          |
 		And token auth has been enforced

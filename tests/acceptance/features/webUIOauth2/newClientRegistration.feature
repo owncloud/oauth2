@@ -11,7 +11,7 @@ Feature: register a new client
 		Then a new client with the name "new client" and the uri "http://localhost:*" should be listed on the webUI
 
 	Scenario: oauth authorization with a new client
-		Given these users have been created:
+		Given these users have been created with skeleton files:
 			|username|password|displayname|email       |
 			|user1   |1234    |User One   |u1@oc.com.np|
 			|user2   |1234    |User Two   |u2@oc.com.np|
