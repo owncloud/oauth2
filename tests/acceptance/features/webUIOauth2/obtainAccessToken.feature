@@ -5,7 +5,7 @@ Feature: obtaining an access token
 	So that I do not need to entrust various apps with my ownCloud password
 
 	Background:
-		Given these users have been created:
+		Given these users have been created with skeleton files:
 		|username|password|displayname|email       |
 		|user1   |1234    |User One   |u1@oc.com.np|
 
@@ -16,7 +16,7 @@ Feature: obtaining an access token
 		Then the client app should receive an authorization code
 
 	Scenario: receive an access token and use it to access a file
-		Given these users have been created:
+		Given these users have been created with skeleton files:
 			|username|password|displayname|email       |
 			|user2   |1234    |User Two   |u2@oc.com.np|
 		When the user sends an oauth2 authorization request using the webUI
@@ -27,7 +27,7 @@ Feature: obtaining an access token
 		But the client app should not be able to download the file "lorem.txt" of "user2" using the access token for authentication
 
 	Scenario: receive a new access token by using the refresh token
-		Given these users have been created:
+		Given these users have been created with skeleton files:
 			|username|password|displayname|email       |
 			|user2   |1234    |User Two   |u2@oc.com.np|
 		And the user "user1" has correctly established an oauth session
@@ -61,7 +61,7 @@ Feature: obtaining an access token
 		Then an invalid oauth request message should be shown
 
 	Scenario: receive an access token for a user that is different to the currently logged in user
-		Given these users have been created:
+		Given these users have been created with skeleton files:
 			|username|password|displayname|email       |
 			|user2   |1234    |User Two   |u2@oc.com.np|
 		And the user has browsed to the login page
