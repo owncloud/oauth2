@@ -18,6 +18,19 @@ pipeline:
       matrix:
         NEED_CORE: true
 
+  install-testrunner:
+    image: owncloudci/php:${PHP_VERSION}
+    pull: true
+    commands:
+      - git clone -b stable10 --depth=1 https://github.com/owncloud/core.git /var/www/owncloud/testrunner
+      - cp -r /var/www/owncloud/apps/oauth2 /var/www/owncloud/testrunner/apps/
+      - cd /var/www/owncloud/testrunner
+      - make install-composer-deps
+      - make vendor-bin-deps
+    when:
+      matrix:
+        USE_RELEASE_TARBALL: true
+
   install-app:
     image: owncloudci/php:${PHP_VERSION}
     pull: true
@@ -48,8 +61,14 @@ pipeline:
     pull: true
     commands:
       - chown www-data /var/www/owncloud -R
-      - chmod 777 /var/www/owncloud/tests/acceptance/filesForUpload -R
-      - chmod +x /var/www/owncloud/tests/acceptance/run.sh
+      - if [ "${USE_RELEASE_TARBALL}" = "true" ];
+        then
+        chmod 777 /var/www/owncloud/testrunner/tests/acceptance/filesForUpload -R;
+        chmod +x /var/www/owncloud/testrunner/tests/acceptance/run.sh;
+        else
+        chmod 777 /var/www/owncloud/tests/acceptance/filesForUpload -R;
+        chmod +x /var/www/owncloud/tests/acceptance/run.sh;
+        fi
     when:
       matrix:
         NEED_SERVER: true
@@ -65,6 +84,7 @@ pipeline:
       - PLATFORM=Linux
       - BEHAT_SUITE=${BEHAT_SUITE}
     commands:
+      - if [ "${USE_RELEASE_TARBALL}" = "true" ]; then cd /var/www/owncloud/testrunner/apps/oauth2; fi
       - make test-acceptance-webui
     when:
       matrix:
@@ -247,3 +267,15 @@ matrix:
     DB_TYPE: sqlite
     NEED_CORE: true
     NEED_INSTALL_APP: true
+
+  # Acceptance test against release tarball
+  - PHP_VERSION: 7.0
+    OC_VERSION: 10.2.0
+    TEST_SUITE: webui-acceptance
+    BEHAT_SUITE: webUIOauth2
+    DB_TYPE: mysql
+    DB_NAME: owncloud
+    NEED_CORE: true
+    NEED_SERVER: true
+    NEED_INSTALL_APP: true
+    USE_RELEASE_TARBALL: true
