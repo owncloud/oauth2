@@ -270,7 +270,7 @@ matrix:
 
   # Acceptance test against release tarball
   - PHP_VERSION: 7.0
-    OC_VERSION: 10.2.0
+    OC_VERSION: 10.2.1
     TEST_SUITE: webui-acceptance
     BEHAT_SUITE: webUIOauth2
     DB_TYPE: mysql
