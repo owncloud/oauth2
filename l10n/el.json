@@ -6,6 +6,7 @@
     "Back" : "Επιστροφή",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Η εφαρμογή θα αποκτήσει πρόσβαση στο όνομα χρήστη σας και θα επιτρέπεται να διαχειριστεί αρχεία, φακέλους και κοινόχρηστα.",
     "Authorize" : "Πιστοποίησε",
+    "Switch users to continue" : "Εναλλαγή χρηστών για συνέχεια",
     "OAuth 2.0" : "OAuth 2.0",
     "Registered clients" : "Εγγεγραμμένοι πελάτες",
     "No clients registered." : "Δεν έχουν εγγραφεί πελάτες.",
