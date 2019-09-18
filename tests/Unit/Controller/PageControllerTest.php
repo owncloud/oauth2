@@ -34,6 +34,7 @@ use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
+use PHPUnit\Framework\MockObject\MockObject;
 use Test\TestCase;
 
 /**
@@ -89,15 +90,15 @@ class PageControllerTest extends TestCase {
 		$this->authorizationCodeMapper = $container->query(AuthorizationCodeMapper::class);
 		/** @var AccessTokenMapper $accessTokenMapper */
 		$accessTokenMapper = $container->query(AccessTokenMapper::class);
-		/** @var IURLGenerator | \PHPUnit\Framework\MockObject\MockObject $urlGenerator */
+		/** @var IURLGenerator | MockObject $urlGenerator */
 		$urlGenerator = $this->createMock(IURLGenerator::class);
-		/** @var IUserSession | \PHPUnit\Framework\MockObject\MockObject $userSession */
+		/** @var IUserSession | MockObject $userSession */
 		$userSession = $this->createMock(IUserSession::class);
-		/** @var IRequest | \PHPUnit\Framework\MockObject\MockObject $request */
+		/** @var IRequest | MockObject $request */
 		$request = $this->createMock(IRequest::class);
-		/** @var IUser | \PHPUnit\Framework\MockObject\MockObject $user */
+		/** @var IUser | MockObject $user */
 		$user = $this->createMock(IUser::class);
-		/** @var IUserManager | \PHPUnit\Framework\MockObject\MockObject $userManager */
+		/** @var IUserManager | MockObject $userManager */
 		$userManager = $this->createMock(IUserManager::class);
 		$userSession->method('getUser')->willReturn($user);
 		$userManager->method('get')->willReturn($user);
@@ -128,7 +129,7 @@ class PageControllerTest extends TestCase {
 		$this->assertInstanceOf(TemplateResponse::class, $result);
 		$this->assertEquals('authorize-error', $result->getTemplateName());
 		$this->assertEquals(
-			['client_name' => null, 'back_url' => OC_Util::getDefaultPageUrl()],
+			['client_name' => null],
 			$result->getParams()
 		);
 
@@ -136,7 +137,7 @@ class PageControllerTest extends TestCase {
 		$this->assertInstanceOf(TemplateResponse::class, $result);
 		$this->assertEquals('authorize-error', $result->getTemplateName());
 		$this->assertEquals(
-			['client_name' => null, 'back_url' => OC_Util::getDefaultPageUrl()],
+			['client_name' => null],
 			$result->getParams()
 		);
 
@@ -144,7 +145,7 @@ class PageControllerTest extends TestCase {
 		$this->assertInstanceOf(TemplateResponse::class, $result);
 		$this->assertEquals('authorize-error', $result->getTemplateName());
 		$this->assertEquals(
-			['client_name' => null, 'back_url' => OC_Util::getDefaultPageUrl()],
+			['client_name' => null],
 			$result->getParams()
 		);
 
@@ -152,7 +153,7 @@ class PageControllerTest extends TestCase {
 		$this->assertInstanceOf(TemplateResponse::class, $result);
 		$this->assertEquals('authorize-error', $result->getTemplateName());
 		$this->assertEquals(
-			['client_name' => null, 'back_url' => OC_Util::getDefaultPageUrl()],
+			['client_name' => null],
 			$result->getParams()
 		);
 
@@ -161,23 +162,19 @@ class PageControllerTest extends TestCase {
 		$this->assertInstanceOf(TemplateResponse::class, $result);
 		$this->assertEquals('authorize-error', $result->getTemplateName());
 		$this->assertEquals(
-			['client_name' => null, 'back_url' => OC_Util::getDefaultPageUrl()],
+			['client_name' => null],
 			$result->getParams()
 		);
 
 		$result = $this->controller->authorize('qwertz', $this->identifier, \urldecode($this->redirectUri));
-		$this->assertInstanceOf(TemplateResponse::class, $result);
-		$this->assertEquals('authorize-error', $result->getTemplateName());
-		$this->assertEquals(
-			['client_name' => $this->name, 'back_url' => OC_Util::getDefaultPageUrl()],
-			$result->getParams()
-		);
+		$this->assertInstanceOf(RedirectResponse::class, $result);
+		$this->assertEquals('https://owncloud.org?error=unsupported_response_type', $result->getRedirectURL());
 
 		$result = $this->controller->authorize('code', $this->identifier, \urldecode('https://www.example.org'));
 		$this->assertInstanceOf(TemplateResponse::class, $result);
 		$this->assertEquals('authorize-error', $result->getTemplateName());
 		$this->assertEquals(
-			['client_name' => $this->name, 'back_url' => OC_Util::getDefaultPageUrl()],
+			['client_name' => $this->name],
 			$result->getParams()
 		);
 
