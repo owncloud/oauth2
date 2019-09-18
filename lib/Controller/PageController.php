@@ -141,9 +141,17 @@ class PageController extends Controller {
 					'logout_url' => $logoutUrl], 'guest'
 			);
 		}
+		if (!\parse_url($redirect_uri)) {
+			$this->logger->error("Invalid OAuth request with invalid redirect_uri: $redirect_uri");
+			return new TemplateResponse(
+				$this->appName,
+				'authorize-error',
+				['client_name' => null], 'guest'
+			);
+		}
 		try {
 			/** @var Client $client */
-			$client = $this->clientMapper->findByIdentifier($client_id);
+			$client = $this->getClientForRequest($client_id, $redirect_uri);
 		} catch (DoesNotExistException $exception) {
 			$this->logger->error("Invalid OAuth request with client-id $client_id");
 			return new TemplateResponse(
@@ -212,7 +220,7 @@ class PageController extends Controller {
 			case 'code':
 				try {
 					/** @var Client $client */
-					$client = $this->clientMapper->findByIdentifier($client_id);
+					$client = $this->getClientForRequest($client_id, $redirect_uri);
 				} catch (DoesNotExistException $exception) {
 					return new RedirectResponse(OC_Util::getDefaultPageUrl());
 				}
@@ -230,9 +238,9 @@ class PageController extends Controller {
 				$this->authorizationCodeMapper->insert($authorizationCode);
 
 				$result = \urldecode($redirect_uri);
-				$result = $result . '?code=' . $code;
+				$result .= '?code=' . $code;
 				if ($state !== null) {
-					$result = $result . '&state=' . \urlencode($state);
+					$result .= '&state=' . \urlencode($state);
 				}
 
 				$this->logger->info('An authorization code has been issued for the client "' . $client->getName() . '".', ['app' => $this->appName]);
@@ -241,7 +249,7 @@ class PageController extends Controller {
 			case 'token':
 				try {
 					/** @var Client $client */
-					$client = $this->clientMapper->findByIdentifier($client_id);
+					$client = $this->getClientForRequest($client_id, $redirect_uri);
 				} catch (DoesNotExistException $exception) {
 					return new RedirectResponse(OC_Util::getDefaultPageUrl());
 				}
@@ -346,5 +354,29 @@ class PageController extends Controller {
 		$userId = Util::sanitizeHTML($userId);
 		$escapedDisplayName = Util::sanitizeHTML($displayName);
 		return "<span class='hasTooltip' data-original-title='$userId'><strong>$escapedDisplayName</strong></span>";
+	}
+
+	/**
+	 * @param $client_id
+	 * @param $redirect_uri
+	 * @return \OCP\AppFramework\Db\Entity
+	 * @throws DoesNotExistException
+	 * @throws MultipleObjectsReturnedException
+	 */
+	private function getClientForRequest($client_id, $redirect_uri) {
+		// check if the client is on the same domain
+		$requestDomain = $this->request->getServerProtocol() . '://' . $this->request->getServerHost();
+		if (Utilities::validateRedirectUri($requestDomain, $redirect_uri, false)) {
+			$this->logger->info('On same domain');
+			$client = new Client();
+			$client->setName('Generic OAuth 2 Client on same domain');
+			$client->setRedirectUri($redirect_uri);
+			$client->setAllowSubdomains(false);
+
+			// store client in db if not yet known ....  ??????
+			$this->clientMapper->findByRedirect(); // :-()
+			return $client;
+		}
+		return $this->clientMapper->findByIdentifier($client_id);
 	}
 }
