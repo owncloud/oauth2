@@ -29,6 +29,7 @@ use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Utilities;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\ILogger;
@@ -98,11 +99,11 @@ class PageController extends Controller {
 	 * @param string $state The state.
 	 * @param string | null $user
 	 *
-	 * @return TemplateResponse The authorize view or the
+	 * @return TemplateResponse | RedirectResponse The authorize view or the
 	 * authorize-error view with a redirection to the
 	 * default page URL.
 	 *
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws MultipleObjectsReturnedException
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
@@ -111,10 +112,11 @@ class PageController extends Controller {
 		if (!\is_string($response_type) || !\is_string($client_id)
 			|| !\is_string($redirect_uri) || ($state !== null && !\is_string($state))
 		) {
+			$this->logger->error('Invalid OAuth request - one of the mandatory query parameters is missing');
 			return new TemplateResponse(
 				$this->appName,
 				'authorize-error',
-				['client_name' => null, 'back_url' => OC_Util::getDefaultPageUrl()], 'guest'
+				['client_name' => null], 'guest'
 			);
 		}
 
@@ -143,27 +145,26 @@ class PageController extends Controller {
 			/** @var Client $client */
 			$client = $this->clientMapper->findByIdentifier($client_id);
 		} catch (DoesNotExistException $exception) {
+			$this->logger->error("Invalid OAuth request with client-id $client_id");
 			return new TemplateResponse(
 				$this->appName,
 				'authorize-error',
-				['client_name' => null, 'back_url' => OC_Util::getDefaultPageUrl()], 'guest'
+				['client_name' => null], 'guest'
 			);
 		}
 
 		if (!Utilities::validateRedirectUri($client->getRedirectUri(), \urldecode($redirect_uri), $client->getAllowSubdomains())) {
+			$this->logger->error("Invalid OAuth request with invalid redirect_uri: $redirect_uri !== {$client->getRedirectUri()}");
 			return new TemplateResponse(
 				$this->appName,
 				'authorize-error',
-				['client_name' => $client->getName(), 'back_url' => OC_Util::getDefaultPageUrl()], 'guest'
+				['client_name' => $client->getName()], 'guest'
 			);
 		}
 
 		if (!\in_array($response_type, ['code', 'token'])) {
-			return new TemplateResponse(
-				$this->appName,
-				'authorize-error',
-				['client_name' => $client->getName(), 'back_url' => OC_Util::getDefaultPageUrl()], 'guest'
-			);
+			$this->logger->error("Invalid OAuth request with wrong response_type: $response_type");
+			return new RedirectResponse($redirect_uri . "?error=unsupported_response_type&state=$state");
 		}
 
 		$logoutUrl = $this->urlGenerator->linkToRouteAbsolute(
@@ -197,7 +198,7 @@ class PageController extends Controller {
 	 * @return RedirectResponse Redirection to the given redirect_uri or to the
 	 * default page URL.
 	 *
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws MultipleObjectsReturnedException
 	 * @NoAdminRequired
 	 */
 	public function generateAuthorizationCode($response_type, $client_id, $redirect_uri, $state = null) {
@@ -258,10 +259,10 @@ class PageController extends Controller {
 				$this->accessTokenMapper->insert($accessToken);
 
 				$result = \urldecode($redirect_uri);
-				$result = $result . '?access_token=' . \urlencode($accessToken->getToken());
-				$result = $result . '&expires_in=' . \urlencode(AccessToken::EXPIRATION_TIME);
+				$result .= '?access_token=' . \urlencode($accessToken->getToken());
+				$result .= '&expires_in=' . \urlencode(AccessToken::EXPIRATION_TIME);
 				if ($state !== null) {
-					$result = $result . '&state=' . \urlencode($state);
+					$result .= '&state=' . \urlencode($state);
 				}
 
 				$this->logger->info('An authorization code has been issued for the client "' . $client->getName() . '".', ['app' => $this->appName]);
