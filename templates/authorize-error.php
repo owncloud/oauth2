@@ -32,8 +32,4 @@ style('oauth2', 'authorization');
 		<p><?php p($l->t('This request is not valid. Please contact the administrator of “%s” if this error persists.', [$_['client_name']])); ?></p>
 	<?php
 	} ?>
-	<br>
-	<a href="<?php p($_['back_url']); ?>">
-		<button autofocus><?php p($l->t('Back')); ?></button>
-	</a>
 </div>
