@@ -194,16 +194,18 @@ class OAuthApiController extends ApiController {
 				$this->logger->info('A refresh token has been used by the client "' . $client->getName() . '" to request an access token.', ['app' => $this->appName]);
 
 				$userId = $refreshToken->getUserId();
-				$relatedAccessToken = new AccessToken();
-				$relatedAccessToken->setId($refreshToken->getAccessTokenId());
-				$this->accessTokenMapper->delete($relatedAccessToken);
-				$this->refreshTokenMapper->delete($refreshToken);
 
 				$userObj = $this->userManager->get($userId);
 				if ($userObj === null || !$userObj->isEnabled()) {
 					$this->logger->debug("the matching user is missing or disabled", ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'unauthorized_client', 'error_description' => 'user not enabled'], Http::STATUS_BAD_REQUEST);
 				}
+
+				$relatedAccessToken = new AccessToken();
+				$relatedAccessToken->setId($refreshToken->getAccessTokenId());
+				$this->accessTokenMapper->delete($relatedAccessToken);
+				$this->refreshTokenMapper->delete($refreshToken);
+
 				break;
 			default:
 				\OC::$server->getLogger()->debug("unhandled grant type: {$grant_type}", ['app'=>__CLASS__]);
