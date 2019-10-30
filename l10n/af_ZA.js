@@ -6,7 +6,6 @@ OC.L10N.register(
     "Request not valid" : "Versoek is ongeldig",
     "This request is not valid. Please contact the administrator if this error persists." : "Hierdie versoek is ongeldig. Kontak die administrateur indien hierdie fout voortduur.",
     "This request is not valid. Please contact the administrator of “%s” if this error persists." : "Hierdie versoek is ongeldig. Kontak die administrateur van “%s” indien hierdie fout voortduur.",
-    "Back" : "Terug",
     "The “%s“ application would like permission to access your account" : "Die “%s”-toepassing versoek toestemming om toegang tot u rekening te verkry",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Die toepassing sal toegang tot u gebruikersnaam verkry en sal toegelaat word om lêers, vouers en delings te bestuur.",
     "Authorize" : "Magtig",

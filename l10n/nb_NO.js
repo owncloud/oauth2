@@ -6,7 +6,6 @@ OC.L10N.register(
     "Request not valid" : "Forespørsel ikke gyldig",
     "This request is not valid. Please contact the administrator if this error persists." : "Denne forespørselen er ikke gyldig. Kontakt administratoren hvis feilen vedvarer.",
     "This request is not valid. Please contact the administrator of “%s” if this error persists." : "Denne forespørselen er ikke gyldig. Kontakt administratoren av \"%s\" hvis feilen vedvarer. ",
-    "Back" : "Tilbake",
     "The “%s“ application would like permission to access your account" : "Programmet \"%s\" ber om tilgangstillatelse til kontoen din. ",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Applikasjonen vil få tilgang til ditt brukernavn og vil kunne administrere filer, lokale mapper og delte mapper.",
     "Authorize" : "Autoriser",

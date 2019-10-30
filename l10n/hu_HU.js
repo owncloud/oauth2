@@ -6,7 +6,6 @@ OC.L10N.register(
     "Request not valid" : "Kérelem érvénytelen",
     "This request is not valid. Please contact the administrator if this error persists." : "Ez a kérés nem érvényes. Ha a hiba továbbra is fennáll, lépjen kapcsolatba a rendszergazdával.",
     "This request is not valid. Please contact the administrator of “%s” if this error persists." : "Ez a kérés nem érvényes. Ha a hiba továbbra is fennáll, lépjen kapcsolatba a (z) \"%s\" rendszergazdájával.",
-    "Back" : "Vissza",
     "The “%s“ application would like permission to access your account" : "A (z) \"%s\" alkalmazás engedélyt kér a fiók elérésére",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Az alkalmazás ezáltal hozzá fog férni a felhasználónevéhez, és engedélyt kap a fájlok, mappák és megosztások kezelésére.",
     "Authorize" : "Engedélyezés",

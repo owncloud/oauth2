@@ -6,7 +6,6 @@ OC.L10N.register(
     "Request not valid" : "无效的请求",
     "This request is not valid. Please contact the administrator if this error persists." : "该请求无效。如果此错误仍然存在，请联系管理员。",
     "This request is not valid. Please contact the administrator of “%s” if this error persists." : "该请求无效。如果此错误仍然存在，请与“%s”的管理员联系。",
-    "Back" : "返回",
     "The “%s“ application would like permission to access your account" : "应用程序 “%s”想要访问您的帐户",
     "You are logged in as %s." : "你已登入为%s。",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "该应用程序将访问您的用户名，并将被允许管理文件、文件夹和共享。",

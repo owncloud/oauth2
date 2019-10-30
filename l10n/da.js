@@ -6,7 +6,6 @@ OC.L10N.register(
     "Request not valid" : "Andmodning ugyldig",
     "This request is not valid. Please contact the administrator if this error persists." : "Denne forespørgsel er ugyldig. Kontakt venligst administratoren hvis denne fejl gentager sig. ",
     "This request is not valid. Please contact the administrator of “%s” if this error persists." : "Denne forespørgsel er ugyldig. Kontakt venligst administratoren af \"%s\" hvis denne fejl gentager sig. ",
-    "Back" : "Tilbage",
     "The “%s“ application would like permission to access your account" : "\"%s\"-applikationen beder om adgang til din konto.",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Applikationen vil få adgang til dit brugernavn og har tilladelse til at administrere filer, mapper og delinger.",
     "Authorize" : "Autoriser",

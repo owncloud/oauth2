@@ -4,7 +4,6 @@ OC.L10N.register(
     "The application was authorized successfully. You can now close this window." : "Aplikasi telah berhasil diotorisasi. Anda dapat menutup halaman ini sekarang",
     "Request not valid" : "Permintaan tidak valid",
     "This request is not valid. Please contact the administrator if this error persists." : "Permintaan tidak valid. Silakan hubungi administrator jika kesalahan ini terus berlanjut.",
-    "Back" : "Kembali",
     "The “%s“ application would like permission to access your account" : "Aplikasi %s meminta ijin untuk mengakses akun anda",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Aplikasi ini akan memperoleh nama pengguna Anda dan akan diizinkan untuk mengelola berkas, folder dan berbagi.",
     "Authorize" : "Otorisasi",

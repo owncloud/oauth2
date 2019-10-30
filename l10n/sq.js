@@ -6,7 +6,6 @@ OC.L10N.register(
     "Request not valid" : "Kërkesë jo e vlefshme",
     "This request is not valid. Please contact the administrator if this error persists." : "Kjo kërkesë s’është e vlefshme. Ju lutemi, lidhuni me përgjegjësin, nëse vazhdon ky gabim.",
     "This request is not valid. Please contact the administrator of “%s” if this error persists." : "Kjo kërkesë s’është e vlefshme. Ju lutemi, nëse ky gabim vazhdon, lidhuni me përgjegjësin e “%s”.",
-    "Back" : "Mbrapsht",
     "The “%s“ application would like permission to access your account" : "Aplikacioni “%s“ do të donte leje të hynte në llogarinë tuaj",
     "You are logged in as %s." : "Jeni i futur si %s.",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Aplikacioni do të mund të përdorë emrin tuaj të përdoruesit dhe do të lejohet të administrojë kartela, dosje dhe ndarje.",

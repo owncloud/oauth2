@@ -1,15 +1,14 @@
 OC.L10N.register(
     "oauth2",
     {
-    "The application \"{app}\" is requesting access to your account. To authorize it, please log in first." : "แอพ \"{app}\" ต้องการขอสิทธิ์การเข้าถึงบัญชีของคุณ หากต้องการให้สิทธิ์โปรดเข้าสู่ระบบก่อน",
-    "The application was authorized successfully. You can now close this window." : "แอพฯได้รับอนุญาตเรียบร้อยแล้ว ขณะนี้คุณสามารถปิดหน้าต่างนี้ได้เลย",
+    "The application \"{app}\" is requesting access to your account. To authorize it, please log in first." : "แอปฯ \"{app}\" ต้องการขอสิทธิ์การเข้าถึงบัญชีของคุณ หากต้องการให้สิทธิ์โปรดเข้าสู่ระบบก่อน",
+    "The application was authorized successfully. You can now close this window." : "แอปฯได้รับอนุญาตเรียบร้อยแล้ว ขณะนี้คุณสามารถปิดหน้าต่างนี้ได้เลย",
     "Request not valid" : "คำร้องขอไม่ถูกต้อง",
     "This request is not valid. Please contact the administrator if this error persists." : "คำร้องขอนี้ไม่ถูกต้อง โปรดติดต่อผู้ดูแลระบบหากยังพบข้อผิดพลาดนี้อยู่",
     "This request is not valid. Please contact the administrator of “%s” if this error persists." : "คำขอนี้ไม่ถูกต้อง โปรดติดต่อผู้ดูแลระบบ “%s” ถ้ายังพบข้อผิดพลาดนี้อยู่",
-    "Back" : "ย้อนกลับ",
-    "The “%s“ application would like permission to access your account" : "แอพฯ “%s” ต้องการสิทธิ์ในการเข้าถึงบัญชีของคุณ",
+    "The “%s“ application would like permission to access your account" : "แอปฯ “%s” ต้องการสิทธิ์ในการเข้าถึงบัญชีของคุณ",
     "You are logged in as %s." : "คุณเข้าสู่ระบบในฐานะ %s",
-    "The application will gain access to your username and will be allowed to manage files, folders and shares." : "แอพพลิเคชันจะเข้าถึงชื่อผู้ใช้ของคุณและจะได้รับอนุญาตให้จัดการไฟล์ โฟลเดอร์และการแชร์ด้วย",
+    "The application will gain access to your username and will be allowed to manage files, folders and shares." : "แอปพลิเคชันจะเข้าถึงชื่อผู้ใช้ของคุณและจะได้รับอนุญาตให้จัดการไฟล์ โฟลเดอร์และการแชร์ด้วย",
     "Authorize" : "การอนุญาต",
     "Switch users to continue" : "เปลี่ยนผู้ใช้เพื่อดำเนินการต่อ",
     "OAuth 2.0" : "OAuth 2.0",
@@ -24,9 +23,9 @@ OC.L10N.register(
     "Add client" : "เพิ่มไคลเอนต์",
     "Allow subdomains" : "อนุญาตให้ใช้โดเมนย่อย",
     "Add" : "เพิ่ม",
-    "Authorized Applications" : "แอพพลิเคชันที่ได้รับอนุญาตแล้ว",
-    "No applications authorized." : "ไม่มีแอพพลิเคชันที่ได้รับอนุญาต",
+    "Authorized Applications" : "แอปพลิเคชันที่ได้รับอนุญาตแล้ว",
+    "No applications authorized." : "ไม่มีแอปพลิเคชันที่ได้รับอนุญาต",
     "Switch user" : "เปลี่ยนผู้ใช้",
-    "You are logged in as %s but the application requested access for user %s." : "คุณเข้าสู่ระบบในชื่อ %s แต่แอพพลิเคชันให้สิทธิการเข้าถึงสำหรับผู้ใช้ %s เท่านั้น"
+    "You are logged in as %s but the application requested access for user %s." : "คุณเข้าสู่ระบบในชื่อ %s แต่แอปพลิเคชันให้สิทธิการเข้าถึงสำหรับผู้ใช้ %s เท่านั้น"
 },
 "nplurals=1; plural=0;");

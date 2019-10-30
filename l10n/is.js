@@ -6,7 +6,6 @@ OC.L10N.register(
     "Request not valid" : "Beiðni ekki gild",
     "This request is not valid. Please contact the administrator if this error persists." : "Þessi beiðni er ógild. Hafðu samband við kerfisstjóra ef þessi villa kemur áfram upp.",
     "This request is not valid. Please contact the administrator of “%s” if this error persists." : "Þessi beiðni er ógild. Hafðu samband við kerfisstjóra \"%s \" ef þessi villa kemur áfram upp.",
-    "Back" : "Til baka",
     "The “%s“ application would like permission to access your account" : "Forritið \"%s \" vill fá að tengjast aðganginum þínum",
     "You are logged in as %s." : "Þú ert skráður inn sem %s.",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Forritið mun fá aðgang að notandanafninu þínu og vera keyft að sýsla með skrár, möppur og sameignir.",

@@ -6,7 +6,6 @@ OC.L10N.register(
     "Request not valid" : "Førespurnad er ikkje gyldig",
     "This request is not valid. Please contact the administrator if this error persists." : "Førespurnad er ikkje gyldig. Ver venleg å kontakte administrator om feilen oppstår att.",
     "This request is not valid. Please contact the administrator of “%s” if this error persists." : "Førespurnad er ikkje gyldig. Ver venleg å kontakte administrator på “%s” om feilen oppstår att.",
-    "Back" : "Tilbake",
     "The “%s“ application would like permission to access your account" : "Programmet “%s” ber om tilgang til din konto",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Applikasjonen vil få tilgang til brukarnamn og kan administrere filer, katalogar og deling.",
     "Authorize" : "Autoriser",

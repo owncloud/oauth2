@@ -6,7 +6,6 @@ OC.L10N.register(
     "Request not valid" : "Requête invalide",
     "This request is not valid. Please contact the administrator if this error persists." : "Cette requête est invalide. Merci de contacter l'administrateur si l'erreur persiste.",
     "This request is not valid. Please contact the administrator of “%s” if this error persists." : "La requête n'est pas valide. Veuillez contacter votre administrateur de \"%s\" si l'erreur persiste.",
-    "Back" : "Retour",
     "The “%s“ application would like permission to access your account" : "L'application \"%s\" souhaiterait l'autorisation d'accéder à votre compte",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "L'application accédera à votre nom d’utilisateur et sera autorisée à gérer vos fichiers, dossiers et partages.",
     "Authorize" : "Autoriser",

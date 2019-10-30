@@ -4,7 +4,6 @@
     "Request not valid" : "요청이 올바르지 않음",
     "This request is not valid. Please contact the administrator if this error persists." : "이 요청이 올바르지 않습니다. 오류가 계속 발생하면 관리자에게 연락하십시오.",
     "This request is not valid. Please contact the administrator of “%s” if this error persists." : "이 요청이 올바르지 않습니다. 오류가 계속 발생하면 \"%s\" 관리자에게 연락하십시오.",
-    "Back" : "뒤로",
     "The “%s“ application would like permission to access your account" : "\"%s\" 앱에서 내 계정에 접근하려고 합니다",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "이 앱이 내 권한을 사용할 수 있으며, 파일, 폴더 및 공유를 관리할 수 있습니다.",
     "Authorize" : "인증",

@@ -4,7 +4,6 @@
     "Request not valid" : "Μη έγκυρη αίτηση",
     "This request is not valid. Please contact the administrator if this error persists." : "Μη έγκυρη αίτηση. Παρακαλούμε επικοινωνήστε με τον διαχειριστή εάν το σφάλμα επιμένει.",
     "This request is not valid. Please contact the administrator of “%s” if this error persists." : "Μη έγκυρη αίτηση. Παρακαλούμε επικοινωνήστε με τον διαχειριστή του “%s” εάν το σφάλμα επιμένει.",
-    "Back" : "Επιστροφή",
     "The “%s“ application would like permission to access your account" : "Η εφαρμογή “%s” θα ήθελε άδεια πρόσβασης στον λογαριασμό σας",
     "You are logged in as %s." : "Έχετε συνδεθεί ως %s.",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Η εφαρμογή θα αποκτήσει πρόσβαση στο όνομα χρήστη σας και θα επιτρέπεται να διαχειριστεί αρχεία, φακέλους και κοινόχρηστα.",
