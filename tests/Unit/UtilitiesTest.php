@@ -31,58 +31,37 @@ class UtilitiesTest extends TestCase {
 		$this->assertFalse(\strpos($random, '/'));
 	}
 
-	public function testValidateRedirectUri() {
-		$this->assertFalse(
+	public function providesUrlsToValidate(): array {
+		return [
+			[false, 'http://owncloud.org:80/test?q=1', 'https://owncloud.org:80/test?q=1', false],
+			[true, 'https://owncloud.org:80/test?q=1', 'https://sso.owncloud.org:80/test?q=1', true],
+			[false, 'https://owncloud.org:80/test?q=1', 'https://sso.owncloud.de:80/test?q=1', true],
+			[false, 'https://owncloud.org:80/test?q=1', 'https://sso.owncloud.org:80/test?q=1', false],
+			[false, 'https://owncloud.org:80/test?q=1', 'https://owncloud.org:90/test?q=1', false],
+			[false, 'https://owncloud.org:80/tests?q=1', 'https://owncloud.org:80/test?q=1', false],
+			[false, 'https://owncloud.org:80/test?q=1', 'https://owncloud.org:80/test?q=0', false],
+			[true, 'http://localhost:*/test?q=1', 'http://localhost:12345/test?q=1', false],
+			[false, 'http://excepted.com', 'http://aaa\@excepted.com', false]
+		];
+	}
+
+	/**
+	 * @dataProvider providesUrlsToValidate
+	 * @param $expectedResult
+	 * @param $expectedRedirect
+	 * @param $actualRedirect
+	 * @param $allowSubDomain
+	 */
+	public function testValidateRedirectUri($expectedResult, $expectedRedirect, $actualRedirect, $allowSubDomain) {
+		$this->assertEquals($expectedResult,
 			Utilities::validateRedirectUri(
-				'http://owncloud.org:80/test?q=1',
-				'https://owncloud.org:80/test?q=1',
-				false)
-		);
-		$this->assertTrue(
-			Utilities::validateRedirectUri(
-				'https://owncloud.org:80/test?q=1',
-				'https://sso.owncloud.org:80/test?q=1',
-				true)
-		);
-		$this->assertFalse(
-			Utilities::validateRedirectUri(
-				'https://owncloud.org:80/test?q=1',
-				'https://sso.owncloud.de:80/test?q=1',
-				true)
-		);
-		$this->assertFalse(
-			Utilities::validateRedirectUri(
-				'https://owncloud.org:80/test?q=1',
-				'https://sso.owncloud.org:80/test?q=1',
-				false)
-		);
-		$this->assertFalse(
-			Utilities::validateRedirectUri(
-				'https://owncloud.org:80/test?q=1',
-				'https://owncloud.org:90/test?q=1',
-				false)
-		);
-		$this->assertFalse(
-			Utilities::validateRedirectUri(
-				'https://owncloud.org:80/tests?q=1',
-				'https://owncloud.org:80/test?q=1',
-				false)
-		);
-		$this->assertFalse(
-			Utilities::validateRedirectUri(
-				'https://owncloud.org:80/test?q=1',
-				'https://owncloud.org:80/test?q=0',
-				false)
-		);
-		$this->assertTrue(
-			Utilities::validateRedirectUri(
-				'http://localhost:*/test?q=1',
-				'http://localhost:12345/test?q=1',
-				false)
+				$expectedRedirect,
+				$actualRedirect,
+				$allowSubDomain)
 		);
 	}
 
-	public function providesUrls() {
+	public function providesUrls(): array {
 		return [
 			[true, 'http://localhost:*'],
 			[true, 'http://localhost:*/oc/10.0'],
@@ -92,6 +71,7 @@ class UtilitiesTest extends TestCase {
 			[false, 'http://owncloud.org:*'],
 		];
 	}
+
 	/**
 	 * @dataProvider providesUrls
 	 * @param $expected

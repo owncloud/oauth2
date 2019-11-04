@@ -37,7 +37,7 @@ dist_dir=$(build_dir)/dist
 # internal aliases
 composer_deps=vendor
 composer_dev_deps=
-acceptance_test_deps=vendor-bin/behat/vendor
+acceptance_test_deps=vendor-bin/behat/vendor $(composer_deps)
 nodejs_deps=
 bower_deps=
 
@@ -122,12 +122,12 @@ clean-deps: clean-composer-deps
 ##------------------------
 .PHONY: test-php-unit
 test-php-unit: ## Run php unit tests
-test-php-unit:
+test-php-unit: $(composer_deps)
 	$(PHPUNIT) --configuration ./phpunit.xml --testsuite unit
 
 .PHONY: test-php-unit-dbg
 test-php-unit-dbg: ## Run php unit tests using phpdbg
-test-php-unit-dbg:
+test-php-unit-dbg: $(composer_deps)
 	$(PHPUNITDBG) --configuration ./phpunit.xml --testsuite unit
 
 .PHONY: test-php-style
