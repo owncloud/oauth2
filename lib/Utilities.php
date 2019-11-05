@@ -19,6 +19,11 @@
 
 namespace OCA\OAuth2;
 
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use Rowbot\URL\Exception\TypeError;
+use Rowbot\URL\URL;
+
 class Utilities {
 
 	/**
@@ -26,7 +31,7 @@ class Utilities {
 	 *
 	 * @return string The random string.
 	 */
-	public static function generateRandom() {
+	public static function generateRandom(): string {
 		return \OC::$server->getSecureRandom()->generate(64,
 			'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
 	}
@@ -46,43 +51,42 @@ class Utilities {
 			$expected = 'http://localhost' . \substr($expected, 18);
 			$validatePort = false;
 		}
-		if (\strcmp(\parse_url($expected, PHP_URL_SCHEME), \parse_url($actual, PHP_URL_SCHEME)) !== 0) {
-			return false;
-		}
-
-		$expectedHost = \parse_url($expected, PHP_URL_HOST);
-		$actualHost = \parse_url($actual, PHP_URL_HOST);
-
-		if ($allowSubdomains) {
-			if (\strcmp($expectedHost, $actualHost) !== 0
-				&& \strcmp($expectedHost, \str_replace(\explode('.', $actualHost)[0] . '.', '', $actualHost)) !== 0
-			) {
+		try {
+			$expectedUrl = new URL($expected);
+			$actualUrl = new URL($actual);
+			if (\strcmp($expectedUrl->protocol, $actualUrl->protocol) !== 0) {
 				return false;
 			}
-		} else {
-			if (\strcmp($expectedHost, $actualHost) !== 0) {
+
+			if ($allowSubdomains) {
+				if (\strcmp($expectedUrl->hostname, $actualUrl->hostname) !== 0
+					&& \strcmp($expectedUrl->hostname, \str_replace(\explode('.', $actualUrl->hostname)[0] . '.', '', $actualUrl->hostname)) !== 0
+				) {
+					return false;
+				}
+			} elseif (\strcmp($expectedUrl->hostname, $actualUrl->hostname) !== 0) {
 				return false;
 			}
-		}
 
-		if ($validatePort) {
-			if (\strcmp(\parse_url($expected, PHP_URL_PORT), \parse_url($actual, PHP_URL_PORT)) !== 0) {
+			if ($validatePort && $expectedUrl->port !== $actualUrl->port) {
 				return false;
 			}
-		}
 
-		if (\strcmp(\parse_url($expected, PHP_URL_PATH), \parse_url($actual, PHP_URL_PATH)) !== 0) {
+			if ($expectedUrl->pathname !== $actualUrl->pathname) {
+				return false;
+			}
+
+			if ($expectedUrl->search !== $actualUrl->search) {
+				return false;
+			}
+
+			return true;
+		} catch (TypeError $ex) {
 			return false;
 		}
-
-		if (\strcmp(\parse_url($expected, PHP_URL_QUERY), \parse_url($actual, PHP_URL_QUERY)) !== 0) {
-			return false;
-		}
-
-		return true;
 	}
 
-	public static function isValidUrl($redirectUri) {
+	public static function isValidUrl($redirectUri): bool {
 		if (\strpos($redirectUri, 'http://localhost:*') === 0) {
 			$redirectUri = 'http://localhost' . \substr($redirectUri, 18);
 		}

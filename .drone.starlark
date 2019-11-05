@@ -9,6 +9,8 @@ config = {
 		'master'
 	],
 
+    'appInstallCommand': 'make vendor',
+
 	'codestyle': {
 		'ordinary' : {
 			'phpVersions': [

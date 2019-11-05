@@ -129,6 +129,13 @@ steps:
     exclude: apps/oauth2
     version: daily-master-qa
 
+- name: install-app-oauth2
+  pull: always
+  image: owncloudci/php:7.0
+  commands:
+  - cd /var/www/owncloud/server/apps/oauth2
+  - make vendor
+
 - name: setup-server-oauth2
   pull: always
   image: owncloudci/php:7.0
@@ -194,6 +201,13 @@ steps:
     db_username: owncloud
     exclude: apps/oauth2
     version: daily-master-qa
+
+- name: install-app-oauth2
+  pull: always
+  image: owncloudci/php:7.0
+  commands:
+  - cd /var/www/owncloud/server/apps/oauth2
+  - make vendor
 
 - name: setup-server-oauth2
   pull: always
@@ -271,6 +285,13 @@ steps:
     exclude: apps/oauth2
     version: daily-master-qa
 
+- name: install-app-oauth2
+  pull: always
+  image: owncloudci/php:7.0
+  commands:
+  - cd /var/www/owncloud/server/apps/oauth2
+  - make vendor
+
 - name: setup-server-oauth2
   pull: always
   image: owncloudci/php:7.0
@@ -346,6 +367,13 @@ steps:
     db_username: owncloud
     exclude: apps/oauth2
     version: daily-master-qa
+
+- name: install-app-oauth2
+  pull: always
+  image: owncloudci/php:7.0
+  commands:
+  - cd /var/www/owncloud/server/apps/oauth2
+  - make vendor
 
 - name: setup-server-oauth2
   pull: always
@@ -423,6 +451,13 @@ steps:
     exclude: apps/oauth2
     version: daily-master-qa
 
+- name: install-app-oauth2
+  pull: always
+  image: owncloudci/php:7.0
+  commands:
+  - cd /var/www/owncloud/server/apps/oauth2
+  - make vendor
+
 - name: setup-server-oauth2
   pull: always
   image: owncloudci/php:7.0
@@ -497,6 +532,13 @@ steps:
     db_username: system
     exclude: apps/oauth2
     version: daily-master-qa
+
+- name: install-app-oauth2
+  pull: always
+  image: owncloudci/php:7.0
+  commands:
+  - cd /var/www/owncloud/server/apps/oauth2
+  - make vendor
 
 - name: setup-server-oauth2
   pull: always
@@ -574,6 +616,13 @@ steps:
     exclude: apps/oauth2
     version: daily-master-qa
 
+- name: install-app-oauth2
+  pull: always
+  image: owncloudci/php:7.1
+  commands:
+  - cd /var/www/owncloud/server/apps/oauth2
+  - make vendor
+
 - name: setup-server-oauth2
   pull: always
   image: owncloudci/php:7.1
@@ -641,6 +690,13 @@ steps:
     exclude: apps/oauth2
     version: daily-master-qa
 
+- name: install-app-oauth2
+  pull: always
+  image: owncloudci/php:7.2
+  commands:
+  - cd /var/www/owncloud/server/apps/oauth2
+  - make vendor
+
 - name: setup-server-oauth2
   pull: always
   image: owncloudci/php:7.2
@@ -707,6 +763,13 @@ steps:
     db_username: owncloud
     exclude: apps/oauth2
     version: daily-master-qa
+
+- name: install-app-oauth2
+  pull: always
+  image: owncloudci/php:7.3
+  commands:
+  - cd /var/www/owncloud/server/apps/oauth2
+  - make vendor
 
 - name: setup-server-oauth2
   pull: always
@@ -785,6 +848,13 @@ steps:
   - cp -r /var/www/owncloud/testrunner/apps/oauth2 /var/www/owncloud/server/apps/
   - cd /var/www/owncloud/testrunner
   - make install-composer-deps vendor-bin-deps
+
+- name: install-app-oauth2
+  pull: always
+  image: owncloudci/php:7.0
+  commands:
+  - cd /var/www/owncloud/server/apps/oauth2
+  - make vendor
 
 - name: setup-server-oauth2
   pull: always
@@ -903,6 +973,13 @@ steps:
   - cp -r /var/www/owncloud/testrunner/apps/oauth2 /var/www/owncloud/server/apps/
   - cd /var/www/owncloud/testrunner
   - make install-composer-deps vendor-bin-deps
+
+- name: install-app-oauth2
+  pull: always
+  image: owncloudci/php:7.0
+  commands:
+  - cd /var/www/owncloud/server/apps/oauth2
+  - make vendor
 
 - name: setup-server-oauth2
   pull: always
