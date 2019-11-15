@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 
+- Handle refresh token of a disabled user - [#225](https://github.com/owncloud/oauth2/issues/225)
 - Use a WHATWG URL spec compliant URL parser - see https://url.spec.wha… - [#229](https://github.com/owncloud/oauth2/issues/229)
 - Remove back button from error page, add logging and return proper err… - [#220](https://github.com/owncloud/oauth2/issues/220)
 - Check user status - [#209](https://github.com/owncloud/oauth2/issues/209)
