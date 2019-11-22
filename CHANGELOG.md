@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.4.2] - 2019-11-21
+
+### Changed
+
+- Handle refresh token of a disabled user - [#225](https://github.com/owncloud/oauth2/issues/225)
+- Use a WHATWG URL spec compliant URL parser - see https://url.spec.wha… - [#229](https://github.com/owncloud/oauth2/issues/229)
+- Remove back button from error page, add logging and return proper err… - [#220](https://github.com/owncloud/oauth2/issues/220)
+- Check user status - [#209](https://github.com/owncloud/oauth2/issues/209)
+
 ## [0.4.1] - 2019-05-15
 
 ### Fixed
@@ -77,7 +86,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - Verify Bearer token even if the session is still valid - [#53](https://github.com/owncloud/oauth2/pull/53)
 - Use displayname on switch user screen - [#90](https://github.com/owncloud/oauth2/pull/90)
 
-[Unreleased]: https://github.com/owncloud/oauth2/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/owncloud/oauth2/compare/v0.4.2...master
+[0.4.2]: https://github.com/owncloud/oauth2/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/owncloud/oauth2/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/owncloud/oauth2/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/owncloud/oauth2/compare/v0.2.3...v0.3.0
