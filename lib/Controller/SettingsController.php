@@ -92,14 +92,16 @@ class SettingsController extends Controller {
 	 * @return RedirectResponse Redirection to the settings page.
 	 */
 	public function addClient() {
-		if (!isset($_POST['redirect_uri']) || !isset($_POST['name'])) {
+		$redirectUri = $this->request->getParam('redirect_uri', null);
+		$name = $this->request->getParam('name', null);
+		if ($redirectUri === null || $name === null) {
 			return new RedirectResponse(
 				$this->urlGenerator->linkToRouteAbsolute(
 					'settings.SettingsPage.getAdmin',
 					['sectionid' => 'authentication']
 				) . '#oauth2');
 		}
-		if (!Utilities::isValidUrl($_POST['redirect_uri'])) {
+		if (!Utilities::isValidUrl($redirectUri)) {
 			return new RedirectResponse(
 				$this->urlGenerator->linkToRouteAbsolute(
 					'settings.SettingsPage.getAdmin',
@@ -110,14 +112,11 @@ class SettingsController extends Controller {
 		$client = new Client();
 		$client->setIdentifier(Utilities::generateRandom());
 		$client->setSecret(Utilities::generateRandom());
-		$client->setRedirectUri(\trim($_POST['redirect_uri']));
-		$client->setName(\trim($_POST['name']));
+		$client->setRedirectUri(\trim($redirectUri));
+		$client->setName(\trim($name));
 
-		if (isset($_POST['allow_subdomains'])) {
-			$client->setAllowSubdomains(true);
-		} else {
-			$client->setAllowSubdomains(false);
-		}
+		$allowSubdomains = $this->request->getParam('allow_subdomains', null) !== null;
+		$client->setAllowSubdomains($allowSubdomains);
 
 		$this->clientMapper->insert($client);
 

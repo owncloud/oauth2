@@ -39,6 +39,9 @@ class SettingsControllerTest extends TestCase {
 	/** @var string $name */
 	private $appName;
 
+	/** @var IRequest */
+	private $request;
+
 	/** @var SettingsController $controller */
 	private $controller;
 
@@ -76,6 +79,7 @@ class SettingsControllerTest extends TestCase {
 		$container = $app->getContainer();
 
 		$this->appName = $container->query('AppName');
+		$this->request = $this->createMock(IRequest::class);
 
 		$this->clientMapper = $container->query('OCA\OAuth2\Db\ClientMapper');
 		$this->clientMapper->deleteAll();
@@ -120,7 +124,7 @@ class SettingsControllerTest extends TestCase {
 
 		$this->controller = new SettingsController(
 			$this->appName,
-			$this->getMockBuilder(IRequest::class)->getMock(),
+			$this->request,
 			$this->clientMapper,
 			$this->authorizationCodeMapper,
 			$this->accessTokenMapper,
@@ -140,59 +144,44 @@ class SettingsControllerTest extends TestCase {
 		$this->refreshTokenMapper->deleteAll();
 	}
 
-	public function testAddClient() {
+	public function provideClientData() {
+		return [
+			// missing name
+			['test', null, null, 0],
+			// missing redirect Uri
+			[null, 'test', null, 0],
+			// malformed redirect Uri
+			['test', 'test', null, 0],
+			// everything is ok
+			[$this->redirectUri, $this->name, null, 1],
+			[$this->redirectUri, $this->name, '1', 1]
+		];
+	}
+
+	/**
+	 * @dataProvider provideClientData
+	 */
+	public function testAddClient($redirectUri, $name, $allowSubdomains, $expectedClientCount) {
 		$this->urlGenerator->expects($this->any())->method('linkToRouteAbsolute')->willReturn('/personal');
 		$this->clientMapper->deleteAll();
 
+		$map = [
+			['redirect_uri', null, $redirectUri],
+			['name', null, $name],
+			['allow_subdomains', null, $allowSubdomains]
+		];
+		$this->request->method('getParam')->willReturnMap($map);
 		$result = $this->controller->addClient();
 		$this->assertTrue($result instanceof RedirectResponse);
 		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
-		$this->assertEquals(0, \count($this->clientMapper->findAll()));
-
-		$_POST['redirect_uri'] = 'test';
-		$result = $this->controller->addClient();
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
-		$this->assertEquals(0, \count($this->clientMapper->findAll()));
-
-		$_POST['redirect_uri'] = null;
-		$_POST['name'] = 'test';
-		$result = $this->controller->addClient();
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
-		$this->assertEquals(0, \count($this->clientMapper->findAll()));
-
-		$_POST['redirect_uri'] = 'test';
-		$_POST['name'] = 'test';
-		$result = $this->controller->addClient();
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
-		$this->assertEquals(0, \count($this->clientMapper->findAll()));
-
-		$_POST['redirect_uri'] = $this->redirectUri;
-		$_POST['name'] = $this->name;
-		$result = $this->controller->addClient();
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
-		$this->assertEquals(1, \count($this->clientMapper->findAll()));
-		/** @var Client $client */
-		$client = $this->clientMapper->findAll()[0];
-		$this->assertEquals($this->redirectUri, $client->getRedirectUri());
-		$this->assertEquals($this->name, $client->getName());
-		$this->assertEquals(0, $client->getAllowSubdomains());
-
-		$this->clientMapper->delete($client);
-
-		$_POST['allow_subdomains'] = '1';
-		$result = $this->controller->addClient();
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
-		$this->assertEquals(1, \count($this->clientMapper->findAll()));
-		/** @var Client $client */
-		$client = $this->clientMapper->findAll()[0];
-		$this->assertEquals($this->redirectUri, $client->getRedirectUri());
-		$this->assertEquals($this->name, $client->getName());
-		$this->assertEquals(1, $client->getAllowSubdomains());
+		$this->assertEquals($expectedClientCount, \count($this->clientMapper->findAll()));
+		if ($expectedClientCount === 1) {
+			/** @var Client $client */
+			$client = $this->clientMapper->findAll()[0];
+			$this->assertEquals($redirectUri, $client->getRedirectUri());
+			$this->assertEquals($name, $client->getName());
+			$this->assertEquals((bool) $allowSubdomains, $client->getAllowSubdomains());
+		}
 	}
 
 	public function testDeleteClient() {
