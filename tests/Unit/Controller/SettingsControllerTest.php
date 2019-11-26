@@ -29,7 +29,9 @@ use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Db\RefreshToken;
 use OCA\OAuth2\Db\RefreshTokenMapper;
+use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\RedirectResponse;
+use OCP\IL10N;
 use OCP\IRequest;
 use OCP\IURLGenerator;
 use PHPUnit\Framework\TestCase;
@@ -130,6 +132,7 @@ class SettingsControllerTest extends TestCase {
 			$this->accessTokenMapper,
 			$this->refreshTokenMapper,
 			$this->userId,
+			$this->createMock(IL10N::class),
 			$container->query('Logger'),
 			$this->urlGenerator
 		);
@@ -160,20 +163,23 @@ class SettingsControllerTest extends TestCase {
 
 	/**
 	 * @dataProvider provideClientData
+	 *
+	 * @param string|null $redirectUri
+	 * @param string|null $name
+	 * @param string|null $allowSubdomains
+	 * @param integer $expectedClientCount
 	 */
 	public function testAddClient($redirectUri, $name, $allowSubdomains, $expectedClientCount) {
-		$this->urlGenerator->expects($this->any())->method('linkToRouteAbsolute')->willReturn('/personal');
 		$this->clientMapper->deleteAll();
 
 		$map = [
-			['redirect_uri', null, $redirectUri],
-			['name', null, $name],
+			['redirect_uri', '', $redirectUri],
+			['name', '', $name],
 			['allow_subdomains', null, $allowSubdomains]
 		];
 		$this->request->method('getParam')->willReturnMap($map);
 		$result = $this->controller->addClient();
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
+		$this->assertTrue($result instanceof JSONResponse);
 		$this->assertEquals($expectedClientCount, \count($this->clientMapper->findAll()));
 		if ($expectedClientCount === 1) {
 			/** @var Client $client */
@@ -184,23 +190,36 @@ class SettingsControllerTest extends TestCase {
 		}
 	}
 
-	public function testDeleteClient() {
-		$this->urlGenerator->expects($this->any())->method('linkToRouteAbsolute')->willReturn('/personal');
+	public function provideClientId() {
+		// Data providers are run before the class is configured.
+		// That's why we need a closure if we want to access $this->smth->property
+		return [
+			[function ($obj) {
+				return null;
+			}, 'error', 1],
+			[function ($obj) {
+				return 'test';
+			}, 'error', 1],
+			[function ($obj) {
+				return $obj->client === null ? '' : $obj->client->getId();
+			}, 'success', 0
+			]
+		];
+	}
 
-		$result = $this->controller->deleteClient(null);
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
-		$this->assertEquals(1, \count($this->clientMapper->findAll()));
-
-		$result = $this->controller->deleteClient('test');
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
-		$this->assertEquals(1, \count($this->clientMapper->findAll()));
-
-		$result = $this->controller->deleteClient($this->client->getId());
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
-		$this->assertEquals(0, \count($this->clientMapper->findAll()));
+	/**
+	 * @dataProvider provideClientId
+	 *
+	 * @param callable $clientIdProvider
+	 * @param string $expectedStatus
+	 * @param integer $expectedClientCount
+	 */
+	public function testDeleteClient($clientIdProvider, $expectedStatus, $expectedClientCount) {
+		$result = $this->controller->deleteClient($clientIdProvider($this));
+		$this->assertTrue($result instanceof JSONResponse);
+		$responseData = $result->getData();
+		$this->assertEquals($expectedStatus, $responseData['status']);
+		$this->assertEquals($expectedClientCount, \count($this->clientMapper->findAll()));
 	}
 
 	public function testRevokeAuthorization() {

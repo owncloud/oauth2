@@ -21,7 +21,7 @@ style('oauth2', 'authorization');
 ?>
 
 <span class="error">
-	<form id="form-inline" action="" method="post">
+	<form class="form-inline" action="" method="post">
 		<p>
 			<b><?php p($l->t('The “%s“ application would like permission to access your account', [$_['client_name']])); ?></b>
 		</p>

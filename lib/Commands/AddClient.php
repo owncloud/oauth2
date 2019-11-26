@@ -78,9 +78,17 @@ class AddClient extends Command {
 			throw new \InvalidArgumentException('Please enter true or false for allowed-sub-domains.');
 		}
 		try {
+			$this->clientMapper->findByName($name);
+			$output->writeln("Client name <$name> is already known.");
+			return 1;
+		} catch (DoesNotExistException $e) {
+			// this is good - name will be uniq
+		}
+
+		try {
 			$this->clientMapper->findByIdentifier($id);
 			$output->writeln("Client <$id> is already known.");
-			return;
+			return 1;
 		} catch (DoesNotExistException $ex) {
 			$client = new Client();
 			$client->setIdentifier($id);

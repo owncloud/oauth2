@@ -18,62 +18,49 @@
  */
 
 /** @var \OCA\OAuth2\Db\Client $client */
-script('oauth2', 'settings');
+script('oauth2', 'settings-admin');
 style('oauth2', 'main');
 style('oauth2', 'settings-admin');
+
+$hasClients = !empty($_['clients']);
 ?>
 
 <div class="section" id="oauth2">
 	<h2 class="app-name"><?php p($l->t('OAuth 2.0')); ?></h2>
 
-    <h3><?php p($l->t('Registered clients')); ?></h3>
-    <?php if (empty($_['clients'])) {
-	p($l->t('No clients registered.'));
-} else {
-	?>
-    <table class="grid">
-        <thead>
-        <tr>
-            <th id="headerName" scope="col"><?php p($l->t('Name')); ?></th>
-            <th id="headerRedirectUri" scope="col"><?php p($l->t('Redirection URI')); ?></th>
-            <th id="headerClientIdentifier" scope="col"><?php p($l->t('Client Identifier')); ?></th>
-            <th id="headerSecret" scope="col"><?php p($l->t('Secret')); ?></th>
-			<th id="headerSubdomains" scope="col"><?php p($l->t('Subdomains allowed')); ?></th>
-            <th id="headerRemove">&nbsp;</th>
-        </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($_['clients'] as $client) {
-		?>
-                <tr>
-                    <td><?php p($client->getName()); ?></td>
-                    <td><?php p($client->getRedirectUri()); ?></td>
-                    <td><code><?php p($client->getIdentifier()); ?></code></td>
-                    <td><code><?php p($client->getSecret()); ?></code></td>
-					<td id="td-allow-subdomains"
-					  <?php if ($client->getAllowSubdomains()) { ?> class="icon-32 icon-checkmark" <?php } ?> >
-					</td>
-                    <td>
-                        <form id="form-inline" class="delete" data-confirm="<?php p($l->t('Are you sure you want to delete this item?')); ?>" action="<?php p($_['urlGenerator']->linkToRoute('oauth2.settings.deleteClient', ['id' => $client->getId()])); ?>" method="post">
-							<input type="hidden" name="requesttoken" value="<?php p($_['requesttoken']) ?>" />
-                            <input type="submit" class="button icon-delete" value="">
-                        </form>
-                    </td>
-                </tr>
-            <?php
-	} ?>
-        </tbody>
-    </table>
-    <?php
-} ?>
+	<h3><?php p($l->t('Registered clients')); ?></h3>
+	<p class="no-clients-message <?php if ($hasClients) {
+	p('hidden');
+}?>">
+		<?php p($l->t('No clients registered.')); ?>
+	</p>
+	<table class="grid <?php if (!$hasClients) {
+	p('hidden');
+}?>">
+		<thead>
+			<tr>
+				<th id="headerName" scope="col"><?php p($l->t('Name')); ?></th>
+				<th id="headerRedirectUri" scope="col"><?php p($l->t('Redirection URI')); ?></th>
+				<th id="headerClientIdentifier" scope="col"><?php p($l->t('Client Identifier')); ?></th>
+				<th id="headerSecret" scope="col"><?php p($l->t('Secret')); ?></th>
+				<th id="headerSubdomains" scope="col"><?php p($l->t('Subdomains allowed')); ?></th>
+				<th id="headerRemove">&nbsp;</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach ($_['clients'] as $client) {	?>
+				<?php include('client.part.php') ?>
+			<?php } ?>
+		</tbody>
+	</table>
 
-    <h3><?php p($l->t('Add client')); ?></h3>
-    <form action="<?php p($_['urlGenerator']->linkToRoute('oauth2.settings.addClient')); ?>" method="post">
-		<input id="name" name="name" type="text" placeholder="<?php p($l->t('Name')); ?>">
-        <input id="redirect_uri" name="redirect_uri" type="text" placeholder="<?php p($l->t('Redirection URI')); ?>">
-		<input type="checkbox" class="checkbox" name="allow_subdomains" id="allow_subdomains" value="1"/>
+	<h3><?php p($l->t('Add client')); ?></h3>
+	<form id="oauth2-new-client">
+		<input name="name" type="text" placeholder="<?php p($l->t('Name')); ?>">
+		<input name="redirect_uri" type="text" placeholder="<?php p($l->t('Redirection URI')); ?>">
+		<input name="allow_subdomains" id="allow_subdomains" type="checkbox" class="checkbox" value="1"/>
 		<label for="allow_subdomains"><?php p($l->t('Allow subdomains'));?></label>
-		<input type="hidden" name="requesttoken" value="<?php p($_['requesttoken']) ?>" />
-        <input type="submit" class="button" value="<?php p($l->t('Add')); ?>">
-    </form>
+	</form>
+	<button id="oauth2_submit" type="button" class="button"><?php p($l->t('Add')); ?></button>
+	<span id="oauth2_save_msg"></span>
 </div>
