@@ -50,9 +50,9 @@ style('oauth2', 'settings-admin');
                     <td><?php p($client->getRedirectUri()); ?></td>
                     <td><code><?php p($client->getIdentifier()); ?></code></td>
                     <td><code><?php p($client->getSecret()); ?></code></td>
-					<td id="td-allow-subdomains"><?php if ($client->getAllowSubdomains()) {
-			?> <img alt="" src="/core/img/actions/checkmark.svg"> <?php
-		} ?></td>
+					<td id="td-allow-subdomains"
+					  <?php if ($client->getAllowSubdomains()) { ?> class="icon-32 icon-checkmark" <?php } ?> >
+					</td>
                     <td>
                         <form id="form-inline" class="delete" data-confirm="<?php p($l->t('Are you sure you want to delete this item?')); ?>" action="<?php p($_['urlGenerator']->linkToRoute('oauth2.settings.deleteClient', ['id' => $client->getId()])); ?>" method="post">
 							<input type="hidden" name="requesttoken" value="<?php p($_['requesttoken']) ?>" />
