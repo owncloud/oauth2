@@ -22,21 +22,23 @@ script('oauth2', 'settings-admin');
 style('oauth2', 'main');
 style('oauth2', 'settings-admin');
 
-$hasClients = !empty($_['clients']);
+if (!empty($_['clients'])) {
+	$noClientsExtraClass = 'hidden';
+	$clientTableExtraClass = '';
+} else {
+	$noClientsExtraClass = '';
+	$clientTableExtraClass = 'hidden';
+}
 ?>
 
 <div class="section" id="oauth2">
 	<h2 class="app-name"><?php p($l->t('OAuth 2.0')); ?></h2>
 
 	<h3><?php p($l->t('Registered clients')); ?></h3>
-	<p class="no-clients-message <?php if ($hasClients) {
-	p('hidden');
-}?>">
+	<p class="no-clients-message <?php p($noClientsExtraClass) ?>">
 		<?php p($l->t('No clients registered.')); ?>
 	</p>
-	<table class="grid <?php if (!$hasClients) {
-	p('hidden');
-}?>">
+	<table class="grid <?php p($clientTableExtraClass) ?>">
 		<thead>
 			<tr>
 				<th id="headerName" scope="col"><?php p($l->t('Name')); ?></th>
@@ -48,9 +50,11 @@ $hasClients = !empty($_['clients']);
 			</tr>
 		</thead>
 		<tbody>
-			<?php foreach ($_['clients'] as $client) {	?>
-				<?php include('client.part.php') ?>
-			<?php } ?>
+		<?php
+			foreach ($_['clients'] as $client):
+				include('client.part.php');
+			endforeach;
+		?>
 		</tbody>
 	</table>
 

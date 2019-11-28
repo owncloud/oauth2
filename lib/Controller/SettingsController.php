@@ -101,62 +101,47 @@ class SettingsController extends Controller {
 	 * @return JSONResponse
 	 */
 	public function addClient() {
-		$redirectUri = $this->request->getParam('redirect_uri', '');
-		$name = $this->request->getParam('name', '');
+		$redirectUri = \trim($this->request->getParam('redirect_uri', ''));
+		$name = \trim($this->request->getParam('name', ''));
+		if ($name === '') {
+			return $this->sendErrorResponse($this->l10n->t('Name must not be empty'));
+		}
+		if ($redirectUri === '') {
+			return $this->sendErrorResponse($this->l10n->t('Redirect URI must not be empty'));
+		}
+		if (!Utilities::isValidUrl($redirectUri)) {
+			return $this->sendErrorResponse($this->l10n->t('Redirect URI must be a valid URL'));
+		}
+
 		try {
-			if ($name === '') {
-				throw new \RuntimeException(
-					$this->l10n->t('Name must not be empty')
-				);
-			}
-			if ($redirectUri === '') {
-				throw new \RuntimeException(
-					$this->l10n->t('Redirect URI must not be empty')
-				);
-			}
-			if (!Utilities::isValidUrl($redirectUri)) {
-				throw new \RuntimeException(
-					$this->l10n->t('Redirect URI must be a valid URL')
-				);
-			}
+			// The name should be unique
+			$this->clientMapper->findByName($name);
+			return $this->sendErrorResponse($this->l10n->t('Name %s already exists', [$name]));
+		} catch (DoesNotExistException $e) {
+			// expected when the client name is not a duplicate
+		}
 
-			try {
-				$this->clientMapper->findByName($name);
-				throw new \RuntimeException(
-					$this->l10n->t('Name %s already exists', [$name])
-				);
-			} catch (DoesNotExistException $e) {
-				// expected when the client name is not duplicated
-			}
+		$client = new Client();
+		$client->setIdentifier(Utilities::generateRandom());
+		$client->setSecret(Utilities::generateRandom());
+		$client->setRedirectUri($redirectUri);
+		$client->setName($name);
 
-			$client = new Client();
-			$client->setIdentifier(Utilities::generateRandom());
-			$client->setSecret(Utilities::generateRandom());
-			$client->setRedirectUri(\trim($redirectUri));
-			$client->setName(\trim($name));
+		$allowSubdomains = $this->request->getParam('allow_subdomains', null) !== null;
+		$client->setAllowSubdomains($allowSubdomains);
 
-			$allowSubdomains = $this->request->getParam('allow_subdomains', null) !== null;
-			$client->setAllowSubdomains($allowSubdomains);
+		$this->clientMapper->insert($client);
+		$this->logger->info('The client "' . $client->getName() . '" has been added.', ['app' => $this->appName]);
 
-			$this->clientMapper->insert($client);
-			$this->logger->info('The client "' . $client->getName() . '" has been added.', ['app' => $this->appName]);
-
-			$template = new Template('oauth2', 'client.part', '');
-			$template->assign('client', $this->clientMapper->findByIdentifier($client->getIdentifier()));
-			$response = [
+		$template = new Template('oauth2', 'client.part', '');
+		$template->assign('client', $this->clientMapper->findByIdentifier($client->getIdentifier()));
+		return new JSONResponse(
+			[
 				'status' => 'success',
 				'rowHtml' =>  $template->fetchPage(),
 				'data' => [] // OC.msg needs this
-			];
-		} catch (\RuntimeException $e) {
-			$response = [
-				'status' => 'error',
-				'data' => [
-					'errorMessage' => $e->getMessage()
-				]
-			];
-		}
-		return new JSONResponse($response);
+			]
+		);
 	}
 
 	/**
@@ -165,38 +150,30 @@ class SettingsController extends Controller {
 	 * @param int $id The client identifier.
 	 *
 	 * @return JSONResponse
+	 * @throws DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
 	public function deleteClient($id) {
-		try {
-			if (!\is_int($id)) {
-				throw new \RuntimeException(
-					$this->l10n->t('Client id must be a number')
-				);
-			}
-			/** @var Client $client */
-			$client = $this->clientMapper->find($id);
-			$clientName = $client->getName();
-			$this->clientMapper->delete($client);
+		if (!\is_int($id)) {
+			return $this->sendErrorResponse($this->l10n->t('Client id must be a number'));
+		}
+		/** @var Client $client */
+		$client = $this->clientMapper->find($id);
+		$clientName = $client->getName();
+		$this->clientMapper->delete($client);
 
-			$this->authorizationCodeMapper->deleteByClient($id);
-			$this->accessTokenMapper->deleteByClient($id);
-			$this->refreshTokenMapper->deleteByClient($id);
+		$this->authorizationCodeMapper->deleteByClient($id);
+		$this->accessTokenMapper->deleteByClient($id);
+		$this->refreshTokenMapper->deleteByClient($id);
 
-			$this->logger->info('The client "' . $clientName . '" has been deleted.', ['app' => $this->appName]);
-			$response = [
+		$this->logger->info('The client "' . $clientName . '" has been deleted.', ['app' => $this->appName]);
+		return new JSONResponse(
+			[
 				'status' => 'success',
 				'clientIdentifier' =>  $client->getIdentifier(),
 				'data' => [] // OC.msg needs this
-			];
-		} catch (\RuntimeException $e) {
-			$response = [
-				'status' => 'error',
-				'data' => [
-					'errorMessage' => $e->getMessage()
-				]
-			];
-		}
-		return new JSONResponse($response);
+			]
+		);
 	}
 
 	/**
@@ -226,5 +203,19 @@ class SettingsController extends Controller {
 				'settings.SettingsPage.getPersonal',
 				['sectionid' => 'security']
 			) . '#oauth2');
+	}
+
+	/**
+	 * @param string $message
+	 * @return JSONResponse
+	 */
+	private function sendErrorResponse($message) {
+		return new JSONResponse(
+			[
+				'status' => 'error',
+				'errorMessage' => $message,
+				'data' => [] // OC.msg needs this
+			]
+		);
 	}
 }
