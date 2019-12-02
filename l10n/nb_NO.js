@@ -18,12 +18,12 @@ OC.L10N.register(
     "Client Identifier" : "Klient id",
     "Secret" : "Secret",
     "Subdomains allowed" : "Underdomener tillatt",
-    "Are you sure you want to delete this item?" : "Er du sikker på at du vil slette dette elementet?",
     "Add client" : "Legg til klient",
     "Allow subdomains" : "Tillat underdomener",
     "Add" : "Legg til",
     "Authorized Applications" : "Autoriser applikasjon",
     "No applications authorized." : "Ingen applikasjoner er autorisert.",
+    "Are you sure you want to delete this item?" : "Er du sikker på at du vil slette dette elementet?",
     "Switch user" : "Bytt bruker",
     "You are logged in as %s but the application requested access for user %s." : "Du er logget in som %smen applikasjonen forespurte tilgang for bruker %s."
 },

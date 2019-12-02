@@ -19,12 +19,12 @@ OC.L10N.register(
     "Client Identifier" : "รหัสประจำตัวไคลเอนต์",
     "Secret" : "ความลับ",
     "Subdomains allowed" : "โดเมนย่อยได้รับอนุญาตแล้ว",
-    "Are you sure you want to delete this item?" : "คุณแน่ใจหรือว่าต้องการลบรายการนี้?",
     "Add client" : "เพิ่มไคลเอนต์",
     "Allow subdomains" : "อนุญาตให้ใช้โดเมนย่อย",
     "Add" : "เพิ่ม",
     "Authorized Applications" : "แอปพลิเคชันที่ได้รับอนุญาตแล้ว",
     "No applications authorized." : "ไม่มีแอปพลิเคชันที่ได้รับอนุญาต",
+    "Are you sure you want to delete this item?" : "คุณแน่ใจหรือว่าต้องการลบรายการนี้?",
     "Switch user" : "เปลี่ยนผู้ใช้",
     "You are logged in as %s but the application requested access for user %s." : "คุณเข้าสู่ระบบในชื่อ %s แต่แอปพลิเคชันให้สิทธิการเข้าถึงสำหรับผู้ใช้ %s เท่านั้น"
 },

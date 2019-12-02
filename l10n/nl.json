@@ -16,12 +16,12 @@
     "Client Identifier" : "Client identificator",
     "Secret" : "Geheim",
     "Subdomains allowed" : "Sub-domeinen toegestaan",
-    "Are you sure you want to delete this item?" : "Weet u zeker dat u dit item wilt verwijderen?",
     "Add client" : "Client toevoegen",
     "Allow subdomains" : "Toestaan sub-domeinen",
     "Add" : "Toevoegen",
     "Authorized Applications" : "Geautoriseerde applicaties",
     "No applications authorized." : "Geen applicaties geautoriseerd.",
+    "Are you sure you want to delete this item?" : "Weet u zeker dat u dit item wilt verwijderen?",
     "Switch user" : "Omschakelen gebruiker",
     "You are logged in as %s but the application requested access for user %s." : "U bent aangemeld als %s, maar de applicatie verzoekt toegang als %s."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

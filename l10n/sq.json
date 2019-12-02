@@ -1,5 +1,6 @@
 { "translations": {
     "The application \"{app}\" is requesting access to your account. To authorize it, please log in first." : "Aplikacioni \"{app}\" po kërkon hyrje në llogarinë tuaj. Që ta autorizoni, ju lutemi, së pari bëni hyrjen në të.",
+    "Saving..." : "Po ruhet …",
     "The application was authorized successfully. You can now close this window." : "Aplikacioni u autorizua me sukses. Tani mund ta mbyllni këtë dritare.",
     "Request not valid" : "Kërkesë jo e vlefshme",
     "This request is not valid. Please contact the administrator if this error persists." : "Kjo kërkesë s’është e vlefshme. Ju lutemi, lidhuni me përgjegjësin, nëse vazhdon ky gabim.",
@@ -17,12 +18,12 @@
     "Client Identifier" : "Identifikues Klienti",
     "Secret" : "E fshehtë",
     "Subdomains allowed" : "Nënpërkatësi të lejuara",
-    "Are you sure you want to delete this item?" : "Jeni i sigurt se doni të fshihet ky objekt?",
     "Add client" : "Shtoni klient",
     "Allow subdomains" : "Lejo nënpërkatësi",
     "Add" : "Shtoje",
     "Authorized Applications" : "Aplikacione të Autorizuar",
     "No applications authorized." : "S’ka aplikacione të autorizuar.",
+    "Are you sure you want to delete this item?" : "Jeni i sigurt se doni të fshihet ky objekt?",
     "Switch user" : "Këmbe përdorues",
     "You are logged in as %s but the application requested access for user %s." : "Keni bërë hyrjen si %s, por aplikacioni kërkoi hyrje për përdoruesin %s."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

@@ -16,12 +16,12 @@
     "Client Identifier" : "Identifiant du client",
     "Secret" : "Secret",
     "Subdomains allowed" : "Sous-domaines autorisés",
-    "Are you sure you want to delete this item?" : "Êtes-vous sûr de vouloir supprimer cet élément ?",
     "Add client" : "Ajouter un client",
     "Allow subdomains" : "Autoriser un sous-domaine",
     "Add" : "Ajouter",
     "Authorized Applications" : "Applications autorisées",
     "No applications authorized." : "Aucune application autorisée.",
+    "Are you sure you want to delete this item?" : "Êtes-vous sûr de vouloir supprimer cet élément ?",
     "Switch user" : "Changer d'utilisateur",
     "You are logged in as %s but the application requested access for user %s." : "Vous êtes connecté en tant que %s mais l'application nécessite l'accès de %s."
 },"pluralForm" :"nplurals=2; plural=(n > 1);"

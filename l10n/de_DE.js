@@ -19,12 +19,12 @@ OC.L10N.register(
     "Client Identifier" : "Client ID",
     "Secret" : "Geheime Zeichenkette",
     "Subdomains allowed" : "Subdomains erlaubt",
-    "Are you sure you want to delete this item?" : "Möchten Sie das Objekt wirklich löschen?",
     "Add client" : "Client hinzufügen",
     "Allow subdomains" : "Subdomains erlauben",
     "Add" : "Hinzufügen",
     "Authorized Applications" : "Autorisierte Anwendungen",
     "No applications authorized." : "Keine Anwendungen autorisiert.",
+    "Are you sure you want to delete this item?" : "Möchten Sie das Objekt wirklich löschen?",
     "Switch user" : "Nutzer wechseln",
     "You are logged in as %s but the application requested access for user %s." : "Sie sind als %s angemeldet, die Anwendung benötigt aber Zugriff auf den Benutzer %s."
 },

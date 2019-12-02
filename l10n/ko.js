@@ -18,12 +18,12 @@ OC.L10N.register(
     "Client Identifier" : "클라이언트 식별자",
     "Secret" : "비밀 값",
     "Subdomains allowed" : "하위 도메인 허용됨",
-    "Are you sure you want to delete this item?" : "이 항목을 삭제하시겠습니까?",
     "Add client" : "클라이언트 추가",
     "Allow subdomains" : "하위 도메인 허용",
     "Add" : "추가",
     "Authorized Applications" : "인증된 앱",
     "No applications authorized." : "인증된 앱이 없습니다.",
+    "Are you sure you want to delete this item?" : "이 항목을 삭제하시겠습니까?",
     "Switch user" : "사용자 전환",
     "You are logged in as %s but the application requested access for user %s." : "%s 님으로 로그인되어 있지만 앱에서 %s 사용자 접근을 요청했습니다."
 },

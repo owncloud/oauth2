@@ -19,12 +19,12 @@ OC.L10N.register(
     "Client Identifier" : "Αναγνωριστικό πελάτη",
     "Secret" : "Μυστικό",
     "Subdomains allowed" : "Επιτρέπονται υποτομείς",
-    "Are you sure you want to delete this item?" : "Είστε σίγουροι πως θέλετε να διαγραφεί αυτό το αντικείμενο;",
     "Add client" : "Προσθήκη πελάτη",
     "Allow subdomains" : "Να επιτρέπονται υποτομείς",
     "Add" : "Προσθήκη",
     "Authorized Applications" : "Πιστοποιημένες εφαρμογές",
     "No applications authorized." : "Δεν έχουν πιστοποιηθεί εφαρμογές.",
+    "Are you sure you want to delete this item?" : "Είστε σίγουροι πως θέλετε να διαγραφεί αυτό το αντικείμενο;",
     "Switch user" : "Εναλλαγή χρήστη",
     "You are logged in as %s but the application requested access for user %s." : "Έχετε συνδεθεί ως %s αλλά η εφαρμογή αιτήθηκε πρόσβαση για τον χρήστη %s."
 },

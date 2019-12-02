@@ -19,12 +19,12 @@ OC.L10N.register(
     "Client Identifier" : "Client Identifier",
     "Secret" : "Secret",
     "Subdomains allowed" : "Subdomains allowed",
-    "Are you sure you want to delete this item?" : "Are you sure you want to delete this item?",
     "Add client" : "Add client",
     "Allow subdomains" : "Allow subdomains",
     "Add" : "Add",
     "Authorized Applications" : "Authorised Applications",
     "No applications authorized." : "No applications authorised.",
+    "Are you sure you want to delete this item?" : "Are you sure you want to delete this item?",
     "Switch user" : "Switch user",
     "You are logged in as %s but the application requested access for user %s." : "You are logged in as %s but the application requested access for user %s."
 },
