@@ -2,6 +2,7 @@ OC.L10N.register(
     "oauth2",
     {
     "The application \"{app}\" is requesting access to your account. To authorize it, please log in first." : "แอปฯ \"{app}\" ต้องการขอสิทธิ์การเข้าถึงบัญชีของคุณ หากต้องการให้สิทธิ์โปรดเข้าสู่ระบบก่อน",
+    "Saving..." : "กำลังบันทึกข้อมูล...",
     "The application was authorized successfully. You can now close this window." : "แอปฯได้รับอนุญาตเรียบร้อยแล้ว ขณะนี้คุณสามารถปิดหน้าต่างนี้ได้เลย",
     "Request not valid" : "คำร้องขอไม่ถูกต้อง",
     "This request is not valid. Please contact the administrator if this error persists." : "คำร้องขอนี้ไม่ถูกต้อง โปรดติดต่อผู้ดูแลระบบหากยังพบข้อผิดพลาดนี้อยู่",

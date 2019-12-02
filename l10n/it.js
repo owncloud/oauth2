@@ -2,6 +2,7 @@ OC.L10N.register(
     "oauth2",
     {
     "The application \"{app}\" is requesting access to your account. To authorize it, please log in first." : "L'applicazione \"{app}\" richiede accesso al tuo account. Per autorizzarlo, effettuare il login prima.",
+    "Saving..." : "Salvataggio in corso...",
     "The application was authorized successfully. You can now close this window." : "Applicazione autorizzata con successo. Puoi chiudere questa finestra.",
     "Request not valid" : "Richiesta non valida",
     "This request is not valid. Please contact the administrator if this error persists." : "Questa richiesta non e' valida. Per favore contatta l'Amministratore se l'errore persiste.",

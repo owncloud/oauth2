@@ -2,6 +2,13 @@ OC.L10N.register(
     "oauth2",
     {
     "The application \"{app}\" is requesting access to your account. To authorize it, please log in first." : "A aplicación «{app}» está solicitando acceso á súa conta. Para autorizala, inicie sesión primeiro.",
+    "Deleting..." : "Eliminando…",
+    "Saving..." : "Gardando…",
+    "Name must not be empty" : "O nome non debe estar baleiro",
+    "Redirect URI must not be empty" : "O URI de redirección non debe estar baleiro",
+    "Redirect URI must be a valid URL" : "O URI de redirección debe ser un URL válido",
+    "Name %s already exists" : "Xa existe o nome %s",
+    "Client id must be a number" : "O identificador de cliente debe ser un número",
     "The application was authorized successfully. You can now close this window." : "A aplicación foi autorizada satisfactoriamente. Agora pode pechar esta xanela.",
     "Request not valid" : "Solicitude incorrecta",
     "This request is not valid. Please contact the administrator if this error persists." : "Esta solicitude non é válida. Póñase en contacto co administrador se este erro persiste.",

@@ -1,5 +1,6 @@
 { "translations": {
     "The application \"{app}\" is requesting access to your account. To authorize it, please log in first." : "L'application \"{app}\" est nécessaire pour accéder à votre compte. Pour l'autoriser, veuillez d'abord vous connecter.",
+    "Saving..." : "Enregistrement...",
     "The application was authorized successfully. You can now close this window." : "L'application a été autorisée avec succès. Vous pouvez maintenant fermer la fenêtre.",
     "Request not valid" : "Requête invalide",
     "This request is not valid. Please contact the administrator if this error persists." : "Cette requête est invalide. Merci de contacter l'administrateur si l'erreur persiste.",

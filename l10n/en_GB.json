@@ -1,5 +1,6 @@
 { "translations": {
     "The application \"{app}\" is requesting access to your account. To authorize it, please log in first." : "The application \"{app}\" is requesting access to your account. To authorise it, please log in first.",
+    "Saving..." : "Saving...",
     "The application was authorized successfully. You can now close this window." : "The application was authorised successfully. You can now close this window.",
     "Request not valid" : "Request not valid",
     "This request is not valid. Please contact the administrator if this error persists." : "This request is not valid. Please contact the administrator if this error persists.",
