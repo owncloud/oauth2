@@ -26,10 +26,14 @@ use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCA\OAuth2\Utilities;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\RedirectResponse;
+use OCP\IL10N;
 use OCP\ILogger;
 use OCP\IRequest;
 use OCP\IURLGenerator;
+use OCP\Template;
 
 class SettingsController extends Controller {
 
@@ -47,6 +51,9 @@ class SettingsController extends Controller {
 
 	/** @var string */
 	private $userId;
+
+	/** @var IL10N  */
+	private $l10n;
 
 	/** @var ILogger */
 	private $logger;
@@ -73,6 +80,7 @@ class SettingsController extends Controller {
 								AccessTokenMapper $accessTokenMapper,
 								RefreshTokenMapper $refreshTokenMapper,
 								$UserId,
+								IL10N $l10n,
 								ILogger $logger,
 								IURLGenerator $urlGenerator) {
 		parent::__construct($AppName, $request);
@@ -82,6 +90,7 @@ class SettingsController extends Controller {
 		$this->accessTokenMapper = $accessTokenMapper;
 		$this->refreshTokenMapper = $refreshTokenMapper;
 		$this->userId = $UserId;
+		$this->l10n = $l10n;
 		$this->logger = $logger;
 		$this->urlGenerator = $urlGenerator;
 	}
@@ -89,45 +98,49 @@ class SettingsController extends Controller {
 	/**
 	 * Adds a client.
 	 *
-	 * @return RedirectResponse Redirection to the settings page.
+	 * @return JSONResponse
 	 */
 	public function addClient() {
-		if (!isset($_POST['redirect_uri']) || !isset($_POST['name'])) {
-			return new RedirectResponse(
-				$this->urlGenerator->linkToRouteAbsolute(
-					'settings.SettingsPage.getAdmin',
-					['sectionid' => 'authentication']
-				) . '#oauth2');
+		$redirectUri = \trim($this->request->getParam('redirect_uri', ''));
+		$name = \trim($this->request->getParam('name', ''));
+		if ($name === '') {
+			return $this->sendErrorResponse($this->l10n->t('Name must not be empty'));
 		}
-		if (!Utilities::isValidUrl($_POST['redirect_uri'])) {
-			return new RedirectResponse(
-				$this->urlGenerator->linkToRouteAbsolute(
-					'settings.SettingsPage.getAdmin',
-					['sectionid' => 'authentication']
-				) . '#oauth2');
+		if ($redirectUri === '') {
+			return $this->sendErrorResponse($this->l10n->t('Redirect URI must not be empty'));
+		}
+		if (!Utilities::isValidUrl($redirectUri)) {
+			return $this->sendErrorResponse($this->l10n->t('Redirect URI must be a valid URL'));
+		}
+
+		try {
+			// The name should be unique
+			$this->clientMapper->findByName($name);
+			return $this->sendErrorResponse($this->l10n->t('Name %s already exists', [$name]));
+		} catch (DoesNotExistException $e) {
+			// expected when the client name is not a duplicate
 		}
 
 		$client = new Client();
 		$client->setIdentifier(Utilities::generateRandom());
 		$client->setSecret(Utilities::generateRandom());
-		$client->setRedirectUri(\trim($_POST['redirect_uri']));
-		$client->setName(\trim($_POST['name']));
+		$client->setRedirectUri($redirectUri);
+		$client->setName($name);
 
-		if (isset($_POST['allow_subdomains'])) {
-			$client->setAllowSubdomains(true);
-		} else {
-			$client->setAllowSubdomains(false);
-		}
+		$allowSubdomains = $this->request->getParam('allow_subdomains', null) !== null;
+		$client->setAllowSubdomains($allowSubdomains);
 
 		$this->clientMapper->insert($client);
-
 		$this->logger->info('The client "' . $client->getName() . '" has been added.', ['app' => $this->appName]);
 
-		return new RedirectResponse(
-			$this->urlGenerator->linkToRouteAbsolute(
-				'settings.SettingsPage.getAdmin',
-				['sectionid' => 'authentication']
-			) . '#oauth2'
+		$template = new Template('oauth2', 'client.part', '');
+		$template->assign('client', $this->clientMapper->findByIdentifier($client->getIdentifier()));
+		return new JSONResponse(
+			[
+				'status' => 'success',
+				'rowHtml' =>  $template->fetchPage(),
+				'data' => [] // OC.msg needs this
+			]
 		);
 	}
 
@@ -136,17 +149,14 @@ class SettingsController extends Controller {
 	 *
 	 * @param int $id The client identifier.
 	 *
-	 * @return RedirectResponse Redirection to the settings page.
+	 * @return JSONResponse
+	 * @throws DoesNotExistException
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
 	public function deleteClient($id) {
 		if (!\is_int($id)) {
-			return new RedirectResponse(
-				$this->urlGenerator->linkToRouteAbsolute(
-					'settings.SettingsPage.getAdmin',
-					['sectionid' => 'authentication']
-				) . '#oauth2');
+			return $this->sendErrorResponse($this->l10n->t('Client id must be a number'));
 		}
-
 		/** @var Client $client */
 		$client = $this->clientMapper->find($id);
 		$clientName = $client->getName();
@@ -157,12 +167,13 @@ class SettingsController extends Controller {
 		$this->refreshTokenMapper->deleteByClient($id);
 
 		$this->logger->info('The client "' . $clientName . '" has been deleted.', ['app' => $this->appName]);
-
-		return new RedirectResponse(
-			$this->urlGenerator->linkToRouteAbsolute(
-				'settings.SettingsPage.getAdmin',
-				['sectionid' => 'authentication']
-			) . '#oauth2');
+		return new JSONResponse(
+			[
+				'status' => 'success',
+				'clientIdentifier' =>  $client->getIdentifier(),
+				'data' => [] // OC.msg needs this
+			]
+		);
 	}
 
 	/**
@@ -192,5 +203,19 @@ class SettingsController extends Controller {
 				'settings.SettingsPage.getPersonal',
 				['sectionid' => 'security']
 			) . '#oauth2');
+	}
+
+	/**
+	 * @param string $message
+	 * @return JSONResponse
+	 */
+	private function sendErrorResponse($message) {
+		return new JSONResponse(
+			[
+				'status' => 'error',
+				'errorMessage' => $message,
+				'data' => [] // OC.msg needs this
+			]
+		);
 	}
 }

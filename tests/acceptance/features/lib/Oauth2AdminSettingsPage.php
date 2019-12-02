@@ -32,7 +32,7 @@ class Oauth2AdminSettingsPage extends OwncloudPage {
 	private $oauthAppNameInputId = "name";
 	private $oauthRedirectionUriInputId = "redirect_uri";
 	private $allowSubdomainsCheckBoxXpath = "//label[@for='allow_subdomains']";
-	private $addClientBtnXpath = "//*[@id='oauth2']//input[@value='Add']";
+	private $addClientBtnXpath = "//*[@id='oauth2']//button[@id='oauth2_submit']";
 	private $clientRowByNameXpath = "//*[@id='oauth2']//td[text()='%s']/../*";
 
 	/**
@@ -94,11 +94,8 @@ class Oauth2AdminSettingsPage extends OwncloudPage {
 		$result['redirection_uri'] = $tds[1]->getText();
 		$result['client_id'] = $tds[2]->getText();
 		$result['client_secret'] = $tds[3]->getText();
-		$actionLink = $tds[5]->find("xpath", "/form")->getAttribute("action");
-		$linkArray = \explode("/", $actionLink);
-		\end($linkArray);
-		$result['id'] = \prev($linkArray);
-		
+		$result['id'] = (int) $tds[5]->find("xpath", "/button")->getAttribute("data-id");
+
 		return $result;
 	}
 }

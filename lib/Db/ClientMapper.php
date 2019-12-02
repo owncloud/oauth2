@@ -75,6 +75,14 @@ class ClientMapper extends Mapper {
 		return $this->findEntity($sql, [$identifier], null, null);
 	}
 
+	public function findByName($name) {
+		if (!\is_string($name)) {
+			throw new InvalidArgumentException('name must not be null');
+		}
+		$sql = 'SELECT * FROM `' . $this->tableName . '` WHERE `name` = ?';
+		return $this->findEntity($sql, [$name], null, null);
+	}
+
 	/**
 	 * Selects all clients.
 	 *
