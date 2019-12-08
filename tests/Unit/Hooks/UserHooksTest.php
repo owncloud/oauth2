@@ -28,7 +28,7 @@ class UserHooksTest extends TestCase {
 	/** @var UserHooks $userHooks */
 	private $userHooks;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$app = new Application();

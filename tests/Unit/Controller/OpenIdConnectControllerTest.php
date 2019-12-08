@@ -42,7 +42,7 @@ class OpenIdConnectControllerTest extends TestCase {
 	/** @var IAvatarManager | \PHPUnit\Framework\MockObject\MockObject */
 	private $avatarManager;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		$this->request = $this->createMock(IRequest::class);
 		$this->userSession = $this->createMock(IUserSession::class);

@@ -27,7 +27,7 @@ class AccessTokenTest extends TestCase {
 	/** @var AccessToken $accessToken */
 	private $accessToken;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$this->accessToken = new AccessToken();

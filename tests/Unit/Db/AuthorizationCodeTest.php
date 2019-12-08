@@ -27,7 +27,7 @@ class AuthorizationCodeTest extends TestCase {
 	/** @var AuthorizationCode $authorizationCode */
 	private $authorizationCode;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$this->authorizationCode = new AuthorizationCode();

@@ -55,7 +55,7 @@ class AuthModuleTest extends TestCase {
 	/**
 	 * @throws \Exception
 	 */
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$app = new Application();
@@ -85,7 +85,7 @@ class AuthModuleTest extends TestCase {
 		$this->authModule = new AuthModule();
 	}
 
-	protected function tearDown() {
+	protected function tearDown(): void {
 		parent::tearDown();
 
 		$this->clientMapper->deleteAll();

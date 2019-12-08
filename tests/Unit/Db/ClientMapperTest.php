@@ -72,7 +72,7 @@ class ClientMapperTest extends TestCase {
 	/** @var AccessToken $accessToken */
 	private $accessToken;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$app = new Application();
@@ -118,7 +118,7 @@ class ClientMapperTest extends TestCase {
 		$this->accessToken = $this->accessTokenMapper->insert($accessToken);
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		parent::tearDown();
 
 		$this->clientMapper->delete($this->client1);
