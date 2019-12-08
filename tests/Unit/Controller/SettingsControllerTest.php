@@ -74,7 +74,7 @@ class SettingsControllerTest extends TestCase {
 	/** @var string $name */
 	private $name = 'ownCloud';
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$app = new Application();
@@ -138,7 +138,7 @@ class SettingsControllerTest extends TestCase {
 		);
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		parent::tearDown();
 
 		$this->clientMapper->deleteAll();

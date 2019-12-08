@@ -50,7 +50,7 @@ class AccessTokenMapperTest extends TestCase {
 	/** @var AccessToken $accessToken2 */
 	private $accessToken2;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$app = new Application();
@@ -76,7 +76,7 @@ class AccessTokenMapperTest extends TestCase {
 		$this->accessToken2 = $this->accessTokenMapper->insert($accessToken);
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		parent::tearDown();
 
 		$this->accessTokenMapper->delete($this->accessToken1);

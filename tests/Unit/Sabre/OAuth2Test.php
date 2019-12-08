@@ -64,7 +64,7 @@ class OAuth2Test extends TestCase {
 	/** @var ISession | PHPUnit\Framework\MockObject\MockObject */
 	private $session;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$this->request = $this->createMock(IRequest::class);
@@ -104,7 +104,7 @@ class OAuth2Test extends TestCase {
 		];
 	}
 
-	protected function tearDown() {
+	protected function tearDown(): void {
 		parent::tearDown();
 
 		$this->clientMapper->deleteAll();

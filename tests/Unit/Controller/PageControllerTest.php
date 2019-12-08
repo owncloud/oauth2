@@ -69,7 +69,7 @@ class PageControllerTest extends TestCase {
 	/** @var Client $client */
 	private $client;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$app = new Application();
@@ -117,7 +117,7 @@ class PageControllerTest extends TestCase {
 		);
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		parent::tearDown();
 
 		$this->clientMapper->delete($this->client);

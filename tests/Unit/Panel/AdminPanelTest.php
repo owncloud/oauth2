@@ -13,7 +13,7 @@ class AdminPanelTest extends TestCase {
 	/** @var ClientMapper */
 	private $clientMapper;
 
-	protected function setUp() {
+	protected function setUp(): void {
 		parent::setUp();
 		$this->clientMapper = $this->createMock(ClientMapper::class);
 		$this->panel = new AdminPanel($this->clientMapper);

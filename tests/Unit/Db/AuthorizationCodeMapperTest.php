@@ -50,7 +50,7 @@ class AuthorizationCodeMapperTest extends TestCase {
 	/** @var AuthorizationCode $authorizationCode2 */
 	private $authorizationCode2;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$app = new Application();
@@ -76,7 +76,7 @@ class AuthorizationCodeMapperTest extends TestCase {
 		$this->authorizationCode2 = $this->authorizationCodeMapper->insert($authorizationCode);
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		parent::tearDown();
 
 		$this->authorizationCodeMapper->delete($this->authorizationCode1);

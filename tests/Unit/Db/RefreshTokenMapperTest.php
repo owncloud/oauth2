@@ -51,7 +51,7 @@ class RefreshTokenMapperTest extends TestCase {
 	/** @var AccessTokenMapper */
 	private $accessTokenMapper;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$app = new Application();
@@ -93,7 +93,7 @@ class RefreshTokenMapperTest extends TestCase {
 		$this->refreshToken2 = $this->refreshTokenMapper->insert($refreshToken);
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		parent::tearDown();
 
 		$this->refreshTokenMapper->delete($this->refreshToken1);

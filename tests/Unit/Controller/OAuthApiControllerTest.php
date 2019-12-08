@@ -92,7 +92,7 @@ class OAuthApiControllerTest extends TestCase {
 	/** @var String $refreshToken */
 	private $authorizationSuccessfulMessageUrl;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		$app = new Application();
@@ -168,7 +168,7 @@ class OAuthApiControllerTest extends TestCase {
 		);
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		parent::tearDown();
 
 		$this->clientMapper->delete($this->client1);
