@@ -1,6 +1,12 @@
 { "translations": {
     "The application \"{app}\" is requesting access to your account. To authorize it, please log in first." : "แอปฯ \"{app}\" ต้องการขอสิทธิ์การเข้าถึงบัญชีของคุณ หากต้องการให้สิทธิ์โปรดเข้าสู่ระบบก่อน",
+    "Deleting..." : "กำลังลบ...",
     "Saving..." : "กำลังบันทึกข้อมูล...",
+    "Name must not be empty" : "ห้ามเว้นว่างชื่อ",
+    "Redirect URI must not be empty" : "URL การเปลี่ยนเส้นทางจะต้องไม่ว่างเปล่า",
+    "Redirect URI must be a valid URL" : "URL สำหรับเปลี่ยนเส้นทางไม่ถูกต้อง",
+    "Name %s already exists" : "ชื่อ %s ถูกใช้แล้ว",
+    "Client id must be a number" : "รหัสไคลเอนต์จะต้องเป็นตัวเลข",
     "The application was authorized successfully. You can now close this window." : "แอปฯได้รับอนุญาตเรียบร้อยแล้ว ขณะนี้คุณสามารถปิดหน้าต่างนี้ได้เลย",
     "Request not valid" : "คำร้องขอไม่ถูกต้อง",
     "This request is not valid. Please contact the administrator if this error persists." : "คำร้องขอนี้ไม่ถูกต้อง โปรดติดต่อผู้ดูแลระบบหากยังพบข้อผิดพลาดนี้อยู่",

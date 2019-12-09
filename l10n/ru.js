@@ -2,7 +2,13 @@ OC.L10N.register(
     "oauth2",
     {
     "The application \"{app}\" is requesting access to your account. To authorize it, please log in first." : "Приложение \"{app}\" запрашивает доступ к вашей учётной записи. Чтобы авторизовать его, начала войдите.",
+    "Deleting..." : "Удаление…",
     "Saving..." : "Сохранение...",
+    "Name must not be empty" : "Имя не должно быть пустым",
+    "Redirect URI must not be empty" : "Адрес для перенаправления не должен быть пустым",
+    "Redirect URI must be a valid URL" : "Адрес для перенаправления должен быть допустимым URL",
+    "Name %s already exists" : "Имя %s уже существует",
+    "Client id must be a number" : "Идентификатор клиента должен быть числом",
     "The application was authorized successfully. You can now close this window." : "Приложение было успешно авторизовано. Теперь вы можете закрыть это окно.",
     "Request not valid" : "Запрос недопустим",
     "This request is not valid. Please contact the administrator if this error persists." : "Запрос недопустим. Пожалуйста, свяжитесь с администратором, если эта ошибка остаётся.",

@@ -1,6 +1,12 @@
 { "translations": {
     "The application \"{app}\" is requesting access to your account. To authorize it, please log in first." : "היישום \"{app}\" מבקש גישה לחשבון שלך. לאישור, יש להתחבר תחילה.",
+    "Deleting..." : "במחיקה...",
     "Saving..." : "שמירה…",
+    "Name must not be empty" : "שדה שם אינו יכול להיות ריק",
+    "Redirect URI must not be empty" : "שדה URI אינו יכול להיות ריק",
+    "Redirect URI must be a valid URL" : "שדה URI חייב להיות נתיב אינטרנט חוקי",
+    "Name %s already exists" : "השם %s כבר קיים",
+    "Client id must be a number" : "מזהה לקוח חייב להיות מספר",
     "The application was authorized successfully. You can now close this window." : "היישום אושר בהצלחה. ניתן לסגור עכשיו את החלון.",
     "Request not valid" : "הבקשה אינה חוקית",
     "This request is not valid. Please contact the administrator if this error persists." : "הבקשה אינה חוקית. יש ליצור קשר עם מנהל המערכת אם שגיאה זו תמשך.",
