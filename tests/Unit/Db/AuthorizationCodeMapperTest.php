@@ -95,23 +95,26 @@ class AuthorizationCodeMapperTest extends TestCase {
 	}
 
 	/**
-	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
 	 */
 	public function testFindDoesNotExistException() {
+		$this->expectException(\OCP\AppFramework\Db\DoesNotExistException::class);
+
 		$this->authorizationCodeMapper->find(-1);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testFindInvalidArgumentException1() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->authorizationCodeMapper->find(null);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testFindInvalidArgumentException2() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->authorizationCodeMapper->find('qwertz');
 	}
 
@@ -127,23 +130,26 @@ class AuthorizationCodeMapperTest extends TestCase {
 	}
 
 	/**
-	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
 	 */
 	public function testFindByCodeDoesNotExistException() {
+		$this->expectException(\OCP\AppFramework\Db\DoesNotExistException::class);
+
 		$this->authorizationCodeMapper->findByCode('qwertz');
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testFindByCodeInvalidArgumentException1() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->authorizationCodeMapper->findByCode(null);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testFindByCodeInvalidArgumentException2() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->authorizationCodeMapper->findByCode(1);
 	}
 
@@ -161,38 +167,43 @@ class AuthorizationCodeMapperTest extends TestCase {
 	}
 
 	/**
-	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
 	 */
 	public function testDeleteByClientUserDoesNotExistException() {
+		$this->expectException(\OCP\AppFramework\Db\DoesNotExistException::class);
+
 		$this->authorizationCodeMapper->deleteByClientUser($this->clientId, $this->userId);
 		$this->authorizationCodeMapper->find($this->id);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testDeleteByClientUserInvalidArgumentException1() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->authorizationCodeMapper->deleteByClientUser(null, null);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testDeleteByClientUserInvalidArgumentException2() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->authorizationCodeMapper->deleteByClientUser('qwertz', 12);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testDeleteByClientUserInvalidArgumentException3() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->authorizationCodeMapper->deleteByClientUser($this->clientId, 12);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testDeleteByClientUserInvalidArgumentException4() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->authorizationCodeMapper->deleteByClientUser('qwertz', $this->userId);
 	}
 
@@ -202,24 +213,27 @@ class AuthorizationCodeMapperTest extends TestCase {
 	}
 
 	/**
-	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
 	 */
 	public function testDeleteByClientDoesNotExistException() {
+		$this->expectException(\OCP\AppFramework\Db\DoesNotExistException::class);
+
 		$this->authorizationCodeMapper->deleteByClient($this->clientId);
 		$this->authorizationCodeMapper->find($this->id);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testDeleteByClientInvalidArgumentException1() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->authorizationCodeMapper->deleteByClient(null);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testDeleteByClientInvalidArgumentException2() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->authorizationCodeMapper->deleteByClient('qwertz');
 	}
 
@@ -229,24 +243,27 @@ class AuthorizationCodeMapperTest extends TestCase {
 	}
 
 	/**
-	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
 	 */
 	public function testDeleteByUserDoesNotExistException() {
+		$this->expectException(\OCP\AppFramework\Db\DoesNotExistException::class);
+
 		$this->authorizationCodeMapper->deleteByUser($this->userId);
 		$this->authorizationCodeMapper->find($this->id);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testDeleteByUserInvalidArgumentException1() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->authorizationCodeMapper->deleteByUser(null);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testDeleteByUserInvalidArgumentException2() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->authorizationCodeMapper->deleteByUser(true);
 	}
 

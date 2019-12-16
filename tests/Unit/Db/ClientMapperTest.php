@@ -140,23 +140,26 @@ class ClientMapperTest extends TestCase {
 	}
 
 	/**
-	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
 	 */
 	public function testFindDoesNotExistException() {
+		$this->expectException(\OCP\AppFramework\Db\DoesNotExistException::class);
+
 		$this->clientMapper->find(-1);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testFindInvalidArgumentException1() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->clientMapper->find(null);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testFindInvalidArgumentException2() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->clientMapper->find('qwertz');
 	}
 
@@ -173,23 +176,26 @@ class ClientMapperTest extends TestCase {
 	}
 
 	/**
-	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
 	 */
 	public function testFindByIdentifierDoesNotExistException() {
+		$this->expectException(\OCP\AppFramework\Db\DoesNotExistException::class);
+
 		$this->clientMapper->findByIdentifier('qwertz');
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testFindByIdentifierInvalidArgumentException1() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->clientMapper->findByIdentifier(null);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testFindByIdentifierInvalidArgumentException2() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->clientMapper->findByIdentifier(12);
 	}
 
@@ -218,16 +224,18 @@ class ClientMapperTest extends TestCase {
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testFindByUserInvalidArgumentException1() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->clientMapper->findByUser(null);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testFindByUserInvalidArgumentException2() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->clientMapper->findByUser(12);
 	}
 
