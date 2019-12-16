@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [0.4.3]
 
-## Changed
+### Changed
 
 - Improve adding a new client - [#237](https://github.com/owncloud/oauth2/issues/237)
 - Drop PHP Support 7.0 - [#238](https://github.com/owncloud/oauth2/issues/238)
@@ -92,7 +92,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - Use displayname on switch user screen - [#90](https://github.com/owncloud/oauth2/pull/90)
 
 [Unreleased]: https://github.com/owncloud/oauth2/compare/v0.4.3...master
-[0.4.2]: https://github.com/owncloud/oauth2/compare/v0.4.2...v0.4.3
+[0.4.3]: https://github.com/owncloud/oauth2/compare/v0.4.2...v0.4.3
 [0.4.2]: https://github.com/owncloud/oauth2/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/owncloud/oauth2/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/owncloud/oauth2/compare/v0.3.0...v0.4.0
