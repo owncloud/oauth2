@@ -111,23 +111,26 @@ class RefreshTokenMapperTest extends TestCase {
 	}
 
 	/**
-	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
 	 */
 	public function testFindDoesNotExistException() {
+		$this->expectException(\OCP\AppFramework\Db\DoesNotExistException::class);
+
 		$this->refreshTokenMapper->find(-1);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testFindInvalidArgumentException1() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->refreshTokenMapper->find(null);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testFindInvalidArgumentException2() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->refreshTokenMapper->find('qwertz');
 	}
 
@@ -142,23 +145,26 @@ class RefreshTokenMapperTest extends TestCase {
 	}
 
 	/**
-	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
 	 */
 	public function testFindByTokenDoesNotExistException() {
+		$this->expectException(\OCP\AppFramework\Db\DoesNotExistException::class);
+
 		$this->refreshTokenMapper->findByToken('qwertz');
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testFindByTokenInvalidArgumentException1() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->refreshTokenMapper->findByToken(null);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testFindByTokenInvalidArgumentException2() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->refreshTokenMapper->findByToken(1);
 	}
 
@@ -176,38 +182,43 @@ class RefreshTokenMapperTest extends TestCase {
 	}
 
 	/**
-	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
 	 */
 	public function testDeleteByClientUserDoesNotExistException() {
+		$this->expectException(\OCP\AppFramework\Db\DoesNotExistException::class);
+
 		$this->refreshTokenMapper->deleteByClientUser($this->clientId, $this->userId);
 		$this->refreshTokenMapper->find($this->id);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testDeleteByClientUserInvalidArgumentException1() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->refreshTokenMapper->deleteByClientUser(null, null);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testDeleteByClientUserInvalidArgumentException2() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->refreshTokenMapper->deleteByClientUser('qwertz', 12);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testDeleteByClientUserInvalidArgumentException3() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->refreshTokenMapper->deleteByClientUser($this->clientId, 12);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testDeleteByClientUserInvalidArgumentException4() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->refreshTokenMapper->deleteByClientUser('qwertz', $this->userId);
 	}
 
@@ -217,24 +228,27 @@ class RefreshTokenMapperTest extends TestCase {
 	}
 
 	/**
-	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
 	 */
 	public function testDeleteByClientDoesNotExistException() {
+		$this->expectException(\OCP\AppFramework\Db\DoesNotExistException::class);
+
 		$this->refreshTokenMapper->deleteByClient($this->clientId);
 		$this->refreshTokenMapper->find($this->id);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testDeleteByClientInvalidArgumentException1() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->refreshTokenMapper->deleteByClient(null);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testDeleteByClientInvalidArgumentException2() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->refreshTokenMapper->deleteByClient('qwertz');
 	}
 
@@ -244,24 +258,27 @@ class RefreshTokenMapperTest extends TestCase {
 	}
 
 	/**
-	 * @expectedException \OCP\AppFramework\Db\DoesNotExistException
 	 */
 	public function testDeleteByUserDoesNotExistException() {
+		$this->expectException(\OCP\AppFramework\Db\DoesNotExistException::class);
+
 		$this->refreshTokenMapper->deleteByUser($this->userId);
 		$this->refreshTokenMapper->find($this->id);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testDeleteByUserInvalidArgumentException1() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->refreshTokenMapper->deleteByUser(null);
 	}
 
 	/**
-	 * @expectedException \InvalidArgumentException
 	 */
 	public function testDeleteByUserInvalidArgumentException2() {
+		$this->expectException(\InvalidArgumentException::class);
+
 		$this->refreshTokenMapper->deleteByUser(true);
 	}
 

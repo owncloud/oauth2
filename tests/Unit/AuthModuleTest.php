@@ -118,11 +118,12 @@ class AuthModuleTest extends TestCase {
 	}
 
 	/**
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage Invalid token
 	 * @throws \Exception
 	 */
 	public function testExpiredToken() {
+		$this->expectException(\Exception::class);
+		$this->expectExceptionMessage('Invalid token');
+
 		$this->accessToken->setExpires(\time() - 1);
 		$this->accessTokenMapper->update($this->accessToken);
 		/** @var IRequest | \PHPUnit\Framework\MockObject\MockObject $request */
@@ -135,11 +136,12 @@ class AuthModuleTest extends TestCase {
 	}
 
 	/**
-	 * @expectedException \Exception
-	 * @expectedExceptionMessage Invalid token
 	 * @throws \Exception
 	 */
 	public function testInvalidToken() {
+		$this->expectException(\Exception::class);
+		$this->expectExceptionMessage('Invalid token');
+
 		/** @var IRequest | \PHPUnit\Framework\MockObject\MockObject $request */
 		$request = $this->getMockBuilder(IRequest::class)->getMock();
 		$request->expects($this->once())
