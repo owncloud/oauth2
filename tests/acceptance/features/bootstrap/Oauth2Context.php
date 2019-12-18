@@ -380,7 +380,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 		$result = WebDavHelper::makeDavRequest(
 			$this->featureContext->getBaseUrl(),
 			$user, $this->accessTokenResponse->access_token,
-			'GET', $file, [], null, null, 2, "files", null, "bearer"
+			'GET', $file, [], null, 2, "files", null, "bearer"
 		);
 		if (!$should && $result->getStatusCode() < 400) {
 			throw new \Exception(
