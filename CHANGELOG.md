@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.4.3] - 2019-12-20
+
+### Changed
+
+- Improve adding a new client - [#237](https://github.com/owncloud/oauth2/issues/237)
+- Drop PHP Support 7.0 - [#238](https://github.com/owncloud/oauth2/issues/238)
+
 ## [0.4.2] - 2019-11-21
 
 ### Changed
@@ -86,7 +93,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - Verify Bearer token even if the session is still valid - [#53](https://github.com/owncloud/oauth2/pull/53)
 - Use displayname on switch user screen - [#90](https://github.com/owncloud/oauth2/pull/90)
 
-[Unreleased]: https://github.com/owncloud/oauth2/compare/v0.4.2...master
+[Unreleased]: https://github.com/owncloud/oauth2/compare/v0.4.3...master
+[0.4.3]: https://github.com/owncloud/oauth2/compare/v0.4.2...v0.4.3
 [0.4.2]: https://github.com/owncloud/oauth2/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/owncloud/oauth2/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/owncloud/oauth2/compare/v0.3.0...v0.4.0
