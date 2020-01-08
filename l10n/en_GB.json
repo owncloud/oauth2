@@ -1,6 +1,12 @@
 { "translations": {
     "The application \"{app}\" is requesting access to your account. To authorize it, please log in first." : "The application \"{app}\" is requesting access to your account. To authorise it, please log in first.",
+    "Deleting..." : "Deleting...",
     "Saving..." : "Saving...",
+    "Name must not be empty" : "Name must not be empty",
+    "Redirect URI must not be empty" : "Redirect URI must not be empty",
+    "Redirect URI must be a valid URL" : "Redirect URI must be a valid URL",
+    "Name %s already exists" : "Name %s already exists",
+    "Client id must be a number" : "Client id must be a number",
     "The application was authorized successfully. You can now close this window." : "The application was authorised successfully. You can now close this window.",
     "Request not valid" : "Request not valid",
     "This request is not valid. Please contact the administrator if this error persists." : "This request is not valid. Please contact the administrator if this error persists.",
