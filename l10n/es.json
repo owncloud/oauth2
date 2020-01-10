@@ -1,6 +1,12 @@
 { "translations": {
     "The application \"{app}\" is requesting access to your account. To authorize it, please log in first." : "La aplicación \"{app}\" requiere acceso a su cuenta. para autorizarla, logese primero.",
+    "Deleting..." : "Eliminando...",
     "Saving..." : "Guardando…",
+    "Name must not be empty" : "El nombre no puede estar vacío",
+    "Redirect URI must not be empty" : "La URI de redirección no puede estar vacía",
+    "Redirect URI must be a valid URL" : "La URI de redirección debe ser una URL válida",
+    "Name %s already exists" : "El nombre %s ya existe",
+    "Client id must be a number" : "El ID de cliente debe ser un número",
     "The application was authorized successfully. You can now close this window." : "La aplicación ha sido autorizada,  ya puede cerrar esta ventana.",
     "Request not valid" : "Petición Inválida",
     "This request is not valid. Please contact the administrator if this error persists." : "Petición inválida. Por favor contacte con el administrador si el error persiste.",
