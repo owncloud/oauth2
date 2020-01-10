@@ -34,6 +34,7 @@ class Oauth2AdminSettingsPage extends OwncloudPage {
 	private $allowSubdomainsCheckBoxXpath = "//label[@for='allow_subdomains']";
 	private $addClientBtnXpath = "//*[@id='oauth2']//button[@id='oauth2_submit']";
 	private $clientRowByNameXpath = "//*[@id='oauth2']//td[text()='%s']/../*";
+	private $oauthSaveMessageXpath = "//span[@id='oauth2_save_msg']";
 
 	/**
 	 *
@@ -70,6 +71,7 @@ class Oauth2AdminSettingsPage extends OwncloudPage {
 			);
 		}
 		$addClientBtn->click();
+		$this->waitTillElementIsNull($this->oauthSaveMessageXpath);
 	}
 
 	/**
