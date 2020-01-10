@@ -189,7 +189,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 	public function establishOauthSession($user) {
 		$this->oauthAuthorizationRequestUsingTheWebui();
 		$this->webUILoginContext
-			->theUserLogsInWithUsernameAndPasswordAfterRedirectFromThePage(
+			->userLogInWithUsernameAndPasswordAfterRedirectFromPage(
 				$user,
 				$this->featureContext->getPasswordForUser($user),
 				"oauth2AuthRequest"
