@@ -301,7 +301,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 * @return void
 	 */
 	public function userRequestsURLWithOAuth($url, $method) {
-		$this->featureContext->sendRequest(
+		$this->featureContext->authContext->sendRequest(
 			$url, $method, 'Bearer ' . $this->accessTokenResponse->access_token
 		);
 	}
@@ -394,8 +394,8 @@ class Oauth2Context extends RawMinkContext implements Context {
 				);
 			}
 
-			if ($this->featureContext->getTokenAuthHasBeenSetTo() === 'true') {
-				$adminPassword = $this->featureContext->generateAuthTokenForAdmin();
+			if ($this->featureContext->authContext->getTokenAuthHasBeenSetTo() === 'true') {
+				$adminPassword = $this->featureContext->authContext->generateAuthTokenForAdmin();
 			} else {
 				$adminPassword = $this->featureContext->getAdminPassword();
 			}
@@ -518,11 +518,11 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 * @return void
 	 */
 	public function after(AfterScenarioScope $scope) {
-		$this->featureContext->aNewBrowserSessionForHasBeenStarted(
+		$this->featureContext->authContext->aNewBrowserSessionForHasBeenStarted(
 			$this->featureContext->getAdminUsername()
 		);
 		foreach ($this->createdOauthClients as $createdOauthClient) {
-			$this->featureContext->sendRequest(
+			$this->featureContext->authContext->sendRequest(
 				"/index.php/apps/oauth2/clients/" .
 				$createdOauthClient['id'] .
 				"/delete",
