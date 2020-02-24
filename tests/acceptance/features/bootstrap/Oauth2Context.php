@@ -27,6 +27,7 @@ use Behat\MinkExtension\Context\RawMinkContext;
 use Page\Oauth2AuthRequestPage;
 use Page\Oauth2OnPersonalSecuritySettingsPage;
 use PHPUnit\Framework\Assert;
+use TestHelpers\HttpRequestHelper;
 use TestHelpers\WebDavHelper;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
@@ -40,7 +41,7 @@ require_once 'bootstrap.php';
  *
  */
 class Oauth2Context extends RawMinkContext implements Context {
-	
+
 	/**
 	 *
 	 * @var FeatureContext
@@ -61,7 +62,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 * @var Oauth2AuthRequestPage
 	 */
 	private $oauth2AuthRequestPage;
-	
+
 	/**
 	 *
 	 * @var Oauth2AdminSettingsPage
@@ -246,19 +247,16 @@ class Oauth2Context extends RawMinkContext implements Context {
 		if ($clientSecret === null) {
 			$clientSecret = $this->clientSecret;
 		}
-		$client = new Client();
-		$options = [];
-		$options['auth'] = [$clientId, $clientSecret];
-	
+
 		if ($refreshToken === null) {
-			$options['body'] = [
+			$body = [
 				'grant_type' => 'authorization_code',
 				'code' => $parameters['code'],
 				'redirect_uri' => 'http://' . $this->redirectUriHost . ':' .
 				$this->redirectUriPort
 			];
 		} else {
-			$options['body'] = [
+			$body = [
 				'grant_type' => 'refresh_token',
 				'refresh_token' => $refreshToken
 			];
@@ -266,8 +264,10 @@ class Oauth2Context extends RawMinkContext implements Context {
 
 		$fullUrl = $this->featureContext->getBaseUrl() .
 				   '/index.php/apps/oauth2/api/v1/token';
-		$request = $client->createRequest('POST', $fullUrl, $options);
-		$response = $client->send($request);
+		$response = HttpRequestHelper::post(
+			$fullUrl, $clientId, $clientSecret, null, $body
+		);
+		$this->featureContext->setResponse($response);
 		$this->accessTokenResponse = \json_decode(
 			$response->getBody()->getContents()
 		);
@@ -456,20 +456,16 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 * @return void
 	 */
 	public function appShouldNotBeAbleToRefreshToken() {
-		try {
-			$this->refreshAccessToken();
-			throw new \Exception(
-				__METHOD__ .
-				" app should not be able to refresh token but looks like it can"
-			);
-		} catch (ClientException $e) {
-			Assert::assertSame(
-				400, $e->getCode(),
-				__METHOD__ .
-				" expected '400' as HTTP error code, but received '" .
-				$e->getCode() . "'"
-			);
-		}
+		$this->clientAppRequestsAccessToken(
+			$this->accessTokenResponse->refresh_token
+		);
+		$this->featureContext->theHTTPStatusCodeShouldBe(
+			400,
+			__METHOD__ .
+			" app should not be able to refresh token but looks like it can " .
+			" expected '400' as HTTP error code, but received '" .
+			$this->featureContext->getResponse()->getStatusCode()
+		);
 	}
 
 	/**
