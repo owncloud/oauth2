@@ -27,6 +27,7 @@ use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
 use OCP\IUserManager;
 use OCP\IRequest;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class AuthModuleTest extends TestCase {
@@ -98,7 +99,7 @@ class AuthModuleTest extends TestCase {
 	 */
 	public function testAuth() {
 		// Wrong Authorization header
-		/** @var IRequest | \PHPUnit\Framework\MockObject\MockObject $request */
+		/** @var IRequest | MockObject $request */
 		$request = $this->getMockBuilder(IRequest::class)->getMock();
 		$request->expects($this->once())
 			->method('getHeader')
@@ -126,7 +127,7 @@ class AuthModuleTest extends TestCase {
 
 		$this->accessToken->setExpires(\time() - 1);
 		$this->accessTokenMapper->update($this->accessToken);
-		/** @var IRequest | \PHPUnit\Framework\MockObject\MockObject $request */
+		/** @var IRequest | MockObject $request */
 		$request = $this->getMockBuilder(IRequest::class)->getMock();
 		$request->expects($this->once())
 			->method('getHeader')
@@ -142,17 +143,17 @@ class AuthModuleTest extends TestCase {
 		$this->expectException(\Exception::class);
 		$this->expectExceptionMessage('Invalid token');
 
-		/** @var IRequest | \PHPUnit\Framework\MockObject\MockObject $request */
+		/** @var IRequest | MockObject $request */
 		$request = $this->getMockBuilder(IRequest::class)->getMock();
 		$request->expects($this->once())
 			->method('getHeader')
 			->with($this->equalTo('Authorization'))
-			->will($this->returnValue('Bearer test'));
+			->willReturn('Bearer test');
 		$this->authModule->auth($request);
 	}
 
 	public function testGetUserPassword() {
-		/** @var IRequest | \PHPUnit\Framework\MockObject\MockObject $request */
+		/** @var IRequest | MockObject $request */
 		$request = $this->getMockBuilder(IRequest::class)->getMock();
 		$this->assertEquals('', $this->authModule->getUserPassword($request));
 	}
