@@ -31,6 +31,10 @@ use OCP\IUser;
 use OCP\IUserManager;
 
 class AuthModule implements IAuthModule {
+	/**
+	 * @var bool
+	 */
+	private $tokenUnknown = false;
 
 	/**
 	 * Authenticates a request.
@@ -51,6 +55,14 @@ class AuthModule implements IAuthModule {
 
 		$user = $this->authToken($bearerToken);
 		if ($user === null) {
+			// In case the token is not known to the oauth2 app and
+			// openidconnect is enabled we do not throw an exception.
+			// This allows the openidconnect app to handle the token.
+			// The openidconnect app will then finally throw the exception
+			// and cause the request to die.
+			if ($this->tokenCanBeHandledByOpenIDConnect()) {
+				return null;
+			}
 			throw new LoginException('Invalid token');
 		}
 		return $user;
@@ -75,9 +87,10 @@ class AuthModule implements IAuthModule {
 	 * @param string $bearerToken
 	 * @return null|IUser
 	 */
-	public function authToken($bearerToken) {
+	public function authToken($bearerToken): ?IUser {
 		$app = new Application();
 		$container = $app->getContainer();
+		$logger = $container->getServer()->getLogger();
 
 		/** @var AccessTokenMapper $accessTokenMapper */
 		$accessTokenMapper = $container->query(AccessTokenMapper::class);
@@ -87,19 +100,29 @@ class AuthModule implements IAuthModule {
 			$accessToken = $accessTokenMapper->findByToken($bearerToken);
 
 			if ($accessToken->hasExpired()) {
-				\OC::$server->getLogger()->debug("token expired $bearerToken", ['app'=>__CLASS__]);
+				$logger->debug("token expired $bearerToken", ['app'=>__CLASS__]);
 				return null;
 			}
 		} catch (DoesNotExistException $exception) {
-			\OC::$server->getLogger()->debug("token does not exist $bearerToken", ['app'=>__CLASS__]);
+			// we don't know the token - openid connect can hanlde it
+			$this->tokenUnknown = true;
+			$logger->debug("token does not exist $bearerToken", ['app'=>__CLASS__]);
 			return null;
 		} catch (MultipleObjectsReturnedException $e) {
-			\OC::$server->getLogger()->debug("multiple tokens exist for $bearerToken", ['app'=>__CLASS__]);
+			$logger->debug("multiple tokens exist for $bearerToken", ['app'=>__CLASS__]);
 			return null;
 		}
 
 		/** @var IUserManager $userManager */
 		$userManager = $container->query('UserManager');
 		return $userManager->get($accessToken->getUserId());
+	}
+
+	protected function tokenCanBeHandledByOpenIDConnect(): bool {
+		if (!$this->tokenUnknown) {
+			return false;
+		}
+
+		return \OC::$server->getAppManager()->isEnabledForUser('openidconnect');
 	}
 }
