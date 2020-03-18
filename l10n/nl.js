@@ -2,6 +2,7 @@ OC.L10N.register(
     "oauth2",
     {
     "The application \"{app}\" is requesting access to your account. To authorize it, please log in first." : "De applicatie \"{app}\" vraagt toegang tot je account. Om dit toe te staan, gelieve eerst aan te melden.",
+    "Deleting..." : "Verwijderen...",
     "Saving..." : "Opslaan",
     "The application was authorized successfully. You can now close this window." : "De applicatie is geauthenticeerd. U kunt dit venster nu sluiten.",
     "Request not valid" : "Ongeldige aanvraag",
