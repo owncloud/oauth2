@@ -75,7 +75,7 @@ class AuthModule implements IAuthModule {
 	 *
 	 * @param IRequest $request The request.
 	 *
-	 * @return null
+	 * @return null|string
 	 */
 	public function getUserPassword(IRequest $request) {
 		return null;

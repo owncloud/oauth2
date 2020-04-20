@@ -137,7 +137,7 @@ class AuthorizationCodeMapper extends Mapper {
 	/**
 	 * Deletes all authorization codes for given client and user ID.
 	 *
-	 * @param int $clientId The client ID.
+	 * @param int|mixed $clientId The client ID.
 	 * @param string $userId The user ID.
 	 */
 	public function deleteByClientUser($clientId, $userId) {

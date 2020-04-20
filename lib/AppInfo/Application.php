@@ -64,7 +64,7 @@ class Application extends App {
 
 		// Add event listener
 		$dispatcher = $this->getContainer()->getServer()->getEventDispatcher();
-		$dispatcher->addListener('OCA\DAV\Connector\Sabre::authInit', function ($event) use ($container) {
+		$dispatcher->addListener('OCA\DAV\Connector\Sabre::authInit', function ($event) {
 			if ($event instanceof SabrePluginEvent) {
 				$authPlugin = $event->getServer()->getPlugin('auth');
 				if ($authPlugin instanceof Plugin) {
@@ -106,6 +106,7 @@ class Application extends App {
 		$mapper = \OC::$server->query(ClientMapper::class);
 		/** @var \OCA\OAuth2\Db\Client $client */
 		try {
+			/** @var \OCA\OAuth2\Db\Client $client */
 			$client = $mapper->findByIdentifier($params['client_id']);
 			\OCP\Util::addScript('oauth2', 'login');
 			\OCP\Util::addStyle('oauth2', 'login');

@@ -217,7 +217,7 @@ class PageController extends Controller {
 		switch ($response_type) {
 			case 'code':
 				try {
-					/** @var Client $client */
+					/** @var \OCA\OAuth2\Db\Client $client */
 					$client = $this->clientMapper->findByIdentifier($client_id);
 				} catch (DoesNotExistException $exception) {
 					return new RedirectResponse(OC_Util::getDefaultPageUrl());
@@ -246,7 +246,7 @@ class PageController extends Controller {
 				return new RedirectResponse($result);
 			case 'token':
 				try {
-					/** @var Client $client */
+					/** @var \OCA\OAuth2\Db\Client $client */
 					$client = $this->clientMapper->findByIdentifier($client_id);
 				} catch (DoesNotExistException $exception) {
 					return new RedirectResponse(OC_Util::getDefaultPageUrl());
@@ -266,8 +266,7 @@ class PageController extends Controller {
 
 				$result = \urldecode($redirect_uri);
 				$result .= '?access_token=' . \urlencode($accessToken->getToken());
-				/** @phan-suppress-next-line PhanTypeMismatchArgumentInternal */
-				$result .= '&expires_in=' . \urlencode(AccessToken::EXPIRATION_TIME);
+				$result .= '&expires_in=' . \urlencode((string)AccessToken::EXPIRATION_TIME);
 				if ($state !== null) {
 					$result .= '&state=' . \urlencode($state);
 				}
@@ -332,7 +331,7 @@ class PageController extends Controller {
 	}
 
 	/**
-	 * @param $userIdOrUser
+	 * @param IUser|string $userIdOrUser
 	 * @return string
 	 */
 	private function buildDisplayForUser($userIdOrUser) {
