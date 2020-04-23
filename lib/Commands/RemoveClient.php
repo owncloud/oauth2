@@ -47,6 +47,13 @@ class RemoveClient extends Command {
 				'identifier of the client - used by the client during the implicit and authorization code flow');
 	}
 
+	/**
+	 * @param InputInterface $input
+	 * @param OutputInterface $output
+	 *
+	 * @return int|void|null
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$id = $input->getArgument('client-id');
 		try {

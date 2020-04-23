@@ -21,9 +21,7 @@ namespace OCA\OAuth2\Controller;
 
 use OCA\OAuth2\Db\AccessToken;
 use OCA\OAuth2\Db\AccessTokenMapper;
-use OCA\OAuth2\Db\AuthorizationCode;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
-use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Db\RefreshToken;
 use OCA\OAuth2\Db\RefreshTokenMapper;
@@ -116,7 +114,7 @@ class OAuthApiController extends ApiController {
 		}
 
 		try {
-			/** @var Client $client */
+			/** @var \OCA\OAuth2\Db\Client $client */
 			$client = $this->clientMapper->findByIdentifier($_SERVER['PHP_AUTH_USER']);
 		} catch (DoesNotExistException $exception) {
 			return new JSONResponse(['error' => 'invalid_client'], Http::STATUS_BAD_REQUEST);
@@ -133,13 +131,13 @@ class OAuthApiController extends ApiController {
 				}
 
 				try {
-					/** @var AuthorizationCode $authorizationCode */
+					/** @var \OCA\OAuth2\Db\AuthorizationCode $authorizationCode */
 					$authorizationCode = $this->authorizationCodeMapper->findByCode($code);
 				} catch (DoesNotExistException $exception) {
 					$this->logger->logException($exception, ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
-
+				/** @phan-suppress-next-line PhanTypeMismatchArgumentInternal */
 				if (\strcmp($authorizationCode->getClientId(), $client->getId()) !== 0) {
 					$this->logger->debug("auth grant client ids mismatch: {$authorizationCode->getClientId()} != {$client->getId()}", ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
@@ -185,7 +183,7 @@ class OAuthApiController extends ApiController {
 					$this->logger->logException($exception, ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], $statusCode);
 				}
-
+				/** @phan-suppress-next-line PhanTypeMismatchArgumentInternal */
 				if (\strcmp($refreshToken->getClientId(), $client->getId()) !== 0) {
 					$this->logger->debug("refresh grant client ids mismatch: {$refreshToken->getClientId()} != {$client->getId()}", ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], $statusCode);

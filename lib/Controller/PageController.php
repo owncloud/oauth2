@@ -24,7 +24,6 @@ use OCA\OAuth2\Db\AccessToken;
 use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\AuthorizationCode;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
-use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Utilities;
 use OCP\AppFramework\Controller;
@@ -142,7 +141,7 @@ class PageController extends Controller {
 			);
 		}
 		try {
-			/** @var Client $client */
+			/** @var \OCA\OAuth2\Db\Client $client */
 			$client = $this->clientMapper->findByIdentifier($client_id);
 		} catch (DoesNotExistException $exception) {
 			$this->logger->error("Invalid OAuth request with client-id $client_id");
@@ -267,6 +266,7 @@ class PageController extends Controller {
 
 				$result = \urldecode($redirect_uri);
 				$result .= '?access_token=' . \urlencode($accessToken->getToken());
+				/** @phan-suppress-next-line PhanTypeMismatchArgumentInternal */
 				$result .= '&expires_in=' . \urlencode(AccessToken::EXPIRATION_TIME);
 				if ($state !== null) {
 					$result .= '&state=' . \urlencode($state);

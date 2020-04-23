@@ -134,6 +134,7 @@ class SettingsController extends Controller {
 		$this->logger->info('The client "' . $client->getName() . '" has been added.', ['app' => $this->appName]);
 
 		$template = new Template('oauth2', 'client.part', '');
+		/** @phan-suppress-next-line PhanTypeMismatchArgument */
 		$template->assign('client', $this->clientMapper->findByIdentifier($client->getIdentifier()));
 		return new JSONResponse(
 			[

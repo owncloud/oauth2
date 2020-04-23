@@ -21,14 +21,12 @@ namespace OCA\OAuth2;
 
 use OC\User\LoginException;
 use OCA\OAuth2\AppInfo\Application;
-use OCA\OAuth2\Db\AccessToken;
 use OCA\OAuth2\Db\AccessTokenMapper;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\Authentication\IAuthModule;
 use OCP\IRequest;
 use OCP\IUser;
-use OCP\IUserManager;
 
 class AuthModule implements IAuthModule {
 	/**
@@ -96,7 +94,7 @@ class AuthModule implements IAuthModule {
 		$accessTokenMapper = $container->query(AccessTokenMapper::class);
 
 		try {
-			/** @var AccessToken $accessToken */
+			/** @var \OCA\OAuth2\Db\AccessToken $accessToken */
 			$accessToken = $accessTokenMapper->findByToken($bearerToken);
 
 			if ($accessToken->hasExpired()) {
@@ -113,7 +111,7 @@ class AuthModule implements IAuthModule {
 			return null;
 		}
 
-		/** @var IUserManager $userManager */
+		/** @var \OCP\IUserManager $userManager */
 		$userManager = $container->query('UserManager');
 		return $userManager->get($accessToken->getUserId());
 	}
