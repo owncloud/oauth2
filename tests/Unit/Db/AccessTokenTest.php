@@ -36,7 +36,7 @@ class AccessTokenTest extends TestCase {
 	public function testResetExpires() {
 		$expected = \time() + AccessToken::EXPIRATION_TIME;
 		$this->accessToken->resetExpires();
-		$this->assertEquals($expected, $this->accessToken->getExpires(), '', 1);
+		$this->assertEqualsWithDelta($expected, $this->accessToken->getExpires(), 1);
 	}
 
 	public function testHasExpired() {

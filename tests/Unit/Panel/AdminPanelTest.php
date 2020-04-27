@@ -22,6 +22,6 @@ class AdminPanelTest extends TestCase {
 	public function testPanel() {
 		$this->clientMapper->method('findAll')->willReturn([]);
 		$page = $this->panel->getPanel()->fetchPage();
-		$this->assertContains('No clients registered.', $page);
+		$this->assertStringContainsString('No clients registered.', $page);
 	}
 }
