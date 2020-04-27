@@ -20,7 +20,6 @@
 namespace OCA\OAuth2\Db;
 
 use InvalidArgumentException;
-use OCA\OAuth2\Controller\SettingsController;
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\Mapper;
 use OCP\IDb;
@@ -107,7 +106,7 @@ class AccessTokenMapper extends Mapper {
 	 * admin settings.
 	 *
 	 * @param int $clientId The client ID
-	 * @see SettingsController::deleteClient()
+	 * @see \OCA\OAuth2\Controller\SettingsController::deleteClient()
 	 */
 	public function deleteByClient($clientId) {
 		if (!\is_int($clientId)) {

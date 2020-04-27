@@ -26,6 +26,7 @@ use OCP\IRequest;
 use OCP\ISession;
 
 class OAuth2 extends AbstractBearer {
+	/** @phan-suppress-next-line PhanUndeclaredClassConstant */
 	const DAV_AUTHENTICATED = Auth::DAV_AUTHENTICATED;
 
 	/**

@@ -62,6 +62,7 @@ class PersonalPanel implements ISettings {
 		$t = new Template('oauth2', 'settings-personal');
 		$t->assign('clients', $this->clientMapper->findByUser($userId));
 		$t->assign('user_id', $userId);
+		/** @phan-suppress-next-line PhanTypeMismatchArgument */
 		$t->assign('urlGenerator', $this->urlGenerator);
 		return $t;
 	}

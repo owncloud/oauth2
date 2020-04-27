@@ -20,7 +20,6 @@
 namespace OCA\OAuth2\AppInfo;
 
 use OCA\OAuth2\AuthModule;
-use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Hooks\UserHooks;
 use OCA\OAuth2\Sabre\OAuth2;
@@ -93,17 +92,19 @@ class Application extends App {
 		}
 
 		$urlParts = \parse_url(\urldecode($redirectUrl));
+		/** @phan-suppress-next-line PhanTypePossiblyInvalidDimOffset */
 		if (\strpos($urlParts['path'], 'apps/oauth2/authorize') === false) {
 			return;
 		}
 		$params = [];
+		/** @phan-suppress-next-line PhanTypePossiblyInvalidDimOffset */
 		\parse_str($urlParts['query'], $params);
 		if (!isset($params['client_id'])) {
 			return;
 		}
 		/** @var ClientMapper $mapper */
 		$mapper = \OC::$server->query(ClientMapper::class);
-		/** @var Client $client */
+		/** @var \OCA\OAuth2\Db\Client $client */
 		try {
 			$client = $mapper->findByIdentifier($params['client_id']);
 			\OCP\Util::addScript('oauth2', 'login');

@@ -87,7 +87,7 @@ class UserHooks {
 				$this->refreshTokenMapper->deleteByUser($user->getUID());
 			}
 		};
-
+		/** @phan-suppress-next-line PhanUndeclaredMethod */
 		$this->userManager->listen('\OC\User', 'preDelete', $callback);
 	}
 }

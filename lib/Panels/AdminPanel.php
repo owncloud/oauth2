@@ -20,7 +20,6 @@
 namespace OCA\OAuth2\Panels;
 
 use OCA\OAuth2\Db\ClientMapper;
-use OCP\IURLGenerator;
 use OCP\Settings\ISettings;
 use OCP\Template;
 

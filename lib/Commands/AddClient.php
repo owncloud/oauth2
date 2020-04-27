@@ -55,6 +55,7 @@ class AddClient extends Command {
 				'Redirect URL - used in the OAuth flows to post back tokens and authorization codes to the client')
 			->addArgument('allow-sub-domains', InputArgument::OPTIONAL,
 				'Defines if the redirect url is allowed to use sub domains. Enter true or false',
+				/** @phan-suppress-next-line PhanTypeMismatchArgument */
 				false);
 	}
 
