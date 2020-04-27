@@ -36,7 +36,7 @@ class AuthorizationCodeTest extends TestCase {
 	public function testResetExpires() {
 		$expected = \time() + AuthorizationCode::EXPIRATION_TIME;
 		$this->authorizationCode->resetExpires();
-		$this->assertEquals($expected, $this->authorizationCode->getExpires(), '', 1);
+		$this->assertEqualsWithDelta($expected, $this->authorizationCode->getExpires(), 1);
 	}
 
 	public function testHasExpired() {
