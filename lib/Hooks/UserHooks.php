@@ -19,16 +19,16 @@
 
 namespace OCA\OAuth2\Hooks;
 
+use OC\User\Manager;
 use OC\User\User;
 use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
 use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCP\ILogger;
-use OCP\IUserManager;
 
 class UserHooks {
 
-	/** @var IUserManager */
+	/** @var Manager */
 	private $userManager;
 
 	/** @var AuthorizationCodeMapper */
@@ -49,14 +49,14 @@ class UserHooks {
 	/**
 	 * UserHooks constructor.
 	 *
-	 * @param IUserManager $userManager The user manager.
+	 * @param Manager $userManager The user manager.
 	 * @param AuthorizationCodeMapper $authorizationCodeMapper The authorization code mapper.
 	 * @param AccessTokenMapper $accessTokenMapper The access token mapper.
 	 * @param RefreshTokenMapper $refreshTokenMapper The refresh token mapper.
 	 * @param ILogger $logger The logger.
 	 * @param string $AppName The app's name.
 	 */
-	public function __construct(IUserManager $userManager,
+	public function __construct(Manager $userManager,
 								AuthorizationCodeMapper $authorizationCodeMapper,
 								AccessTokenMapper $accessTokenMapper,
 								RefreshTokenMapper $refreshTokenMapper,

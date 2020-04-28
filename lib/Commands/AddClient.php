@@ -55,15 +55,21 @@ class AddClient extends Command {
 				'Redirect URL - used in the OAuth flows to post back tokens and authorization codes to the client')
 			->addArgument('allow-sub-domains', InputArgument::OPTIONAL,
 				'Defines if the redirect url is allowed to use sub domains. Enter true or false',
-				/** @phan-suppress-next-line PhanTypeMismatchArgument */
-				false);
+				'false');
 	}
 
+	/**
+	 * @param InputInterface $input
+	 * @param OutputInterface $output
+	 * @return int|void
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 */
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$name = $input->getArgument('name');
 		$id = $input->getArgument('client-id');
 		$secret = $input->getArgument('client-secret');
 		$url = $input->getArgument('redirect-url');
+		/** @var string[]|string|null|bool $allowSubDomains */
 		$allowSubDomains = $input->getArgument('allow-sub-domains');
 
 		if (\strlen($id) < 32) {

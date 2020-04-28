@@ -137,8 +137,8 @@ class OAuthApiController extends ApiController {
 					$this->logger->logException($exception, ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
-				/** @phan-suppress-next-line PhanTypeMismatchArgumentInternal */
-				if (\strcmp($authorizationCode->getClientId(), $client->getId()) !== 0) {
+
+				if (\strcmp((string)$authorizationCode->getClientId(), (string)$client->getId()) !== 0) {
 					$this->logger->debug("auth grant client ids mismatch: {$authorizationCode->getClientId()} != {$client->getId()}", ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
 				}
@@ -183,8 +183,8 @@ class OAuthApiController extends ApiController {
 					$this->logger->logException($exception, ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], $statusCode);
 				}
-				/** @phan-suppress-next-line PhanTypeMismatchArgumentInternal */
-				if (\strcmp($refreshToken->getClientId(), $client->getId()) !== 0) {
+
+				if (\strcmp((string)$refreshToken->getClientId(), (string)$client->getId()) !== 0) {
 					$this->logger->debug("refresh grant client ids mismatch: {$refreshToken->getClientId()} != {$client->getId()}", ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], $statusCode);
 				}
