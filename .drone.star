@@ -28,6 +28,7 @@ config = {
 		'reducedDatabases' : {
 			'phpVersions': [
 				'7.3',
+				'7.4',
 			],
 			'databases': [
 				'mysql:5.5',
@@ -275,7 +276,7 @@ def phan():
 		return pipelines
 
 	default = {
-		'phpVersions': ['7.2', '7.3'],
+		'phpVersions': ['7.2', '7.3', '7.4'],
 	}
 
 	if 'defaults' in config:
@@ -526,7 +527,7 @@ def phptests(testType):
 	errorFound = False
 
 	default = {
-		'phpVersions': ['7.2', '7.3'],
+		'phpVersions': ['7.2', '7.3', '7.4'],
 		'databases': [
 			'sqlite', 'mariadb:10.2', 'mysql:5.5', 'mysql:5.7', 'postgres:9.4', 'oracle'
 		],
