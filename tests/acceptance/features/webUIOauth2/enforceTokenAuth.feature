@@ -19,7 +19,7 @@ So that I can improve the security of the system by forbidding basic auth with u
 		Then the HTTP status code should be "200"
 
 	Scenario: using WebDAV with oauth when token auth is enforced
-		When user "user0" requests "/remote.php/webdav" with "PROPFIND" using basic auth
+		When user "user1" requests "/remote.php/webdav" with "PROPFIND" using basic auth
 		Then the HTTP status code should be "401"
 		When the user requests "/remote.php/webdav" with "PROPFIND" using oauth
 		Then the HTTP status code should be "207"
