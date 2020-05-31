@@ -10,7 +10,7 @@ So that I can improve the security of the system by forbidding basic auth with u
 			| username    | password | displayname  | email                 |
 			| user1       | 1234     | User One     | u1@oc.com.np          |
 		And token auth has been enforced
-		And the user "user1" has correctly established an oauth session
+		And user "user1" has correctly established an oauth session
 
 	Scenario: access files app with oauth when token auth is enforced
 		When user "user1" requests "/index.php/apps/files" with "GET" using basic auth

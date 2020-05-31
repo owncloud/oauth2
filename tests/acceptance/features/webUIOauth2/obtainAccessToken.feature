@@ -30,19 +30,19 @@ Feature: obtaining an access token
 		Given these users have been created with skeleton files:
 			|username|password|displayname|email       |
 			|user2   |1234    |User Two   |u2@oc.com.np|
-		And the user "user1" has correctly established an oauth session
+		And user "user1" has correctly established an oauth session
 		When the client app refreshes the access token
 		Then the client app should be able to download the file "lorem.txt" of "user1" using the access token for authentication
 		But the client app should not be able to download the file "lorem.txt" of "user2" using the access token for authentication
 
 	Scenario: use OCS with oauth
-		Given the user "user1" has correctly established an oauth session
+		Given user "user1" has correctly established an oauth session
 		When the user requests "/ocs/v1.php/apps/files_sharing/api/v1/remote_shares" with "GET" using oauth
 		Then the OCS status code should be "100"
 		And the HTTP status code should be "200"
 
 	Scenario: use OCS with oauth
-		Given the user "user1" has correctly established an oauth session
+		Given user "user1" has correctly established an oauth session
 		When the user requests "/ocs/v2.php/apps/files_sharing/api/v1/remote_shares" with "GET" using oauth
 		Then the OCS status code should be "200"
 		And the HTTP status code should be "200"
@@ -66,7 +66,7 @@ Feature: obtaining an access token
 			|user2   |1234    |User Two   |u2@oc.com.np|
 		And the user has browsed to the login page
 		And the user has logged in with username "user1" and password "1234" using the webUI
-		When the user "user2" sends an oauth2 authorization request using the webUI
+		When user "user2" sends an oauth2 authorization request using the webUI
 		And the user switches the user to continue the oauth process using the webUI
 		And the user logs in with username "user2" and password "1234" using the webUI after a redirect from the oauth2AuthRequest page
 		And the user authorizes the oauth app using the webUI

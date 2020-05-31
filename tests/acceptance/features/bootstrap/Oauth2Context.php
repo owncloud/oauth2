@@ -115,8 +115,8 @@ class Oauth2Context extends RawMinkContext implements Context {
 	}
 
 	/**
-	 * @When /^the user(?: "([^"]*)")? sends an oauth2 authorization request using the webUI$/
-	 * @Given /^the user(?: "([^"]*)")? has sent an oauth2 authorization request$/
+	 * @When /^user "([^"]*)" sends an oauth2 authorization request using the webUI$/
+	 * @Given /^user "([^"]*)" has sent an oauth2 authorization request$/
 	 *
 	 * @param string $username
 	 * @param string $clientId
@@ -139,6 +139,16 @@ class Oauth2Context extends RawMinkContext implements Context {
 			$fullUrl = $fullUrl . "&user=$username";
 		}
 		$this->visitPath($fullUrl);
+	}
+
+	/**
+	 * @When /^the user sends an oauth2 authorization request using the webUI$/
+	 * @Given /^the user has sent an oauth2 authorization request$/
+	 *
+	 * @return void
+	 */
+	public function theUserSendsOauthAuthorizationRequestUsingTheWebui() {
+		$this->oauthAuthorizationRequestUsingTheWebui();
 	}
 
 	/**
@@ -181,7 +191,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 	}
 
 	/**
-	 * @Given the user :user has correctly established an oauth session
+	 * @Given user :user has correctly established an oauth session
 	 *
 	 * @param string $user
 	 *
