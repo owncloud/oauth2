@@ -1,8 +1,8 @@
 parameters:
   inferPrivatePropertyTypeFromConstructor: true
   treatPhpDocTypesAsCertain: false
-  bootstrap: %currentWorkingDirectory%/../../lib/base.php
+  bootstrapFiles:
+    - %currentWorkingDirectory%/../../lib/base.php
   excludes_analyse:
     - %currentWorkingDirectory%/appinfo/Migrations/*.php
   ignoreErrors:
-    - '#Parameter \#2 \$value of method OC\\Template\\Base::assign() expects array|bool|int|string, OCP\\IURLGenerator given.#'
