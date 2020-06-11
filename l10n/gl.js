@@ -24,7 +24,7 @@ OC.L10N.register(
     "Name" : "Nome",
     "Redirection URI" : "URI de redireccionamento",
     "Client Identifier" : "Identificador do cliente",
-    "Secret" : "Secreto",
+    "Secret" : "Segredo",
     "Subdomains allowed" : "Subdominios permitidos",
     "Add client" : "Engadir cliente",
     "Allow subdomains" : "Permitir subdominios",
