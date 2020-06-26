@@ -69,7 +69,7 @@ class AddClient extends Command {
 		$id = $input->getArgument('client-id');
 		$secret = $input->getArgument('client-secret');
 		$url = $input->getArgument('redirect-url');
-		/** @var string[]|string|null|bool $allowSubDomains */
+		/** @var string[]|string|null $allowSubDomains */
 		$allowSubDomains = $input->getArgument('allow-sub-domains');
 
 		if (\strlen($id) < 32) {
@@ -81,7 +81,7 @@ class AddClient extends Command {
 		if (!Utilities::isValidUrl($url)) {
 			throw new \InvalidArgumentException('The redirect URL is not valid.');
 		}
-		if (!\is_bool($allowSubDomains)) {
+		if (!\in_array($allowSubDomains, ['true', 'false'])) {
 			throw new \InvalidArgumentException('Please enter true or false for allowed-sub-domains.');
 		}
 		try {
@@ -103,6 +103,7 @@ class AddClient extends Command {
 			$client->setName($name);
 			$client->setRedirectUri($url);
 			$client->setSecret($secret);
+			$allowSubDomains = \filter_var($allowSubDomains, FILTER_VALIDATE_BOOLEAN);
 			$client->setAllowSubdomains($allowSubDomains);
 
 			$this->clientMapper->insert($client);
