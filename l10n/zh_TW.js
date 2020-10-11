@@ -5,6 +5,8 @@ OC.L10N.register(
     "Saving..." : "儲存中...",
     "Name must not be empty" : "名稱不能為空",
     "Redirect URI must not be empty" : "重定向URI不能為空",
+    "Redirect URI must be a valid URL" : "重定向URI必須是有效的超連結",
+    "Name %s already exists" : "名稱%s已經存在",
     "Client id must be a number" : "客戶端編號必須是數字",
     "The application was authorized successfully. You can now close this window." : "該應用程式已成功授權。 您現在可以關閉此窗口。",
     "Request not valid" : "要求無效",
