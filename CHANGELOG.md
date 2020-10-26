@@ -4,7 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## Unreleased - XXXX-XX-XX
+
+
+## [0.4.4] - 2020-03-03
+
+### Fixed
+
+- No exception in case the token is unknown and the openid connect app is enabled - [#255](https://github.com/owncloud/oauth2/issues/255)
 
 ## [0.4.3] - 2019-12-20
 
@@ -93,7 +100,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - Verify Bearer token even if the session is still valid - [#53](https://github.com/owncloud/oauth2/pull/53)
 - Use displayname on switch user screen - [#90](https://github.com/owncloud/oauth2/pull/90)
 
-[Unreleased]: https://github.com/owncloud/oauth2/compare/v0.4.3...master
+[0.4.4]: https://github.com/owncloud/oauth2/compare/v0.4.3...v0.4.4
 [0.4.3]: https://github.com/owncloud/oauth2/compare/v0.4.2...v0.4.3
 [0.4.2]: https://github.com/owncloud/oauth2/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/owncloud/oauth2/compare/v0.4.0...v0.4.1
@@ -103,4 +110,3 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 [0.2.2]: https://github.com/owncloud/oauth2/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/owncloud/oauth2/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/owncloud/oauth2/compare/v0.1.0...v0.2.0
-
