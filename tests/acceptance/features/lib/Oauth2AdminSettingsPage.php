@@ -39,16 +39,16 @@ class Oauth2AdminSettingsPage extends OwncloudPage {
 	/**
 	 *
 	 * @param string $appName
-	 * @param string $redirctionUri
+	 * @param string $redirectionUri
 	 * @param boolean $allowSubdomains
 	 *
+	 * @return void
 	 * @throws ElementNotFoundException
 	 *
-	 * @return void
 	 */
-	public function addClient($appName, $redirctionUri, $allowSubdomains = false) {
+	public function addClient($appName, $redirectionUri, $allowSubdomains = false) {
 		$this->fillField($this->oauthAppNameInputId, $appName);
-		$this->fillField($this->oauthRedirectionUriInputId, $redirctionUri);
+		$this->fillField($this->oauthRedirectionUriInputId, $redirectionUri);
 		if ($allowSubdomains === true) {
 			$allowSubdomainsCheckBox = $this->find(
 				"xpath", $this->allowSubdomainsCheckBoxXpath
@@ -80,7 +80,7 @@ class Oauth2AdminSettingsPage extends OwncloudPage {
 	 *
 	 * @throws ElementNotFoundException
 	 *
-	 * @return string[] arrray with keys name,redirection_uri,client_id,client_secret,id
+	 * @return string[] array with keys name,redirection_uri,client_id,client_secret,id
 	 */
 	public function getClientInformationByName($name) {
 		$xpath = \sprintf($this->clientRowByNameXpath, $name);
@@ -96,7 +96,7 @@ class Oauth2AdminSettingsPage extends OwncloudPage {
 		$result['redirection_uri'] = $tds[1]->getText();
 		$result['client_id'] = $tds[2]->getText();
 		$result['client_secret'] = $tds[3]->getText();
-		$result['id'] = (int) $tds[5]->find("xpath", "/button")->getAttribute("data-id");
+		$result['id'] = (int) $tds[6]->find("xpath", "/button")->getAttribute("data-id");
 
 		return $result;
 	}
