@@ -27,6 +27,7 @@ use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCA\OAuth2\Utilities;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\RedirectResponse;
 use OCP\IL10N;
@@ -98,12 +99,7 @@ class SettingsController extends Controller {
 		$this->urlGenerator = $urlGenerator;
 	}
 
-	/**
-	 * Adds a client.
-	 *
-	 * @return JSONResponse
-	 */
-	public function addClient() {
+	public function addClient(): JSONResponse {
 		$redirectUri = \trim($this->request->getParam('redirect_uri', ''));
 		$name = \trim($this->request->getParam('name', ''));
 		if ($name === '') {
@@ -132,6 +128,8 @@ class SettingsController extends Controller {
 
 		$allowSubdomains = $this->request->getParam('allow_subdomains', null) !== null;
 		$client->setAllowSubdomains($allowSubdomains);
+		$trusted = $this->request->getParam('trusted', null) !== null;
+		$client->setTrusted($trusted);
 
 		$this->clientMapper->insert($client);
 		$this->logger->info('The client "' . $client->getName() . '" has been added.', ['app' => $this->appName]);
@@ -155,9 +153,9 @@ class SettingsController extends Controller {
 	 *
 	 * @return JSONResponse
 	 * @throws DoesNotExistException
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
+	 * @throws MultipleObjectsReturnedException
 	 */
-	public function deleteClient($id) {
+	public function deleteClient($id): JSONResponse {
 		if (!\is_int($id)) {
 			return $this->sendErrorResponse($this->l10n->t('Client id must be a number'));
 		}
@@ -211,11 +209,7 @@ class SettingsController extends Controller {
 		);
 	}
 
-	/**
-	 * @param string $message
-	 * @return JSONResponse
-	 */
-	private function sendErrorResponse($message) {
+	private function sendErrorResponse(string $message): JSONResponse {
 		return new JSONResponse(
 			[
 				'status' => 'error',

@@ -46,6 +46,7 @@ if (!empty($_['clients'])) {
 				<th id="headerClientIdentifier" scope="col"><?php p($l->t('Client Identifier')); ?></th>
 				<th id="headerSecret" scope="col"><?php p($l->t('Secret')); ?></th>
 				<th id="headerSubdomains" scope="col"><?php p($l->t('Subdomains allowed')); ?></th>
+				<th id="headerTrusted" scope="col"><?php p($l->t('Trusted client')); ?></th>
 				<th id="headerRemove">&nbsp;</th>
 			</tr>
 		</thead>
@@ -64,6 +65,8 @@ if (!empty($_['clients'])) {
 		<input name="redirect_uri" type="text" placeholder="<?php p($l->t('Redirection URI')); ?>">
 		<input name="allow_subdomains" id="allow_subdomains" type="checkbox" class="checkbox" value="1"/>
 		<label for="allow_subdomains"><?php p($l->t('Allow subdomains'));?></label>
+		<input name="trusted" id="trusted" type="checkbox" class="checkbox" value="0"/>
+		<label for="trusted"><?php p($l->t('Trusted client'));?></label>
 	</form>
 	<button id="oauth2_submit" type="button" class="button"><?php p($l->t('Add')); ?></button>
 	<span id="oauth2_save_msg"></span>

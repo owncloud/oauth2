@@ -32,6 +32,7 @@ use OCP\AppFramework\Db\Entity;
  * @method string getName()
  * @method void setName(string $name)
  * @method boolean getAllowSubdomains()
+ * @method boolean getTrusted()
  */
 class Client extends Entity {
 	protected $identifier;
@@ -39,6 +40,7 @@ class Client extends Entity {
 	protected $redirectUri;
 	protected $name;
 	protected $allowSubdomains;
+	protected $trusted;
 
 	/**
 	 * Client constructor.
@@ -50,17 +52,22 @@ class Client extends Entity {
 		$this->addType('redirect_uri', 'string');
 		$this->addType('name', 'string');
 		$this->addType('allow_subdomains', 'boolean');
+		$this->addType('trusted', 'boolean');
 	}
 
-	/**
-	 * @param boolean $value
-	 */
-	public function setAllowSubdomains($value) {
-		$value = (boolean)$value;
+	public function setAllowSubdomains(bool $value): void {
 		if (\OC::$server->getDatabaseConnection()->getDatabasePlatform() instanceof OraclePlatform) {
-			parent::setter('allowSubdomains', [$value ? 1 : 0]);
+			$this->setter('allowSubdomains', [$value ? 1 : 0]);
 		} else {
-			parent::setter('allowSubdomains', [$value]);
+			$this->setter('allowSubdomains', [$value]);
+		}
+	}
+
+	public function setTrusted(bool $value): void {
+		if (\OC::$server->getDatabaseConnection()->getDatabasePlatform() instanceof OraclePlatform) {
+			$this->setter('trusted', [$value ? 1 : 0]);
+		} else {
+			$this->setter('trusted', [$value]);
 		}
 	}
 }

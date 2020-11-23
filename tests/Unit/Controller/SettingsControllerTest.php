@@ -34,6 +34,7 @@ use OCP\AppFramework\Http\RedirectResponse;
 use OCP\IL10N;
 use OCP\IRequest;
 use OCP\IURLGenerator;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SettingsControllerTest extends TestCase {
@@ -59,7 +60,7 @@ class SettingsControllerTest extends TestCase {
 	/** @var RefreshTokenMapper */
 	private $refreshTokenMapper;
 
-	/** @var IURLGenerator | \PHPUnit\Framework\MockObject\MockObject */
+	/** @var IURLGenerator | MockObject */
 	private $urlGenerator;
 
 	/** @var string $userId */
@@ -83,16 +84,15 @@ class SettingsControllerTest extends TestCase {
 		$this->appName = $container->query('AppName');
 		$this->request = $this->createMock(IRequest::class);
 
-		$this->clientMapper = $container->query('OCA\OAuth2\Db\ClientMapper');
+		$this->clientMapper = $container->query(ClientMapper::class);
 		$this->clientMapper->deleteAll();
-		$this->authorizationCodeMapper = $container->query('OCA\OAuth2\Db\AuthorizationCodeMapper');
+		$this->authorizationCodeMapper = $container->query(AuthorizationCodeMapper::class);
 		$this->authorizationCodeMapper->deleteAll();
-		$this->accessTokenMapper = $container->query('OCA\OAuth2\Db\AccessTokenMapper');
+		$this->accessTokenMapper = $container->query(AccessTokenMapper::class);
 		$this->accessTokenMapper->deleteAll();
-		$this->refreshTokenMapper = $container->query('OCA\OAuth2\Db\RefreshTokenMapper');
+		$this->refreshTokenMapper = $container->query(RefreshTokenMapper::class);
 		$this->refreshTokenMapper->deleteAll();
 
-		/** @var Client $client */
 		$client = new Client();
 		$client->setIdentifier('NXCy3M3a6FM9pecVyUZuGF62AJVJaCfmkYz7us4yr4QZqVzMIkVZUf1v2IzvsFZa');
 		$client->setSecret('9yUZuGF6pecVaCfmIzvsFZakYNXCyr4QZqVzMIky3M3a6FMz7us4VZUf2AJVJ1v2');
@@ -123,6 +123,10 @@ class SettingsControllerTest extends TestCase {
 		$this->refreshTokenMapper->insert($refreshToken);
 
 		$this->urlGenerator = $this->getMockBuilder(IURLGenerator::class)->getMock();
+		$l10n = $this->createMock(IL10N::class);
+		$l10n->method('t')->willReturnCallback(static function ($fmt) {
+			return $fmt;
+		});
 
 		$this->controller = new SettingsController(
 			$this->appName,
@@ -132,7 +136,7 @@ class SettingsControllerTest extends TestCase {
 			$this->accessTokenMapper,
 			$this->refreshTokenMapper,
 			$this->userId,
-			$this->createMock(IL10N::class),
+			$l10n,
 			$container->query('Logger'),
 			$this->urlGenerator
 		);
@@ -147,7 +151,7 @@ class SettingsControllerTest extends TestCase {
 		$this->refreshTokenMapper->deleteAll();
 	}
 
-	public function provideClientData() {
+	public function provideClientData(): array {
 		return [
 			// missing name
 			['test', null, null, 0],
@@ -169,28 +173,29 @@ class SettingsControllerTest extends TestCase {
 	 * @param string|null $allowSubdomains
 	 * @param integer $expectedClientCount
 	 */
-	public function testAddClient($redirectUri, $name, $allowSubdomains, $expectedClientCount) {
+	public function testAddClient($redirectUri, $name, $allowSubdomains, $expectedClientCount): void {
 		$this->clientMapper->deleteAll();
 
 		$map = [
 			['redirect_uri', '', $redirectUri],
 			['name', '', $name],
-			['allow_subdomains', null, $allowSubdomains]
+			['allow_subdomains', null, $allowSubdomains],
+			['trusted', null, false],
 		];
 		$this->request->method('getParam')->willReturnMap($map);
 		$result = $this->controller->addClient();
-		$this->assertTrue($result instanceof JSONResponse);
-		$this->assertEquals($expectedClientCount, \count($this->clientMapper->findAll()));
+		self::assertInstanceOf(JSONResponse::class, $result);
+		self::assertCount($expectedClientCount, $this->clientMapper->findAll());
 		if ($expectedClientCount === 1) {
 			/** @var Client $client */
 			$client = $this->clientMapper->findAll()[0];
-			$this->assertEquals($redirectUri, $client->getRedirectUri());
-			$this->assertEquals($name, $client->getName());
-			$this->assertEquals((bool) $allowSubdomains, $client->getAllowSubdomains());
+			self::assertEquals($redirectUri, $client->getRedirectUri());
+			self::assertEquals($name, $client->getName());
+			self::assertEquals((bool) $allowSubdomains, $client->getAllowSubdomains());
 		}
 	}
 
-	public function provideClientId() {
+	public function provideClientId(): array {
 		// Data providers are run before the class is configured.
 		// That's why we need a closure if we want to access $this->smth->property
 		return [
@@ -214,47 +219,47 @@ class SettingsControllerTest extends TestCase {
 	 * @param string $expectedStatus
 	 * @param integer $expectedClientCount
 	 */
-	public function testDeleteClient($clientIdProvider, $expectedStatus, $expectedClientCount) {
+	public function testDeleteClient($clientIdProvider, $expectedStatus, $expectedClientCount): void {
 		$result = $this->controller->deleteClient($clientIdProvider($this));
-		$this->assertTrue($result instanceof JSONResponse);
+		self::assertInstanceOf(JSONResponse::class, $result);
 		$responseData = $result->getData();
-		$this->assertEquals($expectedStatus, $responseData['status']);
-		$this->assertEquals($expectedClientCount, \count($this->clientMapper->findAll()));
+		self::assertEquals($expectedStatus, $responseData['status']);
+		self::assertCount($expectedClientCount, $this->clientMapper->findAll());
 	}
 
-	public function testRevokeAuthorization() {
-		$this->urlGenerator->expects($this->any())->method('linkToRouteAbsolute')->willReturn('/personal');
+	public function testRevokeAuthorization(): void {
+		$this->urlGenerator->method('linkToRouteAbsolute')->willReturn('/personal');
 
 		$result = $this->controller->revokeAuthorization(null, null);
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
-		$this->assertEquals(1, \count($this->clientMapper->findAll()));
-		$this->assertEquals(1, \count($this->authorizationCodeMapper->findAll()));
-		$this->assertEquals(1, \count($this->accessTokenMapper->findAll()));
-		$this->assertEquals(1, \count($this->refreshTokenMapper->findAll()));
+		self::assertInstanceOf(RedirectResponse::class, $result);
+		self::assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
+		self::assertCount(1, $this->clientMapper->findAll());
+		self::assertCount(1, $this->authorizationCodeMapper->findAll());
+		self::assertCount(1, $this->accessTokenMapper->findAll());
+		self::assertCount(1, $this->refreshTokenMapper->findAll());
 
 		$result = $this->controller->revokeAuthorization('', '');
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
-		$this->assertEquals(1, \count($this->clientMapper->findAll()));
-		$this->assertEquals(1, \count($this->authorizationCodeMapper->findAll()));
-		$this->assertEquals(1, \count($this->accessTokenMapper->findAll()));
-		$this->assertEquals(1, \count($this->refreshTokenMapper->findAll()));
+		self::assertInstanceOf(RedirectResponse::class, $result);
+		self::assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
+		self::assertCount(1, $this->clientMapper->findAll());
+		self::assertCount(1, $this->authorizationCodeMapper->findAll());
+		self::assertCount(1, $this->accessTokenMapper->findAll());
+		self::assertCount(1, $this->refreshTokenMapper->findAll());
 
 		$result = $this->controller->revokeAuthorization(12, 12);
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
-		$this->assertEquals(1, \count($this->clientMapper->findAll()));
-		$this->assertEquals(1, \count($this->authorizationCodeMapper->findAll()));
-		$this->assertEquals(1, \count($this->accessTokenMapper->findAll()));
-		$this->assertEquals(1, \count($this->refreshTokenMapper->findAll()));
+		self::assertInstanceOf(RedirectResponse::class, $result);
+		self::assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
+		self::assertCount(1, $this->clientMapper->findAll());
+		self::assertCount(1, $this->authorizationCodeMapper->findAll());
+		self::assertCount(1, $this->accessTokenMapper->findAll());
+		self::assertCount(1, $this->refreshTokenMapper->findAll());
 
 		$result = $this->controller->revokeAuthorization($this->client->getId(), $this->userId);
-		$this->assertTrue($result instanceof RedirectResponse);
-		$this->assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
-		$this->assertEquals(1, \count($this->clientMapper->findAll()));
-		$this->assertEquals(0, \count($this->authorizationCodeMapper->findAll()));
-		$this->assertEquals(0, \count($this->accessTokenMapper->findAll()));
-		$this->assertEquals(0, \count($this->refreshTokenMapper->findAll()));
+		self::assertInstanceOf(RedirectResponse::class, $result);
+		self::assertEquals('/personal#' . $this->appName, $result->getRedirectURL());
+		self::assertCount(1, $this->clientMapper->findAll());
+		self::assertCount(0, $this->authorizationCodeMapper->findAll());
+		self::assertCount(0, $this->accessTokenMapper->findAll());
+		self::assertCount(0, $this->refreshTokenMapper->findAll());
 	}
 }
