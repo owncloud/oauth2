@@ -56,20 +56,7 @@ class PageController extends Controller {
 	/** @var IUserManager */
 	private $userManager;
 
-	/**
-	 * PageController constructor.
-	 *
-	 * @param string $AppName The app's name.
-	 * @param IRequest $request The request.
-	 * @param ClientMapper $clientMapper The client mapper.
-	 * @param AuthorizationCodeMapper $authorizationCodeMapper The authorization code mapper.
-	 * @param AccessTokenMapper $accessTokenMapper The access token mapper.
-	 * @param ILogger $logger The logger.
-	 * @param IURLGenerator $urlGenerator
-	 * @param IUserSession $userSession
-	 * @param IUserManager $userManager
-	 */
-	public function __construct($AppName, IRequest $request,
+	public function __construct(string $appName, IRequest $request,
 								ClientMapper $clientMapper,
 								AuthorizationCodeMapper $authorizationCodeMapper,
 								AccessTokenMapper $accessTokenMapper,
@@ -78,7 +65,7 @@ class PageController extends Controller {
 								IUserSession $userSession,
 								IUserManager $userManager
 	) {
-		parent::__construct($AppName, $request);
+		parent::__construct($appName, $request);
 
 		$this->clientMapper = $clientMapper;
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
@@ -171,6 +158,11 @@ class PageController extends Controller {
 			}
 
 			return new RedirectResponse($errorRedirectUri);
+		}
+
+		// trusted clients get their auth code back directly
+		if ($client->getTrusted()) {
+			return $this->generateAuthorizationCode($response_type, $client_id, $redirect_uri, $state);
 		}
 
 		$logoutUrl = $this->urlGenerator->linkToRouteAbsolute(
