@@ -65,7 +65,7 @@ if (!empty($_['clients'])) {
 		<input name="redirect_uri" type="text" placeholder="<?php p($l->t('Redirection URI')); ?>">
 		<input name="allow_subdomains" id="allow_subdomains" type="checkbox" class="checkbox" value="1"/>
 		<label for="allow_subdomains"><?php p($l->t('Allow subdomains'));?></label>
-		<input name="trusted" id="trusted" type="checkbox" class="checkbox" value="0"/>
+		<input name="trusted" id="trusted" type="checkbox" class="checkbox" value="1"/>
 		<label for="trusted"><?php p($l->t('Trusted client'));?></label>
 	</form>
 	<button id="oauth2_submit" type="button" class="button"><?php p($l->t('Add')); ?></button>
