@@ -59,7 +59,7 @@ class PageController extends Controller {
 	/**
 	 * PageController constructor.
 	 *
-	 * @param string $AppName The app's name.
+	 * @param string $appName The app's name.
 	 * @param IRequest $request The request.
 	 * @param ClientMapper $clientMapper The client mapper.
 	 * @param AuthorizationCodeMapper $authorizationCodeMapper The authorization code mapper.
@@ -97,7 +97,7 @@ class PageController extends Controller {
 	 * @param string $response_type The expected response type.
 	 * @param string $client_id The client identifier.
 	 * @param string $redirect_uri The redirection URI.
-	 * @param string $state The state.
+	 * @param string | null $state The state.
 	 * @param string | null $user
 	 *
 	 * @return TemplateResponse | RedirectResponse The authorize view or the
