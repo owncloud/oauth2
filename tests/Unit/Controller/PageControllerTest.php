@@ -78,7 +78,6 @@ class PageControllerTest extends TestCase {
 		$this->clientMapper = $container->query(ClientMapper::class);
 		$this->clientMapper->deleteAll();
 
-		/** @var Client $client */
 		$client = new Client();
 		$client->setIdentifier($this->identifier);
 		$client->setSecret($this->secret);
@@ -123,137 +122,155 @@ class PageControllerTest extends TestCase {
 		$this->clientMapper->delete($this->client);
 	}
 
-	public function testAuthorize() {
+	public function testAuthorize(): void {
 		// Wrong types
 		$result = $this->controller->authorize(1, 'qwertz', 'abcd', 'state');
-		$this->assertInstanceOf(TemplateResponse::class, $result);
-		$this->assertEquals('authorize-error', $result->getTemplateName());
-		$this->assertEquals(
+		self::assertInstanceOf(TemplateResponse::class, $result);
+		self::assertEquals('authorize-error', $result->getTemplateName());
+		self::assertEquals(
 			['client_name' => null],
 			$result->getParams()
 		);
 
 		$result = $this->controller->authorize('code', 2, 'abcd', 'state');
-		$this->assertInstanceOf(TemplateResponse::class, $result);
-		$this->assertEquals('authorize-error', $result->getTemplateName());
-		$this->assertEquals(
+		self::assertInstanceOf(TemplateResponse::class, $result);
+		self::assertEquals('authorize-error', $result->getTemplateName());
+		self::assertEquals(
 			['client_name' => null],
 			$result->getParams()
 		);
 
 		$result = $this->controller->authorize('code', 'qwertz', 3, 'state');
-		$this->assertInstanceOf(TemplateResponse::class, $result);
-		$this->assertEquals('authorize-error', $result->getTemplateName());
-		$this->assertEquals(
+		self::assertInstanceOf(TemplateResponse::class, $result);
+		self::assertEquals('authorize-error', $result->getTemplateName());
+		self::assertEquals(
 			['client_name' => null],
 			$result->getParams()
 		);
 
 		$result = $this->controller->authorize('code', $this->identifier, \urldecode($this->redirectUri), 4);
-		$this->assertInstanceOf(TemplateResponse::class, $result);
-		$this->assertEquals('authorize-error', $result->getTemplateName());
-		$this->assertEquals(
+		self::assertInstanceOf(TemplateResponse::class, $result);
+		self::assertEquals('authorize-error', $result->getTemplateName());
+		self::assertEquals(
 			['client_name' => null],
 			$result->getParams()
 		);
 
 		// Wrong parameters
 		$result = $this->controller->authorize('code', 'qwertz', 'abcd', 'state');
-		$this->assertInstanceOf(TemplateResponse::class, $result);
-		$this->assertEquals('authorize-error', $result->getTemplateName());
-		$this->assertEquals(
+		self::assertInstanceOf(TemplateResponse::class, $result);
+		self::assertEquals('authorize-error', $result->getTemplateName());
+		self::assertEquals(
 			['client_name' => null],
 			$result->getParams()
 		);
 
 		$result = $this->controller->authorize('qwertz', $this->identifier, \urldecode($this->redirectUri));
-		$this->assertInstanceOf(RedirectResponse::class, $result);
-		$this->assertEquals('https://owncloud.org?error=unsupported_response_type', $result->getRedirectURL());
+		self::assertInstanceOf(RedirectResponse::class, $result);
+		self::assertEquals('https://owncloud.org?error=unsupported_response_type', $result->getRedirectURL());
 
 		$result = $this->controller->authorize('code', $this->identifier, \urldecode('https://www.example.org'));
-		$this->assertInstanceOf(TemplateResponse::class, $result);
-		$this->assertEquals('authorize-error', $result->getTemplateName());
-		$this->assertEquals(
+		self::assertInstanceOf(TemplateResponse::class, $result);
+		self::assertEquals('authorize-error', $result->getTemplateName());
+		self::assertEquals(
 			['client_name' => $this->name],
 			$result->getParams()
 		);
 
 		$result = $this->controller->authorize('code', $this->identifier, \urldecode($this->redirectUri));
-		$this->assertInstanceOf(TemplateResponse::class, $result);
-		$this->assertEquals('authorize', $result->getTemplateName());
-		$this->assertEquals(['client_name' => $this->name, 'logout_url' => null,
+		self::assertInstanceOf(TemplateResponse::class, $result);
+		self::assertEquals('authorize', $result->getTemplateName());
+		self::assertEquals(['client_name' => $this->name, 'logout_url' => null,
 			'current_user' => '<strong>Alice</strong>'], $result->getParams());
 	}
 
-	public function testGenerateAuthorizationCode() {
+	public function testGenerateAuthorizationCode(): void {
 		// Wrong types
 		$result = $this->controller->generateAuthorizationCode(1, 'qwertz', 'abcd', 'state');
-		$this->assertInstanceOf(RedirectResponse::class, $result);
-		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+		self::assertInstanceOf(RedirectResponse::class, $result);
+		self::assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
 		$result = $this->controller->generateAuthorizationCode('code', 2, 'abcd', 'state');
-		$this->assertInstanceOf(RedirectResponse::class, $result);
-		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+		self::assertInstanceOf(RedirectResponse::class, $result);
+		self::assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
 		$result = $this->controller->generateAuthorizationCode('code', 'qwertz', 3, 'state');
-		$this->assertInstanceOf(RedirectResponse::class, $result);
-		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+		self::assertInstanceOf(RedirectResponse::class, $result);
+		self::assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
 		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, \urldecode($this->redirectUri), 4);
-		$this->assertInstanceOf(RedirectResponse::class, $result);
-		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+		self::assertInstanceOf(RedirectResponse::class, $result);
+		self::assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
 		// Wrong parameters
 		$result = $this->controller->generateAuthorizationCode('code', 'qwertz', 'abcd', 'state');
-		$this->assertInstanceOf(RedirectResponse::class, $result);
-		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+		self::assertInstanceOf(RedirectResponse::class, $result);
+		self::assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
 		$result = $this->controller->generateAuthorizationCode('qwertz', $this->identifier, \urldecode($this->redirectUri));
-		$this->assertInstanceOf(RedirectResponse::class, $result);
-		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+		self::assertInstanceOf(RedirectResponse::class, $result);
+		self::assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
 		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, \urldecode('https://www.example.org'));
-		$this->assertInstanceOf(RedirectResponse::class, $result);
-		$this->assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
+		self::assertInstanceOf(RedirectResponse::class, $result);
+		self::assertEquals(OC_Util::getDefaultPageUrl(), $result->getRedirectURL());
 
-		$this->assertCount(0, $this->authorizationCodeMapper->findAll());
+		self::assertCount(0, $this->authorizationCodeMapper->findAll());
 		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, \urldecode($this->redirectUri));
-		$this->assertInstanceOf(RedirectResponse::class, $result);
-		$this->assertCount(1, $this->authorizationCodeMapper->findAll());
-		list($url, $query) = \explode('?', $result->getRedirectURL());
-		$this->assertEquals($url, $this->redirectUri);
+		self::assertInstanceOf(RedirectResponse::class, $result);
+		self::assertCount(1, $this->authorizationCodeMapper->findAll());
+		[$url, $query] = \explode('?', $result->getRedirectURL());
+		self::assertEquals($url, $this->redirectUri);
 		\parse_str($query, $parameters);
-		$this->assertTrue(\array_key_exists('code', $parameters));
+		self::assertTrue(\array_key_exists('code', $parameters));
 		$expected = \time() + AuthorizationCode::EXPIRATION_TIME;
 		/** @var AuthorizationCode $authorizationCode */
 		$authorizationCode = $this->authorizationCodeMapper->findByCode($parameters['code']);
-		$this->assertEqualsWithDelta($expected, $authorizationCode->getExpires(), 1);
-		$this->assertEquals('Alice', $authorizationCode->getUserId());
-		$this->assertEquals($this->client->getId(), $authorizationCode->getClientId());
+		self::assertEqualsWithDelta($expected, $authorizationCode->getExpires(), 1);
+		self::assertEquals('Alice', $authorizationCode->getUserId());
+		self::assertEquals($this->client->getId(), $authorizationCode->getClientId());
 		$this->authorizationCodeMapper->delete($this->authorizationCodeMapper->findByCode($parameters['code']));
 
-		$this->assertCount(0, $this->authorizationCodeMapper->findAll());
+		self::assertCount(0, $this->authorizationCodeMapper->findAll());
 		$result = $this->controller->generateAuthorizationCode('code', $this->identifier, \urldecode($this->redirectUri), 'testingState');
-		$this->assertInstanceOf(RedirectResponse::class, $result);
-		$this->assertCount(1, $this->authorizationCodeMapper->findAll());
-		list($url, $query) = \explode('?', $result->getRedirectURL());
-		$this->assertEquals($url, $this->redirectUri);
+		self::assertInstanceOf(RedirectResponse::class, $result);
+		self::assertCount(1, $this->authorizationCodeMapper->findAll());
+		[$url, $query] = \explode('?', $result->getRedirectURL());
+		self::assertEquals($url, $this->redirectUri);
 		\parse_str($query, $parameters);
-		$this->assertTrue(\array_key_exists('state', $parameters));
-		$this->assertEquals('testingState', $parameters['state']);
-		$this->assertTrue(\array_key_exists('code', $parameters));
+		self::assertTrue(\array_key_exists('state', $parameters));
+		self::assertEquals('testingState', $parameters['state']);
+		self::assertTrue(\array_key_exists('code', $parameters));
 		$expected = \time() + 600;
 		/** @var AuthorizationCode $authorizationCode */
 		$authorizationCode = $this->authorizationCodeMapper->findByCode($parameters['code']);
-		$this->assertEqualsWithDelta($expected, $authorizationCode->getExpires(), 1);
-		$this->assertEquals('Alice', $authorizationCode->getUserId());
-		$this->assertEquals($this->client->getId(), $authorizationCode->getClientId());
+		self::assertEqualsWithDelta($expected, $authorizationCode->getExpires(), 1);
+		self::assertEquals('Alice', $authorizationCode->getUserId());
+		self::assertEquals($this->client->getId(), $authorizationCode->getClientId());
 		$this->authorizationCodeMapper->delete($this->authorizationCodeMapper->findByCode($parameters['code']));
 	}
 
-	public function testAuthorizationSuccessful() {
+	public function testAuthorizationSuccessful(): void {
 		$result = $this->controller->authorizationSuccessful();
-		$this->assertInstanceOf(TemplateResponse::class, $result);
-		$this->assertEquals('authorization-successful', $result->getTemplateName());
+		self::assertInstanceOf(TemplateResponse::class, $result);
+		self::assertEquals('authorization-successful', $result->getTemplateName());
+	}
+
+	public function testTrustedClient(): void {
+		$identifier = 'trusted-client';
+		// add trusted client
+		$client = new Client();
+		$client->setIdentifier($identifier);
+		$client->setSecret($this->secret);
+		$client->setRedirectUri($this->redirectUri);
+		$client->setName('trusted client for testing');
+		$client->setAllowSubdomains(false);
+		$client->setTrusted(true);
+		$this->client = $this->clientMapper->insert($client);
+
+		/** @var RedirectResponse $result */
+		$result = $this->controller->authorize('code', $identifier, \urldecode($this->redirectUri));
+		self::assertInstanceOf(RedirectResponse::class, $result);
+		self::assertStringStartsWith($this->redirectUri . '?code=', $result->getRedirectURL());
 	}
 }
