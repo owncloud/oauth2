@@ -19,6 +19,8 @@
 
 namespace OCA\OAuth2\Db;
 
+use OCA\OAuth2\Exceptions\UnsupportedPkceTransformException;
+use OCA\OAuth2\Utilities;
 use OCP\AppFramework\Db\Entity;
 
 /**
@@ -30,6 +32,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setUserId(string $userId)
  * @method int getExpires()
  * @method void setExpires(int $value)
+ * @method void setCodeChallenge(string $codeChallenge)
+ * @method void setCodeChallengeMethod(string $codeChallengeMethod)
  */
 class AuthorizationCode extends Entity {
 	const EXPIRATION_TIME = 600;
@@ -38,6 +42,8 @@ class AuthorizationCode extends Entity {
 	protected $clientId;
 	protected $userId;
 	protected $expires;
+	protected $codeChallenge;
+	protected $codeChallengeMethod;
 
 	/**
 	 * AuthorizationCode constructor.
@@ -48,6 +54,8 @@ class AuthorizationCode extends Entity {
 		$this->addType('client_id', 'int');
 		$this->addType('user_id', 'string');
 		$this->addType('expires', 'int');
+		$this->addType('code_challenge', 'string');
+		$this->addType('code_challenge_method', 'string');
 	}
 
 	/**
@@ -64,5 +72,19 @@ class AuthorizationCode extends Entity {
 	 */
 	public function hasExpired() {
 		return \time() >= $this->getExpires();
+	}
+
+	public function isCodeVerifierValid($codeVerifier) {
+		if ($this->codeChallengeMethod === 'S256') {
+			// See https://tools.ietf.org/pdf/rfc7636.pdf#57
+			$h = \hash('sha256', $codeVerifier, true);
+			$encoded = Utilities::base64url_encode($h);
+			return $encoded === $this->codeChallenge;
+		} elseif ($this->codeChallengeMethod === 'plain' ||
+				   $this->codeChallengeMethod === '' ||
+				   $this->codeChallengeMethod === null) {
+			return $codeVerifier === $this->codeChallenge;
+		}
+		throw new UnsupportedPkceTransformException("Code challenge method {$this->codeChallengeMethod} not supported");
 	}
 }

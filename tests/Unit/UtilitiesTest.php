@@ -80,4 +80,13 @@ class UtilitiesTest extends TestCase {
 	public function testIsValidUrl($expected, $url) {
 		$this->assertEquals($expected, Utilities::isValidUrl($url));
 	}
+
+	public function testBase64url_encode() {
+		$data = \random_bytes(32);
+		$encoded = Utilities::base64url_encode($data);
+		$this->assertEquals(43, \strlen($encoded));
+		$this->assertFalse(\strpos($encoded, '+'));
+		$this->assertFalse(\strpos($encoded, '/'));
+		$this->assertFalse(\strpos($encoded, '='));
+	}
 }
