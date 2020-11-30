@@ -93,4 +93,9 @@ class Utilities {
 
 		return (\filter_var($redirectUri, FILTER_VALIDATE_URL) !== false);
 	}
+
+	// See https://tools.ietf.org/pdf/rfc7636.pdf#56
+	public static function base64url_encode($data) {
+		return \rtrim(\strtr(\base64_encode($data), '+/', '-_'), '=');
+	}
 }

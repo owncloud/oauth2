@@ -29,6 +29,7 @@ use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Db\RefreshToken;
 use OCA\OAuth2\Db\RefreshTokenMapper;
+use OCA\OAuth2\Utilities;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 use OCP\IURLGenerator;
@@ -519,5 +520,111 @@ class OAuthApiControllerTest extends TestCase {
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('unauthorized_client', $json->error);
 		$this->assertEquals(400, $result->getStatus());
+	}
+
+	public function testGenerateTokenWithAuthorizationCodeAndPKCE() {
+		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
+		$_SERVER['PHP_AUTH_PW'] = $this->clientSecret;
+
+		$userMock = $this->createMock(IUser::class);
+		$userMock->method('isEnabled')->willReturn(true);
+		$this->userManager->method('get')->willReturn($userMock);
+
+		// PKCE with plain code challenge and without providing the challenge method
+		$this->authorizationCode->resetExpires();
+		$this->authorizationCode->setCodeChallenge('challenge');
+		$this->authorizationCodeMapper->update($this->authorizationCode);
+		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(),
+				$this->redirectUri, null, 'challenge');
+		$this->assertTrue($result instanceof JSONResponse);
+		$json = \json_decode($result->render());
+		$this->assertNotEmpty($json->access_token);
+		$this->assertEquals(64, \strlen($json->access_token));
+		$this->assertNotEmpty($json->token_type);
+		$this->assertEquals('Bearer', $json->token_type);
+		$this->assertNotEmpty($json->expires_in);
+		$this->assertEquals(AccessToken::EXPIRATION_TIME, $json->expires_in);
+		$this->assertNotEmpty($json->refresh_token);
+		$this->assertEquals(64, \strlen($json->refresh_token));
+		$this->assertNotEmpty($json->user_id);
+		$this->assertEquals($this->userId, $json->user_id);
+		$this->assertNotEmpty($json->message_url);
+		$this->assertEquals($this->authorizationSuccessfulMessageUrl, $json->message_url);
+		$this->assertEquals(200, $result->getStatus());
+		$this->assertEquals(0, \count($this->authorizationCodeMapper->findAll()));
+		$this->assertEquals(2, \count($this->accessTokenMapper->findAll()));
+		$this->assertEquals(2, \count($this->refreshTokenMapper->findAll()));
+
+		// PKCE with plain code challenge and with providing the challenge method
+		$this->authorizationCode->resetExpires();
+		$this->authorizationCode->setCodeChallenge('challenge');
+		$this->authorizationCode->setCodeChallengeMethod('plain');
+		$this->authorizationCodeMapper->insert($this->authorizationCode);
+		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(),
+			$this->redirectUri, null, 'challenge');
+		$this->assertEquals(200, $result->getStatus());
+		$json = \json_decode($result->render());
+		$this->assertNotEmpty($json->access_token);
+		$this->assertEquals(64, \strlen($json->access_token));
+		$this->assertNotEmpty($json->token_type);
+		$this->assertEquals('Bearer', $json->token_type);
+
+		// PKCE with plain code challenge and incorrect code verifier
+		$this->authorizationCode->resetExpires();
+		$this->authorizationCode->setCodeChallenge('challenge');
+		$this->authorizationCode->setCodeChallengeMethod('plain');
+		$this->authorizationCodeMapper->insert($this->authorizationCode);
+		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(),
+			$this->redirectUri, null, 'false verifier');
+		$json = \json_decode($result->render());
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('invalid_grant', $json->error);
+		$this->assertEquals(400, $result->getStatus());
+	}
+
+	public function testGenerateTokenWithAuthorizationCodeAndPKCES256() {
+		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
+		$_SERVER['PHP_AUTH_PW'] = $this->clientSecret;
+
+		$userMock = $this->createMock(IUser::class);
+		$userMock->method('isEnabled')->willReturn(true);
+		$this->userManager->method('get')->willReturn($userMock);
+
+		// PKCE with S256 code challenge
+		$codeVerifier = Utilities::base64url_encode(\random_bytes(32));
+		$codeChallenge = Utilities::base64url_encode(\hash('sha256', $codeVerifier, true));
+		$this->authorizationCode->resetExpires();
+		$this->authorizationCode->setCodeChallenge($codeChallenge);
+		$this->authorizationCode->setCodeChallengeMethod('S256');
+		$this->authorizationCodeMapper->update($this->authorizationCode);
+		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(),
+			$this->redirectUri, null, $codeVerifier);
+		$this->assertEquals(200, $result->getStatus());
+		$json = \json_decode($result->render());
+		$this->assertNotEmpty($json->access_token);
+		$this->assertEquals(64, \strlen($json->access_token));
+		$this->assertNotEmpty($json->token_type);
+		$this->assertEquals('Bearer', $json->token_type);
+	}
+	public function testGenerateTokenWithAuthorizationCodeAndPKCESInvalidChallengeMethod() {
+		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
+		$_SERVER['PHP_AUTH_PW'] = $this->clientSecret;
+
+		$userMock = $this->createMock(IUser::class);
+		$userMock->method('isEnabled')->willReturn(true);
+		$this->userManager->method('get')->willReturn($userMock);
+
+		// PKCE with incorrect code challenge method
+		$this->authorizationCode->resetExpires();
+		$this->authorizationCode->setCodeChallenge('challenge');
+		$this->authorizationCode->setCodeChallengeMethod('invalid');
+		$this->authorizationCodeMapper->update($this->authorizationCode);
+		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(),
+			$this->redirectUri, null, 'challenge');
+		$this->assertEquals(400, $result->getStatus());
+		$json = \json_decode($result->render());
+		$this->assertNotEmpty($json->error);
+		$this->assertEquals('invalid_request', $json->error);
+		$this->assertEquals('Code challenge method invalid not supported', $json->error_description);
 	}
 }

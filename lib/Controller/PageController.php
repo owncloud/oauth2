@@ -200,6 +200,8 @@ class PageController extends Controller {
 	 * @param string $client_id The client identifier.
 	 * @param string $redirect_uri The redirection URI.
 	 * @param string $state The state.
+	 * @param string $code_challenge The PKCE code challenge.
+	 * @param string $code_challenge_method The PKCE code challenge method.
 	 *
 	 * @return RedirectResponse Redirection to the given redirect_uri or to the
 	 * default page URL.
@@ -207,7 +209,7 @@ class PageController extends Controller {
 	 * @throws MultipleObjectsReturnedException
 	 * @NoAdminRequired
 	 */
-	public function generateAuthorizationCode($response_type, $client_id, $redirect_uri, $state = null) {
+	public function generateAuthorizationCode($response_type, $client_id, $redirect_uri, $state = null, $code_challenge = null, $code_challenge_method = null) {
 		if (!\is_string($response_type) || !\is_string($client_id)
 			|| !\is_string($redirect_uri) || ($state !== null && !\is_string($state))
 		) {
@@ -233,6 +235,8 @@ class PageController extends Controller {
 				$authorizationCode->setClientId($client->getId());
 				$authorizationCode->setUserId($this->userSession->getUser()->getUID());
 				$authorizationCode->resetExpires();
+				$authorizationCode->setCodeChallenge($code_challenge);
+				$authorizationCode->setCodeChallengeMethod($code_challenge_method);
 				$this->authorizationCodeMapper->insert($authorizationCode);
 
 				$result = \urldecode($redirect_uri);

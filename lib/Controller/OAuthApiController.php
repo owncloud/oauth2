@@ -25,6 +25,7 @@ use OCA\OAuth2\Db\AuthorizationCodeMapper;
 use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Db\RefreshToken;
 use OCA\OAuth2\Db\RefreshTokenMapper;
+use OCA\OAuth2\Exceptions\UnsupportedPkceTransformException;
 use OCA\OAuth2\Utilities;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -96,6 +97,7 @@ class OAuthApiController extends ApiController {
 	 * @param string $code The authorization code.
 	 * @param string $redirect_uri The redirect URI.
 	 * @param string $refresh_token The refresh token.
+	 * @param string $code_verifier The PKCE code verifier.
 	 * @return JSONResponse The Access Token or an empty JSON Object.
 	 *
 	 * @NoAdminRequired
@@ -104,7 +106,7 @@ class OAuthApiController extends ApiController {
 	 * @CORS
 	 */
 	public function generateToken($grant_type, $code = null,
-								  $redirect_uri = null, $refresh_token = null) {
+								  $redirect_uri = null, $refresh_token = null, $code_verifier = null) {
 		if (!\is_string($grant_type)) {
 			return new JSONResponse(['error' => 'invalid_request'], Http::STATUS_BAD_REQUEST);
 		}
@@ -151,6 +153,16 @@ class OAuthApiController extends ApiController {
 				if (!Utilities::validateRedirectUri($client->getRedirectUri(), \urldecode($redirect_uri), $client->getAllowSubdomains())) {
 					$this->logger->debug("auth grant redirect uri invalid: {$redirect_uri}", ['app'=>__CLASS__]);
 					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
+				}
+
+				try {
+					if (!$authorizationCode->isCodeVerifierValid($code_verifier)) {
+						$this->logger->debug("code verifier invalid: {$code_verifier}", ['app' => __CLASS__]);
+						return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
+					}
+				} catch (UnsupportedPkceTransformException $e) {
+					$this->logger->debug("code challenge method invalid: {$e}", ['app' => __CLASS__]);
+					return new JSONResponse(['error' => 'invalid_request', 'error_description' => $e->getMessage()], HTTP::STATUS_BAD_REQUEST);
 				}
 
 				$this->logger->info('An authorization code has been used by the client "' . $client->getName() . '" to request an access token.', ['app' => $this->appName]);

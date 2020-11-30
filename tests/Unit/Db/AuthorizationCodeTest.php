@@ -20,6 +20,8 @@
 namespace OCA\OAuth2\Tests\Unit\Db;
 
 use OCA\OAuth2\Db\AuthorizationCode;
+use OCA\OAuth2\Exceptions\UnsupportedPkceTransformException;
+use OCA\OAuth2\Utilities;
 use PHPUnit\Framework\TestCase;
 
 class AuthorizationCodeTest extends TestCase {
@@ -45,5 +47,30 @@ class AuthorizationCodeTest extends TestCase {
 		$this->assertTrue($this->authorizationCode->hasExpired());
 		$this->authorizationCode->resetExpires();
 		$this->assertFalse($this->authorizationCode->hasExpired());
+	}
+
+	public function testIsCodeVerifierValid() {
+		$this->authorizationCode->setCodeChallenge("sometext");
+		$this->authorizationCode->setCodeChallengeMethod('plain');
+		$this->assertTrue($this->authorizationCode->isCodeVerifierValid("sometext"));
+		$this->authorizationCode->setCodeChallengeMethod('');
+		$this->assertTrue($this->authorizationCode->isCodeVerifierValid("sometext"));
+		$this->authorizationCode->setCodeChallengeMethod(null);
+		$this->assertTrue($this->authorizationCode->isCodeVerifierValid("sometext"));
+		$this->assertFalse($this->authorizationCode->isCodeVerifierValid("othertext"));
+
+		$code_verifier = Utilities::base64Url_encode(\random_bytes(32));
+		$code_challenge = Utilities::base64url_encode(\hash('sha256', $code_verifier, true));
+		$this->authorizationCode->setCodeChallenge($code_challenge);
+		$this->authorizationCode->setCodeChallengeMethod('S256');
+		$this->assertTrue($this->authorizationCode->isCodeVerifierValid($code_verifier));
+		$this->assertFalse($this->authorizationCode->isCodeVerifierValid("invalid"));
+	}
+
+	public function testIsCodeVerifierValidWithUnsupportedMethod() {
+		$this->expectException(UnsupportedPkceTransformException::class);
+		$this->expectExceptionMessage("Code challenge method invalid not supported");
+		$this->authorizationCode->setCodeChallengeMethod("invalid");
+		$this->authorizationCode->isCodeVerifierValid("sometext");
 	}
 }
