@@ -136,29 +136,30 @@ class OAuthApiController extends ApiController {
 					/** @var \OCA\OAuth2\Db\AuthorizationCode $authorizationCode */
 					$authorizationCode = $this->authorizationCodeMapper->findByCode($code);
 				} catch (DoesNotExistException $exception) {
-					$this->logger->logException($exception, ['app'=>__CLASS__]);
-					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
+					// could be that authorization code has been already cleaned up or client sends wrong authorization code
+					$this->logger->debug("authorization code does not exist: {$exception}", ['app'=>__CLASS__]);
+					return new JSONResponse(['error' => 'invalid_grant', 'error_description' => 'authorization code does not exist'], Http::STATUS_BAD_REQUEST);
 				}
 
 				if (\strcmp((string)$authorizationCode->getClientId(), (string)$client->getId()) !== 0) {
 					$this->logger->debug("auth grant client ids mismatch: {$authorizationCode->getClientId()} != {$client->getId()}", ['app'=>__CLASS__]);
-					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
+					return new JSONResponse(['error' => 'invalid_grant', 'error_description' => 'auth grant client ids mismatch'], Http::STATUS_BAD_REQUEST);
 				}
 
 				if ($authorizationCode->hasExpired()) {
 					$this->logger->debug("auth grant expired: {$authorizationCode->getExpires()}", ['app'=>__CLASS__]);
-					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
+					return new JSONResponse(['error' => 'invalid_grant', 'error_description' => 'auth grant expired'], Http::STATUS_BAD_REQUEST);
 				}
 
 				if (!Utilities::validateRedirectUri($client->getRedirectUri(), \urldecode($redirect_uri), $client->getAllowSubdomains())) {
 					$this->logger->debug("auth grant redirect uri invalid: {$redirect_uri}", ['app'=>__CLASS__]);
-					return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
+					return new JSONResponse(['error' => 'invalid_grant', 'error_description' => 'auth grant redirect uri invalid'], Http::STATUS_BAD_REQUEST);
 				}
 
 				try {
 					if (!$authorizationCode->isCodeVerifierValid($code_verifier)) {
 						$this->logger->debug("code verifier invalid: {$code_verifier}", ['app' => __CLASS__]);
-						return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
+						return new JSONResponse(['error' => 'invalid_grant', 'error_description' => 'code verifier invalid'], Http::STATUS_BAD_REQUEST);
 					}
 				} catch (UnsupportedPkceTransformException $e) {
 					$this->logger->debug("code challenge method invalid: {$e}", ['app' => __CLASS__]);
@@ -192,13 +193,14 @@ class OAuthApiController extends ApiController {
 					/** @var RefreshToken $refreshToken */
 					$refreshToken = $this->refreshTokenMapper->findByToken($refresh_token);
 				} catch (DoesNotExistException $exception) {
-					$this->logger->logException($exception, ['app'=>__CLASS__]);
-					return new JSONResponse(['error' => 'invalid_grant'], $statusCode);
+					// could be that token has been already cleaned up or client sends wrong token
+					$this->logger->debug("refresh token does not exist: {$exception}", ['app'=>__CLASS__]);
+					return new JSONResponse(['error' => 'invalid_grant', 'error_description' => 'refresh token does not exist'], $statusCode);
 				}
 
 				if (\strcmp((string)$refreshToken->getClientId(), (string)$client->getId()) !== 0) {
 					$this->logger->debug("refresh grant client ids mismatch: {$refreshToken->getClientId()} != {$client->getId()}", ['app'=>__CLASS__]);
-					return new JSONResponse(['error' => 'invalid_grant'], $statusCode);
+					return new JSONResponse(['error' => 'invalid_grant', 'error_description' => 'refresh grant client ids mismatch'], $statusCode);
 				}
 
 				$this->logger->info('A refresh token has been used by the client "' . $client->getName() . '" to request an access token.', ['app' => $this->appName]);
@@ -219,7 +221,7 @@ class OAuthApiController extends ApiController {
 				break;
 			default:
 				\OC::$server->getLogger()->debug("unhandled grant type: {$grant_type}", ['app'=>__CLASS__]);
-				return new JSONResponse(['error' => 'invalid_grant'], Http::STATUS_BAD_REQUEST);
+				return new JSONResponse(['error' => 'invalid_grant', 'error_description' => 'unhandled grant type'], Http::STATUS_BAD_REQUEST);
 		}
 
 		$token = Utilities::generateRandom();
