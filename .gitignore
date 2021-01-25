@@ -13,3 +13,6 @@ vendor-bin/**/composer.lock
 /tests/output
 # SonarCloud scanner
 .scannerwork
+
+# Generated from .drone.star
+.drone.yml
