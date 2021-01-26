@@ -1,6 +1,8 @@
 # 🔐 OAuth 2.0
 [![Build Status](https://drone.owncloud.com/api/badges/owncloud/oauth2/status.svg?branch=master)](https://drone.owncloud.com/owncloud/oauth2)
-[![codecov](https://codecov.io/gh/owncloud/oauth2/branch/master/graph/badge.svg)](https://codecov.io/gh/owncloud/oauth2)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=owncloud_oauth2&metric=alert_status)](https://sonarcloud.io/dashboard?id=owncloud_oauth2)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=owncloud_oauth2&metric=security_rating)](https://sonarcloud.io/dashboard?id=owncloud_oauth2)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=owncloud_oauth2&metric=coverage)](https://sonarcloud.io/dashboard?id=owncloud_oauth2)
 
 This app implements the [OAuth 2.0 Authorization Code Flow](https://tools.ietf.org/html/rfc6749#section-4.1).
 
