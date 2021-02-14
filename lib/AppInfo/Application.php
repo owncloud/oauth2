@@ -104,7 +104,6 @@ class Application extends App {
 		}
 		/** @var ClientMapper $mapper */
 		$mapper = \OC::$server->query(ClientMapper::class);
-		/** @var \OCA\OAuth2\Db\Client $client */
 		try {
 			/** @var \OCA\OAuth2\Db\Client $client */
 			$client = $mapper->findByIdentifier($params['client_id']);
