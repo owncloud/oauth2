@@ -5,7 +5,7 @@ Feature: obtaining an access token
   So that I do not need to entrust various apps with my ownCloud password
 
   Background:
-    Given these users have been created with skeleton files:
+    Given these users have been created with large skeleton files:
       | username | password | displayname  | email             |
       | Alice    | 1234     | Alice Hansen | alice@example.org |
 
