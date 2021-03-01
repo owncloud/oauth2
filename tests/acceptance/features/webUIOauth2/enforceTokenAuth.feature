@@ -6,7 +6,7 @@ Feature: enforce token auth
   So that I can improve the security of the system by forbidding basic auth with username & password
 
   Background:
-    Given these users have been created with skeleton files:
+    Given these users have been created with large skeleton files:
       | username | password | displayname  | email             |
       | Alice    | 1234     | Alice Hansen | alice@example.org |
     And token auth has been enforced

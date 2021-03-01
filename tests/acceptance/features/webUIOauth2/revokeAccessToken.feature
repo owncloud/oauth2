@@ -5,7 +5,7 @@ Feature: revoke an access token
   So that I can stop a previous permitted application accessing my data
 
   Background:
-    Given these users have been created with skeleton files:
+    Given these users have been created with large skeleton files:
       | username | password | displayname  | email             |
       | Alice    | 1234     | Alice Hansen | alice@example.org |
 
