@@ -119,7 +119,7 @@ class PageController extends Controller {
 			);
 		}
 
-		if ($user !== null && $user !== $this->userSession->getUser()->getUID()) {
+		if ($user !== null && $user !== $this->userSession->getUser()->getUserName()) {
 			$logoutUrl = $this->urlGenerator->linkToRouteAbsolute(
 				'oauth2.page.logout', [
 					'user' => $user,
@@ -216,6 +216,15 @@ class PageController extends Controller {
 			return new RedirectResponse(OC_Util::getDefaultPageUrl());
 		}
 
+		$userName = $this->userSession->getUser()->getUserName();
+		$userUID  = $this->userSession->getUser()->getUID();
+
+		if ($userName !== null && $userName !== $userUID) {
+			$userNameAndUid = \implode(':', [ $userName, $userUID ]);
+		} else {
+			$userNameAndUid = $userUID;
+		}
+
 		switch ($response_type) {
 			case 'code':
 				try {
@@ -233,7 +242,7 @@ class PageController extends Controller {
 				$authorizationCode = new AuthorizationCode();
 				$authorizationCode->setCode($code);
 				$authorizationCode->setClientId($client->getId());
-				$authorizationCode->setUserId($this->userSession->getUser()->getUID());
+				$authorizationCode->setUserId($userNameAndUid);
 				$authorizationCode->resetExpires();
 				$authorizationCode->setCodeChallenge($code_challenge);
 				$authorizationCode->setCodeChallengeMethod($code_challenge_method);
@@ -264,7 +273,7 @@ class PageController extends Controller {
 				$accessToken = new AccessToken();
 				$accessToken->setToken($token);
 				$accessToken->setClientId($client->getId());
-				$accessToken->setUserId($this->userSession->getUser()->getUID());
+				$accessToken->setUserId($userNameAndUid);
 				$accessToken->resetExpires();
 				$this->accessTokenMapper->insert($accessToken);
 
