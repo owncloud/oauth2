@@ -51,7 +51,8 @@ class Oauth2AdminSettingsPage extends OwncloudPage {
 		$this->fillField($this->oauthRedirectionUriInputId, $redirctionUri);
 		if ($allowSubdomains === true) {
 			$allowSubdomainsCheckBox = $this->find(
-				"xpath", $this->allowSubdomainsCheckBoxXpath
+				"xpath",
+				$this->allowSubdomainsCheckBoxXpath
 			);
 			if ($allowSubdomainsCheckBox === null) {
 				throw new ElementNotFoundException(

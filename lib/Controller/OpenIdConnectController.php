@@ -48,10 +48,13 @@ class OpenIdConnectController extends ApiController {
 	 * @param IURLGenerator $urlGenerator The URL generator.
 	 * @param IAvatarManager $avatarManager
 	 */
-	public function __construct($AppName, IRequest $request,
-								IUserSession $userSession,
-								IURLGenerator $urlGenerator,
-								IAvatarManager $avatarManager) {
+	public function __construct(
+		$AppName,
+		IRequest $request,
+		IUserSession $userSession,
+		IURLGenerator $urlGenerator,
+		IAvatarManager $avatarManager
+	) {
 		parent::__construct($AppName, $request);
 
 		$this->userSession = $userSession;

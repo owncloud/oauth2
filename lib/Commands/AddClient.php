@@ -45,17 +45,32 @@ class AddClient extends Command {
 		$this
 			->setName('oauth2:add-client')
 			->setDescription('Adds an OAuth2 client')
-			->addArgument('name', InputArgument::REQUIRED,
-				'name of the client - will be displayed in the authorization page to the user')
-			->addArgument('client-id', InputArgument::REQUIRED,
-				'identifier of the client - used by the client during the implicit and authorization code flow')
-			->addArgument('client-secret', InputArgument::REQUIRED,
-				'secret of the client - used by the client during the authorization code flow')
-			->addArgument('redirect-url', InputArgument::REQUIRED,
-				'Redirect URL - used in the OAuth flows to post back tokens and authorization codes to the client')
-			->addArgument('allow-sub-domains', InputArgument::OPTIONAL,
+			->addArgument(
+				'name',
+				InputArgument::REQUIRED,
+				'name of the client - will be displayed in the authorization page to the user'
+			)
+			->addArgument(
+				'client-id',
+				InputArgument::REQUIRED,
+				'identifier of the client - used by the client during the implicit and authorization code flow'
+			)
+			->addArgument(
+				'client-secret',
+				InputArgument::REQUIRED,
+				'secret of the client - used by the client during the authorization code flow'
+			)
+			->addArgument(
+				'redirect-url',
+				InputArgument::REQUIRED,
+				'Redirect URL - used in the OAuth flows to post back tokens and authorization codes to the client'
+			)
+			->addArgument(
+				'allow-sub-domains',
+				InputArgument::OPTIONAL,
 				'Defines if the redirect url is allowed to use sub domains. Enter true or false',
-				'false');
+				'false'
+			);
 	}
 
 	/**

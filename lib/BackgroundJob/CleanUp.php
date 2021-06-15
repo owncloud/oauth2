@@ -41,7 +41,8 @@ class CleanUp extends TimedJob {
 
 	public function __construct(
 		AuthorizationCodeMapper $authorizationCodeMapper,
-		AccessTokenMapper $accessTokenMapper) {
+		AccessTokenMapper $accessTokenMapper
+	) {
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
 		$this->accessTokenMapper = $accessTokenMapper;
 	}

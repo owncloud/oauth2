@@ -27,7 +27,7 @@ use OCP\ISession;
 
 class OAuth2 extends AbstractBearer {
 	/** @phan-suppress-next-line PhanUndeclaredClassConstant */
-	const DAV_AUTHENTICATED = Auth::DAV_AUTHENTICATED;
+	public const DAV_AUTHENTICATED = Auth::DAV_AUTHENTICATED;
 
 	/**
 	 * This is the prefix that will be used to generate principal urls.
@@ -56,11 +56,13 @@ class OAuth2 extends AbstractBearer {
 	 * @param IRequest $request The request.
 	 * @param string $principalPrefix The principal prefix.
 	 */
-	public function __construct(ISession $session,
-								Session $userSession,
-								IRequest $request,
-								AuthModule $authModule,
-								$principalPrefix = 'principals/users/') {
+	public function __construct(
+		ISession $session,
+		Session $userSession,
+		IRequest $request,
+		AuthModule $authModule,
+		$principalPrefix = 'principals/users/'
+	) {
 		$this->session = $session;
 		$this->userSession = $userSession;
 		$this->request = $request;

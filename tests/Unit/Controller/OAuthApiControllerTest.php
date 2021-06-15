@@ -534,8 +534,13 @@ class OAuthApiControllerTest extends TestCase {
 		$this->authorizationCode->resetExpires();
 		$this->authorizationCode->setCodeChallenge('challenge');
 		$this->authorizationCodeMapper->update($this->authorizationCode);
-		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(),
-				$this->redirectUri, null, 'challenge');
+		$result = $this->controller->generateToken(
+			'authorization_code',
+			$this->authorizationCode->getCode(),
+			$this->redirectUri,
+			null,
+			'challenge'
+		);
 		$this->assertTrue($result instanceof JSONResponse);
 		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->access_token);
@@ -560,8 +565,13 @@ class OAuthApiControllerTest extends TestCase {
 		$this->authorizationCode->setCodeChallenge('challenge');
 		$this->authorizationCode->setCodeChallengeMethod('plain');
 		$this->authorizationCodeMapper->insert($this->authorizationCode);
-		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(),
-			$this->redirectUri, null, 'challenge');
+		$result = $this->controller->generateToken(
+			'authorization_code',
+			$this->authorizationCode->getCode(),
+			$this->redirectUri,
+			null,
+			'challenge'
+		);
 		$this->assertEquals(200, $result->getStatus());
 		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->access_token);
@@ -574,8 +584,13 @@ class OAuthApiControllerTest extends TestCase {
 		$this->authorizationCode->setCodeChallenge('challenge');
 		$this->authorizationCode->setCodeChallengeMethod('plain');
 		$this->authorizationCodeMapper->insert($this->authorizationCode);
-		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(),
-			$this->redirectUri, null, 'false verifier');
+		$result = $this->controller->generateToken(
+			'authorization_code',
+			$this->authorizationCode->getCode(),
+			$this->redirectUri,
+			null,
+			'false verifier'
+		);
 		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->error);
 		$this->assertEquals('invalid_grant', $json->error);
@@ -597,8 +612,13 @@ class OAuthApiControllerTest extends TestCase {
 		$this->authorizationCode->setCodeChallenge($codeChallenge);
 		$this->authorizationCode->setCodeChallengeMethod('S256');
 		$this->authorizationCodeMapper->update($this->authorizationCode);
-		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(),
-			$this->redirectUri, null, $codeVerifier);
+		$result = $this->controller->generateToken(
+			'authorization_code',
+			$this->authorizationCode->getCode(),
+			$this->redirectUri,
+			null,
+			$codeVerifier
+		);
 		$this->assertEquals(200, $result->getStatus());
 		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->access_token);
@@ -619,8 +639,13 @@ class OAuthApiControllerTest extends TestCase {
 		$this->authorizationCode->setCodeChallenge('challenge');
 		$this->authorizationCode->setCodeChallengeMethod('invalid');
 		$this->authorizationCodeMapper->update($this->authorizationCode);
-		$result = $this->controller->generateToken('authorization_code', $this->authorizationCode->getCode(),
-			$this->redirectUri, null, 'challenge');
+		$result = $this->controller->generateToken(
+			'authorization_code',
+			$this->authorizationCode->getCode(),
+			$this->redirectUri,
+			null,
+			'challenge'
+		);
 		$this->assertEquals(400, $result->getStatus());
 		$json = \json_decode($result->render());
 		$this->assertNotEmpty($json->error);

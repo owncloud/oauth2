@@ -124,7 +124,8 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 * @return void
 	 */
 	public function oauthAuthorizationRequestUsingTheWebui(
-		$username = null, $clientId = null
+		$username = null,
+		$clientId = null
 	) {
 		if ($clientId === null) {
 			$clientId = $this->clientId;
@@ -162,7 +163,8 @@ class Oauth2Context extends RawMinkContext implements Context {
 		$username = null
 	) {
 		$this->oauthAuthorizationRequestUsingTheWebui(
-			$username, \end($this->createdOauthClients)['client_id']
+			$username,
+			\end($this->createdOauthClients)['client_id']
 		);
 	}
 
@@ -220,7 +222,8 @@ class Oauth2Context extends RawMinkContext implements Context {
 			$this->accessTokenResponse->refresh_token
 		);
 		Assert::assertNotSame(
-			$oldAccessToken, $this->accessTokenResponse->access_token,
+			$oldAccessToken,
+			$this->accessTokenResponse->access_token,
 			__METHOD__ . " the new token is not different to the old one"
 		);
 	}
@@ -247,7 +250,9 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 * @return void
 	 */
 	public function clientAppRequestsAccessToken(
-		$refreshToken = null, $clientId = null, $clientSecret = null
+		$refreshToken = null,
+		$clientId = null,
+		$clientSecret = null
 	) {
 		$redirectUri = \parse_url($this->getSession()->getCurrentUrl());
 		\parse_str($redirectUri['query'], $parameters);
@@ -275,7 +280,11 @@ class Oauth2Context extends RawMinkContext implements Context {
 		$fullUrl = $this->featureContext->getBaseUrl() .
 				   '/index.php/apps/oauth2/api/v1/token';
 		$response = HttpRequestHelper::post(
-			$fullUrl, $clientId, $clientSecret, null, $body
+			$fullUrl,
+			$clientId,
+			$clientSecret,
+			null,
+			$body
 		);
 		$this->featureContext->setResponse($response);
 		$this->accessTokenResponse = \json_decode(
@@ -312,7 +321,9 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 */
 	public function userRequestsURLWithOAuth($url, $method) {
 		$this->featureContext->authContext->sendRequest(
-			$url, $method, 'Bearer ' . $this->accessTokenResponse->access_token
+			$url,
+			$method,
+			'Bearer ' . $this->accessTokenResponse->access_token
 		);
 	}
 
@@ -325,7 +336,8 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 */
 	public function revokeOauthAppUsingTheWebUI($appName) {
 		$this->oath2OnPersonalSecurityPage->revokeApp(
-			$this->getSession(), $appName
+			$this->getSession(),
+			$appName
 		);
 	}
 
@@ -389,8 +401,16 @@ class Oauth2Context extends RawMinkContext implements Context {
 		}
 		$result = WebDavHelper::makeDavRequest(
 			$this->featureContext->getBaseUrl(),
-			$user, $this->accessTokenResponse->access_token,
-			'GET', $file, [], null, 2, "files", null, "bearer"
+			$user,
+			$this->accessTokenResponse->access_token,
+			'GET',
+			$file,
+			[],
+			null,
+			2,
+			"files",
+			null,
+			"bearer"
 		);
 		if (!$should && $result->getStatusCode() < 400) {
 			throw new \Exception(
@@ -411,13 +431,15 @@ class Oauth2Context extends RawMinkContext implements Context {
 			}
 
 			$localContent = SetupHelper::readSkeletonFile(
-				$file, $this->featureContext->getBaseUrl(),
+				$file,
+				$this->featureContext->getBaseUrl(),
 				$this->featureContext->getAdminUsername(),
 				$adminPassword
 			);
 			$downloadedContent = $result->getBody()->getContents();
 			Assert::assertSame(
-				$localContent, $downloadedContent,
+				$localContent,
+				$downloadedContent,
 				__METHOD__ . " content of downloaded file is not as expected"
 			);
 		}
@@ -431,20 +453,23 @@ class Oauth2Context extends RawMinkContext implements Context {
 	public function clientAppShouldReceiveAuthCode() {
 		$redirectUri = \parse_url($this->getSession()->getCurrentUrl());
 		Assert::assertEquals(
-			$this->redirectUriHost, $redirectUri['host'],
+			$this->redirectUriHost,
+			$redirectUri['host'],
 			__METHOD__ . " the host of redirect uri should be '" .
 			$this->redirectUriHost . "' but it is '" .
 			$redirectUri['host'] . "'"
 		);
 		Assert::assertEquals(
-			$this->redirectUriPort, $redirectUri['port'],
+			$this->redirectUriPort,
+			$redirectUri['port'],
 			__METHOD__ . " the port of redirect uri should be '" .
 			$this->redirectUriPort . "' but it is '" .
 			$redirectUri['port'] . "'"
 		);
 		\parse_str($redirectUri['query'], $parameters);
 		Assert::assertEquals(
-			64, \strlen($parameters['code']),
+			64,
+			\strlen($parameters['code']),
 			__METHOD__ . " received code should be 64 char long but its " .
 			\strlen($parameters['code']) . " long"
 		);
@@ -489,10 +514,14 @@ class Oauth2Context extends RawMinkContext implements Context {
 	public function assertClientIsListedOnWebUI($name, $uri) {
 		$client = $this->oauth2AdminSettingsPage->getClientInformationByName($name);
 		Assert::assertSame(
-			$name, $client['name'], "name of displayed client is wrong"
+			$name,
+			$client['name'],
+			"name of displayed client is wrong"
 		);
 		Assert::assertSame(
-			$uri, $client['redirection_uri'], "uri of displayed client is wrong"
+			$uri,
+			$client['redirection_uri'],
+			"uri of displayed client is wrong"
 		);
 	}
 
@@ -532,7 +561,9 @@ class Oauth2Context extends RawMinkContext implements Context {
 				"/index.php/apps/oauth2/clients/" .
 				$createdOauthClient['id'] .
 				"/delete",
-				"POST", null, true
+				"POST",
+				null,
+				true
 			);
 		}
 	}

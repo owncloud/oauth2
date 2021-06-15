@@ -36,7 +36,7 @@ use OCP\AppFramework\Db\Entity;
  * @method void setCodeChallengeMethod(string $codeChallengeMethod)
  */
 class AuthorizationCode extends Entity {
-	const EXPIRATION_TIME = 600;
+	public const EXPIRATION_TIME = 600;
 
 	protected $code;
 	protected $clientId;

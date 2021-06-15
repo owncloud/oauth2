@@ -44,7 +44,8 @@ class PersonalPanel implements ISettings {
 	public function __construct(
 		ClientMapper $clientMapper,
 		IUserSession $userSession,
-		IURLGenerator $urlGenerator) {
+		IURLGenerator $urlGenerator
+	) {
 		$this->clientMapper = $clientMapper;
 		$this->userSession = $userSession;
 		$this->urlGenerator = $urlGenerator;
