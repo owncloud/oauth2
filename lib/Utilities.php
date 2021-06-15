@@ -32,8 +32,10 @@ class Utilities {
 	 * @return string The random string.
 	 */
 	public static function generateRandom(): string {
-		return \OC::$server->getSecureRandom()->generate(64,
-			'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
+		return \OC::$server->getSecureRandom()->generate(
+			64,
+			'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+		);
 	}
 
 	/**

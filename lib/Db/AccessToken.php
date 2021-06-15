@@ -32,7 +32,7 @@ use OCP\AppFramework\Db\Entity;
  * @method void setExpires(int $value)
  */
 class AccessToken extends Entity {
-	const EXPIRATION_TIME = 3600;
+	public const EXPIRATION_TIME = 3600;
 
 	protected $token;
 	protected $clientId;

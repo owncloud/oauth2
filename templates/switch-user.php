@@ -26,8 +26,10 @@ script('oauth2', 'switch-user');
 	<p><b><?php p($l->t('Switch user')); ?></b></p>
 	<br>
 	<p><?php
-		print_unescaped($l->t('You are logged in as %s but the application requested access for user %s.',
-			[$_['current_user'], $_['requested_user']])); ?>
+		print_unescaped($l->t(
+	'You are logged in as %s but the application requested access for user %s.',
+	[$_['current_user'], $_['requested_user']]
+)); ?>
 	</p>
 	<br>
 	<a href="<?php p($_['logout_url']); ?>">

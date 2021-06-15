@@ -128,7 +128,8 @@ class OAuth2Test extends TestCase {
 			static::invokePrivate(
 				$oAuth2,
 				'isDavAuthenticated',
-				[$this->userId])
+				[$this->userId]
+			)
 		);
 
 		// User has initially authenticated via DAV
@@ -145,7 +146,8 @@ class OAuth2Test extends TestCase {
 			static::invokePrivate(
 				$oAuth2,
 				'isDavAuthenticated',
-				[$this->userId])
+				[$this->userId]
+			)
 		);
 	}
 
@@ -179,7 +181,8 @@ class OAuth2Test extends TestCase {
 			static::invokePrivate(
 				$oAuth2,
 				'validateBearerToken',
-				[$this->accessToken->getToken()])
+				[$this->accessToken->getToken()]
+			)
 		);
 	}
 
@@ -204,7 +207,8 @@ class OAuth2Test extends TestCase {
 			static::invokePrivate(
 				$oAuth2,
 				'validateBearerToken',
-				[$this->accessToken->getToken()])
+				[$this->accessToken->getToken()]
+			)
 		);
 
 		// User has initially authenticated via DAV
@@ -230,7 +234,8 @@ class OAuth2Test extends TestCase {
 			static::invokePrivate(
 				$oAuth2,
 				'validateBearerToken',
-				[$this->accessToken->getToken()])
+				[$this->accessToken->getToken()]
+			)
 		);
 	}
 }

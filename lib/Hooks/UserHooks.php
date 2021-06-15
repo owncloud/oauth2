@@ -56,12 +56,14 @@ class UserHooks {
 	 * @param ILogger $logger The logger.
 	 * @param string $AppName The app's name.
 	 */
-	public function __construct(Manager $userManager,
-								AuthorizationCodeMapper $authorizationCodeMapper,
-								AccessTokenMapper $accessTokenMapper,
-								RefreshTokenMapper $refreshTokenMapper,
-								ILogger $logger,
-								$AppName) {
+	public function __construct(
+		Manager $userManager,
+		AuthorizationCodeMapper $authorizationCodeMapper,
+		AccessTokenMapper $accessTokenMapper,
+		RefreshTokenMapper $refreshTokenMapper,
+		ILogger $logger,
+		$AppName
+	) {
 		$this->userManager = $userManager;
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
 		$this->accessTokenMapper = $accessTokenMapper;

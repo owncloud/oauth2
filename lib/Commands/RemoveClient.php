@@ -43,8 +43,11 @@ class RemoveClient extends Command {
 		$this
 			->setName('oauth2:remove-client')
 			->setDescription('Removes an OAuth2 client')
-			->addArgument('client-id', InputArgument::REQUIRED,
-				'identifier of the client - used by the client during the implicit and authorization code flow');
+			->addArgument(
+				'client-id',
+				InputArgument::REQUIRED,
+				'identifier of the client - used by the client during the implicit and authorization code flow'
+			);
 	}
 
 	/**

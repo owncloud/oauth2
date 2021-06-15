@@ -54,8 +54,13 @@ class OpenIdConnectControllerTest extends TestCase {
 			return "https://cloud.nasa.gov$url";
 		});
 
-		$this->controller = new OpenIdConnectController('oauth2',
-			$this->request, $this->userSession, $this->urlGenerator, $this->avatarManager);
+		$this->controller = new OpenIdConnectController(
+			'oauth2',
+			$this->request,
+			$this->userSession,
+			$this->urlGenerator,
+			$this->avatarManager
+		);
 	}
 
 	/**

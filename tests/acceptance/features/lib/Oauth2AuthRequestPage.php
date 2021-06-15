@@ -80,7 +80,8 @@ class Oauth2AuthRequestPage extends OwncloudPage {
 	 */
 	public function getErrorMessageHeading() {
 		$errorMessageHeadingElement = $this->find(
-			"xpath", $this->errorMessageHeadingXpath
+			"xpath",
+			$this->errorMessageHeadingXpath
 		);
 		
 		if ($errorMessageHeadingElement === null) {
@@ -108,10 +109,12 @@ class Oauth2AuthRequestPage extends OwncloudPage {
 		$end = $currentTime + ($timeout_msec / 1000);
 		while ($currentTime <= $end) {
 			$requestTokenInput = $this->find(
-				"xpath", $this->requestTokenInputXpath
+				"xpath",
+				$this->requestTokenInputXpath
 			);
 			$errorMessageHeadingElement = $this->find(
-				"xpath", $this->errorMessageHeadingXpath
+				"xpath",
+				$this->errorMessageHeadingXpath
 			);
 			if ($requestTokenInput !== null
 				|| $errorMessageHeadingElement !== null

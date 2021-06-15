@@ -74,15 +74,18 @@ class SettingsController extends Controller {
 	 * @param ILogger $logger The logger.
 	 * @param IURLGenerator $urlGenerator Use for url generation
 	 */
-	public function __construct($AppName, IRequest $request,
-								ClientMapper $clientMapper,
-								AuthorizationCodeMapper $authorizationCodeMapper,
-								AccessTokenMapper $accessTokenMapper,
-								RefreshTokenMapper $refreshTokenMapper,
-								$UserId,
-								IL10N $l10n,
-								ILogger $logger,
-								IURLGenerator $urlGenerator) {
+	public function __construct(
+		$AppName,
+		IRequest $request,
+		ClientMapper $clientMapper,
+		AuthorizationCodeMapper $authorizationCodeMapper,
+		AccessTokenMapper $accessTokenMapper,
+		RefreshTokenMapper $refreshTokenMapper,
+		$UserId,
+		IL10N $l10n,
+		ILogger $logger,
+		IURLGenerator $urlGenerator
+	) {
 		parent::__construct($AppName, $request);
 
 		$this->clientMapper = $clientMapper;
@@ -192,7 +195,8 @@ class SettingsController extends Controller {
 				$this->urlGenerator->linkToRouteAbsolute(
 					'settings.SettingsPage.getPersonal',
 					['sectionid' => 'security']
-				) . '#oauth2');
+				) . '#oauth2'
+			);
 		}
 
 		$this->authorizationCodeMapper->deleteByClientUser($id, $this->userId);
@@ -203,7 +207,8 @@ class SettingsController extends Controller {
 			$this->urlGenerator->linkToRouteAbsolute(
 				'settings.SettingsPage.getPersonal',
 				['sectionid' => 'security']
-			) . '#oauth2');
+			) . '#oauth2'
+		);
 	}
 
 	/**

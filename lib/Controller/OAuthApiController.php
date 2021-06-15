@@ -71,14 +71,17 @@ class OAuthApiController extends ApiController {
 	 * @param IURLGenerator $urlGenerator The URL generator.
 	 * @param ILogger $logger The logger.
 	 */
-	public function __construct($AppName, IRequest $request,
-								ClientMapper $clientMapper,
-								AuthorizationCodeMapper $authorizationCodeMapper,
-								AccessTokenMapper $accessTokenMapper,
-								RefreshTokenMapper $refreshTokenMapper,
-								IUserManager $userManager,
-								IURLGenerator $urlGenerator,
-								ILogger $logger) {
+	public function __construct(
+		$AppName,
+		IRequest $request,
+		ClientMapper $clientMapper,
+		AuthorizationCodeMapper $authorizationCodeMapper,
+		AccessTokenMapper $accessTokenMapper,
+		RefreshTokenMapper $refreshTokenMapper,
+		IUserManager $userManager,
+		IURLGenerator $urlGenerator,
+		ILogger $logger
+	) {
 		parent::__construct($AppName, $request);
 
 		$this->clientMapper = $clientMapper;
@@ -105,8 +108,13 @@ class OAuthApiController extends ApiController {
 	 * @PublicPage
 	 * @CORS
 	 */
-	public function generateToken($grant_type, $code = null,
-								  $redirect_uri = null, $refresh_token = null, $code_verifier = null) {
+	public function generateToken(
+		$grant_type,
+		$code = null,
+		$redirect_uri = null,
+		$refresh_token = null,
+		$code_verifier = null
+	) {
 		if (!\is_string($grant_type)) {
 			return new JSONResponse(['error' => 'invalid_request'], Http::STATUS_BAD_REQUEST);
 		}

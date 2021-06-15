@@ -53,11 +53,13 @@ class UtilitiesTest extends TestCase {
 	 * @param $allowSubDomain
 	 */
 	public function testValidateRedirectUri($expectedResult, $expectedRedirect, $actualRedirect, $allowSubDomain) {
-		$this->assertEquals($expectedResult,
+		$this->assertEquals(
+			$expectedResult,
 			Utilities::validateRedirectUri(
 				$expectedRedirect,
 				$actualRedirect,
-				$allowSubDomain)
+				$allowSubDomain
+			)
 		);
 	}
 

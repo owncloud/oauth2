@@ -69,14 +69,16 @@ class PageController extends Controller {
 	 * @param IUserSession $userSession
 	 * @param IUserManager $userManager
 	 */
-	public function __construct($AppName, IRequest $request,
-								ClientMapper $clientMapper,
-								AuthorizationCodeMapper $authorizationCodeMapper,
-								AccessTokenMapper $accessTokenMapper,
-								ILogger $logger,
-								IURLGenerator $urlGenerator,
-								IUserSession $userSession,
-								IUserManager $userManager
+	public function __construct(
+		$AppName,
+		IRequest $request,
+		ClientMapper $clientMapper,
+		AuthorizationCodeMapper $authorizationCodeMapper,
+		AccessTokenMapper $accessTokenMapper,
+		ILogger $logger,
+		IURLGenerator $urlGenerator,
+		IUserSession $userSession,
+		IUserManager $userManager
 	) {
 		parent::__construct($AppName, $request);
 
@@ -106,8 +108,13 @@ class PageController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function authorize($response_type, $client_id, $redirect_uri,
-							  $state = null, $user = null) {
+	public function authorize(
+		$response_type,
+		$client_id,
+		$redirect_uri,
+		$state = null,
+		$user = null
+	) {
 		if (!\is_string($response_type) || !\is_string($client_id)
 			|| !\is_string($redirect_uri) || ($state !== null && !\is_string($state))
 		) {
@@ -115,13 +122,15 @@ class PageController extends Controller {
 			return new TemplateResponse(
 				$this->appName,
 				'authorize-error',
-				['client_name' => null], 'guest'
+				['client_name' => null],
+				'guest'
 			);
 		}
 
 		if ($user !== null && $user !== $this->userSession->getUser()->getUserName()) {
 			$logoutUrl = $this->urlGenerator->linkToRouteAbsolute(
-				'oauth2.page.logout', [
+				'oauth2.page.logout',
+				[
 					'user' => $user,
 					'requesttoken' => Util::callRegister(),
 					'response_type' => $response_type,
@@ -137,7 +146,8 @@ class PageController extends Controller {
 				$this->appName,
 				'switch-user',
 				['current_user' => $currentUser, 'requested_user' => $requestedUser,
-					'logout_url' => $logoutUrl], 'guest'
+					'logout_url' => $logoutUrl],
+				'guest'
 			);
 		}
 		try {
@@ -148,7 +158,8 @@ class PageController extends Controller {
 			return new TemplateResponse(
 				$this->appName,
 				'authorize-error',
-				['client_name' => null], 'guest'
+				['client_name' => null],
+				'guest'
 			);
 		}
 
@@ -157,7 +168,8 @@ class PageController extends Controller {
 			return new TemplateResponse(
 				$this->appName,
 				'authorize-error',
-				['client_name' => $client->getName()], 'guest'
+				['client_name' => $client->getName()],
+				'guest'
 			);
 		}
 
@@ -174,7 +186,8 @@ class PageController extends Controller {
 		}
 
 		$logoutUrl = $this->urlGenerator->linkToRouteAbsolute(
-			'oauth2.page.logout', [
+			'oauth2.page.logout',
+			[
 				'user' => $user,
 				'requesttoken' => Util::callRegister(),
 				'response_type' => $response_type,
@@ -336,11 +349,13 @@ class PageController extends Controller {
 		]);
 
 		// redirect the browser to the login page and set the redirect_url to the authorize page of oauth2
-		return new RedirectResponse($this->urlGenerator->linkToRouteAbsolute('core.login.showLoginForm',
+		return new RedirectResponse($this->urlGenerator->linkToRouteAbsolute(
+			'core.login.showLoginForm',
 			[
 				'user' => $user,
 				'redirect_url' => $redirectUrl
-			]));
+			]
+		));
 	}
 
 	/**

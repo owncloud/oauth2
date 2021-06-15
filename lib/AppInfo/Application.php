@@ -69,11 +69,13 @@ class Application extends App {
 				$authPlugin = $event->getServer()->getPlugin('auth');
 				if ($authPlugin instanceof Plugin) {
 					$authPlugin->addBackend(
-						new OAuth2(\OC::$server->getSession(),
+						new OAuth2(
+							\OC::$server->getSession(),
 							\OC::$server->getUserSession(),
 							\OC::$server->getRequest(),
 							new AuthModule(),
-							'principals/')
+							'principals/'
+						)
 					);
 				}
 			}
