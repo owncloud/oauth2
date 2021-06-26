@@ -1,7 +1,7 @@
 OC.L10N.register(
     "oauth2",
     {
-    "The application \"{app}\" is requesting access to your account. To authorize it, please log in first." : "La aplicación \"{app}\" requiere acceso a su cuenta. para autorizarla, logese primero.",
+    "The application \"{app}\" is requesting access to your account. To authorize it, please log in first." : "La aplicación \"{app}\" requiere acceso a su cuenta. para autorizarla, inicie sesión primero.",
     "Deleting..." : "Eliminando...",
     "Saving..." : "Guardando…",
     "Name must not be empty" : "El nombre no puede estar vacío",
