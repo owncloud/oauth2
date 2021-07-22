@@ -281,6 +281,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 				   '/index.php/apps/oauth2/api/v1/token';
 		$response = HttpRequestHelper::post(
 			$fullUrl,
+			$this->featureContext->getStepLineRef(),
 			$clientId,
 			$clientSecret,
 			null,
@@ -406,6 +407,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 			'GET',
 			$file,
 			[],
+			$this->featureContext->getStepLineRef(),
 			null,
 			2,
 			"files",
@@ -432,6 +434,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 
 			$localContent = SetupHelper::readSkeletonFile(
 				$file,
+				$this->featureContext->getStepLineRef(),
 				$this->featureContext->getBaseUrl(),
 				$this->featureContext->getAdminUsername(),
 				$adminPassword
