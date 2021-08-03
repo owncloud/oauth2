@@ -6,6 +6,7 @@
     "Redirect URI must not be empty" : "Adresa přesměrování nesmí být prázdná",
     "Redirect URI must be a valid URL" : "Adresa přesměrování musí být platnou URL adresou",
     "Name %s already exists" : "Jméno %s již existuje",
+    "Client id must be a number" : "Client id musí být číslo",
     "The application was authorized successfully. You can now close this window." : "Aplikace byla úspěšně autorizována. Můžete nyní zavřít toto okno.",
     "Request not valid" : "Neplatný požadavek",
     "This request is not valid. Please contact the administrator if this error persists." : "Neplatný požadavek. Prosím kontaktujte administrátora, pokud chyba přetrvává.",
