@@ -88,11 +88,15 @@ class Utilities {
 		}
 	}
 
-	public static function isValidUrl($redirectUri): bool {
+	public static function removeWildcardPort($redirectUri): string {
 		if (\strpos($redirectUri, 'http://localhost:*') === 0) {
 			$redirectUri = 'http://localhost' . \substr($redirectUri, 18);
 		}
+		return $redirectUri;
+	}
 
+	public static function isValidUrl($redirectUri): bool {
+		$redirectUri = Utilities::removeWildcardPort($redirectUri);
 		return (\filter_var($redirectUri, FILTER_VALIDATE_URL) !== false);
 	}
 

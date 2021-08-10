@@ -35,6 +35,7 @@ use OCP\ILogger;
 use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\Template;
+use Rowbot\URL\URL;
 
 class SettingsController extends Controller {
 
@@ -129,6 +130,11 @@ class SettingsController extends Controller {
 		$allowSubdomains = $this->request->getParam('allow_subdomains', null) !== null;
 		$client->setAllowSubdomains($allowSubdomains);
 		$trusted = $this->request->getParam('trusted', null) !== null;
+
+		$rURI = new URL(Utilities::removeWildcardPort($redirectUri));
+		if (($rURI->hostname === 'localhost' || $rURI->hostname === '127.0.0.1') && $trusted) {
+			return $this->sendErrorResponse($this->l10n->t('Cannot set localhost as trusted.'));
+		}
 		$client->setTrusted($trusted);
 
 		$this->clientMapper->insert($client);
