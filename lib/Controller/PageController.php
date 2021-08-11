@@ -59,7 +59,7 @@ class PageController extends Controller {
 	/**
 	 * PageController constructor.
 	 *
-	 * @param string $AppName The app's name.
+	 * @param string $appName The app's name.
 	 * @param IRequest $request The request.
 	 * @param ClientMapper $clientMapper The client mapper.
 	 * @param AuthorizationCodeMapper $authorizationCodeMapper The authorization code mapper.
@@ -70,7 +70,7 @@ class PageController extends Controller {
 	 * @param IUserManager $userManager
 	 */
 	public function __construct(
-		$AppName,
+		string $appName,
 		IRequest $request,
 		ClientMapper $clientMapper,
 		AuthorizationCodeMapper $authorizationCodeMapper,
@@ -80,7 +80,7 @@ class PageController extends Controller {
 		IUserSession $userSession,
 		IUserManager $userManager
 	) {
-		parent::__construct($AppName, $request);
+		parent::__construct($appName, $request);
 
 		$this->clientMapper = $clientMapper;
 		$this->authorizationCodeMapper = $authorizationCodeMapper;
@@ -97,7 +97,7 @@ class PageController extends Controller {
 	 * @param string $response_type The expected response type.
 	 * @param string $client_id The client identifier.
 	 * @param string $redirect_uri The redirection URI.
-	 * @param string $state The state.
+	 * @param string | null $state The state.
 	 * @param string | null $user
 	 *
 	 * @return TemplateResponse | RedirectResponse The authorize view or the
@@ -113,7 +113,9 @@ class PageController extends Controller {
 		$client_id,
 		$redirect_uri,
 		$state = null,
-		$user = null
+		$user = null,
+		$code_challenge = null,
+		$code_challenge_method = null
 	) {
 		if (!\is_string($response_type) || !\is_string($client_id)
 			|| !\is_string($redirect_uri) || ($state !== null && !\is_string($state))
@@ -183,6 +185,11 @@ class PageController extends Controller {
 			}
 
 			return new RedirectResponse($errorRedirectUri);
+		}
+
+		// trusted clients get their auth code back directly
+		if ($client->getTrusted()) {
+			return $this->generateAuthorizationCode($response_type, $client_id, $redirect_uri, $state, $code_challenge, $code_challenge_method);
 		}
 
 		$logoutUrl = $this->urlGenerator->linkToRouteAbsolute(

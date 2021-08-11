@@ -25,6 +25,7 @@ use OCA\OAuth2\Db\Client;
 use OCA\OAuth2\Db\ClientMapper;
 use OCA\OAuth2\Utilities;
 use OCP\AppFramework\Db\DoesNotExistException;
+use Rowbot\URL\URL;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -70,7 +71,20 @@ class AddClient extends Command {
 				InputArgument::OPTIONAL,
 				'Defines if the redirect url is allowed to use sub domains. Enter true or false',
 				'false'
-			);
+			)
+			->addArgument(
+				'trusted',
+				InputArgument::OPTIONAL,
+				'Defines if the client is trusted. Enter true or false',
+				'false'
+			)
+			->addArgument(
+				'force-trust',
+				InputArgument::OPTIONAL,
+				'Trust the client even if the redirect-url is localhost.',
+				'false'
+			)
+		;
 	}
 
 	/**
@@ -84,8 +98,9 @@ class AddClient extends Command {
 		$id = $input->getArgument('client-id');
 		$secret = $input->getArgument('client-secret');
 		$url = $input->getArgument('redirect-url');
-		/** @var string[]|string|null $allowSubDomains */
 		$allowSubDomains = $input->getArgument('allow-sub-domains');
+		$trusted = $input->getArgument('trusted');
+		$forceTrust = $input->getArgument('force-trust');
 
 		if (\strlen($id) < 32) {
 			throw new \InvalidArgumentException('The client id should be at least 32 characters long');
@@ -98,6 +113,9 @@ class AddClient extends Command {
 		}
 		if (!\in_array($allowSubDomains, ['true', 'false'])) {
 			throw new \InvalidArgumentException('Please enter true or false for allowed-sub-domains.');
+		}
+		if (!\in_array($trusted, ['true', 'false'])) {
+			throw new \InvalidArgumentException('Please enter true or false for trusted.');
 		}
 		try {
 			// the name should be uniq
@@ -119,7 +137,15 @@ class AddClient extends Command {
 			$client->setRedirectUri($url);
 			$client->setSecret($secret);
 			$allowSubDomains = \filter_var($allowSubDomains, FILTER_VALIDATE_BOOLEAN);
-			$client->setAllowSubdomains($allowSubDomains);
+			$client->setAllowSubdomains((bool)$allowSubDomains);
+			$trusted = \filter_var($trusted, FILTER_VALIDATE_BOOLEAN);
+			$forceTrust = \filter_var($forceTrust, FILTER_VALIDATE_BOOLEAN);
+			$rURI = new URL(Utilities::removeWildcardPort($url));
+			if ($trusted && !$forceTrust && ($rURI->hostname === 'localhost' || $rURI->hostname === '127.0.0.1')) {
+				$output->writeln("Cannot set localhost as trusted.");
+				return 1;
+			}
+			$client->setTrusted((bool)$trusted);
 
 			$this->clientMapper->insert($client);
 		}

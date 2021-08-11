@@ -29,8 +29,6 @@ use Page\Oauth2OnPersonalSecuritySettingsPage;
 use PHPUnit\Framework\Assert;
 use TestHelpers\HttpRequestHelper;
 use TestHelpers\WebDavHelper;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
 use Page\Oauth2AdminSettingsPage;
 use TestHelpers\SetupHelper;
 
@@ -241,9 +239,9 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 * @When the client app requests an access token
 	 * @Given the client app has requested an access token
 	 *
-	 * @param string $refreshToken if set the `grant_type` `refresh_token`
-	 *                             will be used with the given refresh token
-	 *                             to request a new access token
+	 * @param string|null $refreshToken if set the `grant_type` `refresh_token`
+	 *                                  will be used with the given refresh token
+	 *                                  to request a new access token
 	 * @param string|null $clientId
 	 * @param string|null $clientSecret
 	 *
@@ -297,7 +295,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 * @When the client app requests an access token with the new client-id and client-secret
 	 * @Given the client app has requested an access token with the new client-id and client-secret
 	 *
-	 * @param string $refreshToken see clientAppRequestsAccessToken()
+	 * @param string|null $refreshToken see clientAppRequestsAccessToken()
 	 *
 	 * @return void
 	 */
@@ -551,11 +549,9 @@ class Oauth2Context extends RawMinkContext implements Context {
 	/**
 	 * @AfterScenario @webUI
 	 *
-	 * @param AfterScenarioScope $scope
-	 *
 	 * @return void
 	 */
-	public function after(AfterScenarioScope $scope) {
+	public function after() {
 		$this->featureContext->authContext->aNewBrowserSessionForHasBeenStarted(
 			$this->featureContext->getAdminUsername()
 		);
