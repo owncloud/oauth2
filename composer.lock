@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "12ad350654ccb91dba83a99e65b67fcc",
+    "content-hash": "4838013ea00a664916111bfa6be1ae7a",
     "packages": [
         {
             "name": "rowbot/url",
@@ -124,7 +124,7 @@
     "platform": [],
     "platform-dev": [],
     "platform-overrides": {
-        "php": "7.1"
+        "php": "7.3"
     },
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }
