@@ -4,8 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
-## Unreleased - XXXX-XX-XX
+## [Unreleased] - XXXX-XX-XX
 
+## [0.5.0] - 2020-08-16
+
+### Added
+
+- Add support for trusted clients [#298](https://github.com/owncloud/oauth2/issues/298)
+- Support setups with user login name != internal UID [#286](https://github.com/owncloud/oauth2/issues/286)
+- Implement the oauth2 pkce extension [#276](https://github.com/owncloud/oauth2/issues/276)
+
+### Changed
+
+- Return proper error description for auth-core/refresh-token errors [#279](https://github.com/owncloud/oauth2/issues/279)
+- Adjust PHP dependencies for composer 2.0 [#273](https://github.com/owncloud/oauth2/issues/273)
 
 ## [0.4.4] - 2020-03-03
 
@@ -100,6 +112,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - Verify Bearer token even if the session is still valid - [#53](https://github.com/owncloud/oauth2/pull/53)
 - Use displayname on switch user screen - [#90](https://github.com/owncloud/oauth2/pull/90)
 
+[Unreleased]: https://github.com/owncloud/oauth2/compare/v0.5.0...master
+[0.5.0]: https://github.com/owncloud/oauth2/compare/v0.4.4...v0.5.0
 [0.4.4]: https://github.com/owncloud/oauth2/compare/v0.4.3...v0.4.4
 [0.4.3]: https://github.com/owncloud/oauth2/compare/v0.4.2...v0.4.3
 [0.4.2]: https://github.com/owncloud/oauth2/compare/v0.4.1...v0.4.2
