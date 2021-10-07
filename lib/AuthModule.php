@@ -115,7 +115,7 @@ class AuthModule implements IAuthModule {
 		$userManager = $container->query('UserManager');
 		$userId = $accessToken->getUserId();
 		if (\strstr($userId, ':')) {
-			list($userName, $userId) = \explode(':', $userId, 2);
+			list(1 => $userId) = \explode(':', $userId, 2);
 		}
 		return $userManager->get($userId);
 	}
