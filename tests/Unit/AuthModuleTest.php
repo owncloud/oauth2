@@ -38,6 +38,9 @@ class AuthModuleTest extends TestCase {
 	/** @var String $userId */
 	private $userId = 'john';
 
+	/** @var String $userIdConcat */
+	private $userIdConcat = 'John Doe:john';
+
 	/** @var ClientMapper $clientMapper */
 	private $clientMapper;
 
@@ -109,6 +112,18 @@ class AuthModuleTest extends TestCase {
 
 		// Valid request
 		$request = $this->getMockBuilder(IRequest::class)->getMock();
+		$request->expects($this->once())
+			->method('getHeader')
+			->with($this->equalTo('Authorization'))
+			->will($this->returnValue('Bearer ' . $this->accessToken->getToken()));
+		$user = $this->authModule->auth($request);
+		$this->assertNotNull($user);
+		$this->assertEquals($this->userId, $user->getUID());
+
+		// Valid request with ConcatUserID
+		$request = $this->getMockBuilder(IRequest::class)->getMock();
+		$this->accessToken->setUserId($this->userIdConcat);
+		$this->accessToken = $this->accessTokenMapper->update($this->accessToken);
 		$request->expects($this->once())
 			->method('getHeader')
 			->with($this->equalTo('Authorization'))

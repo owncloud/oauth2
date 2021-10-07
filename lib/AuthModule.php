@@ -113,7 +113,11 @@ class AuthModule implements IAuthModule {
 
 		/** @var \OCP\IUserManager $userManager */
 		$userManager = $container->query('UserManager');
-		return $userManager->get($accessToken->getUserId());
+		$userId = $accessToken->getUserId();
+		if (\strstr($userId, ':')) {
+			list(1 => $userId) = \explode(':', $userId, 2);
+		}
+		return $userManager->get($userId);
 	}
 
 	protected function tokenCanBeHandledByOpenIDConnect(): bool {
