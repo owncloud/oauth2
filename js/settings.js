@@ -38,7 +38,7 @@ $(document).ready(function () {
 	}).done(function(data){
 		if (data.authHeaderFound !== true) {
 			OC.Notification.show(
-				'Oauth2 will not work properly as your webserver does not pass Authorization header to PHP.'
+				'Oauth2 will not work properly as your webserver does not pass the Authorization header to PHP.'
 			);
 		}
 	});
