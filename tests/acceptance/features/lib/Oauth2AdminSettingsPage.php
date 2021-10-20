@@ -40,13 +40,17 @@ class Oauth2AdminSettingsPage extends OwncloudPage {
 	 *
 	 * @param string $appName
 	 * @param string $redirectionUri
-	 * @param boolean $allowSubdomains
+	 * @param bool $allowSubdomains
 	 *
 	 * @return void
 	 * @throws ElementNotFoundException
 	 *
 	 */
-	public function addClient($appName, $redirectionUri, $allowSubdomains = false) {
+	public function addClient(
+		string $appName,
+		string $redirectionUri,
+		bool $allowSubdomains = false
+	): void {
 		$this->fillField($this->oauthAppNameInputId, $appName);
 		$this->fillField($this->oauthRedirectionUriInputId, $redirectionUri);
 		if ($allowSubdomains === true) {
@@ -83,7 +87,7 @@ class Oauth2AdminSettingsPage extends OwncloudPage {
 	 *
 	 * @return string[] array with keys name,redirection_uri,client_id,client_secret,id
 	 */
-	public function getClientInformationByName($name) {
+	public function getClientInformationByName(string $name): array {
 		$xpath = \sprintf($this->clientRowByNameXpath, $name);
 		$tds = $this->findAll("xpath", $xpath);
 		if (\count($tds) === 0) {

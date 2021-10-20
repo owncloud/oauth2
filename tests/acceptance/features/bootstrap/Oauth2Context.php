@@ -21,7 +21,6 @@
  */
 
 use Behat\Behat\Context\Context;
-use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Page\Oauth2AuthRequestPage;
@@ -116,15 +115,15 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 * @When /^user "([^"]*)" sends an oauth2 authorization request using the webUI$/
 	 * @Given /^user "([^"]*)" has sent an oauth2 authorization request$/
 	 *
-	 * @param string $username
-	 * @param string $clientId
+	 * @param string|null $username
+	 * @param string|null $clientId
 	 *
 	 * @return void
 	 */
 	public function oauthAuthorizationRequestUsingTheWebui(
-		$username = null,
-		$clientId = null
-	) {
+		?string $username = null,
+		?string $clientId = null
+	): void {
 		if ($clientId === null) {
 			$clientId = $this->clientId;
 		}
@@ -146,20 +145,20 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function theUserSendsOauthAuthorizationRequestUsingTheWebui() {
+	public function theUserSendsOauthAuthorizationRequestUsingTheWebui(): void {
 		$this->oauthAuthorizationRequestUsingTheWebui();
 	}
 
 	/**
 	 * @When /^the user(?: "([^"]*)")? sends an oauth2 authorization request with the new client-id using the webUI$/
 	 *
-	 * @param string $username
+	 * @param string|null $username
 	 *
 	 * @return void
 	 */
 	public function oauthAuthorizationRequestWithNewClientIdUsingTheWebui(
-		$username = null
-	) {
+		?string $username = null
+	): void {
 		$this->oauthAuthorizationRequestUsingTheWebui(
 			$username,
 			\end($this->createdOauthClients)['client_id']
@@ -171,7 +170,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function oAuthAuthorizationRequestUnregisteredClientIdUsingTheWebui() {
+	public function oAuthAuthorizationRequestUnregisteredClientIdUsingTheWebui(): void {
 		$this->visitPath(
 			$this->featureContext->getBaseUrl() .
 			'/index.php/apps/oauth2/authorize?response_type=code&client_id=xxxxxx' .
@@ -186,7 +185,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function theUserAuthorizesOauthAppUsingTheWebUI() {
+	public function theUserAuthorizesOauthAppUsingTheWebUI(): void {
 		$this->oauth2AuthRequestPage->authorizeApp();
 	}
 
@@ -197,7 +196,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function establishOauthSession($user) {
+	public function establishOauthSession(string $user): void {
 		$this->oauthAuthorizationRequestUsingTheWebui();
 		$this->webUILoginContext
 			->userLogInWithUsernameAndPasswordAfterRedirectFromPage(
@@ -214,7 +213,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function refreshAccessToken() {
+	public function refreshAccessToken(): void {
 		$oldAccessToken = $this->accessTokenResponse->access_token;
 		$this->clientAppRequestsAccessToken(
 			$this->accessTokenResponse->refresh_token
@@ -231,7 +230,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function switchTheUserToContinueOauthProcess() {
+	public function switchTheUserToContinueOauthProcess(): void {
 		$this->oauth2AuthRequestPage->switchUsers();
 	}
 
@@ -248,10 +247,10 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 * @return void
 	 */
 	public function clientAppRequestsAccessToken(
-		$refreshToken = null,
-		$clientId = null,
-		$clientSecret = null
-	) {
+		?string $refreshToken = null,
+		?string $clientId = null,
+		?string $clientSecret = null
+	): void {
 		$redirectUri = \parse_url($this->getSession()->getCurrentUrl());
 		\parse_str($redirectUri['query'], $parameters);
 		if ($clientId === null) {
@@ -300,8 +299,8 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 * @return void
 	 */
 	public function clientAppRequestsAccessTokenWithNewClientId(
-		$refreshToken = null
-	) {
+		?string $refreshToken = null
+	): void {
 		$this->clientAppRequestsAccessToken(
 			$refreshToken,
 			\end($this->createdOauthClients)['client_id'],
@@ -318,7 +317,10 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function userRequestsURLWithOAuth($url, $method) {
+	public function userRequestsURLWithOAuth(
+		string $url,
+		string $method
+	): void {
 		$this->featureContext->authContext->sendRequest(
 			$url,
 			$method,
@@ -333,7 +335,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function revokeOauthAppUsingTheWebUI($appName) {
+	public function revokeOauthAppUsingTheWebUI(string $appName): void {
 		$this->oath2OnPersonalSecurityPage->revokeApp(
 			$this->getSession(),
 			$appName
@@ -346,7 +348,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function theUserBrowsesToTheOauth2AdminSettingsPage() {
+	public function theUserBrowsesToTheOauth2AdminSettingsPage(): void {
 		$this->oauth2AdminSettingsPage->open();
 	}
 
@@ -358,7 +360,10 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function addNewOauthClientUsingTheWebUI($name, $uri) {
+	public function addNewOauthClientUsingTheWebUI(
+		string $name,
+		string $uri
+	): void {
 		$this->oauth2AdminSettingsPage->addClient($name, $uri);
 		$client = $this->oauth2AdminSettingsPage->getClientInformationByName($name);
 		$this->createdOauthClients[] = $client;
@@ -372,7 +377,10 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function addNewOauthClient($name, $uri) {
+	public function addNewOauthClient(
+		string $name,
+		string $uri
+	): void {
 		$this->webUIGeneralContext->adminLogsInUsingTheWebUI();
 		$this->theUserBrowsesToTheOauth2AdminSettingsPage();
 		$this->addNewOauthClientUsingTheWebUI($name, $uri);
@@ -388,7 +396,11 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function accessFileUsingOauthToken($shouldOrNot, $file, $user) {
+	public function accessFileUsingOauthToken(
+		string $shouldOrNot,
+		string $file,
+		string $user
+	): void {
 		$should = ($shouldOrNot !== "not");
 		// The capturing groups of the regex include the quotes at each
 		// end of the captured string, so trim them.
@@ -451,7 +463,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function clientAppShouldReceiveAuthCode() {
+	public function clientAppShouldReceiveAuthCode(): void {
 		$redirectUri = \parse_url($this->getSession()->getCurrentUrl());
 		Assert::assertEquals(
 			$this->redirectUriHost,
@@ -481,7 +493,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function invalidOauthRequestMessageShouldBeShown() {
+	public function invalidOauthRequestMessageShouldBeShown(): void {
 		$error = $this->oauth2AuthRequestPage->getErrorMessageHeading();
 		Assert::assertSame("Request not valid", $error);
 	}
@@ -491,7 +503,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function appShouldNotBeAbleToRefreshToken() {
+	public function appShouldNotBeAbleToRefreshToken(): void {
 		$this->clientAppRequestsAccessToken(
 			$this->accessTokenResponse->refresh_token
 		);
@@ -512,7 +524,10 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function assertClientIsListedOnWebUI($name, $uri) {
+	public function assertClientIsListedOnWebUI(
+		string $name,
+		string $uri
+	): void {
 		$client = $this->oauth2AdminSettingsPage->getClientInformationByName($name);
 		Assert::assertSame(
 			$name,
@@ -536,7 +551,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function before(BeforeScenarioScope $scope) {
+	public function before(BeforeScenarioScope $scope): void {
 		// Get the environment
 		$environment = $scope->getEnvironment();
 		// Get all the contexts you need in this context
@@ -551,7 +566,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 *
 	 * @return void
 	 */
-	public function after() {
+	public function after(): void {
 		$this->featureContext->authContext->aNewBrowserSessionForHasBeenStarted(
 			$this->featureContext->getAdminUsername()
 		);
@@ -572,7 +587,7 @@ class Oauth2Context extends RawMinkContext implements Context {
 	 *
 	 * @return int port number
 	 */
-	private function findAvailablePort() {
+	private function findAvailablePort(): int {
 		$socket = \socket_create_listen(0);
 		\socket_getsockname($socket, $address, $port);
 		\socket_close($socket);
