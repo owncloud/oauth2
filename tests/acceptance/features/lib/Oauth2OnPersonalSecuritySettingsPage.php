@@ -41,7 +41,7 @@ class Oauth2OnPersonalSecuritySettingsPage extends OwncloudPage {
 	 *
 	 * @return void
 	 */
-	public function revokeApp(Session $session, $app) {
+	public function revokeApp(Session $session, string $app): void {
 		$xpath = \sprintf($this->deleteBtnByAppNameXpath, $app);
 		$revokeBtn = $this->find("xpath", $xpath);
 		if ($revokeBtn === null) {
