@@ -40,9 +40,9 @@ class Oauth2AuthRequestPage extends OwncloudPage {
 	 *
 	 * @return void
 	 */
-	public function authorizeApp() {
+	public function authorizeApp(): void {
 		$submitButton = $this->find("xpath", $this->authorizeButtonXpath);
-		
+
 		if ($submitButton === null) {
 			throw new ElementNotFoundException(
 				__METHOD__ .
@@ -59,9 +59,9 @@ class Oauth2AuthRequestPage extends OwncloudPage {
 	 *
 	 * @return void
 	 */
-	public function switchUsers() {
+	public function switchUsers(): void {
 		$switchUsersButton = $this->find("xpath", $this->switchUsersButtonXpath);
-		
+
 		if ($switchUsersButton === null) {
 			throw new ElementNotFoundException(
 				__METHOD__ .
@@ -78,12 +78,12 @@ class Oauth2AuthRequestPage extends OwncloudPage {
 	 *
 	 * @return string
 	 */
-	public function getErrorMessageHeading() {
+	public function getErrorMessageHeading(): string {
 		$errorMessageHeadingElement = $this->find(
 			"xpath",
 			$this->errorMessageHeadingXpath
 		);
-		
+
 		if ($errorMessageHeadingElement === null) {
 			throw new ElementNotFoundException(
 				__METHOD__ .
@@ -91,7 +91,7 @@ class Oauth2AuthRequestPage extends OwncloudPage {
 				"could not find heading of error message"
 			);
 		}
-		
+
 		return $errorMessageHeadingElement->getText();
 	}
 
@@ -103,8 +103,8 @@ class Oauth2AuthRequestPage extends OwncloudPage {
 	 */
 	public function waitTillPageIsLoaded(
 		Session $session,
-		$timeout_msec = STANDARD_UI_WAIT_TIMEOUT_MILLISEC
-	) {
+		int $timeout_msec = STANDARD_UI_WAIT_TIMEOUT_MILLISEC
+	): void {
 		$currentTime = \microtime(true);
 		$end = $currentTime + ($timeout_msec / 1000);
 		while ($currentTime <= $end) {
@@ -124,7 +124,7 @@ class Oauth2AuthRequestPage extends OwncloudPage {
 			\usleep(STANDARD_SLEEP_TIME_MICROSEC);
 			$currentTime = \microtime(true);
 		}
-		
+
 		if ($currentTime > $end) {
 			throw new \Exception(
 				__METHOD__ . " timeout waiting for page to load"
