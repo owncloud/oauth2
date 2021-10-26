@@ -58,13 +58,13 @@ class ListClients extends Base {
 		/** @var  \OCA\OAuth2\Db\Client  $client */
 		foreach ($clients as $client) {
 			$clientsOutput[$client->getName()] = [
-				'ID' => $client->getId(),
-				'Name' => $client->getName(),
-				'Redirection URI' => $client->getRedirectUri(),
-				'Client identifier' => $client->getIdentifier(),
-				'Secret' => $client->getSecret(),
-				'Subdomains allowed' => $client->getAllowSubdomains() === true ? 'yes' : 'no',
-				'Trusted client' => $client->getTrusted() === true ? 'yes' : 'no',
+				'id' => $client->getId(),
+				'name' => $client->getName(),
+				'redirectUri' => $client->getRedirectUri(),
+				'identifier' => $client->getIdentifier(),
+				'secret' => $client->getSecret(),
+				'subdomainsAllowed' => $client->getAllowSubdomains() === true ? 'yes' : 'no',
+				'trusted' => $client->getTrusted() === true ? 'yes' : 'no',
 			];
 		}
 		parent::writeArrayInOutputFormat($input, $output, $clientsOutput, self::DEFAULT_OUTPUT_PREFIX, true);
