@@ -56,7 +56,7 @@ class ListClients extends Base {
 		$clientsOutput = [];
 
 		/** @var  \OCA\OAuth2\Db\Client  $client */
-		foreach ($clients as $client){
+		foreach ($clients as $client) {
 			$clientsOutput[$client->getName()] = [
 				'ID' => $client->getId(),
 				'Name' => $client->getName(),
