@@ -41,7 +41,7 @@ class ListClients extends Base {
 	protected function configure() {
 		parent::configure();
 		$this
-			->setName('oauth2:list')
+			->setName('oauth2:list-clients')
 			->setDescription('Lists OAuth2 clients');
 	}
 
