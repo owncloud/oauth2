@@ -4,8 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased] - XXXX-XX-XX
+## [0.5.2] - 2021-11-02
 
+- [#313](https://github.com/owncloud/oauth2/issues/313) - Add occ oauth2:list command
+- [#315](https://github.com/owncloud/oauth2/issues/315) - Sanitize output of command oauth2:list-clients
+- [#314](https://github.com/owncloud/oauth2/issues/314) - Add occ oauth2:modify-client command
 
 
 ## [0.5.1] - 2021-10-05
@@ -121,7 +124,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - Verify Bearer token even if the session is still valid - [#53](https://github.com/owncloud/oauth2/pull/53)
 - Use displayname on switch user screen - [#90](https://github.com/owncloud/oauth2/pull/90)
 
-[Unreleased]: https://github.com/owncloud/oauth2/compare/v0.5.1...master
+[Unreleased]: https://github.com/owncloud/oauth2/compare/v0.5.2...master
+[0.5.2]: https://github.com/owncloud/oauth2/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/owncloud/oauth2/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/owncloud/oauth2/compare/v0.4.4...v0.5.0
 [0.4.4]: https://github.com/owncloud/oauth2/compare/v0.4.3...v0.4.4
