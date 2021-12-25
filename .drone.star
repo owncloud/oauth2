@@ -1086,8 +1086,9 @@ def acceptance(ctx):
                              setupScality(testConfig["scalityS3"]) +
                              setupElasticSearch(testConfig["esVersion"]) +
                              testConfig["extraSetup"] +
+waitForEmailService(testConfig["emailNeeded"]) +
                              fixPermissions(testConfig["phpVersion"], testConfig["federatedServerNeeded"], params["selUserNeeded"]) +
-                             waitForBrowserService(testConfig["phpVersion"], isWebUI) +
+                             waitForBrowserService(testConfig["browser"]) +
                              [
                                  ({
                                      "name": "acceptance-tests",
@@ -2104,3 +2105,15 @@ def waitForServer(federatedServerNeeded):
             "wait-for -it federated:80 -t 600",
         ] if federatedServerNeeded else []),
     }]
+
+def waitForEmailService(emailNeeded):
+    if emailNeeded:
+        return [{
+            "name": "wait-for-email",
+            "image": OC_CI_WAIT_FOR,
+            "commands": [
+                "wait-for -it email:8025 -t 600",
+            ],
+        }]
+
+    return []
