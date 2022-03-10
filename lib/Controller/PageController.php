@@ -98,7 +98,7 @@ class PageController extends Controller {
 	 * @param string $client_id The client identifier.
 	 * @param string $redirect_uri The redirection URI.
 	 * @param string | null $state The state.
-	 * @param string | null $user
+	 * @param string | null $user The user id
 	 *
 	 * @return TemplateResponse | RedirectResponse The authorize view or the
 	 * authorize-error view with a redirection to the
@@ -129,11 +129,19 @@ class PageController extends Controller {
 			);
 		}
 
-		if ($user !== null && $user !== $this->userSession->getUser()->getUserName()) {
+		// look up username so we can fill the login field for the end user
+		$userObj = $this->userManager->get($user);
+		if ($userObj !== null) {
+			$userName = $userObj->getUserName();
+		} else {
+			$userName = $user;
+		}
+
+		if ($user !== null && $user !== $this->userSession->getUser()->getUID()) {
 			$logoutUrl = $this->urlGenerator->linkToRouteAbsolute(
 				'oauth2.page.logout',
 				[
-					'user' => $user,
+					'user' => $userName,
 					'requesttoken' => Util::callRegister(),
 					'response_type' => $response_type,
 					'client_id' => $client_id,
@@ -195,7 +203,7 @@ class PageController extends Controller {
 		$logoutUrl = $this->urlGenerator->linkToRouteAbsolute(
 			'oauth2.page.logout',
 			[
-				'user' => $user,
+				'user' => $userName,
 				'requesttoken' => Util::callRegister(),
 				'response_type' => $response_type,
 				'client_id' => $client_id,
@@ -236,14 +244,7 @@ class PageController extends Controller {
 			return new RedirectResponse(OC_Util::getDefaultPageUrl());
 		}
 
-		$userName = $this->userSession->getUser()->getUserName();
 		$userUID  = $this->userSession->getUser()->getUID();
-
-		if ($userName !== null && $userName !== $userUID) {
-			$userNameAndUid = \implode(':', [ $userName, $userUID ]);
-		} else {
-			$userNameAndUid = $userUID;
-		}
 
 		switch ($response_type) {
 			case 'code':
@@ -262,7 +263,7 @@ class PageController extends Controller {
 				$authorizationCode = new AuthorizationCode();
 				$authorizationCode->setCode($code);
 				$authorizationCode->setClientId($client->getId());
-				$authorizationCode->setUserId($userNameAndUid);
+				$authorizationCode->setUserId($userUID);
 				$authorizationCode->resetExpires();
 				$authorizationCode->setCodeChallenge($code_challenge);
 				$authorizationCode->setCodeChallengeMethod($code_challenge_method);
@@ -293,7 +294,7 @@ class PageController extends Controller {
 				$accessToken = new AccessToken();
 				$accessToken->setToken($token);
 				$accessToken->setClientId($client->getId());
-				$accessToken->setUserId($userNameAndUid);
+				$accessToken->setUserId($userUID);
 				$accessToken->resetExpires();
 				$this->accessTokenMapper->insert($accessToken);
 
@@ -355,11 +356,19 @@ class PageController extends Controller {
 			'user' => $user
 		]);
 
+		// look up username so we can fill the login field for the end user
+		$userObj = $this->userManager->get($user);
+		if ($userObj !== null) {
+			$userName = $userObj->getUserName();
+		} else {
+			$userName = $user;
+		}
+
 		// redirect the browser to the login page and set the redirect_url to the authorize page of oauth2
 		return new RedirectResponse($this->urlGenerator->linkToRouteAbsolute(
 			'core.login.showLoginForm',
 			[
-				'user' => $user,
+				'user' => $userName,
 				'redirect_url' => $redirectUrl
 			]
 		));
