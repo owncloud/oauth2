@@ -129,19 +129,11 @@ class PageController extends Controller {
 			);
 		}
 
-		// look up username so we can fill the login field for the end user
-		$userObj = $this->userManager->get($user);
-		if ($userObj !== null) {
-			$userName = $userObj->getUserName();
-		} else {
-			$userName = $user;
-		}
-
 		if ($this->isDifferentUser($user)) {
 			$logoutUrl = $this->urlGenerator->linkToRouteAbsolute(
 				'oauth2.page.logout',
 				[
-					'user' => $userName,
+					'user' => $user,
 					'requesttoken' => Util::callRegister(),
 					'response_type' => $response_type,
 					'client_id' => $client_id,
@@ -203,7 +195,7 @@ class PageController extends Controller {
 		$logoutUrl = $this->urlGenerator->linkToRouteAbsolute(
 			'oauth2.page.logout',
 			[
-				'user' => $userName,
+				'user' => $user,
 				'requesttoken' => Util::callRegister(),
 				'response_type' => $response_type,
 				'client_id' => $client_id,
