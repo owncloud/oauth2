@@ -202,7 +202,7 @@ class PageController extends Controller {
 		$logoutUrl = $this->urlGenerator->linkToRouteAbsolute(
 			'oauth2.page.logout',
 			[
-				'user' => $userName,
+				'user' => $user,
 				'requesttoken' => Util::callRegister(),
 				'response_type' => $response_type,
 				'client_id' => $client_id,
