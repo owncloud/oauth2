@@ -395,13 +395,13 @@ class PageController extends Controller {
 	 * @return bool
 	 */
 	private function isDifferentUser($userId) {
-	        if (empty($userId)) {
-	                return false;
-	        }
-	        $userObj = $this->userManager->get($userId);
-	        if ($userObj === null) {
-	                return true;
-	        }
-	        return $userObj->getUID() !== $this->userSession->getUser()->getUID();
+		if (empty($userId)) {
+			return false;
+		}
+		$userObj = $this->userManager->get($userId);
+		if ($userObj === null) {
+			return true;
+		}
+		return $userObj->getUID() !== $this->userSession->getUser()->getUID();
 	}
 }
