@@ -403,11 +403,11 @@ class PageController extends Controller {
 	 */
 	private function isDifferentUser($userId) {
 		if (empty($userId)) {
-				return false;
+			return false;
 		}
 		$userObj = $this->userManager->get($userId);
 		if ($userObj === null) {
-				return true;
+			return true;
 		}
 		return $userObj->getUID() !== $this->userSession->getUser()->getUID();
 	}
