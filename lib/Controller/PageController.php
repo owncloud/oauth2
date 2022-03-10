@@ -140,7 +140,7 @@ class PageController extends Controller {
 			$logoutUrl = $this->urlGenerator->linkToRouteAbsolute(
 				'oauth2.page.logout',
 				[
-					'user' => $userName,
+					'user' => $user,
 					'requesttoken' => Util::callRegister(),
 					'response_type' => $response_type,
 					'client_id' => $client_id,
@@ -368,7 +368,7 @@ class PageController extends Controller {
 			'core.login.showLoginForm',
 			[
 				'user' => $userName,
-				'redirect_url' => $redirectUrl
+				'redirect_url' => \urlencode($redirectUrl)
 			]
 		));
 	}
