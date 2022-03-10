@@ -137,7 +137,7 @@ class PageController extends Controller {
 			$userName = $user;
 		}
 
-		if ($user !== null && $user !== $this->userSession->getUser()->getUID()) {
+		if ($this->isDifferentUser($user)) {
 			$logoutUrl = $this->urlGenerator->linkToRouteAbsolute(
 				'oauth2.page.logout',
 				[
@@ -396,5 +396,20 @@ class PageController extends Controller {
 		$userId = Util::sanitizeHTML($userId);
 		$escapedDisplayName = Util::sanitizeHTML($displayName);
 		return "<span class='hasTooltip' data-original-title='$userId'><strong>$escapedDisplayName</strong></span>";
+	}
+
+	/**
+	 * @param string $userId
+	 * @return bool
+	 */
+	private function isDifferentUser($userId) {
+	        if (empty($userId)) {
+	                return false;
+	        }
+	        $userObj = $this->userManager->get($userId);
+	        if ($userObj === null) {
+	                return true;
+	        }
+	        return $userObj->getUID() !== $this->userSession->getUser()->getUID();
 	}
 }
