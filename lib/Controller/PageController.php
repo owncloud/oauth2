@@ -39,6 +39,8 @@ use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\Util;
 
+use function PHPSTORM_META\map;
+
 class PageController extends Controller {
 
 	/** @var ClientMapper */
@@ -138,7 +140,9 @@ class PageController extends Controller {
 					'response_type' => $response_type,
 					'client_id' => $client_id,
 					'redirect_uri' => \urlencode($redirect_uri),
-					'state' => $state
+					'state' => $state,
+					'code_challenge' => $code_challenge,
+					'code_challenge_method' => $code_challenge_method
 				]
 			);
 			$currentUser = $this->userSession->getUser();
@@ -200,7 +204,9 @@ class PageController extends Controller {
 				'response_type' => $response_type,
 				'client_id' => $client_id,
 				'redirect_uri' => \urlencode($redirect_uri),
-				'state' => $state
+				'state' => $state,
+				'code_challenge' => $code_challenge,
+				'code_challenge_method' => $code_challenge_method
 			]
 		);
 		$currentUser = $this->userSession->getUser();
@@ -327,7 +333,14 @@ class PageController extends Controller {
 	 * @param string | null $state
 	 * @return RedirectResponse | TemplateResponse
 	 */
-	public function logout($user, $response_type, $client_id, $redirect_uri, $state = null) {
+	public function logout(
+		$user, 
+		$response_type, 
+		$client_id, 
+		$redirect_uri,
+		$state = null,
+		$code_challenge = null,
+		$code_challenge_method = null) {
 		if (!\is_string($response_type) || !\is_string($client_id)
 			|| !\is_string($redirect_uri) || ($state !== null && !\is_string($state))
 		) {
@@ -345,7 +358,9 @@ class PageController extends Controller {
 			'client_id' => $client_id,
 			'redirect_uri' => $redirect_uri,
 			'state' => $state,
-			'user' => $user
+			'user' => $user,
+			'code_challenge' => $code_challenge,
+			'code_challenge_method' => $code_challenge_method 
 		]);
 
 		// look up username so we can fill the login field for the end user
