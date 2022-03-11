@@ -39,8 +39,6 @@ use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\Util;
 
-use function PHPSTORM_META\map;
-
 class PageController extends Controller {
 
 	/** @var ClientMapper */
