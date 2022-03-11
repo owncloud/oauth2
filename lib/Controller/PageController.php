@@ -129,13 +129,6 @@ class PageController extends Controller {
 			);
 		}
 
-		$userObj = $this->userManager->get($user);
-		if ($userObj !== null) {
-				$userName = $userObj->getUserName();
-		} else {
-			$userName = $user;
-		}
-
 		if ($this->isDifferentUser($user)) {
 			$logoutUrl = $this->urlGenerator->linkToRouteAbsolute(
 				'oauth2.page.logout',
