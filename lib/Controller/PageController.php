@@ -351,16 +351,16 @@ class PageController extends Controller {
 		// look up username so we can fill the login field for the end user
 		$userObj = $this->userManager->get($user);
 		if ($userObj !== null) {
-			$userName = $userObj->getUserName();
+			$loginHint = $userObj->getUserName();
 		} else {
-			$userName = $user;
+			$loginHint = $user;
 		}
 
 		// redirect the browser to the login page and set the redirect_url to the authorize page of oauth2
 		return new RedirectResponse($this->urlGenerator->linkToRouteAbsolute(
 			'core.login.showLoginForm',
 			[
-				'user' => $userName,
+				'user' => $loginHint,
 				'redirect_url' => \urlencode($redirectUrl)
 			]
 		));
