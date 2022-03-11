@@ -338,7 +338,8 @@ class PageController extends Controller {
 		$redirect_uri,
 		$state = null,
 		$code_challenge = null,
-		$code_challenge_method = null) {
+		$code_challenge_method = null
+	) {
 		if (!\is_string($response_type) || !\is_string($client_id)
 			|| !\is_string($redirect_uri) || ($state !== null && !\is_string($state))
 		) {
@@ -358,7 +359,7 @@ class PageController extends Controller {
 			'state' => $state,
 			'user' => $user,
 			'code_challenge' => $code_challenge,
-			'code_challenge_method' => $code_challenge_method 
+			'code_challenge_method' => $code_challenge_method
 		]);
 
 		// look up username so we can fill the login field for the end user
