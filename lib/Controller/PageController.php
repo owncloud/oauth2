@@ -332,9 +332,9 @@ class PageController extends Controller {
 	 * @return RedirectResponse | TemplateResponse
 	 */
 	public function logout(
-		$user, 
-		$response_type, 
-		$client_id, 
+		$user,
+		$response_type,
+		$client_id,
 		$redirect_uri,
 		$state = null,
 		$code_challenge = null,
