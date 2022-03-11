@@ -117,7 +117,7 @@ class Application extends App {
 				if ($u !== null) {
 					$data['login_hint'] = $u->getUserName();
 				}
-				if (!\is_string($data['login_hint']) || $data['login_hint'] === '') {
+				if (!isset($data['login_hint']) || !\is_string($data['login_hint']) || $data['login_hint'] === '') {
 					$data['login_hint'] = $params['user'];
 				}
 			}
