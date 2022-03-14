@@ -177,11 +177,12 @@ class OAuthApiController extends ApiController {
 				$this->logger->info('An authorization code has been used by the client "' . $client->getName() . '" to request an access token.', ['app' => $this->appName]);
 
 				$userId = $authorizationCode->getUserId();
+
+				// strip off username if it exists
 				if (\strstr($userId, ':')) {
-					list($userName, $userId) = \explode(':', $userId, 2);
-				} else {
-					$userName = $userId;
+					list(, $userId) = \explode(':', $userId, 2);
 				}
+
 				$this->authorizationCodeMapper->delete($authorizationCode);
 
 				$userObj = $this->userManager->get($userId);
@@ -219,10 +220,10 @@ class OAuthApiController extends ApiController {
 				$this->logger->info('A refresh token has been used by the client "' . $client->getName() . '" to request an access token.', ['app' => $this->appName]);
 
 				$userId = $refreshToken->getUserId();
+
+				// strip off username if it exists
 				if (\strstr($userId, ':')) {
-					list($userName, $userId) = \explode(':', $userId, 2);
-				} else {
-					$userName = $userId;
+					list(, $userId) = \explode(':', $userId, 2);
 				}
 
 				$userObj = $this->userManager->get($userId);
@@ -264,7 +265,7 @@ class OAuthApiController extends ApiController {
 				'token_type' => 'Bearer',
 				'expires_in' => AccessToken::EXPIRATION_TIME,
 				'refresh_token' => $refreshToken->getToken(),
-				'user_id' => $userName,
+				'user_id' => $userId,
 				'message_url' => $this->urlGenerator->linkToRouteAbsolute($this->appName . '.page.authorizationSuccessful')
 			]
 		);

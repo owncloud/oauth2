@@ -98,7 +98,9 @@ class PageController extends Controller {
 	 * @param string $client_id The client identifier.
 	 * @param string $redirect_uri The redirection URI.
 	 * @param string | null $state The state.
-	 * @param string | null $user
+	 * @param string | null $user The user id
+	 * @param string $code_challenge | null The PKCE code challenge.
+	 * @param string $code_challenge_method | null The PKCE code challenge method.
 	 *
 	 * @return TemplateResponse | RedirectResponse The authorize view or the
 	 * authorize-error view with a redirection to the
@@ -129,7 +131,7 @@ class PageController extends Controller {
 			);
 		}
 
-		if ($user !== null && $user !== $this->userSession->getUser()->getUserName()) {
+		if ($this->isDifferentUser($user)) {
 			$logoutUrl = $this->urlGenerator->linkToRouteAbsolute(
 				'oauth2.page.logout',
 				[
@@ -138,7 +140,9 @@ class PageController extends Controller {
 					'response_type' => $response_type,
 					'client_id' => $client_id,
 					'redirect_uri' => \urlencode($redirect_uri),
-					'state' => $state
+					'state' => $state,
+					'code_challenge' => $code_challenge,
+					'code_challenge_method' => $code_challenge_method
 				]
 			);
 			$currentUser = $this->userSession->getUser();
@@ -200,7 +204,9 @@ class PageController extends Controller {
 				'response_type' => $response_type,
 				'client_id' => $client_id,
 				'redirect_uri' => \urlencode($redirect_uri),
-				'state' => $state
+				'state' => $state,
+				'code_challenge' => $code_challenge,
+				'code_challenge_method' => $code_challenge_method
 			]
 		);
 		$currentUser = $this->userSession->getUser();
@@ -236,14 +242,7 @@ class PageController extends Controller {
 			return new RedirectResponse(OC_Util::getDefaultPageUrl());
 		}
 
-		$userName = $this->userSession->getUser()->getUserName();
 		$userUID  = $this->userSession->getUser()->getUID();
-
-		if ($userName !== null && $userName !== $userUID) {
-			$userNameAndUid = \implode(':', [ $userName, $userUID ]);
-		} else {
-			$userNameAndUid = $userUID;
-		}
 
 		switch ($response_type) {
 			case 'code':
@@ -262,7 +261,7 @@ class PageController extends Controller {
 				$authorizationCode = new AuthorizationCode();
 				$authorizationCode->setCode($code);
 				$authorizationCode->setClientId($client->getId());
-				$authorizationCode->setUserId($userNameAndUid);
+				$authorizationCode->setUserId($userUID);
 				$authorizationCode->resetExpires();
 				$authorizationCode->setCodeChallenge($code_challenge);
 				$authorizationCode->setCodeChallengeMethod($code_challenge_method);
@@ -293,7 +292,7 @@ class PageController extends Controller {
 				$accessToken = new AccessToken();
 				$accessToken->setToken($token);
 				$accessToken->setClientId($client->getId());
-				$accessToken->setUserId($userNameAndUid);
+				$accessToken->setUserId($userUID);
 				$accessToken->resetExpires();
 				$this->accessTokenMapper->insert($accessToken);
 
@@ -332,9 +331,19 @@ class PageController extends Controller {
 	 * @param string $client_id
 	 * @param string $redirect_uri
 	 * @param string | null $state
+	 * @param string $code_challenge | null The PKCE code challenge.
+	 * @param string $code_challenge_method | null The PKCE code challenge method.
 	 * @return RedirectResponse | TemplateResponse
 	 */
-	public function logout($user, $response_type, $client_id, $redirect_uri, $state = null) {
+	public function logout(
+		$user,
+		$response_type,
+		$client_id,
+		$redirect_uri,
+		$state = null,
+		$code_challenge = null,
+		$code_challenge_method = null
+	) {
 		if (!\is_string($response_type) || !\is_string($client_id)
 			|| !\is_string($redirect_uri) || ($state !== null && !\is_string($state))
 		) {
@@ -352,15 +361,25 @@ class PageController extends Controller {
 			'client_id' => $client_id,
 			'redirect_uri' => $redirect_uri,
 			'state' => $state,
-			'user' => $user
+			'user' => $user,
+			'code_challenge' => $code_challenge,
+			'code_challenge_method' => $code_challenge_method
 		]);
+
+		// look up username so we can fill the login field for the end user
+		$userObj = $this->userManager->get($user);
+		if ($userObj !== null) {
+			$loginHint = $userObj->getUserName();
+		} else {
+			$loginHint = $user;
+		}
 
 		// redirect the browser to the login page and set the redirect_url to the authorize page of oauth2
 		return new RedirectResponse($this->urlGenerator->linkToRouteAbsolute(
 			'core.login.showLoginForm',
 			[
-				'user' => $user,
-				'redirect_url' => $redirectUrl
+				'user' => $loginHint,
+				'redirect_url' => \urlencode($redirectUrl)
 			]
 		));
 	}
@@ -387,5 +406,20 @@ class PageController extends Controller {
 		$userId = Util::sanitizeHTML($userId);
 		$escapedDisplayName = Util::sanitizeHTML($displayName);
 		return "<span class='hasTooltip' data-original-title='$userId'><strong>$escapedDisplayName</strong></span>";
+	}
+
+	/**
+	 * @param string $userId
+	 * @return bool
+	 */
+	private function isDifferentUser($userId) {
+		if (empty($userId)) {
+			return false;
+		}
+		$userObj = $this->userManager->get($userId);
+		if ($userObj === null) {
+			return true;
+		}
+		return $userObj->getUID() !== $this->userSession->getUser()->getUID();
 	}
 }
