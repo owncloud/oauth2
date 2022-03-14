@@ -2,7 +2,6 @@
 namespace OCA\oauth2\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
 use OCP\Migration\ISchemaMigration;
 
 /**
