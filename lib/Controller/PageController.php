@@ -99,6 +99,8 @@ class PageController extends Controller {
 	 * @param string $redirect_uri The redirection URI.
 	 * @param string | null $state The state.
 	 * @param string | null $user The user id
+	 * @param string $code_challenge | null The PKCE code challenge.
+	 * @param string $code_challenge_method | null The PKCE code challenge method.
 	 *
 	 * @return TemplateResponse | RedirectResponse The authorize view or the
 	 * authorize-error view with a redirection to the
@@ -329,6 +331,8 @@ class PageController extends Controller {
 	 * @param string $client_id
 	 * @param string $redirect_uri
 	 * @param string | null $state
+	 * @param string $code_challenge | null The PKCE code challenge.
+	 * @param string $code_challenge_method | null The PKCE code challenge method.
 	 * @return RedirectResponse | TemplateResponse
 	 */
 	public function logout(
