@@ -113,7 +113,13 @@ class Application extends App {
 			\OCP\Util::addStyle('oauth2', 'login');
 			$data = ['key' => 'oauth2', 'client' => $client->getName()];
 			if (isset($params['user'])) {
-				$data['user'] = $params['user'];
+				$u = \OC::$server->getUserManager()->get($params['user']);
+				if ($u !== null) {
+					$data['login_hint'] = $u->getUserName();
+				}
+				if (!isset($data['login_hint']) || !\is_string($data['login_hint']) || $data['login_hint'] === '') {
+					$data['login_hint'] = $params['user'];
+				}
 			}
 			\OCP\Util::addHeader('data', $data);
 		} catch (DoesNotExistException $ex) {
