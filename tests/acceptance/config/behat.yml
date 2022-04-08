@@ -22,8 +22,4 @@ default:
         - WebUIPersonalSecuritySettingsContext:
 
   extensions:
-    jarnaiz\JUnitFormatter\JUnitFormatterExtension:
-      filename: report-oauth2.xml
-      outputDir: '%paths.base%/../output/'
-
     Cjm\Behat\StepThroughExtension: ~
