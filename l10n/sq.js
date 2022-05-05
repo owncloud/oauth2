@@ -16,7 +16,7 @@ OC.L10N.register(
     "This request is not valid. Please contact the administrator of “%s” if this error persists." : "Kjo kërkesë s’është e vlefshme. Ju lutemi, nëse ky gabim vazhdon, lidhuni me përgjegjësin e “%s”.",
     "The “%s“ application would like permission to access your account" : "Aplikacioni “%s“ do të donte leje të hynte në llogarinë tuaj",
     "You are logged in as %s." : "Jeni i futur si %s.",
-    "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Aplikacioni do të mund të përdorë emrin tuaj të përdoruesit dhe do të lejohet të administrojë kartela, dosje dhe ndarje.",
+    "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Aplikacioni do të mund të përdorë emrin tuaj të përdoruesit dhe do të lejohet të administrojë kartela, dosje dhe pjesë.",
     "Authorize" : "Autorizoje",
     "Switch users to continue" : "Që të vazhdohet, këmbeni përdorues",
     "OAuth 2.0" : "OAuth 2.0",
