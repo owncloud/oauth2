@@ -37,4 +37,4 @@ OC.L10N.register(
     "Switch user" : "Mudar de usuário",
     "You are logged in as %s but the application requested access for user %s." : "Você está logado como %s mas o aplicativo solicitou acesso para o usuário %s."
 },
-"nplurals=2; plural=(n > 1);");
+"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
