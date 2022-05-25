@@ -84,6 +84,12 @@ class AddClient extends Command {
 				'Trust the client even if the redirect-url is localhost.',
 				'false'
 			)
+			->addArgument(
+				'invalidate-on-logout',
+				InputArgument::OPTIONAL,
+				'Invalidate the oauth token when logging out of the ownCloud web client',
+				'false'
+			)
 		;
 	}
 
@@ -101,6 +107,7 @@ class AddClient extends Command {
 		$allowSubDomains = $input->getArgument('allow-sub-domains');
 		$trusted = $input->getArgument('trusted');
 		$forceTrust = $input->getArgument('force-trust');
+		$invalidateOnLogout = $input->getArgument('invalidate-on-logout');
 
 		if (\strlen($id) < 32) {
 			throw new \InvalidArgumentException('The client id should be at least 32 characters long');
@@ -116,6 +123,9 @@ class AddClient extends Command {
 		}
 		if (!\in_array($trusted, ['true', 'false'])) {
 			throw new \InvalidArgumentException('Please enter true or false for trusted.');
+		}
+		if (!\in_array($invalidateOnLogout, ['true', 'false'])) {
+			throw new \InvalidArgumentException('Please enter true or false for invalidate-on-logout.');
 		}
 		try {
 			// the name should be uniq
@@ -139,6 +149,7 @@ class AddClient extends Command {
 			$allowSubDomains = \filter_var($allowSubDomains, FILTER_VALIDATE_BOOLEAN);
 			$client->setAllowSubdomains((bool)$allowSubDomains);
 			$trusted = \filter_var($trusted, FILTER_VALIDATE_BOOLEAN);
+			$invalidateOnLogout = \filter_var($invalidateOnLogout, FILTER_VALIDATE_BOOLEAN);
 			$forceTrust = \filter_var($forceTrust, FILTER_VALIDATE_BOOLEAN);
 			$rURI = new URL(Utilities::removeWildcardPort($url));
 			if ($trusted && !$forceTrust && ($rURI->hostname === 'localhost' || $rURI->hostname === '127.0.0.1')) {
@@ -146,6 +157,7 @@ class AddClient extends Command {
 				return 1;
 			}
 			$client->setTrusted((bool)$trusted);
+			$client->setInvalidateOnLogout((bool)$invalidateOnLogout);
 
 			$this->clientMapper->insert($client);
 		}

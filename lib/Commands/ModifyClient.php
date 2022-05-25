@@ -53,7 +53,7 @@ class ModifyClient extends Command {
 			->addArgument(
 				'key',
 				InputArgument::REQUIRED,
-				'Key to be changed. Valid keys are : name, client-id, client-secret, redirect-url, allow-sub-domains, trusted'
+				'Key to be changed. Valid keys are : name, client-id, client-secret, redirect-url, allow-sub-domains, trusted, invalidate-on-logout'
 			)
 			->addArgument(
 				'value',
@@ -89,6 +89,7 @@ class ModifyClient extends Command {
 			'redirect-url' => 'setRedirectUri',
 			'allow-sub-domains' => 'setAllowSubdomains',
 			'trusted' => 'setTrusted',
+			'invalidate-on-logout' => 'setInvalidateOnLogout',
 		];
 
 		if (!\array_key_exists($key, $funcMapper)) {
@@ -111,8 +112,11 @@ class ModifyClient extends Command {
 		if ($key === 'trusted' && !\in_array($value, ['true', 'false'])) {
 			throw new \InvalidArgumentException('Please enter true or false for trusted.');
 		}
+		if ($key === 'invalidate-on-logout' && !\in_array($value, ['true', 'false'])) {
+			throw new \InvalidArgumentException('Please enter true or false for invalidate-on-logout.');
+		}
 
-		if ($key === 'trusted' || $key == 'allow-sub-domains') {
+		if ($key === 'trusted' || $key == 'allow-sub-domains' || $key == 'invalidate-on-logout') {
 			$value = \filter_var($value, FILTER_VALIDATE_BOOLEAN);
 		}
 
