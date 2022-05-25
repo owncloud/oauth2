@@ -111,9 +111,9 @@ class UserHooks {
 			$clientsWithInvalidate = $this->clientMapper->findInvalidateOnLogout();
 
 			foreach ($clientsWithInvalidate as $client) {
-//				$this->authorizationCodeMapper->deleteByClientUser($client->getId(), $user->getUID());
-//				$this->accessTokenMapper->deleteByClientUser($client->getId(), $user->getUID());
-//				$this->refreshTokenMapper->deleteByClientUser($client->getId(), $user->getUID());
+				$this->authorizationCodeMapper->deleteByClientUser($client->getId(), $user->getUID());
+				$this->accessTokenMapper->deleteByClientUser($client->getId(), $user->getUID());
+				$this->refreshTokenMapper->deleteByClientUser($client->getId(), $user->getUID());
 			}
 
 			return null;
