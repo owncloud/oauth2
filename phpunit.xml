@@ -2,23 +2,20 @@
 		 colors="true"
 		 verbose="true"
 		 failOnRisky="true"
-		 failOnWarning="true"
->
-    <testsuites>
-        <testsuite name="unit">
-            <directory>./tests/Unit</directory>
-        </testsuite>
-    </testsuites>
-
-	<filter>
-		<whitelist>
-			<directory suffix=".php">./appinfo</directory>
-			<directory suffix=".php">./lib</directory>
-			<directory suffix=".php">./templates</directory>
-		</whitelist>
-	</filter>
-
-	<logging>
-		<log type="coverage-clover" target="./tests/output/clover.xml"/>
-	</logging>
+		 failOnWarning="true">
+  <testsuites>
+    <testsuite name="unit">
+      <directory>./tests/unit</directory>
+    </testsuite>
+  </testsuites>
+  <coverage>
+    <include>
+	  <directory suffix=".php">./appinfo</directory>
+	  <directory suffix=".php">./lib</directory>
+	  <directory suffix=".php">./templates</directory>
+    </include>
+    <report>
+      <clover outputFile="./tests/output/clover.xml"/>
+    </report>
+  </coverage>
 </phpunit>
