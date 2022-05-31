@@ -101,6 +101,7 @@ class OAuthApiController extends ApiController {
 	 * @param string $redirect_uri The redirect URI.
 	 * @param string $refresh_token The refresh token.
 	 * @param string $code_verifier The PKCE code verifier.
+	 * @param string $client_id The client id in case of a public client.
 	 * @return JSONResponse The Access Token or an empty JSON Object.
 	 *
 	 * @NoAdminRequired
@@ -113,7 +114,8 @@ class OAuthApiController extends ApiController {
 		$code = null,
 		$redirect_uri = null,
 		$refresh_token = null,
-		$code_verifier = null
+		$code_verifier = null,
+		$client_id = null
 	) {
 		if (!\is_string($grant_type)) {
 			return new JSONResponse(['error' => 'invalid_request'], Http::STATUS_BAD_REQUEST);
@@ -123,15 +125,28 @@ class OAuthApiController extends ApiController {
 			return new JSONResponse(['error' => 'invalid_request'], Http::STATUS_BAD_REQUEST);
 		}
 
-		try {
-			/** @var \OCA\OAuth2\Db\Client $client */
-			$client = $this->clientMapper->findByIdentifier($_SERVER['PHP_AUTH_USER']);
-		} catch (DoesNotExistException $exception) {
-			return new JSONResponse(['error' => 'invalid_client'], Http::STATUS_BAD_REQUEST);
-		}
+		if (\is_string($client_id) && \is_string($code_verifier)) {
+			// The authorization code flow doesn't require a client secret in case of a public client.
+			// Instead, the client needs to use the PKCE extension and send a code challenge / code verifier.
+			// That is why we don't compare the client secret when the client id and code verifier are set in the
+			// query parameters.
+			try {
+				/** @var \OCA\OAuth2\Db\Client $client */
+				$client = $this->clientMapper->findByIdentifier($client_id);
+			} catch (DoesNotExistException $exception) {
+				return new JSONResponse(['error' => 'invalid_client'], Http::STATUS_BAD_REQUEST);
+			}
+		} else {
+			try {
+				/** @var \OCA\OAuth2\Db\Client $client */
+				$client = $this->clientMapper->findByIdentifier($_SERVER['PHP_AUTH_USER']);
+			} catch (DoesNotExistException $exception) {
+				return new JSONResponse(['error' => 'invalid_client'], Http::STATUS_BAD_REQUEST);
+			}
 
-		if (\strcmp($client->getSecret(), $_SERVER['PHP_AUTH_PW']) !== 0) {
-			return new JSONResponse(['error' => 'invalid_client'], Http::STATUS_BAD_REQUEST);
+			if (\strcmp($client->getSecret(), $_SERVER['PHP_AUTH_PW']) !== 0) {
+				return new JSONResponse(['error' => 'invalid_client'], Http::STATUS_BAD_REQUEST);
+			}
 		}
 
 		switch ($grant_type) {
