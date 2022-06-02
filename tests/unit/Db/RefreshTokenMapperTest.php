@@ -40,14 +40,21 @@ class RefreshTokenMapperTest extends TestCase {
 	/** @var int $clientId */
 	private $clientId = 1;
 
+	/** @var AccessToken $accessToken1 */
+	private $accessToken1;
+
 	/** @var RefreshToken $refreshToken1 */
 	private $refreshToken1;
 
 	/** @var int $id */
 	private $id;
 
+	/** @var AccessToken $accessToken2 */
+	private $accessToken2;
+
 	/** @var RefreshToken $refreshToken2 */
 	private $refreshToken2;
+
 	/** @var AccessTokenMapper */
 	private $accessTokenMapper;
 
@@ -67,7 +74,7 @@ class RefreshTokenMapperTest extends TestCase {
 		$accessToken->setClientId($this->clientId);
 		$accessToken->setUserId($this->userId);
 		$accessToken->resetExpires();
-		$this->accessTokenMapper->insert($accessToken);
+		$this->accessToken1 = $this->accessTokenMapper->insert($accessToken);
 
 		$refreshToken = new RefreshToken();
 		$refreshToken->setToken($this->token);
@@ -78,24 +85,26 @@ class RefreshTokenMapperTest extends TestCase {
 		$this->refreshToken1 = $this->refreshTokenMapper->insert($refreshToken);
 		$this->id = $this->refreshToken1->getId();
 
-		$accessToken = new AccessToken();
-		$accessToken->setToken('3M3amqVGF62kYz7us4yr4QZyUZuMIAZUf1v2IzvsFJVJaCfz6FM9pecVkVZaNXCy');
-		$accessToken->setClientId($this->clientId);
-		$accessToken->setUserId($this->userId);
-		$accessToken->resetExpires();
-		$this->accessTokenMapper->insert($accessToken);
+		$accessToken2 = new AccessToken();
+		$accessToken2->setToken('vH5Z4r4af6wBvrtKS2Px1tLI9eIsJQUjGjAMJcSALzIwqL7YVnyMltYHAGOiLpV8');
+		$accessToken2->setClientId($this->clientId);
+		$accessToken2->setUserId($this->userId);
+		$accessToken2->resetExpires();
+		$this->accessToken2 = $this->accessTokenMapper->insert($accessToken2);
 
-		$refreshToken = new RefreshToken();
-		$refreshToken->setToken('XCy4QZI7s4yr3MmkcVv2IzvkVZUf1asFZaYzuGF6uyUZ6FM9pef2AqVzMJ3VJaCN');
-		$refreshToken->setClientId(1);
-		$refreshToken->setUserId('max');
-		$refreshToken->setAccessTokenId($accessToken->getId());
-		$this->refreshToken2 = $this->refreshTokenMapper->insert($refreshToken);
+		$refreshToken2 = new RefreshToken();
+		$refreshToken2->setToken('XCy4QZI7s4yr3MmkcVv2IzvkVZUf1asFZaYzuGF6uyUZ6FM9pef2AqVzMJ3VJaCN');
+		$refreshToken2->setClientId(1);
+		$refreshToken2->setUserId('max');
+		$refreshToken2->setAccessTokenId($this->accessToken2->getId());
+		$this->refreshToken2 = $this->refreshTokenMapper->insert($refreshToken2);
 	}
 
 	public function tearDown(): void {
 		parent::tearDown();
 
+		$this->accessTokenMapper->delete($this->accessToken1);
+		$this->accessTokenMapper->delete($this->accessToken2);
 		$this->refreshTokenMapper->delete($this->refreshToken1);
 		$this->refreshTokenMapper->delete($this->refreshToken2);
 	}
