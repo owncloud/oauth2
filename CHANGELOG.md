@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased] - XXXX-XX-XX
 
+
+## [0.5.3] - 2022-06-02
+
+### Fixed
+
+- [#327](https://github.com/owncloud/oauth2/pull/327) - Use userid on api calls, show username in login form 
+- [#331](https://github.com/owncloud/oauth2/pull/331) - Add missing token index
+- [#337](https://github.com/owncloud/oauth2/pull/337) - Don't require client secret when using PKCE
+
+### Changed 
+
+- [#328](https://github.com/owncloud/oauth2/pull/328) - Fill login_hint with username
+
+
 ## [0.5.2] - 2021-11-02
 
 - [#313](https://github.com/owncloud/oauth2/issues/313) - Add occ oauth2:list command
@@ -126,7 +140,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - Verify Bearer token even if the session is still valid - [#53](https://github.com/owncloud/oauth2/pull/53)
 - Use displayname on switch user screen - [#90](https://github.com/owncloud/oauth2/pull/90)
 
-[Unreleased]: https://github.com/owncloud/oauth2/compare/v0.5.2...master
+[Unreleased]: https://github.com/owncloud/oauth2/compare/v0.5.3...master
+[0.5.3]: https://github.com/owncloud/oauth2/compare/v0.5.2...v0.5.3
 [0.5.2]: https://github.com/owncloud/oauth2/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/owncloud/oauth2/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/owncloud/oauth2/compare/v0.4.4...v0.5.0
