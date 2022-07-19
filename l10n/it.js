@@ -20,6 +20,7 @@ OC.L10N.register(
     "Client Identifier" : "Identificatore client",
     "Secret" : "Segreto",
     "Subdomains allowed" : "Sottodomini consentiti",
+    "Trusted client" : "Client fidato",
     "Add client" : "Aggiungi client",
     "Allow subdomains" : "Consenti sottodomini",
     "Add" : "Aggiungi",
