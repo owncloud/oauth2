@@ -21,6 +21,7 @@
     "Client Identifier" : "クライアント識別子",
     "Secret" : "シークレットキー",
     "Subdomains allowed" : "サブドメイン許可",
+    "Trusted client" : "信頼できるクライアント",
     "Add client" : "クライアント追加",
     "Allow subdomains" : "サブドメイン許可",
     "Add" : "追加",
