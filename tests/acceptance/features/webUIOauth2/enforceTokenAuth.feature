@@ -12,17 +12,20 @@ Feature: enforce token auth
     And token auth has been enforced
     And user "Alice" has correctly established an oauth session
 
+
   Scenario: access files app with oauth when token auth is enforced
     When user "Alice" requests "/index.php/apps/files" with "GET" using basic auth
     Then the HTTP status code should be "401"
     When the user requests "/index.php/apps/files" with "GET" using oauth
     Then the HTTP status code should be "200"
 
+
   Scenario: using WebDAV with oauth when token auth is enforced
     When user "Alice" requests "/remote.php/webdav" with "PROPFIND" using basic auth
     Then the HTTP status code should be "401"
     When the user requests "/remote.php/webdav" with "PROPFIND" using oauth
     Then the HTTP status code should be "207"
+
 
   Scenario: using OCS with oauth when token auth is enforced
     When user "Alice" requests "/ocs/v1.php/apps/files_sharing/api/v1/remote_shares" with "GET" using basic auth
@@ -40,6 +43,7 @@ Feature: enforce token auth
     When the user requests "/ocs/v2.php/apps/files_sharing/api/v1/remote_shares" with "GET" using oauth
     Then the OCS status code should be "200"
     And the HTTP status code should be "200"
+
 
   Scenario Outline: download a file with oauth when token auth is enforced
     Given using <dav_version> DAV path

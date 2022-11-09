@@ -4,11 +4,13 @@ Feature: register a new client
   I want to be able to register new clients
   So that private set of client_ids and client_secrets can be used
 
+
   Scenario: register a new client on the webUI
     Given user admin has logged in using the webUI
     And the administrator has browsed to the oauth admin settings page
     When the administrator adds a new oauth client with the name "new client" and the uri "http://localhost:*" using the webUI
     Then a new client with the name "new client" and the uri "http://localhost:*" should be listed on the webUI
+
 
   Scenario: oauth authorization with a new client
     Given these users have been created with large skeleton files:
