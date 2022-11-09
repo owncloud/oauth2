@@ -9,11 +9,13 @@ Feature: revoke an access token
       | username | password | displayname  | email             |
       | Alice    | 1234     | Alice Hansen | alice@example.org |
 
+
   Scenario: revoke an access token by webUI
     Given user "Alice" has correctly established an oauth session
     And the user has browsed to the personal security settings page
     When the user revokes the oauth app "Desktop Client" using the webUI
     Then the client app should not be able to download the file "lorem.txt" of "Alice" using the access token for authentication
+
 
   Scenario: receiving a new access token by using the refresh token should not work after revoking the app
     Given user "Alice" has correctly established an oauth session
