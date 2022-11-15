@@ -27,7 +27,7 @@ OC.L10N.register(
     "Client Identifier" : "Идентификатор на клиента",
     "Secret" : "Тайна",
     "Subdomains allowed" : "Позволени поддомейни",
-    "Trusted client" : "Доверен клиент",
+    "Trusted client" : "Надежден клиент",
     "Add client" : "Добавяне на клиент",
     "Allow subdomains" : "Разрешаване на поддомейни",
     "Add" : "Добавяне",
