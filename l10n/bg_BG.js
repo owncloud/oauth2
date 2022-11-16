@@ -14,7 +14,7 @@ OC.L10N.register(
     "Request not valid" : "Заявката не е валидна",
     "This request is not valid. Please contact the administrator if this error persists." : "Тази заявка не е валидна. Моля, свържете се с администратор, ако тази грешка продължава.",
     "This request is not valid. Please contact the administrator of “%s” if this error persists." : "Тази заявка не е валидна. Моля, свържете се с администратора на \"%s\", ако тази грешка продължава.",
-    "The “%s“ application would like permission to access your account" : "Приложението \"%s\" иска разрешение за достъп до вашия профил",
+    "The “%s“ application would like permission to access your account" : "Приложението \"%s\" иска право на достъп до вашия профил",
     "You are logged in as %s." : "Влезли сте в системата като %s.",
     "The application will gain access to your username and will be allowed to manage files, folders and shares." : "Приложението ще получи достъп до вашето потребителско име и ще може да управлява файлове, папки и споделяния.",
     "Authorize" : "Упълномощаване",
