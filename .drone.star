@@ -47,7 +47,14 @@ config = {
     ],
     "appInstallCommandPhp": "make vendor",
     "codestyle": True,
-    "phan": True,
+    "phan": {
+        "multipleVersions": {
+            "phpVersions": [
+                DEFAULT_PHP_VERSION,
+                "7.3",
+            ],
+        },
+    },
     "phpstan": True,
     "javascript": False,
     "phpunit": True,
