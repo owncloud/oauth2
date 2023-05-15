@@ -95,7 +95,7 @@ Eventually replace sensitive data as the name/IP-address of your LDAP server or 
 
 - **Sync Client logs:**
 ```
-ref. https://doc.owncloud.org/desktop/latest/troubleshooting.html#log-files
+ref. https://doc.owncloud.com/desktop/latest/troubleshooting.html#log-files
 ```
 
 ### Logs
