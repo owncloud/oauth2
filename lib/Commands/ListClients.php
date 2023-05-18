@@ -48,10 +48,10 @@ class ListClients extends Base {
 	/**
 	 * @param InputInterface $input
 	 * @param OutputInterface $output
-	 * @return int|void
+	 * @return int
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$clients  = $this->clientMapper->findAll();
 		$clientsOutput = [];
 

@@ -90,10 +90,10 @@ class AddClient extends Command {
 	/**
 	 * @param InputInterface $input
 	 * @param OutputInterface $output
-	 * @return int|void
+	 * @return int
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$name = $input->getArgument('name');
 		$id = $input->getArgument('client-id');
 		$secret = $input->getArgument('client-secret');
@@ -149,5 +149,6 @@ class AddClient extends Command {
 
 			$this->clientMapper->insert($client);
 		}
+		return 0;
 	}
 }

@@ -66,10 +66,10 @@ class ModifyClient extends Command {
 	/**
 	 * @param InputInterface $input
 	 * @param OutputInterface $output
-	 * @return int|void
+	 * @return int
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$name = $input->getArgument('name');
 		$key = $input->getArgument('key');
 		$value = $input->getArgument('value');
@@ -138,5 +138,6 @@ class ModifyClient extends Command {
 
 		\call_user_func([$client, $funcMapper[$key]], $value);
 		$this->clientMapper->update($client);
+		return 0;
 	}
 }

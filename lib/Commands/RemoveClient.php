@@ -54,18 +54,19 @@ class RemoveClient extends Command {
 	 * @param InputInterface $input
 	 * @param OutputInterface $output
 	 *
-	 * @return int|void|null
+	 * @return int
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException
 	 */
-	protected function execute(InputInterface $input, OutputInterface $output) {
+	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$id = $input->getArgument('client-id');
 		try {
 			$client = $this->clientMapper->findByIdentifier($id);
 			$this->clientMapper->delete($client);
 			$output->writeln("Client <$id> has been deleted");
-			return;
 		} catch (DoesNotExistException $ex) {
 			$output->writeln("Client <$id> is unknown");
+			return 1;
 		}
+		return 0;
 	}
 }
