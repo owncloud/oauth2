@@ -37,7 +37,6 @@ use OCP\IURLGenerator;
 use OCP\IUserManager;
 
 class OAuthApiController extends ApiController {
-
 	/** @var ClientMapper */
 	private $clientMapper;
 

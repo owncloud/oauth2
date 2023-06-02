@@ -38,7 +38,6 @@ require_once 'bootstrap.php';
  *
  */
 class Oauth2Context extends RawMinkContext implements Context {
-
 	/**
 	 *
 	 * @var FeatureContext

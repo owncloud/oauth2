@@ -25,7 +25,6 @@ use Rowbot\URL\Exception\TypeError;
 use Rowbot\URL\URL;
 
 class Utilities {
-
 	/**
 	 * Generates a random string with 64 characters.
 	 *

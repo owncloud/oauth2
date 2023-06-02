@@ -29,7 +29,6 @@ use OCP\IUser;
 use OCP\IUserSession;
 
 class OpenIdConnectController extends ApiController {
-
 	/** @var IURLGenerator */
 	private $urlGenerator;
 

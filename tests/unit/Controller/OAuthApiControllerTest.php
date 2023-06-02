@@ -38,7 +38,6 @@ use OCP\IUser;
 use PHPUnit\Framework\TestCase;
 
 class OAuthApiControllerTest extends TestCase {
-
 	/** @var OAuthApiController $controller */
 	private $controller;
 

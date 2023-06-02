@@ -55,7 +55,7 @@ if (!empty($_['clients'])) {
 			foreach ($_['clients'] as $client):
 				include('client.part.php');
 			endforeach;
-		?>
+?>
 		</tbody>
 	</table>
 

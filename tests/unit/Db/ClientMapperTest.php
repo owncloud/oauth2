@@ -29,7 +29,6 @@ use OCA\OAuth2\Db\ClientMapper;
 use PHPUnit\Framework\TestCase;
 
 class ClientMapperTest extends TestCase {
-
 	/** @var ClientMapper $clientMapper */
 	private $clientMapper;
 

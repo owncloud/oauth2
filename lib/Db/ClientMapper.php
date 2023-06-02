@@ -25,7 +25,6 @@ use OCP\AppFramework\Db\Mapper;
 use OCP\IDb;
 
 class ClientMapper extends Mapper {
-
 	/**
 	 * ClientMapper constructor.
 	 *

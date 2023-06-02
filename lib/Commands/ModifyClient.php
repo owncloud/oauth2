@@ -31,7 +31,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ModifyClient extends Command {
-
 	/** @var ClientMapper */
 	private $clientMapper;
 

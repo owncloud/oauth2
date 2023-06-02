@@ -25,7 +25,6 @@ use OCP\AppFramework\Db\Mapper;
 use OCP\IDb;
 
 class RefreshTokenMapper extends Mapper {
-
 	/**
 	 * RefreshTokenMapper constructor.
 	 *

@@ -23,7 +23,6 @@ use OCA\OAuth2\Db\AccessToken;
 use PHPUnit\Framework\TestCase;
 
 class AccessTokenTest extends TestCase {
-
 	/** @var AccessToken $accessToken */
 	private $accessToken;
 

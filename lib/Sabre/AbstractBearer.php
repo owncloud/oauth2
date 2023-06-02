@@ -25,7 +25,6 @@ use Sabre\HTTP\ResponseInterface;
  * @license http://sabre.io/license/ Modified BSD License
  */
 abstract class AbstractBearer implements BackendInterface {
-
 	/**
 	 * Authentication Realm.
 	 *

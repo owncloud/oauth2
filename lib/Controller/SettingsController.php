@@ -38,7 +38,6 @@ use OCP\Template;
 use Rowbot\URL\URL;
 
 class SettingsController extends Controller {
-
 	/** @var ClientMapper */
 	private $clientMapper;
 

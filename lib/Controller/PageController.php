@@ -40,7 +40,6 @@ use OCP\IUserSession;
 use OCP\Util;
 
 class PageController extends Controller {
-
 	/** @var ClientMapper */
 	private $clientMapper;
 	/** @var AuthorizationCodeMapper */

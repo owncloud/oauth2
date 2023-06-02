@@ -27,7 +27,6 @@ use OCA\OAuth2\Db\RefreshTokenMapper;
 use OCP\ILogger;
 
 class UserHooks {
-
 	/** @var Manager */
 	private $userManager;
 

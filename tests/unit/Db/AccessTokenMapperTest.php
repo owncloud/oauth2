@@ -25,7 +25,6 @@ use OCA\OAuth2\Db\AccessTokenMapper;
 use PHPUnit\Framework\TestCase;
 
 class AccessTokenMapperTest extends TestCase {
-
 	/** @var AccessTokenMapper $accessTokenMapper */
 	private $accessTokenMapper;
 

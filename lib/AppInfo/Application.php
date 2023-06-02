@@ -29,7 +29,6 @@ use OCP\SabrePluginEvent;
 use Sabre\DAV\Auth\Plugin;
 
 class Application extends App {
-
 	/**
 	 * Application constructor.
 	 *
