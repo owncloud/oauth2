@@ -30,7 +30,6 @@ use OCP\IUserSession;
 use PHPUnit\Framework\TestCase;
 
 class OpenIdConnectControllerTest extends TestCase {
-
 	/** @var OpenIdConnectController */
 	private $controller;
 	/** @var IRequest | \PHPUnit\Framework\MockObject\MockObject */

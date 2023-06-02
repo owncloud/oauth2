@@ -44,7 +44,6 @@ use Test\TestCase;
  * @group DB
  */
 class PageControllerTest extends TestCase {
-
 	/** @var PageController $controller */
 	private $controller;
 

@@ -32,7 +32,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class AddClient extends Command {
-
 	/** @var ClientMapper */
 	private $clientMapper;
 

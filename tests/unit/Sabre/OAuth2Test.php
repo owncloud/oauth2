@@ -41,7 +41,6 @@ use OC\User\User;
  * @group DB
  */
 class OAuth2Test extends TestCase {
-
 	/** @var IRequest | PHPUnit\Framework\MockObject\MockObject $request */
 	private $request;
 

@@ -26,7 +26,6 @@ use OCP\IDb;
 use OCP\ILogger;
 
 class AuthorizationCodeMapper extends Mapper {
-
 	/** @var ILogger */
 	private $logger;
 

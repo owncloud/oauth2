@@ -25,7 +25,6 @@ use OCA\OAuth2\Db\AuthorizationCodeMapper;
 use PHPUnit\Framework\TestCase;
 
 class AuthorizationCodeMapperTest extends TestCase {
-
 	/** @var AuthorizationCodeMapper $authorizationCodeMapper */
 	private $authorizationCodeMapper;
 

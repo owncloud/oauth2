@@ -26,7 +26,6 @@ use OCP\Settings\ISettings;
 use OCP\Template;
 
 class PersonalPanel implements ISettings {
-
 	/**
 	 * @var \OCA\OAuth2\Db\ClientMapper
 	 */

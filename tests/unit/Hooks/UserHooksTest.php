@@ -24,7 +24,6 @@ use OCA\OAuth2\Hooks\UserHooks;
 use PHPUnit\Framework\TestCase;
 
 class UserHooksTest extends TestCase {
-
 	/** @var UserHooks $userHooks */
 	private $userHooks;
 

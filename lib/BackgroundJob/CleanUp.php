@@ -24,7 +24,6 @@ use OCA\OAuth2\Db\AccessTokenMapper;
 use OCA\OAuth2\Db\AuthorizationCodeMapper;
 
 class CleanUp extends TimedJob {
-
 	/**
 	 * @var AccessTokenMapper
 	 */

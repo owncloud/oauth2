@@ -103,7 +103,6 @@ class OAuth2 extends AbstractBearer {
 	protected function validateBearerToken($bearerToken) {
 		if ($this->userSession->isLoggedIn() &&
 			$this->isDavAuthenticated($this->userSession->getUser()->getUID())) {
-
 			// verify the bearer token
 			$tokenUser = $this->authModule->authToken($bearerToken);
 			if ($tokenUser === null) {

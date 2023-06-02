@@ -27,9 +27,9 @@ style('oauth2', 'main');
 
 	<h3><?php p($l->t('Authorized Applications')); ?></h3>
 	<?php if (empty($_['clients'])) {
-	p($l->t('No applications authorized.'));
-} else {
-	?>
+		p($l->t('No applications authorized.'));
+	} else {
+		?>
 	<table class="grid">
 		<thead>
 		<tr>
@@ -39,7 +39,7 @@ style('oauth2', 'main');
 		</thead>
 		<tbody>
 		<?php foreach ($_['clients'] as $client) {
-		?>
+			?>
 			<tr>
 				<td><?php p($client->getName()); ?></td>
 				<td>
@@ -50,9 +50,9 @@ style('oauth2', 'main');
 				</td>
 			</tr>
 		<?php
-	} ?>
+		} ?>
 		</tbody>
 	</table>
 	<?php
-} ?>
+	} ?>
 </div>

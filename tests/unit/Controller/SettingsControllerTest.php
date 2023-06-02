@@ -38,7 +38,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SettingsControllerTest extends TestCase {
-
 	/** @var string $name */
 	private $appName;
 

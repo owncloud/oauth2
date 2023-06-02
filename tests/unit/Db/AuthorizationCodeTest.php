@@ -25,7 +25,6 @@ use OCA\OAuth2\Utilities;
 use PHPUnit\Framework\TestCase;
 
 class AuthorizationCodeTest extends TestCase {
-
 	/** @var AuthorizationCode $authorizationCode */
 	private $authorizationCode;
 

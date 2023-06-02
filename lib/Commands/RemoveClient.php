@@ -29,7 +29,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class RemoveClient extends Command {
-
 	/** @var ClientMapper */
 	private $clientMapper;
 
