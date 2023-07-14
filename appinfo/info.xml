@@ -34,7 +34,8 @@ When using OAuth2 a unique access token is generated for each device or third pa
     <screenshot>https://raw.githubusercontent.com/owncloud/screenshots/master/oauth2/ownCloud-oauth2-app-auth-request.jpg</screenshot>
     <screenshot>https://raw.githubusercontent.com/owncloud/screenshots/master/oauth2/ownCloud-oauth2-app-authorized.jpg</screenshot>
     <dependencies>
-        <owncloud min-version="10.3" max-version="10"/>
+        <owncloud min-version="10.11" max-version="10" />
+        <php min-version="7.4" />
     </dependencies>
     <types>
         <authentication/>

@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - [#353](https://github.com/owncloud/oauth2/pull/353) - Always return an int from Symfony Command execute method
+- Minimum core version 10.11, minimum php version 7.4
 - Download URL string changes
 - Bump libraries
 
