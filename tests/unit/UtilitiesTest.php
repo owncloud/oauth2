@@ -23,7 +23,7 @@ use OCA\OAuth2\Utilities;
 use PHPUnit\Framework\TestCase;
 
 class UtilitiesTest extends TestCase {
-	public function testGenerateRandom() {
+	public function testGenerateRandom(): void {
 		$random = Utilities::generateRandom();
 
 		$this->assertEquals(64, \strlen($random));
@@ -41,7 +41,9 @@ class UtilitiesTest extends TestCase {
 			[false, 'https://owncloud.org:80/tests?q=1', 'https://owncloud.org:80/test?q=1', false],
 			[false, 'https://owncloud.org:80/test?q=1', 'https://owncloud.org:80/test?q=0', false],
 			[true, 'http://localhost:*/test?q=1', 'http://localhost:12345/test?q=1', false],
-			[false, 'http://excepted.com', 'http://aaa\@excepted.com', false]
+			[false, 'http://excepted.com', 'http://aaa\@excepted.com', false],
+			[false, 'https://trustedclient.com', 'https://munity.trustedclient.community.', true],
+			[false, 'https://trustedclient.com', 'https://munity.trustedclient.community', true]
 		];
 	}
 
@@ -52,7 +54,7 @@ class UtilitiesTest extends TestCase {
 	 * @param $actualRedirect
 	 * @param $allowSubDomain
 	 */
-	public function testValidateRedirectUri($expectedResult, $expectedRedirect, $actualRedirect, $allowSubDomain) {
+	public function testValidateRedirectUri($expectedResult, $expectedRedirect, $actualRedirect, $allowSubDomain): void {
 		$this->assertEquals(
 			$expectedResult,
 			Utilities::validateRedirectUri(
@@ -79,11 +81,11 @@ class UtilitiesTest extends TestCase {
 	 * @param $expected
 	 * @param $url
 	 */
-	public function testIsValidUrl($expected, $url) {
+	public function testIsValidUrl($expected, $url): void {
 		$this->assertEquals($expected, Utilities::isValidUrl($url));
 	}
 
-	public function testBase64url_encode() {
+	public function testBase64url_encode(): void {
 		$data = \random_bytes(32);
 		$encoded = Utilities::base64url_encode($data);
 		$this->assertEquals(43, \strlen($encoded));
