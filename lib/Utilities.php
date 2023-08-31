@@ -47,7 +47,7 @@ class Utilities {
 	 *
 	 * @return boolean True if the redirection URI is valid, false otherwise.
 	 */
-	public static function validateRedirectUri($expected, $actual, $allowSubdomains) {
+	public static function validateRedirectUri($expected, $actual, $allowSubdomains): bool {
 		$validatePort = true;
 		if (\strpos($expected, 'http://localhost:*') === 0) {
 			$expected = 'http://localhost' . \substr($expected, 18);
@@ -60,13 +60,7 @@ class Utilities {
 				return false;
 			}
 
-			if ($allowSubdomains) {
-				if (\strcmp($expectedUrl->hostname, $actualUrl->hostname) !== 0
-					&& \strcmp($expectedUrl->hostname, \str_replace(\explode('.', $actualUrl->hostname)[0] . '.', '', $actualUrl->hostname)) !== 0
-				) {
-					return false;
-				}
-			} elseif (\strcmp($expectedUrl->hostname, $actualUrl->hostname) !== 0) {
+			if (!self::validateDomain($expectedUrl, $actualUrl, $allowSubdomains)) {
 				return false;
 			}
 
@@ -96,12 +90,28 @@ class Utilities {
 	}
 
 	public static function isValidUrl($redirectUri): bool {
-		$redirectUri = Utilities::removeWildcardPort($redirectUri);
+		$redirectUri = self::removeWildcardPort($redirectUri);
 		return (\filter_var($redirectUri, FILTER_VALIDATE_URL) !== false);
 	}
 
 	// See https://tools.ietf.org/pdf/rfc7636.pdf#56
-	public static function base64url_encode($data) {
+	public static function base64url_encode($data): string {
 		return \rtrim(\strtr(\base64_encode($data), '+/', '-_'), '=');
+	}
+
+	private static function validateDomain(URL $expectedUrl, URL $actualUrl, bool $allowSubdomains): bool {
+		if (!$allowSubdomains) {
+			return \strcmp($expectedUrl->hostname, $actualUrl->hostname) === 0;
+		}
+
+		$expectedUrlParts = array_reverse(explode('.', $expectedUrl->hostname));
+		$actualUrlParts = array_reverse(explode('.', $actualUrl->hostname));
+		foreach ($expectedUrlParts as $i => $p) {
+			if ($p !== $actualUrlParts[$i]) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }
