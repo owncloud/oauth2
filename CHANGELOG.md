@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased] ....
+
+
+## [0.6.1] - 2023-08-31
+
+### FIXED
+
+- [#359](https://github.com/owncloud/oauth2/pull/359) - fix: harden subdomain validation
+
+
 ## [0.6.0] - 2023-07-27
 
 ### Changed
@@ -147,7 +157,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - Verify Bearer token even if the session is still valid - [#53](https://github.com/owncloud/oauth2/pull/53)
 - Use displayname on switch user screen - [#90](https://github.com/owncloud/oauth2/pull/90)
 
-[Unreleased]: https://github.com/owncloud/oauth2/compare/v0.6.0...master
+[Unreleased]: https://github.com/owncloud/oauth2/compare/v0.6.1...master
+[0.6.1]: https://github.com/owncloud/oauth2/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/owncloud/oauth2/compare/v0.5.3...v0.6.0
 [0.5.3]: https://github.com/owncloud/oauth2/compare/v0.5.2...v0.5.3
 [0.5.2]: https://github.com/owncloud/oauth2/compare/v0.5.1...v0.5.2
