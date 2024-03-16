@@ -35,4 +35,4 @@ OC.L10N.register(
     "Switch user" : "החלפת משתמש",
     "You are logged in as %s but the application requested access for user %s." : "הנך מחובר כ-  %s אבל היישום מבקש הרשאת גישה עבור משתמש %s."
 },
-"nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");
+"nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");
