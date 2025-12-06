@@ -25,6 +25,7 @@ OC.L10N.register(
     "Name" : "Name",
     "Redirection URI" : "Redirection URI",
     "Client Identifier" : "Client Identifier",
+    "Secret" : "Secret",
     "Subdomains allowed" : "Subdomains allowed",
     "Trusted client" : "Trusted client",
     "Add client" : "Add client",

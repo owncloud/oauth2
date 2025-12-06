@@ -22,6 +22,7 @@ OC.L10N.register(
     "OAuth 2.0" : "OAuth 2.0",
     "Registered clients" : "已注册的客户端",
     "No clients registered." : "没有已注册的客户端",
+    "Name" : "名稱",
     "Redirection URI" : "URI重定向",
     "Client Identifier" : "客户端标识符",
     "Secret" : "密码",
