@@ -113,8 +113,7 @@ class AuthorizationCodeMapper extends Mapper {
 		}
 
 		$sql = 'DELETE FROM `' . $this->tableName . '` ' . 'WHERE `client_id` = ?';
-		$stmt = $this->execute($sql, [$clientId], null, null);
-		$stmt->closeCursor();
+		$stmt = $this->executeStatement($sql, [$clientId], null, null);
 	}
 
 	/**
@@ -129,8 +128,7 @@ class AuthorizationCodeMapper extends Mapper {
 		}
 
 		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `user_id` = ?';
-		$stmt = $this->execute($sql, [$userId], null, null);
-		$stmt->closeCursor();
+		$stmt = $this->executeStatement($sql, [$userId], null, null);
 	}
 
 	/**
@@ -145,8 +143,7 @@ class AuthorizationCodeMapper extends Mapper {
 		}
 
 		$sql = 'DELETE FROM `' . $this->tableName . '` ' . 'WHERE `client_id` = ? AND `user_id` = ?';
-		$stmt = $this->execute($sql, [$clientId, $userId], null, null);
-		$stmt->closeCursor();
+		$stmt = $this->executeStatement($sql, [$clientId, $userId], null, null);
 	}
 
 	/**
@@ -154,8 +151,7 @@ class AuthorizationCodeMapper extends Mapper {
 	 */
 	public function deleteAll() {
 		$sql = 'DELETE FROM `' . $this->tableName . '`';
-		$stmt = $this->execute($sql, []);
-		$stmt->closeCursor();
+		$stmt = $this->executeStatement($sql, []);
 	}
 
 	/**
@@ -165,7 +161,6 @@ class AuthorizationCodeMapper extends Mapper {
 		$this->logger->info('Cleaning up expired Authorization Codes.', ['app' => $this->appName]);
 
 		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `expires` <= ' . (\time() - 60 * 60 * 24 * 7);
-		$stmt = $this->execute($sql);
-		$stmt->closeCursor();
+		$stmt = $this->executeStatement($sql);
 	}
 }

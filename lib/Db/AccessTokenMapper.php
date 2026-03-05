@@ -113,8 +113,7 @@ class AccessTokenMapper extends Mapper {
 		}
 
 		$sql = 'DELETE FROM `' . $this->tableName . '` ' . ' WHERE `client_id` = ?';
-		$stmt = $this->execute($sql, [$clientId], null, null);
-		$stmt->closeCursor();
+		$stmt = $this->executeStatement($sql, [$clientId], null, null);
 	}
 
 	/**
@@ -128,8 +127,7 @@ class AccessTokenMapper extends Mapper {
 		}
 
 		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `user_id` = ?';
-		$stmt = $this->execute($sql, [$userId], null, null);
-		$stmt->closeCursor();
+		$stmt = $this->executeStatement($sql, [$userId], null, null);
 	}
 
 	/**
@@ -145,8 +143,7 @@ class AccessTokenMapper extends Mapper {
 		}
 
 		$sql = 'DELETE FROM `' . $this->tableName . '` ' . 'WHERE `client_id` = ? AND `user_id` = ?';
-		$stmt = $this->execute($sql, [$clientId, $userId], null, null);
-		$stmt->closeCursor();
+		$stmt = $this->executeStatement($sql, [$clientId, $userId], null, null);
 	}
 
 	/**
@@ -154,8 +151,7 @@ class AccessTokenMapper extends Mapper {
 	 */
 	public function deleteAll() {
 		$sql = 'DELETE FROM `' . $this->tableName . '`';
-		$stmt = $this->execute($sql, []);
-		$stmt->closeCursor();
+		$stmt = $this->executeStatement($sql, []);
 	}
 
 	/**
@@ -165,7 +161,6 @@ class AccessTokenMapper extends Mapper {
 		$this->logger->info('Cleaning up expired Access Tokens.', ['app' => $this->appName]);
 
 		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `expires` <= ' . (\time() - 60 * 60 * 24 * 7);
-		$stmt = $this->execute($sql);
-		$stmt->closeCursor();
+		$stmt = $this->executeStatement($sql);
 	}
 }
