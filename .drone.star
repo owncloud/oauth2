@@ -64,6 +64,9 @@ config = {
             "suites": [
                 "webUIOauth2",
             ],
+            "servers": [
+                "daily-master-qa",
+            ],
         },
     },
 }
