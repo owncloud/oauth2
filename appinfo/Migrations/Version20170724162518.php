@@ -2,7 +2,7 @@
 namespace OCA\oauth2\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use OCP\Migration\ISchemaMigration;
 
 class Version20170724162518 implements ISchemaMigration {
@@ -10,7 +10,7 @@ class Version20170724162518 implements ISchemaMigration {
 		$prefix = $options['tablePrefix'];
 		$table = $schema->getTable("{$prefix}oauth2_refresh_tokens");
 		if (!$table->hasColumn('access_token_id')) {
-			$table->addColumn('access_token_id', Type::INTEGER, ['notNull' => false]);
+			$table->addColumn('access_token_id', Types::INTEGER, ['notNull' => false]);
 		}
 	}
 }

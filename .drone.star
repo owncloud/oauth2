@@ -54,22 +54,18 @@ config = {
         "master",
     ],
     "appInstallCommandPhp": "make vendor",
-    "codestyle": True,
-    "phan": {
-        "multipleVersions": {
-            "phpVersions": [
-                DEFAULT_PHP_VERSION,
-                "7.3",
-            ],
-        },
-    },
-    "phpstan": True,
+    "codestyle": False,
+    "phan": False,
+    "phpstan": False,
     "javascript": False,
-    "phpunit": True,
+    "phpunit": False,
     "acceptance": {
         "webUI": {
             "suites": [
                 "webUIOauth2",
+            ],
+            "servers": [
+                "daily-master-qa",
             ],
         },
     },

@@ -120,7 +120,6 @@ class ClientMapper extends Mapper {
 	 */
 	public function deleteAll() {
 		$sql = 'DELETE FROM `' . $this->tableName . '`';
-		$stmt = $this->execute($sql, []);
-		$stmt->closeCursor();
+		$stmt = $this->executeStatement($sql, []);
 	}
 }
