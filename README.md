@@ -32,6 +32,7 @@ Register clients in the admin settings: `/index.php/settings/admin?sectionid=add
 ```bash
 make test-php-unit
 make test-php-style
+make test-acceptance-webui
 ```
 
 ## Documentation

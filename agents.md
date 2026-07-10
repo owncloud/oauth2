@@ -12,7 +12,7 @@ ownCloud Server app implementing OAuth 2.0 Authorization Code Flow (RFC 6749). L
 - `templates/` -- Server-side templates
 - `appinfo/` -- ownCloud app metadata
 - `l10n/` -- Translation files
-- `tests/` -- Unit tests
+- `tests/` -- Unit and acceptance tests
 - `Makefile` -- Build and test automation
 - `composer.json` -- PHP dependencies
 
@@ -28,6 +28,7 @@ make dist                     # Build distribution
 make test-php-unit            # Run PHP unit tests
 make test-php-style           # Check PHP code style
 make test-php-phan            # Run Phan static analysis
+make test-acceptance-webui    # Run WebUI acceptance tests
 make clean                    # Clean build artifacts
 ```
 
