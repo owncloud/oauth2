@@ -1,4 +1,4 @@
-# agents.md -- OAuth2
+# AGENTS.md -- OAuth2
 
 ## Repository Overview
 
