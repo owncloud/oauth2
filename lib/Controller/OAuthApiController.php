@@ -192,11 +192,6 @@ class OAuthApiController extends ApiController {
 
 				$userId = $authorizationCode->getUserId();
 
-				// strip off username if it exists
-				if (\strstr($userId, ':')) {
-					list(, $userId) = \explode(':', $userId, 2);
-				}
-
 				$this->authorizationCodeMapper->delete($authorizationCode);
 
 				$userObj = $this->userManager->get($userId);
@@ -234,11 +229,6 @@ class OAuthApiController extends ApiController {
 				$this->logger->info('A refresh token has been used by the client "' . $client->getName() . '" to request an access token.', ['app' => $this->appName]);
 
 				$userId = $refreshToken->getUserId();
-
-				// strip off username if it exists
-				if (\strstr($userId, ':')) {
-					list(, $userId) = \explode(':', $userId, 2);
-				}
 
 				$userObj = $this->userManager->get($userId);
 				if ($userObj === null || !$userObj->isEnabled()) {

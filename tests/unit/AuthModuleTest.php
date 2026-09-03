@@ -37,9 +37,6 @@ class AuthModuleTest extends TestCase {
 	/** @var String $userId */
 	private $userId = 'john';
 
-	/** @var String $userIdConcat */
-	private $userIdConcat = 'John Doe:john';
-
 	/** @var ClientMapper $clientMapper */
 	private $clientMapper;
 
@@ -118,18 +115,18 @@ class AuthModuleTest extends TestCase {
 		$user = $this->authModule->auth($request);
 		$this->assertNotNull($user);
 		$this->assertEquals($this->userId, $user->getUID());
+	}
 
-		// Valid request with ConcatUserID
-		$request = $this->getMockBuilder(IRequest::class)->getMock();
-		$this->accessToken->setUserId($this->userIdConcat);
-		$this->accessToken = $this->accessTokenMapper->update($this->accessToken);
-		$request->expects($this->once())
-			->method('getHeader')
-			->with($this->equalTo('Authorization'))
-			->will($this->returnValue('Bearer ' . $this->accessToken->getToken()));
-		$user = $this->authModule->auth($request);
-		$this->assertNotNull($user);
-		$this->assertEquals($this->userId, $user->getUID());
+	/**
+	 * The user id stored on the token is opaque - a colon in it must not be
+	 * treated as a "login name:user id" separator, otherwise the token
+	 * authenticates a different account than the one it was issued for.
+	 */
+	public function testAuthTokenKeepsUserIdWithColon() {
+		$this->accessToken->setUserId('attacker:' . $this->userId);
+		$this->accessTokenMapper->update($this->accessToken);
+
+		$this->assertNull($this->authModule->authToken($this->accessToken->getToken()));
 	}
 
 	/**
