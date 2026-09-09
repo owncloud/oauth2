@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ## [Unreleased] ....
 
 
+## [0.7.2] - 2026-09-09
+
+### Fixed
+- [#389](https://github.com/owncloud/oauth2/pull/389) - fix: treat the OAuth2 user id as opaque
+
 ## [0.7.1] - 2026-07-22
 
 ### Changed
@@ -167,7 +172,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - Verify Bearer token even if the session is still valid - [#53](https://github.com/owncloud/oauth2/pull/53)
 - Use displayname on switch user screen - [#90](https://github.com/owncloud/oauth2/pull/90)
 
-[Unreleased]: https://github.com/owncloud/oauth2/compare/v0.7.1..master
+[Unreleased]: https://github.com/owncloud/oauth2/compare/v0.7.2..master
+[0.7.2]: https://github.com/owncloud/oauth2/compare/v0.7.1..v0.7.2
 [0.7.1]: https://github.com/owncloud/oauth2/compare/v0.7.0..v0.7.1
 [0.7.0]: https://github.com/owncloud/oauth2/compare/v0.6.1..v0.7.0
 [0.6.1]: https://github.com/owncloud/oauth2/compare/v0.6.0...v0.6.1
