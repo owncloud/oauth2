@@ -625,6 +625,76 @@ class OAuthApiControllerTest extends TestCase {
 		$this->assertNotEmpty($json->token_type);
 		$this->assertEquals('Bearer', $json->token_type);
 	}
+	/**
+	 * The stored user id is opaque - a colon in it must not be treated as a
+	 * "login name:user id" separator, otherwise the token is issued for a
+	 * different account than the one which authorized the code.
+	 */
+	public function testGenerateTokenWithAuthorizationCodeKeepsUserIdWithColon() {
+		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
+		$_SERVER['PHP_AUTH_PW'] = $this->clientSecret;
+
+		$userIdWithColon = 'attacker:' . $this->userId;
+		$this->authorizationCode->setUserId($userIdWithColon);
+		$this->authorizationCodeMapper->update($this->authorizationCode);
+
+		$requestedUserIds = [];
+		$this->mockUserManagerFor($userIdWithColon, $requestedUserIds);
+
+		$result = $this->controller->generateToken(
+			'authorization_code',
+			$this->authorizationCode->getCode(),
+			$this->redirectUri
+		);
+		$this->assertEquals(200, $result->getStatus());
+		$json = \json_decode($result->render());
+		$this->assertEquals([$userIdWithColon], $requestedUserIds);
+		$this->assertEquals($userIdWithColon, $json->user_id);
+		$this->assertEquals($userIdWithColon, $this->accessTokenMapper->findByToken($json->access_token)->getUserId());
+		$this->assertEquals($userIdWithColon, $this->refreshTokenMapper->findByToken($json->refresh_token)->getUserId());
+	}
+
+	/**
+	 * @see testGenerateTokenWithAuthorizationCodeKeepsUserIdWithColon
+	 */
+	public function testGenerateTokenWithRefreshTokenKeepsUserIdWithColon() {
+		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
+		$_SERVER['PHP_AUTH_PW'] = $this->clientSecret;
+
+		$userIdWithColon = 'attacker:' . $this->userId;
+		$this->refreshToken->setUserId($userIdWithColon);
+		$this->refreshTokenMapper->update($this->refreshToken);
+
+		$requestedUserIds = [];
+		$this->mockUserManagerFor($userIdWithColon, $requestedUserIds);
+
+		$result = $this->controller->generateToken('refresh_token', null, null, $this->refreshToken->getToken());
+		$this->assertEquals(200, $result->getStatus());
+		$json = \json_decode($result->render());
+		$this->assertEquals([$userIdWithColon], $requestedUserIds);
+		$this->assertEquals($userIdWithColon, $json->user_id);
+		$this->assertEquals($userIdWithColon, $this->accessTokenMapper->findByToken($json->access_token)->getUserId());
+		$this->assertEquals($userIdWithColon, $this->refreshTokenMapper->findByToken($json->refresh_token)->getUserId());
+	}
+
+	/**
+	 * Lets the user manager resolve $userId only, and records every requested id.
+	 *
+	 * @param string $userId The only user id which resolves to an enabled user.
+	 * @param array $requestedUserIds Collects the requested user ids.
+	 * @return void
+	 */
+	private function mockUserManagerFor($userId, array &$requestedUserIds) {
+		$userMock = $this->createMock(IUser::class);
+		$userMock->method('isEnabled')->willReturn(true);
+
+		$this->userManager->method('get')
+			->willReturnCallback(function ($requestedUserId) use ($userId, $userMock, &$requestedUserIds) {
+				$requestedUserIds[] = $requestedUserId;
+				return $requestedUserId === $userId ? $userMock : null;
+			});
+	}
+
 	public function testGenerateTokenWithAuthorizationCodeAndPKCESInvalidChallengeMethod() {
 		$_SERVER['PHP_AUTH_USER'] = $this->clientIdentifier1;
 		$_SERVER['PHP_AUTH_PW'] = $this->clientSecret;
