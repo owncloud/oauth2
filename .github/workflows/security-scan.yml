@@ -1,0 +1,32 @@
+name: Security Scan
+
+on:
+  push:
+    branches:
+      - release-0.6
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+  schedule:
+    # Weekly, so CVEs published against already-released code surface without a
+    # code change. GitHub only runs schedules on the default branch, so this is
+    # inert here - it is kept for symmetry with master.
+    - cron: '0 3 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-scan-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  trivy:
+    name: Trivy
+    uses: owncloud/reusable-workflows/.github/workflows/trivy.yml@main
+    with:
+      # The 0.6 line targets php 7.4, so build the tree to scan with 7.4.
+      php-version: '7.4'
