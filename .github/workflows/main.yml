@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - release-0.6
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  APP_NAME: oauth2
+  PHP_VERSIONS: '["7.4"]'
+  # The 0.6 line supports ownCloud 10 only (see appinfo/info.xml), so the tests
+  # must run against the 10.x core branch - owncloud/core master is 11.x by now.
+  CORE_REF: '10.16'
+
+jobs:
+  get-vars:
+    runs-on: ubuntu-latest
+    outputs:
+      app-name: ${{ env.APP_NAME }}
+      php-versions: ${{ env.PHP_VERSIONS }}
+      core-ref: ${{ env.CORE_REF }}
+    steps:
+      - name: Set variables
+        run: |
+          echo "App name $APP_NAME"
+          echo "PHP versions string: $PHP_VERSIONS"
+          echo "Core ref: $CORE_REF"
+
+  semantic-git-messages:
+    name: Commits
+    uses: owncloud/reusable-workflows/.github/workflows/semantic-git-message.yml@main
+
+  php-code-style:
+    name: PHP Code Style
+    needs:
+      - get-vars
+    uses: owncloud/reusable-workflows/.github/workflows/php-codestyle.yml@main
+    with:
+      app-name: ${{ needs.get-vars.outputs.app-name }}
+      php-versions: ${{ needs.get-vars.outputs.php-versions }}
+      core-ref: ${{ needs.get-vars.outputs.core-ref }}
+      core-ref-php74: ${{ needs.get-vars.outputs.core-ref }}
+
+  php-unit:
+    name: PHP Unit
+    needs:
+      - get-vars
+    uses: owncloud/reusable-workflows/.github/workflows/php-unit.yml@main
+    with:
+      app-name: ${{ needs.get-vars.outputs.app-name }}
+      php-versions: ${{ needs.get-vars.outputs.php-versions }}
+      core-ref: ${{ needs.get-vars.outputs.core-ref }}
+      core-ref-php74: ${{ needs.get-vars.outputs.core-ref }}
+
+  # No acceptance job on this branch: the reusable acceptance workflow installs a
+  # hardcoded owncloud-daily-master-qa.tar.bz2 (11.x) with the owncloudci/core:php83
+  # image, and an app declaring max-version="10" cannot be enabled on that server.
+  # Once acceptance.yml gains inputs for the server tarball and installer image, add
+  # the acceptance-webui job here as on master.
