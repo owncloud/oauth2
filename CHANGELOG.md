@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [0.6.3] - 2026-09-23
+
+### Fixed
+
+- [#394](https://github.com/owncloud/oauth2/pull/394) - ship an artifact whose code signature
+  ownCloud 10 can verify. The v0.6.2 package was signed in the current signature format, which
+  ownCloud 10's integrity checker does not understand: it reads a single `certificate` field and
+  only RSA/PSS signatures, so the app failed `occ integrity:check-app oauth2` with *App Certificate
+  is not valid* on every ownCloud 10 install, and the code-integrity warning appeared in admin
+  settings. v0.6.3 is the same code as v0.6.2 - including the opaque user id fix - signed in the
+  format this release line requires. The release workflow is removed from this branch, since it can
+  only produce the newer format; this release line is built and signed locally instead.
+
+
 ## [0.6.2] - 2026-09-09
 
 ### Fixed
@@ -161,7 +175,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - Verify Bearer token even if the session is still valid - [#53](https://github.com/owncloud/oauth2/pull/53)
 - Use displayname on switch user screen - [#90](https://github.com/owncloud/oauth2/pull/90)
 
-[Unreleased]: https://github.com/owncloud/oauth2/compare/v0.6.2...release-0.6
+[Unreleased]: https://github.com/owncloud/oauth2/compare/v0.6.3...release-0.6
+[0.6.3]: https://github.com/owncloud/oauth2/compare/v0.6.2...v0.6.3
 [0.6.2]: https://github.com/owncloud/oauth2/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/owncloud/oauth2/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/owncloud/oauth2/compare/v0.5.3...v0.6.0
