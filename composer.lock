@@ -8,25 +8,25 @@
     "packages": [
         {
             "name": "brick/math",
-            "version": "0.13.1",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brick/math.git",
-                "reference": "fc7ed316430118cc7836bf45faff18d5dfc8de04"
+                "reference": "2effe05d2177c451b86c6a073196a4034c02f211"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/fc7ed316430118cc7836bf45faff18d5dfc8de04",
-                "reference": "fc7ed316430118cc7836bf45faff18d5dfc8de04",
+                "url": "https://api.github.com/repos/brick/math/zipball/2effe05d2177c451b86c6a073196a4034c02f211",
+                "reference": "2effe05d2177c451b86c6a073196a4034c02f211",
                 "shasum": ""
             },
             "require": {
-                "php": "^8.1"
+                "php": "^8.2"
             },
             "require-dev": {
-                "php-coveralls/php-coveralls": "^2.2",
-                "phpunit/phpunit": "^10.1",
-                "vimeo/psalm": "6.8.8"
+                "phpstan/phpstan": "2.2.13",
+                "phpstan/phpstan-phpunit": "2.0.18",
+                "phpunit/phpunit": "^11.5"
             },
             "type": "library",
             "autoload": {
@@ -56,7 +56,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brick/math/issues",
-                "source": "https://github.com/brick/math/tree/0.13.1"
+                "source": "https://github.com/brick/math/tree/1.0.0"
             },
             "funding": [
                 {
@@ -64,7 +64,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-29T13:50:30+00:00"
+            "time": "2026-09-12T10:28:18+00:00"
         },
         {
             "name": "psr/log",
@@ -233,23 +233,23 @@
         },
         {
             "name": "rowbot/url",
-            "version": "4.1.0",
+            "version": "4.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/TRowbotham/URL-Parser.git",
-                "reference": "3087a67802a11796590e4bb9507981e48b077529"
+                "reference": "9b1bd1ac757672cb0682f697b53dc5aa03c76297"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/TRowbotham/URL-Parser/zipball/3087a67802a11796590e4bb9507981e48b077529",
-                "reference": "3087a67802a11796590e4bb9507981e48b077529",
+                "url": "https://api.github.com/repos/TRowbotham/URL-Parser/zipball/9b1bd1ac757672cb0682f697b53dc5aa03c76297",
+                "reference": "9b1bd1ac757672cb0682f697b53dc5aa03c76297",
                 "shasum": ""
             },
             "require": {
-                "brick/math": "^0.12 || ^0.13",
+                "brick/math": "^0.12 || ^0.13 || ^0.14 || ^0.15 || ^0.16 || ^0.17 || ^0.18 || ^0.19 || ^0.20 || ^1.0",
                 "ext-mbstring": "*",
                 "php": ">=8.1",
-                "psr/log": "^3.0",
+                "psr/log": "^2.0 || ^3.0",
                 "rowbot/idna": "^0.3.0"
             },
             "require-dev": {
@@ -291,22 +291,22 @@
             ],
             "support": {
                 "issues": "https://github.com/TRowbotham/URL-Parser/issues",
-                "source": "https://github.com/TRowbotham/URL-Parser/tree/4.1.0"
+                "source": "https://github.com/TRowbotham/URL-Parser/tree/4.2.1"
             },
-            "time": "2025-09-19T00:44:16+00:00"
+            "time": "2026-10-03T01:15:39+00:00"
         },
         {
             "name": "symfony/polyfill-intl-normalizer",
-            "version": "v1.38.0",
+            "version": "v1.43.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-intl-normalizer.git",
-                "reference": "2d446c214bdbe5b71bde5011b060a05fece3ae6b"
+                "reference": "ebd57ccc7edb93d632e184efbe7693d2517bab3b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-intl-normalizer/zipball/2d446c214bdbe5b71bde5011b060a05fece3ae6b",
-                "reference": "2d446c214bdbe5b71bde5011b060a05fece3ae6b",
+                "url": "https://api.github.com/repos/symfony/polyfill-intl-normalizer/zipball/ebd57ccc7edb93d632e184efbe7693d2517bab3b",
+                "reference": "ebd57ccc7edb93d632e184efbe7693d2517bab3b",
                 "shasum": ""
             },
             "require": {
@@ -358,7 +358,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-intl-normalizer/tree/v1.38.0"
+                "source": "https://github.com/symfony/polyfill-intl-normalizer/tree/v1.43.0"
             },
             "funding": [
                 {
@@ -378,7 +378,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-25T13:48:31+00:00"
+            "time": "2026-09-23T22:02:09+00:00"
         }
     ],
     "packages-dev": [
