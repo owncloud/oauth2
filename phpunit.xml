@@ -1,6 +1,7 @@
 <phpunit bootstrap="../../tests/bootstrap.php"
 		 colors="true"
 		 verbose="true"
+		 convertDeprecationsToExceptions="true"
 		 failOnRisky="true"
 		 failOnWarning="true">
   <testsuites>

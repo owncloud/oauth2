@@ -100,8 +100,8 @@ class SettingsController extends Controller {
 	}
 
 	public function addClient(): JSONResponse {
-		$redirectUri = \trim($this->request->getParam('redirect_uri', ''));
-		$name = \trim($this->request->getParam('name', ''));
+		$redirectUri = \trim($this->request->getParam('redirect_uri', '') ?? '');
+		$name = \trim($this->request->getParam('name', '') ?? '');
 		if ($name === '') {
 			return $this->sendErrorResponse($this->l10n->t('Name must not be empty'));
 		}
