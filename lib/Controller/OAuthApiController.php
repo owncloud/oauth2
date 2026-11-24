@@ -204,7 +204,7 @@ class OAuthApiController extends ApiController {
 			case 'refresh_token':
 				$statusCode = Http::STATUS_BAD_REQUEST;
 				// This fixes the infinite loop issue with desktop client 2.4.2
-				if (\preg_match('/\bmirall\b.+2\.4\.2/i', $this->request->getHeader('User-Agent'))) {
+				if (\preg_match('/\bmirall\b.+2\.4\.2/i', $this->request->getHeader('User-Agent') ?? '')) {
 					$statusCode = Http::STATUS_OK;
 				}
 
